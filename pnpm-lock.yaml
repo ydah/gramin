@@ -41,6 +41,9 @@ importers:
       '@gramin/frontend-bnf':
         specifier: workspace:*
         version: link:../frontend-bnf
+      '@gramin/frontend-menhir':
+        specifier: workspace:*
+        version: link:../frontend-menhir
       '@gramin/frontend-peg':
         specifier: workspace:*
         version: link:../frontend-peg
@@ -67,6 +70,12 @@ importers:
         version: link:../core
 
   packages/frontend-bnf:
+    dependencies:
+      '@gramin/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/frontend-menhir:
     dependencies:
       '@gramin/core':
         specifier: workspace:*

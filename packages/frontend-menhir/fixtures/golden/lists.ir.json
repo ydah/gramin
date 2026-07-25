@@ -1,0 +1,133 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": true,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [
+    {
+      "kind": "rule",
+      "name": "option",
+      "origin": "stdlib"
+    },
+    {
+      "kind": "rule",
+      "name": "separated_list",
+      "origin": "stdlib"
+    }
+  ],
+  "irVersion": "1.2.0",
+  "precedence": [
+    {
+      "assoc": "left",
+      "tokens": [
+        "COMMA"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 9,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "symbol",
+              "label": "value",
+              "name": "X"
+            }
+          ]
+        }
+      ],
+      "declaredType": "int",
+      "isInline": true,
+      "name": "wrapper",
+      "params": [
+        "X"
+      ]
+    },
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 10,
+            "present": true
+          },
+          "items": [
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "name": "COMMA"
+                },
+                {
+                  "args": [
+                    {
+                      "kind": "terminal",
+                      "name": "INT"
+                    }
+                  ],
+                  "kind": "symbol",
+                  "name": "wrapper"
+                }
+              ],
+              "kind": "symbol",
+              "label": "values",
+              "name": "separated_list"
+            },
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "name": "INT"
+                }
+              ],
+              "kind": "symbol",
+              "label": "maybe",
+              "name": "option"
+            },
+            {
+              "kind": "terminal",
+              "name": "EOF"
+            }
+          ]
+        }
+      ],
+      "name": "main"
+    }
+  ],
+  "source": {
+    "dialect": "menhir",
+    "fileNames": [
+      "lists.mly"
+    ],
+    "format": "menhir",
+    "frontend": {
+      "id": "menhir",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "main"
+  ],
+  "terminals": [
+    {
+      "declaredType": "int",
+      "name": "INT"
+    },
+    {
+      "name": "COMMA"
+    },
+    {
+      "name": "EOF"
+    }
+  ]
+}

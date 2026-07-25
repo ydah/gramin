@@ -5,6 +5,7 @@ import { analyzeGrammar } from "@gramin/analyzer";
 import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
 import { serializeCanonical, validateIR } from "@gramin/core";
+import { menhirFrontend } from "@gramin/frontend-menhir";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { describe, expect, it } from "vitest";
@@ -199,6 +200,23 @@ describe("gramin CLI", () => {
       "utf8",
     );
     expect(actual).toBe(expected);
+  });
+
+  it("counts Menhir stdlib calls in the shared parameterized-rule metrics", () => {
+    const content = readFileSync(
+      new URL("../../frontend-menhir/fixtures/lists.mly", import.meta.url),
+      "utf8",
+    );
+    const parsed = menhirFrontend.parse([{ name: "lists.mly", content }], {});
+    if (!parsed.ir) throw new Error("expected Menhir IR");
+    const features = analyzeGrammar(parsed.ir);
+    expect(features.sugar).toMatchObject({
+      parameterizedRuleDefs: 1,
+      parameterizedCalls: {
+        known: { option: 1, separated_list: 1 },
+      },
+      inlineRules: 1,
+    });
   });
 
   const antlrCorpusRoot = new URL("../../../fixtures/downloaded/antlr/", import.meta.url);

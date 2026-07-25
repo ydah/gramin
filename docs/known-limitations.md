@@ -27,3 +27,15 @@ with `IR015_LOSSY_ANTLR_NEGATION`.
 Lexer commands such as `skip`, `more`, `type`, and `channel` do not affect structural
 features. Parser wildcard `.` is represented as the named terminal `ANY_TOKEN`, not the
 scannerless `anyChar` node. Source action and predicate code is never retained or run.
+
+## Menhir syntax
+
+The in-process Menhir frontend targets classic colon-based rules, `%inline`,
+parameterized symbols, precedence declarations, and the documented standard library.
+OCaml preambles and comments are skipped; action bodies are opaque and contribute only
+presence and length metadata.
+
+The newer `let ... :=` syntax and attributes beyond `%public` are not expanded in the
+initial frontend. Projects that require exact handling can provide an OCaml implementation
+through the external frontend protocol, as described by ADR 0003. Unsupported constructs
+must be reported rather than executed.

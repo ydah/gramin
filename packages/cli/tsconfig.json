@@ -11,6 +11,7 @@
     { "path": "../analyzer" },
     { "path": "../frontend-antlr" },
     { "path": "../frontend-bnf" },
+    { "path": "../frontend-menhir" },
     { "path": "../frontend-peg" },
     { "path": "../frontend-yacc" },
     { "path": "../reporter" }

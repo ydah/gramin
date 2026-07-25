@@ -28,6 +28,7 @@
     "@gramin/core": "workspace:*",
     "@gramin/frontend-antlr": "workspace:*",
     "@gramin/frontend-bnf": "workspace:*",
+    "@gramin/frontend-menhir": "workspace:*",
     "@gramin/frontend-peg": "workspace:*",
     "@gramin/frontend-yacc": "workspace:*",
     "@gramin/reporter": "workspace:*"
