@@ -1,0 +1,495 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "1.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ],
+          "loc": {
+            "endCol": 10,
+            "endLine": 5,
+            "startCol": 5,
+            "startLine": 5
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 5,
+        "endLine": 4,
+        "startCol": 1,
+        "startLine": 4
+      },
+      "name": "json"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "object"
+            }
+          ],
+          "loc": {
+            "endCol": 11,
+            "endLine": 8,
+            "startCol": 5,
+            "startLine": 8
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "array"
+            }
+          ],
+          "loc": {
+            "endCol": 10,
+            "endLine": 9,
+            "startCol": 5,
+            "startLine": 9
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "STRING"
+            }
+          ],
+          "loc": {
+            "endCol": 11,
+            "endLine": 10,
+            "startCol": 5,
+            "startLine": 10
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ],
+          "loc": {
+            "endCol": 11,
+            "endLine": 11,
+            "startCol": 5,
+            "startLine": 11
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "TRUE"
+            }
+          ],
+          "loc": {
+            "endCol": 9,
+            "endLine": 12,
+            "startCol": 5,
+            "startLine": 12
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "FALSE"
+            }
+          ],
+          "loc": {
+            "endCol": 10,
+            "endLine": 13,
+            "startCol": 5,
+            "startLine": 13
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NULL"
+            }
+          ],
+          "loc": {
+            "endCol": 9,
+            "endLine": 14,
+            "startCol": 5,
+            "startLine": 14
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 7,
+        "startCol": 1,
+        "startLine": 7
+      },
+      "name": "value"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "{"
+            },
+            {
+              "kind": "terminal",
+              "literal": "}"
+            }
+          ],
+          "loc": {
+            "endCol": 12,
+            "endLine": 17,
+            "startCol": 5,
+            "startLine": 17
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "{"
+            },
+            {
+              "kind": "symbol",
+              "name": "members"
+            },
+            {
+              "kind": "terminal",
+              "literal": "}"
+            }
+          ],
+          "loc": {
+            "endCol": 20,
+            "endLine": 18,
+            "startCol": 5,
+            "startLine": 18
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 7,
+        "endLine": 16,
+        "startCol": 1,
+        "startLine": 16
+      },
+      "name": "object"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "member"
+            }
+          ],
+          "loc": {
+            "endCol": 11,
+            "endLine": 21,
+            "startCol": 5,
+            "startLine": 21
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "members"
+            },
+            {
+              "kind": "terminal",
+              "literal": ","
+            },
+            {
+              "kind": "symbol",
+              "name": "member"
+            }
+          ],
+          "loc": {
+            "endCol": 23,
+            "endLine": 22,
+            "startCol": 5,
+            "startLine": 22
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 8,
+        "endLine": 20,
+        "startCol": 1,
+        "startLine": 20
+      },
+      "name": "members"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "STRING"
+            },
+            {
+              "kind": "terminal",
+              "literal": ":"
+            },
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ],
+          "loc": {
+            "endCol": 21,
+            "endLine": 25,
+            "startCol": 5,
+            "startLine": 25
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 7,
+        "endLine": 24,
+        "startCol": 1,
+        "startLine": 24
+      },
+      "name": "member"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ],
+          "loc": {
+            "endCol": 12,
+            "endLine": 28,
+            "startCol": 5,
+            "startLine": 28
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "kind": "symbol",
+              "name": "elements"
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ],
+          "loc": {
+            "endCol": 21,
+            "endLine": 29,
+            "startCol": 5,
+            "startLine": 29
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 27,
+        "startCol": 1,
+        "startLine": 27
+      },
+      "name": "array"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ],
+          "loc": {
+            "endCol": 10,
+            "endLine": 32,
+            "startCol": 5,
+            "startLine": 32
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "elements"
+            },
+            {
+              "kind": "terminal",
+              "literal": ","
+            },
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ],
+          "loc": {
+            "endCol": 23,
+            "endLine": 33,
+            "startCol": 5,
+            "startLine": 33
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 9,
+        "endLine": 31,
+        "startCol": 1,
+        "startLine": 31
+      },
+      "name": "elements"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "json.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "json"
+  ],
+  "terminals": [
+    {
+      "loc": {
+        "endCol": 14,
+        "endLine": 1,
+        "startCol": 8,
+        "startLine": 1
+      },
+      "name": "STRING"
+    },
+    {
+      "loc": {
+        "endCol": 21,
+        "endLine": 1,
+        "startCol": 15,
+        "startLine": 1
+      },
+      "name": "NUMBER"
+    },
+    {
+      "loc": {
+        "endCol": 26,
+        "endLine": 1,
+        "startCol": 22,
+        "startLine": 1
+      },
+      "name": "TRUE"
+    },
+    {
+      "loc": {
+        "endCol": 32,
+        "endLine": 1,
+        "startCol": 27,
+        "startLine": 1
+      },
+      "name": "FALSE"
+    },
+    {
+      "loc": {
+        "endCol": 37,
+        "endLine": 1,
+        "startCol": 33,
+        "startLine": 1
+      },
+      "name": "NULL"
+    },
+    {
+      "literal": "{",
+      "loc": {
+        "endCol": 8,
+        "endLine": 17,
+        "startCol": 5,
+        "startLine": 17
+      }
+    },
+    {
+      "literal": "}",
+      "loc": {
+        "endCol": 12,
+        "endLine": 17,
+        "startCol": 9,
+        "startLine": 17
+      }
+    },
+    {
+      "literal": ",",
+      "loc": {
+        "endCol": 16,
+        "endLine": 22,
+        "startCol": 13,
+        "startLine": 22
+      }
+    },
+    {
+      "literal": ":",
+      "loc": {
+        "endCol": 15,
+        "endLine": 25,
+        "startCol": 12,
+        "startLine": 25
+      }
+    },
+    {
+      "literal": "[",
+      "loc": {
+        "endCol": 8,
+        "endLine": 28,
+        "startCol": 5,
+        "startLine": 28
+      }
+    },
+    {
+      "literal": "]",
+      "loc": {
+        "endCol": 12,
+        "endLine": 28,
+        "startCol": 9,
+        "startLine": 28
+      }
+    }
+  ]
+}

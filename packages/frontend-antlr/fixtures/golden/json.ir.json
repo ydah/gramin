@@ -1,0 +1,276 @@
+{
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": true,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "1.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "value"
+            },
+            {
+              "kind": "terminal",
+              "name": "EOF"
+            }
+          ]
+        }
+      ],
+      "name": "json"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "object"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "array"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "STRING"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "TRUE"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "FALSE"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NULL"
+            }
+          ]
+        }
+      ],
+      "name": "value"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "{"
+            },
+            {
+              "expr": {
+                "expr": {
+                  "items": [
+                    {
+                      "kind": "symbol",
+                      "name": "member"
+                    },
+                    {
+                      "expr": {
+                        "expr": {
+                          "items": [
+                            {
+                              "kind": "terminal",
+                              "literal": ","
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "member"
+                            }
+                          ],
+                          "kind": "seq"
+                        },
+                        "kind": "group"
+                      },
+                      "kind": "star"
+                    }
+                  ],
+                  "kind": "seq"
+                },
+                "kind": "group"
+              },
+              "kind": "opt"
+            },
+            {
+              "kind": "terminal",
+              "literal": "}"
+            }
+          ]
+        }
+      ],
+      "name": "object"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "STRING"
+            },
+            {
+              "kind": "terminal",
+              "literal": ":"
+            },
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ]
+        }
+      ],
+      "name": "member"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "expr": {
+                "expr": {
+                  "items": [
+                    {
+                      "kind": "symbol",
+                      "name": "value"
+                    },
+                    {
+                      "expr": {
+                        "expr": {
+                          "items": [
+                            {
+                              "kind": "terminal",
+                              "literal": ","
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "value"
+                            }
+                          ],
+                          "kind": "seq"
+                        },
+                        "kind": "group"
+                      },
+                      "kind": "star"
+                    }
+                  ],
+                  "kind": "seq"
+                },
+                "kind": "group"
+              },
+              "kind": "opt"
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ]
+        }
+      ],
+      "name": "array"
+    }
+  ],
+  "source": {
+    "dialect": "antlr4",
+    "fileNames": [
+      "Json.g4"
+    ],
+    "format": "antlr4",
+    "frontend": {
+      "id": "antlr4",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "json"
+  ],
+  "terminals": [
+    {
+      "literal": "true",
+      "name": "TRUE"
+    },
+    {
+      "literal": "false",
+      "name": "FALSE"
+    },
+    {
+      "literal": "null",
+      "name": "NULL"
+    },
+    {
+      "name": "STRING"
+    },
+    {
+      "name": "NUMBER"
+    },
+    {
+      "name": "WS"
+    },
+    {
+      "name": "EOF"
+    },
+    {
+      "literal": "{"
+    },
+    {
+      "literal": ","
+    },
+    {
+      "literal": "}"
+    },
+    {
+      "literal": ":"
+    },
+    {
+      "literal": "["
+    },
+    {
+      "literal": "]"
+    }
+  ]
+}

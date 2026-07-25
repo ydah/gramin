@@ -12,6 +12,7 @@ const goldenCases = [
   "adversarial-actions",
   "raw-string",
   "lrama",
+  "json",
 ] as const;
 
 describe("fixture to IR golden files", () => {

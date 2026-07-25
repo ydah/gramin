@@ -53,4 +53,18 @@ WS: [ \\t\\r\\n]+ -> skip;`;
     });
     expect(validateIR(result.ir).ok).toBe(true);
   });
+
+  it("parses the cross-format JSON grammar", () => {
+    const json = readFileSync(new URL("../fixtures/Json.g4", import.meta.url), "utf8");
+    const result = antlrFrontend.parse([{ name: "Json.g4", content: json }], {});
+    expect(result.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.ir?.rules.map(({ name }) => name)).toEqual([
+      "json",
+      "value",
+      "object",
+      "member",
+      "array",
+    ]);
+  });
 });

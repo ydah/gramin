@@ -1,0 +1,285 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "1.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ]
+        }
+      ],
+      "name": "json"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "object"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "array"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "STRING"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "TRUE"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "FALSE"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NULL"
+            }
+          ]
+        }
+      ],
+      "name": "value"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "{"
+            },
+            {
+              "kind": "terminal",
+              "literal": "}"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "{"
+            },
+            {
+              "kind": "symbol",
+              "name": "members"
+            },
+            {
+              "kind": "terminal",
+              "literal": "}"
+            }
+          ]
+        }
+      ],
+      "name": "object"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "member"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "members"
+            },
+            {
+              "kind": "terminal",
+              "literal": ","
+            },
+            {
+              "kind": "symbol",
+              "name": "member"
+            }
+          ]
+        }
+      ],
+      "name": "members"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "STRING"
+            },
+            {
+              "kind": "terminal",
+              "literal": ":"
+            },
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ]
+        }
+      ],
+      "name": "member"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "kind": "symbol",
+              "name": "elements"
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ]
+        }
+      ],
+      "name": "array"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "elements"
+            },
+            {
+              "kind": "terminal",
+              "literal": ","
+            },
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ]
+        }
+      ],
+      "name": "elements"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "json.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "json"
+  ],
+  "terminals": [
+    {
+      "name": "STRING"
+    },
+    {
+      "name": "NUMBER"
+    },
+    {
+      "name": "TRUE"
+    },
+    {
+      "name": "FALSE"
+    },
+    {
+      "name": "NULL"
+    },
+    {
+      "literal": "{"
+    },
+    {
+      "literal": "}"
+    },
+    {
+      "literal": ","
+    },
+    {
+      "literal": ":"
+    },
+    {
+      "literal": "["
+    },
+    {
+      "literal": "]"
+    }
+  ]
+}
