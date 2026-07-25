@@ -10,6 +10,7 @@
     { "path": "../core" },
     { "path": "../analyzer" },
     { "path": "../frontend-bnf" },
+    { "path": "../frontend-peg" },
     { "path": "../frontend-yacc" },
     { "path": "../reporter" }
   ]

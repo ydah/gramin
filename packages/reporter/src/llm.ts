@@ -38,6 +38,14 @@ const renderDigest = (features: GrammarFeatures, detail: DigestDetail): string =
         detail.listLimit,
       )
     : "_omitted for budget_";
+  const orderedChoice = features.structure.notApplicable?.nullableRules?.includes("orderedChoice");
+  const structureInterpretation = orderedChoice
+    ? "Ordered-choice/PEG note: left recursion is usually a defect signal; CFG nullability is not applicable."
+    : "EBNF repetition can replace explicit recursion, so recursion counts depend on representation.";
+  const lexiconInterpretation =
+    features.lexicon.charClassCount > 0 || features.lexicon.anyCharCount > 0
+      ? "Scannerless note: prefer literal occurrences, character classes, and any-char counts over token declarations."
+      : "Token declarations and literal occurrences describe the grammar lexicon.";
 
   return `# Grammar analysis digest
 
@@ -63,7 +71,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 - Dependency depth ${features.structure.maxDependencyDepth}; nullable rules ${features.structure.nullableRules ?? "not applicable"}
 - Core fan-in symbols: ${codeList(features.notable.coreSymbols, detail.listLimit)}
 - Unreachable: ${codeList(features.structure.unreachableSymbols, detail.listLimit)}
-- Interpretation: EBNF repetition replaces explicit recursion; in PEG, left recursion is usually a defect signal. Not applicable: ${notApplicable(features.structure.notApplicable)}
+- Interpretation: ${structureInterpretation} Not applicable: ${notApplicable(features.structure.notApplicable)}
 
 ## Precedence
 
@@ -76,6 +84,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 - Named/literal tokens: ${features.lexicon.namedTokens}/${features.lexicon.literalTokens}; literal occurrences ${features.lexicon.literalOccurrences}; character classes ${features.lexicon.charClassCount}; any-char ${features.lexicon.anyCharCount}
 - Keyword-like (approximate): ${codeList(features.lexicon.keywordLike, detail.listLimit)}
 - Punctuation-like (approximate): ${codeList(features.lexicon.punctuationLike, detail.listLimit)}
+- Interpretation: ${lexiconInterpretation} Not applicable: ${notApplicable(features.lexicon.notApplicable)}
 
 ## Sugar and extensions
 

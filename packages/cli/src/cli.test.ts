@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { analyzeGrammar } from "@gramin/analyzer";
 import { bnfFrontend } from "@gramin/frontend-bnf";
 import { serializeCanonical, validateIR } from "@gramin/core";
+import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { describe, expect, it } from "vitest";
 import type { CliIO } from "./cli.js";
@@ -159,6 +160,25 @@ describe("gramin CLI", () => {
       EXIT_FATAL,
     );
     expect(test.stderr.join("")).toContain("IR_CANON_SCANNERLESS_CAPABILITY");
+  });
+
+  it("reports PEG-specific applicability and scannerless metrics", async () => {
+    const content = readFileSync(
+      new URL("../../frontend-peg/fixtures/json.peggy", import.meta.url),
+      "utf8",
+    );
+    const parsed = pegFrontend.parse([{ name: "json.peggy", content }], {});
+    if (!parsed.ir) throw new Error("expected PEG IR");
+    const features = analyzeGrammar(parsed.ir);
+    expect(features.structure.nullableRules).toBeUndefined();
+    expect(features.structure.notApplicable?.nullableRules).toContain("orderedChoice");
+    expect(features.lexicon.charClassCount).toBeGreaterThan(0);
+    expect(features.lexicon.anyCharCount).toBe(1);
+
+    const test = harness({ "json.peggy": content });
+    expect(await runCli(["analyze", "json.peggy", "--format", "llm"], test.io)).toBe(EXIT_SUCCESS);
+    expect(test.stdout.join("")).toContain("left recursion is usually a defect signal");
+    expect(test.stdout.join("")).toContain("Scannerless note");
   });
 
   it.runIf(existsSync(new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url)))(

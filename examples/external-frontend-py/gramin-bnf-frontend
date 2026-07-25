@@ -130,7 +130,7 @@ def main():
     has_sugar = any(token in text for token in ("[", "{", "?", "*", "+"))
     dialect = options.dialect or ("bnf" if "::=" in text else "ebnf")
     ir = {
-        "irVersion": "1.0.0",
+        "irVersion": "1.1.0",
         "source": {
             "format": "bnf",
             "dialect": dialect,

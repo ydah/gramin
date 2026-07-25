@@ -38,6 +38,9 @@ importers:
       '@gramin/frontend-bnf':
         specifier: workspace:*
         version: link:../frontend-bnf
+      '@gramin/frontend-peg':
+        specifier: workspace:*
+        version: link:../frontend-peg
       '@gramin/frontend-yacc':
         specifier: workspace:*
         version: link:../frontend-yacc
@@ -55,6 +58,12 @@ importers:
         version: 8.20.0
 
   packages/frontend-bnf:
+    dependencies:
+      '@gramin/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/frontend-peg:
     dependencies:
       '@gramin/core':
         specifier: workspace:*

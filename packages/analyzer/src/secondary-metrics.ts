@@ -70,6 +70,15 @@ export const lexiconFeatures = (ir: GrammarIR): GrammarFeatures["lexicon"] => {
     punctuationLike: literals
       .filter((literal) => literal.length > 0 && /^[^A-Za-z0-9]+$/u.test(literal))
       .sort(compareBytes),
+    ...(ir.capabilities.scannerless
+      ? {
+          notApplicable: {
+            namedTokens:
+              "scannerless grammar: use literalOccurrences, charClassCount, and anyCharCount",
+            literalTokens: "scannerless grammar: declarations do not represent a separate lexer",
+          },
+        }
+      : {}),
   };
 };
 
