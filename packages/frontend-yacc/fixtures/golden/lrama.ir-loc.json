@@ -1,0 +1,179 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": true,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [
+    {
+      "kind": "rule",
+      "name": "list",
+      "origin": "stdlib"
+    },
+    {
+      "kind": "rule",
+      "name": "option",
+      "origin": "stdlib"
+    },
+    {
+      "kind": "rule",
+      "name": "separated_list",
+      "origin": "stdlib"
+    }
+  ],
+  "irVersion": "0.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "X"
+            }
+          ],
+          "loc": {
+            "endCol": 6,
+            "endLine": 4,
+            "startCol": 5,
+            "startLine": 4
+          }
+        }
+      ],
+      "declaredType": "node",
+      "isInline": true,
+      "loc": {
+        "endCol": 22,
+        "endLine": 3,
+        "startCol": 15,
+        "startLine": 3
+      },
+      "name": "wrapper",
+      "params": [
+        "X"
+      ]
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "kind": "terminal",
+                      "name": "ITEM"
+                    }
+                  ],
+                  "kind": "symbol",
+                  "name": "option"
+                }
+              ],
+              "kind": "symbol",
+              "label": "wrapped",
+              "name": "wrapper"
+            }
+          ],
+          "loc": {
+            "endCol": 35,
+            "endLine": 8,
+            "startCol": 5,
+            "startLine": 8
+          }
+        },
+        {
+          "items": [
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "name": "ITEM"
+                }
+              ],
+              "kind": "symbol",
+              "name": "list"
+            }
+          ],
+          "loc": {
+            "endCol": 15,
+            "endLine": 9,
+            "startCol": 5,
+            "startLine": 9
+          }
+        },
+        {
+          "items": [
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "literal": ","
+                },
+                {
+                  "kind": "terminal",
+                  "name": "ITEM"
+                }
+              ],
+              "kind": "symbol",
+              "name": "separated_list"
+            }
+          ],
+          "loc": {
+            "endCol": 30,
+            "endLine": 10,
+            "startCol": 5,
+            "startLine": 10
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 7,
+        "startCol": 1,
+        "startLine": 7
+      },
+      "name": "start"
+    }
+  ],
+  "source": {
+    "dialect": "lrama",
+    "fileNames": [
+      "lrama.y"
+    ],
+    "format": "lrama",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "loc": {
+        "endCol": 12,
+        "endLine": 2,
+        "startCol": 8,
+        "startLine": 2
+      },
+      "name": "ITEM"
+    },
+    {
+      "literal": ",",
+      "loc": {
+        "endCol": 23,
+        "endLine": 10,
+        "startCol": 20,
+        "startLine": 10
+      }
+    }
+  ]
+}

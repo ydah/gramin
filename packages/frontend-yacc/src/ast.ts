@@ -16,6 +16,12 @@ export type YaccItem =
       readonly loc: SourceSpan;
     }
   | { readonly kind: "literal"; readonly value: string; readonly loc: SourceSpan }
+  | {
+      readonly kind: "repeat";
+      readonly operator: "opt" | "star" | "plus";
+      readonly item: YaccItem;
+      readonly loc: SourceSpan;
+    }
   | { readonly kind: "action"; readonly codeLength: number; readonly loc: SourceSpan };
 
 export interface YaccAlternative {

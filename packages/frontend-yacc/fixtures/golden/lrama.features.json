@@ -1,0 +1,126 @@
+{
+  "actions": {
+    "altActionCoverage": 0,
+    "avgActionLength": 0,
+    "maxActionLength": 0,
+    "midRuleActions": 0
+  },
+  "diagnostics": [],
+  "featuresVersion": "0.2.0",
+  "lexicon": {
+    "anyCharCount": 0,
+    "charClassCount": 0,
+    "keywordLike": [],
+    "literalOccurrences": 1,
+    "literalTokens": 1,
+    "namedTokens": 1,
+    "punctuationLike": [
+      ","
+    ]
+  },
+  "notable": {
+    "coreSymbols": [
+      "wrapper"
+    ],
+    "deepestRecursionMembers": [],
+    "largestRule": {
+      "name": "start"
+    }
+  },
+  "precedence": {
+    "assocBreakdown": {
+      "left": 0,
+      "nonassoc": 0,
+      "precedence": 0,
+      "right": 0
+    },
+    "levels": 0,
+    "precOverrides": 0,
+    "tokensInPrecedence": {
+      "count": 0,
+      "ratio": 0
+    }
+  },
+  "size": {
+    "alternatives": 4,
+    "avgAltPerRule": 2,
+    "avgRhsLength": 1,
+    "emptyAlternatives": 0,
+    "maxAltPerRule": {
+      "rule": "start",
+      "value": 3
+    },
+    "maxRhsLength": {
+      "rule": "start",
+      "value": 1
+    },
+    "nestedChoiceCount": 0,
+    "nonterminals": 2,
+    "rules": 2,
+    "terminals": 2,
+    "unresolvedSymbols": {
+      "count": 0,
+      "names": []
+    }
+  },
+  "source": {
+    "dialect": "lrama",
+    "fileNames": [
+      "lrama.y"
+    ],
+    "format": "lrama",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "structure": {
+    "directLeftRecursiveRules": 0,
+    "directRightRecursiveRules": 0,
+    "largestSccSize": {
+      "members": [],
+      "value": 0
+    },
+    "maxDependencyDepth": 1,
+    "nullableRules": 0,
+    "recursionSccCount": 0,
+    "topFanIn": [
+      {
+        "count": 1,
+        "symbol": "wrapper"
+      },
+      {
+        "count": 0,
+        "symbol": "start"
+      }
+    ],
+    "topFanOut": [
+      {
+        "count": 1,
+        "symbol": "start"
+      },
+      {
+        "count": 0,
+        "symbol": "wrapper"
+      }
+    ],
+    "unreachableSymbols": []
+  },
+  "sugar": {
+    "inlineRules": 1,
+    "notApplicable": {
+      "opt": "ebnfSugar capability is false",
+      "plus": "ebnfSugar capability is false",
+      "star": "ebnfSugar capability is false"
+    },
+    "parameterizedCalls": {
+      "known": {
+        "list": 1,
+        "option": 1,
+        "separated_list": 1
+      },
+      "total": 4
+    },
+    "parameterizedRuleDefs": 1
+  }
+}

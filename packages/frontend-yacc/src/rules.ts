@@ -34,26 +34,53 @@ const parseArguments = (stream: TokenStream): YaccItem[] | undefined => {
   return parsedArguments;
 };
 
+const parsePostfix = (stream: TokenStream, item: YaccItem): YaccItem => {
+  const postfix = stream.peek();
+  if (postfix.kind !== "other" || !["?", "*", "+"].includes(postfix.value)) return item;
+  stream.consume();
+  const operator = postfix.value === "?" ? "opt" : postfix.value === "*" ? "star" : "plus";
+  return { kind: "repeat", operator, item, loc: item.loc };
+};
+
 const parseItem = (stream: TokenStream): YaccItem | undefined => {
   const token = stream.peek();
   if (token.kind === "identifier") {
     stream.consume();
     const args = parseArguments(stream);
     const label = parseLabel(stream);
-    return {
+    return parsePostfix(stream, {
       kind: "reference",
       name: token.value,
       ...(args === undefined ? {} : { args }),
       ...(label === undefined ? {} : { label }),
       loc: token.loc,
-    };
+    });
   }
   if (token.kind === "literal") {
     stream.consume();
-    return { kind: "literal", value: token.value, loc: token.loc };
+    const label = parseLabel(stream);
+    if (label !== undefined) {
+      stream.diagnostics.push({
+        severity: "info",
+        code: "IR012_LOSSY_TERMINAL_LABEL",
+        message: `terminal label ${label} is not represented in Grammar IR v0.2`,
+        loc: token.loc,
+      });
+    }
+    return parsePostfix(stream, { kind: "literal", value: token.value, loc: token.loc });
   }
   if (token.kind === "action") {
     stream.consume();
+    const label = parseLabel(stream);
+    const declaredType = stream.match("tag");
+    if (label !== undefined || declaredType !== undefined) {
+      stream.diagnostics.push({
+        severity: "info",
+        code: "IR013_LOSSY_ACTION_METADATA",
+        message: "mid-rule action label and semantic type are not represented in Grammar IR v0.2",
+        loc: token.loc,
+      });
+    }
     return { kind: "action", codeLength: token.value.length, loc: token.loc };
   }
   return undefined;
@@ -138,24 +165,85 @@ const recoverRule = (stream: TokenStream): void => {
   stream.match("semicolon");
 };
 
+interface RuleDefinitionResult {
+  readonly rule?: YaccRule;
+  readonly lramaSyntaxSeen: boolean;
+}
+
+export const parseRuleDefinition = (
+  stream: TokenStream,
+  declaredTypes: ReadonlyMap<string, string>,
+): RuleDefinitionResult => {
+  let isInline = false;
+  let lramaSyntaxSeen = false;
+  while (stream.peek().kind === "directive") {
+    if (stream.peek().value === "rule") {
+      stream.consume();
+      lramaSyntaxSeen = true;
+      continue;
+    }
+    if (stream.peek().value === "inline") {
+      stream.consume();
+      isInline = true;
+      lramaSyntaxSeen = true;
+      continue;
+    }
+    break;
+  }
+
+  const name = stream.match("identifier");
+  if (!name) {
+    stream.report("warning", "YACC200_EXPECTED_RULE", "expected a rule name");
+    stream.consume();
+    return { lramaSyntaxSeen };
+  }
+  const params = parseParameters(stream);
+  if (params) lramaSyntaxSeen = true;
+  const inlineType = stream.match("tag")?.value;
+  if (!stream.match("colon")) {
+    stream.report("error", "YACC208_EXPECTED_COLON", `expected : after rule ${name.value}`);
+    recoverRule(stream);
+    return { lramaSyntaxSeen };
+  }
+
+  const alternatives: YaccAlternative[] = [];
+  do {
+    alternatives.push(parseAlternative(stream, name));
+  } while (stream.match("bar"));
+
+  if (!stream.match("semicolon")) {
+    stream.report("error", "YACC209_EXPECTED_SEMICOLON", `expected ; after rule ${name.value}`);
+    recoverRule(stream);
+  }
+  const declaredType = inlineType ?? declaredTypes.get(name.value);
+  return {
+    rule: {
+      name: name.value,
+      ...(params === undefined ? {} : { params }),
+      ...(isInline ? { isInline: true } : {}),
+      ...(declaredType === undefined ? {} : { declaredType }),
+      alternatives,
+      loc: name.loc,
+    },
+    lramaSyntaxSeen,
+  };
+};
+
 export const parseRules = (
   stream: TokenStream,
   declaredTypes: ReadonlyMap<string, string>,
 ): RuleParseResult => {
   const rules: YaccRule[] = [];
-  let pendingInline = false;
   let lramaSyntaxSeen = false;
 
   while (!["section", "eof"].includes(stream.peek().kind)) {
-    const directive = stream.match("directive");
-    if (directive?.value === "inline") {
-      pendingInline = true;
-      lramaSyntaxSeen = true;
-      continue;
-    }
-    if (directive?.value === "rule") {
-      lramaSyntaxSeen = true;
-    } else if (directive) {
+    const directive = stream.peek();
+    if (
+      directive.kind === "directive" &&
+      directive.value !== "rule" &&
+      directive.value !== "inline"
+    ) {
+      stream.consume();
       stream.diagnostics.push({
         severity: "warning",
         code: "YACC201_UNEXPECTED_DIRECTIVE",
@@ -164,42 +252,9 @@ export const parseRules = (
       });
       continue;
     }
-
-    const name = stream.match("identifier");
-    if (!name) {
-      stream.report("warning", "YACC200_EXPECTED_RULE", "expected a rule name");
-      stream.consume();
-      continue;
-    }
-    const params = parseParameters(stream);
-    if (params) lramaSyntaxSeen = true;
-    if (!stream.match("colon")) {
-      stream.report("error", "YACC208_EXPECTED_COLON", `expected : after rule ${name.value}`);
-      recoverRule(stream);
-      pendingInline = false;
-      continue;
-    }
-
-    const alternatives: YaccAlternative[] = [];
-    do {
-      alternatives.push(parseAlternative(stream, name));
-    } while (stream.match("bar"));
-
-    if (!stream.match("semicolon")) {
-      stream.report("error", "YACC209_EXPECTED_SEMICOLON", `expected ; after rule ${name.value}`);
-      recoverRule(stream);
-    }
-
-    const declaredType = declaredTypes.get(name.value);
-    rules.push({
-      name: name.value,
-      ...(params === undefined ? {} : { params }),
-      ...(pendingInline ? { isInline: true } : {}),
-      ...(declaredType === undefined ? {} : { declaredType }),
-      alternatives,
-      loc: name.loc,
-    });
-    pendingInline = false;
+    const parsed = parseRuleDefinition(stream, declaredTypes);
+    if (parsed.rule) rules.push(parsed.rule);
+    if (parsed.lramaSyntaxSeen) lramaSyntaxSeen = true;
   }
 
   stream.match("section");

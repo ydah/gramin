@@ -12,13 +12,14 @@ const maxRuleMetric = (
 };
 
 export const unresolvedSymbols = (ir: GrammarIR): string[] => {
-  const known = new Set([
+  const globallyKnown = new Set([
     ...ir.rules.map((rule) => rule.name),
     ...ir.terminals.flatMap((terminal) => (terminal.name ? [terminal.name] : [])),
     ...ir.externalSymbols.map((symbol) => symbol.name),
   ]);
   const unresolved = new Set<string>();
   ir.rules.forEach((rule) => {
+    const known = new Set([...globallyKnown, ...(rule.params ?? [])]);
     rule.alternatives.forEach((alternative) => {
       for (const reference of collectReferences(alternative)) {
         if (!known.has(reference)) unresolved.add(reference);

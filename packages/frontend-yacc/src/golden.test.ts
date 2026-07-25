@@ -11,6 +11,7 @@ const goldenCases = [
   "precedence-override",
   "adversarial-actions",
   "raw-string",
+  "lrama",
 ] as const;
 
 describe("fixture to IR golden files", () => {

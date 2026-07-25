@@ -7,12 +7,15 @@ import {
   type TerminalDecl,
 } from "@gramin/core";
 import type { YaccAst, YaccItem } from "./ast.js";
+import { LRAMA_STDLIB_RULES } from "./lrama-stdlib.js";
 
 interface LoweringContext {
   readonly aliases: ReadonlyMap<string, string>;
   readonly terminalLiterals: ReadonlyMap<string, string>;
   readonly terminalNames: ReadonlySet<string>;
   readonly ruleNames: ReadonlySet<string>;
+  readonly externalNames: ReadonlySet<string>;
+  readonly parameterNames: ReadonlySet<string>;
   readonly diagnostics: Diagnostic[];
   readonly unresolved: Set<string>;
 }
@@ -51,6 +54,10 @@ const collectTerminals = (ast: YaccAst): TerminalDecl[] => {
       .map((terminal) => terminal.literal),
   );
   const visit = (item: YaccItem): void => {
+    if (item.kind === "repeat") {
+      visit(item.item);
+      return;
+    }
     if (item.kind === "literal" && !declaredAliases.has(item.value)) {
       add({ literal: item.value, loc: item.loc });
     }
@@ -69,6 +76,9 @@ const lowerItem = (item: YaccItem, context: LoweringContext): Expr => {
   if (item.kind === "action") {
     return { kind: "midRuleAction", codeLength: item.codeLength };
   }
+  if (item.kind === "repeat") {
+    return { kind: item.operator, expr: lowerItem(item.item, context) };
+  }
   if (item.kind === "literal") {
     const alias = context.aliases.get(item.value);
     return alias
@@ -86,7 +96,12 @@ const lowerItem = (item: YaccItem, context: LoweringContext): Expr => {
     };
   }
 
-  if (!context.ruleNames.has(item.name) && !context.unresolved.has(item.name)) {
+  if (
+    !context.ruleNames.has(item.name) &&
+    !context.externalNames.has(item.name) &&
+    !context.parameterNames.has(item.name) &&
+    !context.unresolved.has(item.name)
+  ) {
     context.unresolved.add(item.name);
     context.diagnostics.push({
       severity: "warning",
@@ -138,24 +153,68 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
     }
   }
   const ruleNames = new Set(ast.rules.map((rule) => rule.name));
+  const usedParameterizedNames = new Set<string>();
+  const usedReferenceNames = new Set<string>();
+  const collectParameterizedNames = (item: YaccItem): void => {
+    if (item.kind === "repeat") {
+      collectParameterizedNames(item.item);
+      return;
+    }
+    if (item.kind !== "reference") return;
+    usedReferenceNames.add(item.name);
+    if (item.args !== undefined) usedParameterizedNames.add(item.name);
+    item.args?.forEach(collectParameterizedNames);
+  };
+  ast.rules.forEach((rule) => {
+    rule.alternatives.forEach((alternative) => {
+      alternative.items.forEach(collectParameterizedNames);
+    });
+  });
+  const stdlibNames = new Set(
+    [...usedParameterizedNames].filter(
+      (name) => LRAMA_STDLIB_RULES.has(name) && !ruleNames.has(name),
+    ),
+  );
+  const builtinNames = new Set(
+    usedReferenceNames.has("error") && !ruleNames.has("error") ? ["error"] : [],
+  );
+  const externalNames = new Set([...stdlibNames, ...builtinNames]);
+  const hasEbnfSugar = ast.rules.some((rule) =>
+    rule.alternatives.some((alternative) => {
+      const containsRepeat = (item: YaccItem): boolean =>
+        item.kind === "repeat" ||
+        (item.kind === "reference" && (item.args?.some(containsRepeat) ?? false));
+      return alternative.items.some(containsRepeat);
+    }),
+  );
   const diagnostics = [...ast.diagnostics];
   const context: LoweringContext = {
     aliases,
     terminalLiterals,
     terminalNames,
     ruleNames,
+    externalNames,
+    parameterNames: new Set(),
     diagnostics,
     unresolved: new Set(),
   };
 
-  const rules = ast.rules.map((rule) => ({
-    name: rule.name,
-    ...(rule.params === undefined ? {} : { params: [...rule.params] }),
-    ...(rule.isInline === undefined ? {} : { isInline: rule.isInline }),
-    ...(rule.declaredType === undefined ? {} : { declaredType: rule.declaredType }),
-    alternatives: rule.alternatives.map((alternative) => lowerAlternative(alternative, context)),
-    loc: rule.loc,
-  }));
+  const rules = ast.rules.map((rule) => {
+    const ruleContext: LoweringContext = {
+      ...context,
+      parameterNames: new Set(rule.params ?? []),
+    };
+    return {
+      name: rule.name,
+      ...(rule.params === undefined ? {} : { params: [...rule.params] }),
+      ...(rule.isInline === undefined ? {} : { isInline: rule.isInline }),
+      ...(rule.declaredType === undefined ? {} : { declaredType: rule.declaredType }),
+      alternatives: rule.alternatives.map((alternative) =>
+        lowerAlternative(alternative, ruleContext),
+      ),
+      loc: rule.loc,
+    };
+  });
 
   return {
     irVersion: IR_VERSION,
@@ -167,7 +226,7 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
     },
     capabilities: {
       orderedChoice: false,
-      ebnfSugar: false,
+      ebnfSugar: hasEbnfSugar,
       predicates: false,
       scannerless: false,
       precedenceTable: true,
@@ -177,7 +236,12 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
     startSymbols:
       ast.startSymbols.length > 0 ? [...ast.startSymbols] : rules[0] ? [rules[0].name] : [],
     terminals,
-    externalSymbols: [],
+    externalSymbols: [
+      ...[...stdlibNames].sort().map((name) => ({ name, origin: "stdlib", kind: "rule" as const })),
+      ...[...builtinNames]
+        .sort()
+        .map((name) => ({ name, origin: "builtin", kind: "terminal" as const })),
+    ],
     precedence: ast.precedence.map((level) => ({
       assoc: level.assoc,
       tokens: level.tokens.map((token) => token.value),

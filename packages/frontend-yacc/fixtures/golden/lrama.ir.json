@@ -1,0 +1,131 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": true,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [
+    {
+      "kind": "rule",
+      "name": "list",
+      "origin": "stdlib"
+    },
+    {
+      "kind": "rule",
+      "name": "option",
+      "origin": "stdlib"
+    },
+    {
+      "kind": "rule",
+      "name": "separated_list",
+      "origin": "stdlib"
+    }
+  ],
+  "irVersion": "0.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "X"
+            }
+          ]
+        }
+      ],
+      "declaredType": "node",
+      "isInline": true,
+      "name": "wrapper",
+      "params": [
+        "X"
+      ]
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "kind": "terminal",
+                      "name": "ITEM"
+                    }
+                  ],
+                  "kind": "symbol",
+                  "name": "option"
+                }
+              ],
+              "kind": "symbol",
+              "label": "wrapped",
+              "name": "wrapper"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "name": "ITEM"
+                }
+              ],
+              "kind": "symbol",
+              "name": "list"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "literal": ","
+                },
+                {
+                  "kind": "terminal",
+                  "name": "ITEM"
+                }
+              ],
+              "kind": "symbol",
+              "name": "separated_list"
+            }
+          ]
+        }
+      ],
+      "name": "start"
+    }
+  ],
+  "source": {
+    "dialect": "lrama",
+    "fileNames": [
+      "lrama.y"
+    ],
+    "format": "lrama",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "name": "ITEM"
+    },
+    {
+      "literal": ","
+    }
+  ]
+}

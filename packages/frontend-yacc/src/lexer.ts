@@ -32,6 +32,7 @@ export const lexYacc = (source: string): LexResult => {
   const diagnostics: Diagnostic[] = [];
   let sectionCount = 0;
   let declarationBlockExpected = false;
+  let preambleRuleActive = false;
 
   const pushToken = (kind: TokenKind, value: string, start: ReturnType<typeof cursor.mark>) => {
     tokens.push({ kind, value, loc: cursor.spanFrom(start) });
@@ -205,9 +206,13 @@ export const lexYacc = (source: string): LexResult => {
       const directive = cursor.slice(start).slice(1);
       pushToken("directive", directive, start);
       declarationBlockExpected = sectionCount === 0 && blockDirectives.has(directive);
+      if (sectionCount === 0 && directive === "rule") preambleRuleActive = true;
       continue;
     }
-    if (cursor.peek() === "{" && (sectionCount > 0 || declarationBlockExpected)) {
+    if (
+      cursor.peek() === "{" &&
+      (sectionCount > 0 || declarationBlockExpected || preambleRuleActive)
+    ) {
       scanAction();
       declarationBlockExpected = false;
       continue;
@@ -235,6 +240,9 @@ export const lexYacc = (source: string): LexResult => {
     const start = cursor.mark();
     const character = cursor.advance();
     pushToken(punctuationKinds[character] ?? "other", character, start);
+    if (character === ";" && sectionCount === 0 && preambleRuleActive) {
+      preambleRuleActive = false;
+    }
   }
 
   const end = cursor.mark();

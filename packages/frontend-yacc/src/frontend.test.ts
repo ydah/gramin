@@ -42,6 +42,7 @@ describe("yacc-family parser and lowering", () => {
     "precedence-override.y",
     "adversarial-actions.y",
     "raw-string.y",
+    "lrama.y",
   ])("produces canonical IR for %s", (name) => {
     const result = parseFixture(name);
     expect(result.ir).not.toBeNull();
@@ -69,5 +70,21 @@ describe("yacc-family parser and lowering", () => {
     expect(serializeCanonical(result.ir, { stripLocations: true })).toBe(
       serializeCanonical(result.ir, { stripLocations: true }),
     );
+  });
+
+  it("preserves Lrama parameters and classifies stdlib calls as external", () => {
+    const result = parseFixture("lrama.y");
+    expect(result.ir?.source.format).toBe("lrama");
+    expect(result.ir?.capabilities.parameterizedRules).toBe(true);
+    expect(result.ir?.rules.find((rule) => rule.name === "wrapper")).toMatchObject({
+      params: ["X"],
+      isInline: true,
+      declaredType: "node",
+    });
+    expect(result.ir?.externalSymbols).toEqual([
+      { name: "list", origin: "stdlib", kind: "rule" },
+      { name: "option", origin: "stdlib", kind: "rule" },
+      { name: "separated_list", origin: "stdlib", kind: "rule" },
+    ]);
   });
 });

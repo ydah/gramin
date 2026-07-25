@@ -2,8 +2,8 @@
 set -eu
 
 destination=${1:-fixtures/downloaded}
-bison_commit=9e3f67f424d34b141c77f6c825f95043f73e30f1
-ruby_commit=33192f99a6f12b25d352f184d123eda1fcdbfc67
+bison_commit=25b3d0e1a3f97a33615099e4b211f3953990c203
+ruby_commit=33db313e855dfa83d7c66c2de6d63b9b401c32a0
 
 mkdir -p "$destination/bison" "$destination/ruby"
 curl -fsSL "https://raw.githubusercontent.com/akimd/bison/$bison_commit/examples/c/calc/calc.y" \

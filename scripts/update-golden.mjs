@@ -18,6 +18,7 @@ if (!process.argv.includes("--update-golden")) {
     "precedence-override",
     "adversarial-actions",
     "raw-string",
+    "lrama",
   ];
   await mkdir(goldenDirectory, { recursive: true });
   for (const name of names) {
