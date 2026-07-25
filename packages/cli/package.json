@@ -1,0 +1,36 @@
+{
+  "name": "gramin",
+  "version": "0.1.0",
+  "author": "Yudai Takada",
+  "description": "Analyze parser grammar files as deterministic structural features",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "gramin": "./dist/bin.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run src --passWithNoTests",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@gramin/analyzer": "workspace:*",
+    "@gramin/core": "workspace:*",
+    "@gramin/frontend-yacc": "workspace:*",
+    "@gramin/reporter": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@gramin/core",
+  "version": "0.2.0",
+  "author": "Yudai Takada",
+  "description": "Versioned Grammar IR and feature contracts for gramin",
+  "type": "module",
+  "files": [
+    "dist",
+    "schema"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schema/*": "./schema/*"
+  },
+  "scripts": {
+    "build": "tsc -b && node dist/write-schemas.js",
+    "test": "vitest run src",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "0.34.52",
+    "ajv": "8.20.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}
