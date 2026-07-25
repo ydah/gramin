@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { analyzeGrammar } from "../packages/analyzer/dist/index.js";
 import { serializeCanonical } from "../packages/core/dist/index.js";
+import { antlrFrontend } from "../packages/frontend-antlr/dist/index.js";
 import { bnfFrontend } from "../packages/frontend-bnf/dist/index.js";
 import { pegFrontend } from "../packages/frontend-peg/dist/index.js";
 import { yaccFrontend } from "../packages/frontend-yacc/dist/index.js";
@@ -89,5 +90,29 @@ if (!process.argv.includes("--update-golden")) {
   await writeFile(
     resolve(pegGoldenDirectory, "json.features-loc.json"),
     serializeCanonical(analyzeGrammar(pegResult.ir)),
+  );
+
+  const antlrFixtureDirectory = resolve("packages/frontend-antlr/fixtures");
+  const antlrGoldenDirectory = resolve(antlrFixtureDirectory, "golden");
+  await mkdir(antlrGoldenDirectory, { recursive: true });
+  const antlrContent = await readFile(resolve(antlrFixtureDirectory, "Labels.g4"), "utf8");
+  const antlrResult = antlrFrontend.parse([{ name: "Labels.g4", content: antlrContent }], {});
+  if (!antlrResult.ir) throw new Error("Could not generate IR for Labels.g4");
+  const strippedAntlrIR = JSON.parse(serializeCanonical(antlrResult.ir, { stripLocations: true }));
+  await writeFile(
+    resolve(antlrGoldenDirectory, "labels.ir.json"),
+    serializeCanonical(antlrResult.ir, { stripLocations: true }),
+  );
+  await writeFile(
+    resolve(antlrGoldenDirectory, "labels.ir-loc.json"),
+    serializeCanonical(antlrResult.ir),
+  );
+  await writeFile(
+    resolve(antlrGoldenDirectory, "labels.features.json"),
+    serializeCanonical(analyzeGrammar(strippedAntlrIR)),
+  );
+  await writeFile(
+    resolve(antlrGoldenDirectory, "labels.features-loc.json"),
+    serializeCanonical(analyzeGrammar(antlrResult.ir)),
   );
 }

@@ -8,6 +8,7 @@ import {
   serializeCanonical,
   validateIR,
 } from "@gramin/core";
+import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
@@ -46,7 +47,7 @@ const defaultIO: CliIO = {
   runExternalFrontend: runExternalFrontendProcess,
 };
 
-const frontends: readonly Frontend[] = [yaccFrontend, bnfFrontend, pegFrontend];
+const frontends: readonly Frontend[] = [yaccFrontend, bnfFrontend, pegFrontend, antlrFrontend];
 
 const usage = `Usage:
   gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>]

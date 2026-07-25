@@ -28,7 +28,8 @@ choices are flattened; nested ordered choices use `choice(ordered: true)`.
 1. A choice directly below a rule is flattened into `Rule.alternatives`.
 2. `Alternative.items` is an implicit sequence, so it cannot directly contain `seq`.
    A `seq` cannot directly contain another `seq`.
-3. A `group` cannot occur directly in `Alternative.items`.
+3. A `group` directly in `Alternative.items` must have a `choice` child. Frontends unwrap
+   groups around one expression and flatten groups around one sequence.
 4. `capabilities.orderedChoice` is true exactly when an ordered choice occurs.
 5. `capabilities.scannerless` is true exactly when `charClass` or `anyChar` occurs.
 6. Frontends resolve a declared literal alias to its named terminal before emitting IR.
@@ -48,3 +49,5 @@ golden-fixture updates. See
 [`RFC 0001`](./rfcs/0001-grammar-ir-v1.md) for the v1 evidence and migration policy.
 [`RFC 0002`](./rfcs/0002-ordered-rule-alternatives.md) defines the additive v1.1 ordered
 alternative field.
+[`RFC 0003`](./rfcs/0003-top-level-nested-choice-group.md) defines the v1.2 canonical
+relaxation for nested choices.

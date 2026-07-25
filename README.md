@@ -3,9 +3,9 @@
 `gramin` converts parser grammar files into deterministic, versioned structural features
 for tooling, review, and LLM-assisted analysis. It never executes semantic actions.
 
-The current release supports POSIX Yacc, Bison, Lrama, BNF, EBNF, and Peggy/PEG.js,
-including parameterized rules, named references, EBNF sugar, scannerless expressions,
-and Lrama standard-library calls.
+The current release supports POSIX Yacc, Bison, Lrama, BNF, EBNF, ANTLR4, and
+Peggy/PEG.js, including split parser/lexer grammars, parameterized rules, named
+references, EBNF sugar, scannerless expressions, and Lrama standard-library calls.
 
 ## Requirements
 

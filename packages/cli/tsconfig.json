@@ -9,6 +9,7 @@
   "references": [
     { "path": "../core" },
     { "path": "../analyzer" },
+    { "path": "../frontend-antlr" },
     { "path": "../frontend-bnf" },
     { "path": "../frontend-peg" },
     { "path": "../frontend-yacc" },

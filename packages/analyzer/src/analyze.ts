@@ -36,7 +36,7 @@ const versionDiagnostics = (version: string): Diagnostic[] => {
     ];
   }
   if (major !== 1) throw new UnsupportedIRVersionError(version);
-  if (minor <= 1) return [];
+  if (minor <= 2) return [];
   return [
     {
       severity: "warning",

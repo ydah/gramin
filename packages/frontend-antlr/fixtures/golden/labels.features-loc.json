@@ -1,0 +1,146 @@
+{
+  "actions": {
+    "altActionCoverage": 0,
+    "avgActionLength": 0,
+    "maxActionLength": 0,
+    "midRuleActions": 0
+  },
+  "diagnostics": [
+    {
+      "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+      "loc": {
+        "endCol": 15,
+        "endLine": 12,
+        "startCol": 10,
+        "startLine": 12
+      },
+      "message": "fragment DIGIT was excluded from terminals",
+      "severity": "info"
+    },
+    {
+      "code": "IR011_LOSSY_SEMANTIC_PREDICATE",
+      "loc": {
+        "endCol": 18,
+        "endLine": 7,
+        "startCol": 7,
+        "startLine": 7
+      },
+      "message": "ANTLR semantic predicate code was omitted",
+      "severity": "info"
+    },
+    {
+      "code": "ANALYZER003_UNUSED_TERMINALS",
+      "message": "unused terminals: WS",
+      "severity": "warning"
+    }
+  ],
+  "featuresVersion": "0.2.0",
+  "lexicon": {
+    "anyCharCount": 0,
+    "charClassCount": 0,
+    "keywordLike": [],
+    "literalOccurrences": 3,
+    "literalTokens": 3,
+    "namedTokens": 3,
+    "punctuationLike": [
+      ",",
+      "[",
+      "]"
+    ]
+  },
+  "notable": {
+    "coreSymbols": [
+      "item"
+    ],
+    "deepestRecursionMembers": [],
+    "largestRule": {
+      "line": 4,
+      "name": "item"
+    }
+  },
+  "precedence": {
+    "notApplicable": {
+      "assocBreakdown": "precedenceTable capability is false",
+      "levels": "precedenceTable capability is false",
+      "precOverrides": "precedenceTable capability is false",
+      "tokensInPrecedence": "precedenceTable capability is false"
+    }
+  },
+  "size": {
+    "alternatives": 4,
+    "avgAltPerRule": 2,
+    "avgRhsLength": 2,
+    "emptyAlternatives": 0,
+    "maxAltPerRule": {
+      "line": 4,
+      "rule": "item",
+      "value": 3
+    },
+    "maxRhsLength": {
+      "line": 4,
+      "rule": "item",
+      "value": 4
+    },
+    "nestedChoiceCount": 0,
+    "nonterminals": 2,
+    "rules": 2,
+    "terminals": 6,
+    "unresolvedSymbols": {
+      "count": 0,
+      "names": []
+    }
+  },
+  "source": {
+    "dialect": "antlr4",
+    "fileNames": [
+      "Labels.g4"
+    ],
+    "format": "antlr4",
+    "frontend": {
+      "id": "antlr4",
+      "version": "0.1.0"
+    }
+  },
+  "structure": {
+    "directLeftRecursiveRules": 1,
+    "directRightRecursiveRules": 1,
+    "largestSccSize": {
+      "members": [],
+      "value": 0
+    },
+    "maxDependencyDepth": 1,
+    "nullableRules": 0,
+    "recursionSccCount": 0,
+    "topFanIn": [
+      {
+        "count": 2,
+        "symbol": "item"
+      },
+      {
+        "count": 0,
+        "symbol": "start"
+      }
+    ],
+    "topFanOut": [
+      {
+        "count": 1,
+        "symbol": "item"
+      },
+      {
+        "count": 1,
+        "symbol": "start"
+      }
+    ],
+    "unreachableSymbols": []
+  },
+  "sugar": {
+    "notApplicable": {
+      "inlineRules": "parameterizedRules capability is false",
+      "parameterizedCalls": "parameterizedRules capability is false",
+      "parameterizedRuleDefs": "parameterizedRules capability is false"
+    },
+    "opt": 0,
+    "plus": 0,
+    "star": 1
+  }
+}

@@ -35,6 +35,9 @@ importers:
       '@gramin/core':
         specifier: workspace:*
         version: link:../core
+      '@gramin/frontend-antlr':
+        specifier: workspace:*
+        version: link:../frontend-antlr
       '@gramin/frontend-bnf':
         specifier: workspace:*
         version: link:../frontend-bnf
@@ -56,6 +59,12 @@ importers:
       ajv:
         specifier: 8.20.0
         version: 8.20.0
+
+  packages/frontend-antlr:
+    dependencies:
+      '@gramin/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/frontend-bnf:
     dependencies:
