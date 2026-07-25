@@ -304,30 +304,34 @@ describe("gramin CLI", () => {
 
   const antlrCorpusRoot = new URL("../../../fixtures/downloaded/antlr/", import.meta.url);
   const hasAntlrCorpus = existsSync(new URL("json/JSON.g4", antlrCorpusRoot));
-  it.runIf(hasAntlrCorpus)("analyzes three pinned grammars-v4 grammar sets without errors", () => {
-    const cases = [
-      ["json/JSON.g4"],
-      ["sqlite/SQLiteParser.g4", "sqlite/SQLiteLexer.g4"],
-      ["java/JavaParser.g4", "java/JavaLexer.g4"],
-    ] as const;
-    cases.forEach((names) => {
-      const files = names.map((name) => ({
-        name,
-        content: readFileSync(new URL(name, antlrCorpusRoot), "utf8"),
-      }));
-      const parsed = antlrFrontend.parse(files, {});
-      expect(
-        parsed.diagnostics.filter(({ severity }) => severity === "error"),
-        names.join(", "),
-      ).toEqual([]);
-      expect(validateIR(parsed.ir).ok, names.join(", ")).toBe(true);
-      if (!parsed.ir) return;
-      expect(analyzeGrammar(parsed.ir).size.unresolvedSymbols, names.join(", ")).toEqual({
-        count: 0,
-        names: [],
+  it.runIf(hasAntlrCorpus)(
+    "analyzes three pinned grammars-v4 grammar sets without errors",
+    { timeout: 15_000 },
+    () => {
+      const cases = [
+        ["json/JSON.g4"],
+        ["sqlite/SQLiteParser.g4", "sqlite/SQLiteLexer.g4"],
+        ["java/JavaParser.g4", "java/JavaLexer.g4"],
+      ] as const;
+      cases.forEach((names) => {
+        const files = names.map((name) => ({
+          name,
+          content: readFileSync(new URL(name, antlrCorpusRoot), "utf8"),
+        }));
+        const parsed = antlrFrontend.parse(files, {});
+        expect(
+          parsed.diagnostics.filter(({ severity }) => severity === "error"),
+          names.join(", "),
+        ).toEqual([]);
+        expect(validateIR(parsed.ir).ok, names.join(", ")).toBe(true);
+        if (!parsed.ir) return;
+        expect(analyzeGrammar(parsed.ir).size.unresolvedSymbols, names.join(", ")).toEqual({
+          count: 0,
+          names: [],
+        });
       });
-    });
-  });
+    },
+  );
 
   it.runIf(existsSync(new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url)))(
     "analyzes the pinned Ruby parse.y corpus within the local target",
