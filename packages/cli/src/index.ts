@@ -11,3 +11,4 @@ export {
   type ExternalFrontendRunner,
   runExternalFrontendProcess,
 } from "./external-frontend.js";
+export { CLI_VERSION } from "./version.js";
