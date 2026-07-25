@@ -1,0 +1,26 @@
+{
+  "name": "gramin-workspace",
+  "version": "0.0.0",
+  "author": "Yudai Takada",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -b && node packages/core/dist/write-schemas.js",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "clean": "tsc -b --clean",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint . && pnpm check:boundaries",
+    "test": "vitest run",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.5",
+    "@types/node": "24.10.1",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}

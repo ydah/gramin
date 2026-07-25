@@ -1,0 +1,9 @@
+/.idea/
+/.vscode/
+tmp/
+*.log
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
