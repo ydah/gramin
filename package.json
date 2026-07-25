@@ -2,7 +2,17 @@
   "name": "gramin-workspace",
   "version": "0.0.0",
   "author": "Yudai Takada",
+  "description": "Grammar analysis packages and command-line tooling",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://github.com/ydah/gramin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ydah/gramin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ydah/gramin/issues"
+  },
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=20"

@@ -10,9 +10,57 @@ references, EBNF sugar, scannerless expressions, and Lrama/Menhir standard-libra
 ## Requirements
 
 - Node.js 20 or newer
-- pnpm 10
 
-## Build and verify
+## Quick start
+
+```sh
+npx gramin analyze grammar.y
+npx gramin analyze grammar.y --format md
+npx gramin analyze grammar.y --format llm --budget-chars 8000
+```
+
+Install the command globally when using it repeatedly:
+
+```sh
+npm install --global gramin
+gramin analyze grammar.y --format md
+```
+
+Example Markdown output:
+
+```text
+# Grammar feature report
+
+Features version: `0.2.0`
+
+## Size
+
+| Metric | Value |
+|---|---:|
+| `rules` | 2 |
+| `alternatives` | 7 |
+| `unresolvedSymbols.count` | 0 |
+```
+
+Inspect or pipe the versioned Grammar IR with the globally installed command:
+
+```sh
+gramin ir grammar.y | gramin analyze --ir -
+```
+
+Other useful commands:
+
+```sh
+gramin detect grammar.y
+gramin validate-ir grammar-ir.json
+```
+
+Exit codes are 0 for success, 1 for partial analysis with error diagnostics, 2 for fatal
+input or frontend failures, and 3 for invalid command usage.
+
+## Development
+
+Development requires pnpm 10:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -21,31 +69,6 @@ pnpm typecheck
 pnpm test
 pnpm build
 ```
-
-## Quick start
-
-```sh
-node packages/cli/dist/bin.js analyze packages/frontend-yacc/fixtures/calc.y
-node packages/cli/dist/bin.js analyze grammar.y --format md
-node packages/cli/dist/bin.js analyze grammar.y --format llm --budget-chars 8000
-```
-
-Inspect or pipe the versioned Grammar IR:
-
-```sh
-node packages/cli/dist/bin.js ir grammar.y |
-  node packages/cli/dist/bin.js analyze --ir -
-```
-
-Other useful commands:
-
-```sh
-node packages/cli/dist/bin.js detect grammar.y
-node packages/cli/dist/bin.js validate-ir grammar-ir.json
-```
-
-Exit codes are 0 for success, 1 for partial analysis with error diagnostics, 2 for fatal
-input or frontend failures, and 3 for invalid command usage.
 
 ## Corpus validation
 

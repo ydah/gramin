@@ -3,9 +3,29 @@
   "version": "0.1.0",
   "author": "Yudai Takada",
   "description": "Analyze parser grammar files as deterministic structural features",
+  "keywords": [
+    "grammar",
+    "parser",
+    "yacc",
+    "bison",
+    "antlr",
+    "menhir",
+    "peg"
+  ],
+  "homepage": "https://github.com/ydah/gramin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ydah/gramin.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/ydah/gramin/issues"
+  },
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/.tsbuildinfo"
   ],
   "bin": {
     "gramin": "./dist/bin.js"
@@ -32,6 +52,9 @@
     "@gramin/frontend-peg": "workspace:*",
     "@gramin/frontend-yacc": "workspace:*",
     "@gramin/reporter": "workspace:*"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public"
