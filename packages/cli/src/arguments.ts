@@ -5,6 +5,7 @@ export interface ParsedArguments {
   readonly files: readonly string[];
   readonly format: OutputFormat;
   readonly frontend?: string;
+  readonly frontendCommand?: string;
   readonly dialect?: string;
   readonly irInput?: string;
   readonly output?: string;
@@ -19,6 +20,7 @@ export type ArgumentResult =
 const valueOptions = new Set([
   "--format",
   "--frontend",
+  "--frontend-cmd",
   "--dialect",
   "--ir",
   "--budget-chars",
@@ -62,6 +64,10 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
     return { ok: false, message: "--budget-chars must be a positive integer" };
   }
   const frontend = options.get("--frontend");
+  const frontendCommand = options.get("--frontend-cmd");
+  if (frontend !== undefined && frontendCommand !== undefined) {
+    return { ok: false, message: "--frontend and --frontend-cmd cannot be used together" };
+  }
   const dialect = options.get("--dialect");
   const irInput = options.get("--ir");
   const output = options.get("-o");
@@ -73,6 +79,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
       files,
       format: format as OutputFormat,
       ...(frontend === undefined ? {} : { frontend }),
+      ...(frontendCommand === undefined ? {} : { frontendCommand }),
       ...(dialect === undefined ? {} : { dialect }),
       ...(irInput === undefined ? {} : { irInput }),
       ...(output === undefined ? {} : { output }),

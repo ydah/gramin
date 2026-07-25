@@ -1,0 +1,182 @@
+{
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "0.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "term"
+            },
+            {
+              "expr": {
+                "items": [
+                  {
+                    "expr": {
+                      "alts": [
+                        {
+                          "kind": "terminal",
+                          "literal": "+"
+                        },
+                        {
+                          "kind": "terminal",
+                          "literal": "-"
+                        }
+                      ],
+                      "kind": "choice",
+                      "ordered": false
+                    },
+                    "kind": "group"
+                  },
+                  {
+                    "kind": "symbol",
+                    "name": "term"
+                  }
+                ],
+                "kind": "seq"
+              },
+              "kind": "star"
+            }
+          ]
+        }
+      ],
+      "name": "expr"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "factor"
+            },
+            {
+              "expr": {
+                "items": [
+                  {
+                    "expr": {
+                      "alts": [
+                        {
+                          "kind": "terminal",
+                          "literal": "*"
+                        },
+                        {
+                          "kind": "terminal",
+                          "literal": "/"
+                        }
+                      ],
+                      "kind": "choice",
+                      "ordered": false
+                    },
+                    "kind": "group"
+                  },
+                  {
+                    "kind": "symbol",
+                    "name": "factor"
+                  }
+                ],
+                "kind": "seq"
+              },
+              "kind": "star"
+            }
+          ]
+        }
+      ],
+      "name": "term"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "number"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "("
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            },
+            {
+              "kind": "terminal",
+              "literal": ")"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "expr": {
+                "kind": "terminal",
+                "literal": "-"
+              },
+              "kind": "opt"
+            },
+            {
+              "kind": "terminal",
+              "literal": "number"
+            }
+          ]
+        }
+      ],
+      "name": "factor"
+    }
+  ],
+  "source": {
+    "dialect": "bnf",
+    "fileNames": [
+      "arithmetic.ebnf"
+    ],
+    "format": "bnf",
+    "frontend": {
+      "id": "bnf",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "expr"
+  ],
+  "terminals": [
+    {
+      "literal": "("
+    },
+    {
+      "literal": ")"
+    },
+    {
+      "literal": "*"
+    },
+    {
+      "literal": "+"
+    },
+    {
+      "literal": "-"
+    },
+    {
+      "literal": "/"
+    },
+    {
+      "literal": "number"
+    }
+  ]
+}

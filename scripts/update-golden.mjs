@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { analyzeGrammar } from "../packages/analyzer/dist/index.js";
 import { serializeCanonical } from "../packages/core/dist/index.js";
+import { bnfFrontend } from "../packages/frontend-bnf/dist/index.js";
 import { yaccFrontend } from "../packages/frontend-yacc/dist/index.js";
 
 if (!process.argv.includes("--update-golden")) {
@@ -39,4 +40,29 @@ if (!process.argv.includes("--update-golden")) {
       serializeCanonical(analyzeGrammar(result.ir)),
     );
   }
+
+  const bnfFixtureDirectory = resolve("packages/frontend-bnf/fixtures");
+  const bnfGoldenDirectory = resolve(bnfFixtureDirectory, "golden");
+  await mkdir(bnfGoldenDirectory, { recursive: true });
+  const bnfContent = await readFile(resolve(bnfFixtureDirectory, "arithmetic.ebnf"), "utf8");
+  const bnfResult = bnfFrontend.parse([{ name: "arithmetic.ebnf", content: bnfContent }], {});
+  if (!bnfResult.ir) throw new Error("Could not generate IR for arithmetic.ebnf");
+  await writeFile(
+    resolve(bnfGoldenDirectory, "arithmetic.ir.json"),
+    serializeCanonical(bnfResult.ir, { stripLocations: true }),
+  );
+  await writeFile(
+    resolve(bnfGoldenDirectory, "arithmetic.ir-loc.json"),
+    serializeCanonical(bnfResult.ir),
+  );
+  await writeFile(
+    resolve(bnfGoldenDirectory, "arithmetic.features.json"),
+    serializeCanonical(
+      analyzeGrammar(JSON.parse(serializeCanonical(bnfResult.ir, { stripLocations: true }))),
+    ),
+  );
+  await writeFile(
+    resolve(bnfGoldenDirectory, "arithmetic.features-loc.json"),
+    serializeCanonical(analyzeGrammar(bnfResult.ir)),
+  );
 }

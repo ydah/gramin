@@ -8,6 +8,7 @@ const workspacePath = fileURLToPath(workspaceRoot);
 const publicPackages = new Set([
   "@gramin/core",
   "@gramin/analyzer",
+  "@gramin/frontend-bnf",
   "@gramin/frontend-yacc",
   "@gramin/reporter",
 ]);
@@ -15,11 +16,18 @@ const publicPackages = new Set([
 const allowedImports = new Map([
   ["core", new Set()],
   ["analyzer", new Set(["@gramin/core"])],
+  ["frontend-bnf", new Set(["@gramin/core"])],
   ["frontend-yacc", new Set(["@gramin/core"])],
   ["reporter", new Set(["@gramin/core"])],
   [
     "cli",
-    new Set(["@gramin/core", "@gramin/analyzer", "@gramin/frontend-yacc", "@gramin/reporter"]),
+    new Set([
+      "@gramin/core",
+      "@gramin/analyzer",
+      "@gramin/frontend-bnf",
+      "@gramin/frontend-yacc",
+      "@gramin/reporter",
+    ]),
   ],
 ]);
 

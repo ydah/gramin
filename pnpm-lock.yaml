@@ -35,6 +35,9 @@ importers:
       '@gramin/core':
         specifier: workspace:*
         version: link:../core
+      '@gramin/frontend-bnf':
+        specifier: workspace:*
+        version: link:../frontend-bnf
       '@gramin/frontend-yacc':
         specifier: workspace:*
         version: link:../frontend-yacc
@@ -50,6 +53,12 @@ importers:
       ajv:
         specifier: 8.20.0
         version: 8.20.0
+
+  packages/frontend-bnf:
+    dependencies:
+      '@gramin/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/frontend-yacc:
     dependencies:
