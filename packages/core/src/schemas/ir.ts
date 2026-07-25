@@ -185,7 +185,7 @@ export const GrammarIRSchema = Type.Object(
     rules: Type.Array(RuleSchema),
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/grammar-ir-v0.2.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/grammar-ir-v1.json" },
 );
 
 export type Capabilities = Static<typeof CapabilitiesSchema>;

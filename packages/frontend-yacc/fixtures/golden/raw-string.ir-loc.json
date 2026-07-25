@@ -22,7 +22,7 @@
     }
   ],
   "externalSymbols": [],
-  "irVersion": "0.2.0",
+  "irVersion": "1.0.0",
   "precedence": [],
   "rules": [
     {

@@ -7,7 +7,7 @@ const schemaDirectory = new URL("../schema/", import.meta.url);
 await mkdir(schemaDirectory, { recursive: true });
 await Promise.all([
   writeFile(
-    new URL("grammar-ir-v0.2.schema.json", schemaDirectory),
+    new URL("grammar-ir-v1.schema.json", schemaDirectory),
     serializeCanonical(GrammarIRSchemaDocument),
   ),
   writeFile(

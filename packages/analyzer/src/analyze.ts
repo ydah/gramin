@@ -26,8 +26,17 @@ const versionDiagnostics = (version: string): Diagnostic[] => {
   const [majorText, minorText] = version.split(".");
   const major = Number(majorText);
   const minor = Number(minorText);
-  if (major !== 0) throw new UnsupportedIRVersionError(version);
-  if (minor <= 2) return [];
+  if (major === 0) {
+    return [
+      {
+        severity: "warning",
+        code: "ANALYZER005_LEGACY_IR_VERSION",
+        message: `Grammar IR ${version} is supported for migration; emit version 1.0.0`,
+      },
+    ];
+  }
+  if (major !== 1) throw new UnsupportedIRVersionError(version);
+  if (minor === 0) return [];
   return [
     {
       severity: "warning",
