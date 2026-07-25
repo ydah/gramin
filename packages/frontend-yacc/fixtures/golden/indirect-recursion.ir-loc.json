@@ -1,0 +1,130 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "0.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "first"
+            },
+            {
+              "kind": "terminal",
+              "name": "END"
+            }
+          ],
+          "loc": {
+            "endCol": 17,
+            "endLine": 4,
+            "startCol": 8,
+            "startLine": 4
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 4,
+        "startCol": 1,
+        "startLine": 4
+      },
+      "name": "start"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "second"
+            }
+          ],
+          "loc": {
+            "endCol": 14,
+            "endLine": 5,
+            "startCol": 8,
+            "startLine": 5
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 5,
+        "startCol": 1,
+        "startLine": 5
+      },
+      "name": "first"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "first"
+            }
+          ],
+          "loc": {
+            "endCol": 14,
+            "endLine": 6,
+            "startCol": 9,
+            "startLine": 6
+          }
+        },
+        {
+          "items": [],
+          "loc": {
+            "endCol": 23,
+            "endLine": 6,
+            "startCol": 17,
+            "startLine": 6
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 7,
+        "endLine": 6,
+        "startCol": 1,
+        "startLine": 6
+      },
+      "name": "second"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "indirect-recursion.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "loc": {
+        "endCol": 11,
+        "endLine": 2,
+        "startCol": 8,
+        "startLine": 2
+      },
+      "name": "END"
+    }
+  ]
+}

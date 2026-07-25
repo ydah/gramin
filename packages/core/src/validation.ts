@@ -1,6 +1,6 @@
 import { Ajv2020, type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
-import { type Expr, GrammarIRSchema, type GrammarIR } from "./schemas/ir.js";
 import { type GrammarFeatures, GrammarFeaturesSchema } from "./schemas/features.js";
+import { type Expr, type GrammarIR, GrammarIRSchema } from "./schemas/ir.js";
 
 export interface ValidationIssue {
   readonly code: string;

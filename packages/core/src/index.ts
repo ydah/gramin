@@ -5,11 +5,6 @@ export type {
   SourceFile,
 } from "./frontend.js";
 export {
-  canonicalize,
-  serializeCanonical,
-  type SerializationOptions,
-} from "./serialization.js";
-export {
   GrammarFeaturesSchemaDocument,
   GrammarIRSchemaDocument,
 } from "./schema-documents.js";
@@ -32,10 +27,15 @@ export {
   type TerminalDecl,
 } from "./schemas/ir.js";
 export {
-  validateFeatures,
-  validateIR,
+  canonicalize,
+  type SerializationOptions,
+  serializeCanonical,
+} from "./serialization.js";
+export {
   type ValidationIssue,
   type ValidationResult,
+  validateFeatures,
+  validateIR,
 } from "./validation.js";
 
 export const IR_VERSION = "0.2.0";

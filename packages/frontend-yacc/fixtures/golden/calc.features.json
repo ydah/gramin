@@ -1,0 +1,130 @@
+{
+  "actions": {
+    "altActionCoverage": 0.1429,
+    "avgActionLength": 15,
+    "maxActionLength": 15,
+    "midRuleActions": 1
+  },
+  "diagnostics": [
+    {
+      "code": "YACC100_IGNORED_DIRECTIVE",
+      "message": "ignored declaration directive %union",
+      "severity": "info"
+    }
+  ],
+  "featuresVersion": "0.2.0",
+  "lexicon": {
+    "anyCharCount": 0,
+    "charClassCount": 0,
+    "keywordLike": [
+      "if"
+    ],
+    "literalOccurrences": 5,
+    "literalTokens": 3,
+    "namedTokens": 3,
+    "punctuationLike": [
+      "+",
+      "-",
+      ";"
+    ]
+  },
+  "notable": {
+    "coreSymbols": [
+      "expr",
+      "input"
+    ],
+    "deepestRecursionMembers": [],
+    "largestRule": {
+      "name": "expr"
+    }
+  },
+  "precedence": {
+    "assocBreakdown": {
+      "left": 1,
+      "nonassoc": 0,
+      "precedence": 0,
+      "right": 1
+    },
+    "levels": 2,
+    "precOverrides": 1,
+    "tokensInPrecedence": {
+      "count": 3,
+      "ratio": 0.5
+    }
+  },
+  "size": {
+    "alternatives": 7,
+    "avgAltPerRule": 3.5,
+    "avgRhsLength": 2,
+    "emptyAlternatives": 1,
+    "maxAltPerRule": {
+      "rule": "expr",
+      "value": 5
+    },
+    "maxRhsLength": {
+      "rule": "expr",
+      "value": 3
+    },
+    "nestedChoiceCount": 0,
+    "nonterminals": 2,
+    "rules": 2,
+    "terminals": 6,
+    "unresolvedSymbols": {
+      "count": 0,
+      "names": []
+    }
+  },
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "calc.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "structure": {
+    "directLeftRecursiveRules": 2,
+    "directRightRecursiveRules": 1,
+    "largestSccSize": {
+      "members": [],
+      "value": 0
+    },
+    "maxDependencyDepth": 1,
+    "nullableRules": 1,
+    "recursionSccCount": 0,
+    "topFanIn": [
+      {
+        "count": 2,
+        "symbol": "expr"
+      },
+      {
+        "count": 1,
+        "symbol": "input"
+      }
+    ],
+    "topFanOut": [
+      {
+        "count": 2,
+        "symbol": "input"
+      },
+      {
+        "count": 1,
+        "symbol": "expr"
+      }
+    ],
+    "unreachableSymbols": []
+  },
+  "sugar": {
+    "notApplicable": {
+      "inlineRules": "parameterizedRules capability is false",
+      "opt": "ebnfSugar capability is false",
+      "parameterizedCalls": "parameterizedRules capability is false",
+      "parameterizedRuleDefs": "parameterizedRules capability is false",
+      "plus": "ebnfSugar capability is false",
+      "star": "ebnfSugar capability is false"
+    }
+  }
+}

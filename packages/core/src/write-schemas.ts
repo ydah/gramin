@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { serializeCanonical } from "./serialization.js";
 import { GrammarFeaturesSchemaDocument, GrammarIRSchemaDocument } from "./schema-documents.js";
+import { serializeCanonical } from "./serialization.js";
 
 const schemaDirectory = new URL("../schema/", import.meta.url);
 
