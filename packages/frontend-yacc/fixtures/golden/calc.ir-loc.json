@@ -1,0 +1,285 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [
+    {
+      "code": "YACC100_IGNORED_DIRECTIVE",
+      "loc": {
+        "endCol": 7,
+        "endLine": 2,
+        "startCol": 1,
+        "startLine": 2
+      },
+      "message": "ignored declaration directive %union",
+      "severity": "info"
+    }
+  ],
+  "externalSymbols": [],
+  "irVersion": "0.2.0",
+  "precedence": [
+    {
+      "assoc": "left",
+      "loc": {
+        "endCol": 6,
+        "endLine": 5,
+        "startCol": 1,
+        "startLine": 5
+      },
+      "tokens": [
+        "+",
+        "-"
+      ]
+    },
+    {
+      "assoc": "right",
+      "loc": {
+        "endCol": 7,
+        "endLine": 6,
+        "startCol": 1,
+        "startLine": 6
+      },
+      "tokens": [
+        "UMINUS"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [],
+          "loc": {
+            "endCol": 11,
+            "endLine": 11,
+            "startCol": 5,
+            "startLine": 11
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "input"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            },
+            {
+              "kind": "terminal",
+              "literal": ";"
+            }
+          ],
+          "loc": {
+            "endCol": 19,
+            "endLine": 12,
+            "startCol": 5,
+            "startLine": 12
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 10,
+        "startCol": 1,
+        "startLine": 10
+      },
+      "name": "input"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ],
+          "loc": {
+            "endCol": 11,
+            "endLine": 16,
+            "startCol": 5,
+            "startLine": 16
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "if",
+              "name": "IF"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            }
+          ],
+          "loc": {
+            "endCol": 14,
+            "endLine": 17,
+            "startCol": 5,
+            "startLine": 17
+          }
+        },
+        {
+          "action": {
+            "codeLength": 15,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "expr"
+            },
+            {
+              "kind": "terminal",
+              "literal": "+"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            }
+          ],
+          "loc": {
+            "endCol": 36,
+            "endLine": 18,
+            "startCol": 5,
+            "startLine": 18
+          }
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "-"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            }
+          ],
+          "loc": {
+            "endCol": 26,
+            "endLine": 19,
+            "startCol": 5,
+            "startLine": 19
+          },
+          "precedence": "UMINUS"
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "expr"
+            },
+            {
+              "codeLength": 15,
+              "kind": "midRuleAction"
+            },
+            {
+              "kind": "terminal",
+              "literal": "-"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            }
+          ],
+          "loc": {
+            "endCol": 36,
+            "endLine": 20,
+            "startCol": 5,
+            "startLine": 20
+          }
+        }
+      ],
+      "declaredType": "node",
+      "loc": {
+        "endCol": 5,
+        "endLine": 15,
+        "startCol": 1,
+        "startLine": 15
+      },
+      "name": "expr"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "calc.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "input"
+  ],
+  "terminals": [
+    {
+      "declaredType": "number",
+      "loc": {
+        "endCol": 23,
+        "endLine": 3,
+        "startCol": 17,
+        "startLine": 3
+      },
+      "name": "NUMBER"
+    },
+    {
+      "literal": "if",
+      "loc": {
+        "endCol": 10,
+        "endLine": 4,
+        "startCol": 8,
+        "startLine": 4
+      },
+      "name": "IF"
+    },
+    {
+      "literal": "+",
+      "loc": {
+        "endCol": 6,
+        "endLine": 5,
+        "startCol": 1,
+        "startLine": 5
+      }
+    },
+    {
+      "literal": "-",
+      "loc": {
+        "endCol": 6,
+        "endLine": 5,
+        "startCol": 1,
+        "startLine": 5
+      }
+    },
+    {
+      "loc": {
+        "endCol": 7,
+        "endLine": 6,
+        "startCol": 1,
+        "startLine": 6
+      },
+      "name": "UMINUS"
+    },
+    {
+      "literal": ";",
+      "loc": {
+        "endCol": 19,
+        "endLine": 12,
+        "startCol": 16,
+        "startLine": 12
+      }
+    }
+  ]
+}

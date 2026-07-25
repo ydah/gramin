@@ -1,0 +1,64 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [
+    {
+      "code": "YACC100_IGNORED_DIRECTIVE",
+      "message": "ignored declaration directive %code",
+      "severity": "info"
+    },
+    {
+      "code": "YACC100_IGNORED_DIRECTIVE",
+      "message": "ignored declaration directive %union",
+      "severity": "info"
+    }
+  ],
+  "externalSymbols": [],
+  "irVersion": "0.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 114,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "VALUE"
+            }
+          ]
+        }
+      ],
+      "name": "start"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "adversarial-actions.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "name": "VALUE"
+    }
+  ]
+}

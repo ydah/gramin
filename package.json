@@ -15,7 +15,8 @@
     "format:check": "biome format .",
     "lint": "biome lint . && pnpm check:boundaries",
     "test": "vitest run",
-    "typecheck": "tsc -b --pretty false"
+    "typecheck": "tsc -b --pretty false",
+    "update-golden": "pnpm build && node scripts/update-golden.mjs --update-golden"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.5",

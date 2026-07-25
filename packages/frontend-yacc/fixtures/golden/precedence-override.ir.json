@@ -1,0 +1,101 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "0.2.0",
+  "precedence": [
+    {
+      "assoc": "left",
+      "tokens": [
+        "+",
+        "-"
+      ]
+    },
+    {
+      "assoc": "precedence",
+      "tokens": [
+        "NEGATE"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "expr"
+            },
+            {
+              "kind": "terminal",
+              "literal": "+"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "-"
+            },
+            {
+              "kind": "symbol",
+              "name": "expr"
+            }
+          ],
+          "precedence": "NEGATE"
+        }
+      ],
+      "name": "expr"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "precedence-override.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "expr"
+  ],
+  "terminals": [
+    {
+      "name": "NUMBER"
+    },
+    {
+      "literal": "+"
+    },
+    {
+      "literal": "-"
+    },
+    {
+      "name": "NEGATE"
+    }
+  ]
+}

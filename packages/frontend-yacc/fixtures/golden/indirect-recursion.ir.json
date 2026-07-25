@@ -1,0 +1,82 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [],
+  "irVersion": "0.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "first"
+            },
+            {
+              "kind": "terminal",
+              "name": "END"
+            }
+          ]
+        }
+      ],
+      "name": "start"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "second"
+            }
+          ]
+        }
+      ],
+      "name": "first"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "first"
+            }
+          ]
+        },
+        {
+          "items": []
+        }
+      ],
+      "name": "second"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "indirect-recursion.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "name": "END"
+    }
+  ]
+}
