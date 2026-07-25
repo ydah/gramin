@@ -150,6 +150,7 @@ const AlternativeSchema = Type.Object(
 const RuleSchema = Type.Object(
   {
     name: Type.String({ minLength: 1 }),
+    orderedAlternatives: Type.Optional(Type.Boolean()),
     params: Type.Optional(Type.Array(Type.String({ minLength: 1 }))),
     isInline: Type.Optional(Type.Boolean()),
     declaredType: Type.Optional(Type.String()),

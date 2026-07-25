@@ -109,7 +109,7 @@ const walkExpression = (
 
 const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
   const state: CanonicalState = {
-    hasOrderedChoice: false,
+    hasOrderedChoice: ir.rules.some((rule) => rule.orderedAlternatives === true),
     hasScannerlessNode: false,
     issues: [],
   };

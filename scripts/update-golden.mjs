@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { analyzeGrammar } from "../packages/analyzer/dist/index.js";
 import { serializeCanonical } from "../packages/core/dist/index.js";
 import { bnfFrontend } from "../packages/frontend-bnf/dist/index.js";
+import { pegFrontend } from "../packages/frontend-peg/dist/index.js";
 import { yaccFrontend } from "../packages/frontend-yacc/dist/index.js";
 
 if (!process.argv.includes("--update-golden")) {
@@ -64,5 +65,29 @@ if (!process.argv.includes("--update-golden")) {
   await writeFile(
     resolve(bnfGoldenDirectory, "arithmetic.features-loc.json"),
     serializeCanonical(analyzeGrammar(bnfResult.ir)),
+  );
+
+  const pegFixtureDirectory = resolve("packages/frontend-peg/fixtures");
+  const pegGoldenDirectory = resolve(pegFixtureDirectory, "golden");
+  await mkdir(pegGoldenDirectory, { recursive: true });
+  const pegContent = await readFile(resolve(pegFixtureDirectory, "json.peggy"), "utf8");
+  const pegResult = pegFrontend.parse([{ name: "json.peggy", content: pegContent }], {});
+  if (!pegResult.ir) throw new Error("Could not generate IR for json.peggy");
+  const strippedPegIR = JSON.parse(serializeCanonical(pegResult.ir, { stripLocations: true }));
+  await writeFile(
+    resolve(pegGoldenDirectory, "json.ir.json"),
+    serializeCanonical(pegResult.ir, { stripLocations: true }),
+  );
+  await writeFile(
+    resolve(pegGoldenDirectory, "json.ir-loc.json"),
+    serializeCanonical(pegResult.ir),
+  );
+  await writeFile(
+    resolve(pegGoldenDirectory, "json.features.json"),
+    serializeCanonical(analyzeGrammar(strippedPegIR)),
+  );
+  await writeFile(
+    resolve(pegGoldenDirectory, "json.features-loc.json"),
+    serializeCanonical(analyzeGrammar(pegResult.ir)),
   );
 }

@@ -18,6 +18,8 @@ A document contains:
 Expressions form a discriminated union of `symbol`, `terminal`, `seq`, `choice`, `opt`,
 `star`, `plus`, `predicate`, `charClass`, `anyChar`, `midRuleAction`, and `group`.
 Actions preserve only presence and source length; source code is never retained or run.
+`Rule.orderedAlternatives` preserves PEG-style first-success semantics after top-level
+choices are flattened; nested ordered choices use `choice(ordered: true)`.
 
 ## Canonical form
 
@@ -44,3 +46,5 @@ historical `grammar-ir-v0.2.schema.json` remains packaged for old producers.
 A contract change requires an RFC plus coordinated frontend, analyzer, documentation, and
 golden-fixture updates. See
 [`RFC 0001`](./rfcs/0001-grammar-ir-v1.md) for the v1 evidence and migration policy.
+[`RFC 0002`](./rfcs/0002-ordered-rule-alternatives.md) defines the additive v1.1 ordered
+alternative field.

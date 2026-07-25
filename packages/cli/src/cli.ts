@@ -9,6 +9,7 @@ import {
   validateIR,
 } from "@gramin/core";
 import { bnfFrontend } from "@gramin/frontend-bnf";
+import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { renderJson, renderLlmDigest, renderMarkdown } from "@gramin/reporter";
 import { type ParsedArguments, parseArguments } from "./arguments.js";
@@ -45,7 +46,7 @@ const defaultIO: CliIO = {
   runExternalFrontend: runExternalFrontendProcess,
 };
 
-const frontends: readonly Frontend[] = [yaccFrontend, bnfFrontend];
+const frontends: readonly Frontend[] = [yaccFrontend, bnfFrontend, pegFrontend];
 
 const usage = `Usage:
   gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>]

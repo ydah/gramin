@@ -75,6 +75,10 @@ All are **E/B** and apply only when `precedenceTable` is true.
 | `keywordLike` | Distinct alphabetic literals and aliases | H | C |
 | `punctuationLike` | Distinct non-alphanumeric literals and aliases | H | C |
 
+For scannerless grammars, consumers use `literalOccurrences`, `charClassCount`, and
+`anyCharCount`. Declaration counts remain present for features v0.2 compatibility but are
+listed in `notApplicable` because they do not describe a separate lexer.
+
 ## Sugar and extensions
 
 All are **E/B** and are emitted only for the relevant capability.

@@ -1,0 +1,10 @@
+start = _ value:value _ { return value; }
+value = object / array / string / number / "true" / "false" / "null"
+object = "{" _ (member (_ "," _ member)*)? _ "}"
+member = string _ ":" _ value
+array = "[" _ (value (_ "," _ value)*)? _ "]"
+string = '"' chars:[^"]* '"'
+number = "-"? [0-9]+ ("." [0-9]+)?
+keyword = &("true" / "false" / "null") [a-z]+
+other = !keyword .
+_ = [ \t\r\n]*

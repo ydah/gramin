@@ -589,6 +589,9 @@
             "minLength": 1,
             "type": "string"
           },
+          "orderedAlternatives": {
+            "type": "boolean"
+          },
           "params": {
             "items": {
               "minLength": 1,

@@ -1,0 +1,474 @@
+{
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": false,
+    "orderedChoice": true,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": true,
+    "scannerless": true
+  },
+  "diagnostics": [
+    {
+      "code": "IR010_LOSSY_ACTION",
+      "message": "Peggy action code was omitted",
+      "severity": "info"
+    },
+    {
+      "code": "IR013_LOSSY_PEG_LABEL",
+      "message": "label chars on a non-symbol expression was omitted",
+      "severity": "info"
+    }
+  ],
+  "externalSymbols": [],
+  "irVersion": "1.1.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "kind": "symbol",
+              "label": "value",
+              "name": "value"
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            }
+          ]
+        }
+      ],
+      "name": "start"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "object"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "array"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "string"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "number"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "true"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "false"
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "null"
+            }
+          ]
+        }
+      ],
+      "name": "value",
+      "orderedAlternatives": true
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "{"
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "expr": {
+                "expr": {
+                  "items": [
+                    {
+                      "kind": "symbol",
+                      "name": "member"
+                    },
+                    {
+                      "expr": {
+                        "expr": {
+                          "items": [
+                            {
+                              "kind": "symbol",
+                              "name": "_"
+                            },
+                            {
+                              "kind": "terminal",
+                              "literal": ","
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "_"
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "member"
+                            }
+                          ],
+                          "kind": "seq"
+                        },
+                        "kind": "group"
+                      },
+                      "kind": "star"
+                    }
+                  ],
+                  "kind": "seq"
+                },
+                "kind": "group"
+              },
+              "kind": "opt"
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "kind": "terminal",
+              "literal": "}"
+            }
+          ]
+        }
+      ],
+      "name": "object"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "string"
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "kind": "terminal",
+              "literal": ":"
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "kind": "symbol",
+              "name": "value"
+            }
+          ]
+        }
+      ],
+      "name": "member"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "expr": {
+                "expr": {
+                  "items": [
+                    {
+                      "kind": "symbol",
+                      "name": "value"
+                    },
+                    {
+                      "expr": {
+                        "expr": {
+                          "items": [
+                            {
+                              "kind": "symbol",
+                              "name": "_"
+                            },
+                            {
+                              "kind": "terminal",
+                              "literal": ","
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "_"
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "value"
+                            }
+                          ],
+                          "kind": "seq"
+                        },
+                        "kind": "group"
+                      },
+                      "kind": "star"
+                    }
+                  ],
+                  "kind": "seq"
+                },
+                "kind": "group"
+              },
+              "kind": "opt"
+            },
+            {
+              "kind": "symbol",
+              "name": "_"
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ]
+        }
+      ],
+      "name": "array"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "\""
+            },
+            {
+              "expr": {
+                "kind": "charClass",
+                "negated": true,
+                "pattern": "\""
+              },
+              "kind": "star"
+            },
+            {
+              "kind": "terminal",
+              "literal": "\""
+            }
+          ]
+        }
+      ],
+      "name": "string"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "expr": {
+                "kind": "terminal",
+                "literal": "-"
+              },
+              "kind": "opt"
+            },
+            {
+              "expr": {
+                "kind": "charClass",
+                "pattern": "0-9"
+              },
+              "kind": "plus"
+            },
+            {
+              "expr": {
+                "expr": {
+                  "items": [
+                    {
+                      "kind": "terminal",
+                      "literal": "."
+                    },
+                    {
+                      "expr": {
+                        "kind": "charClass",
+                        "pattern": "0-9"
+                      },
+                      "kind": "plus"
+                    }
+                  ],
+                  "kind": "seq"
+                },
+                "kind": "group"
+              },
+              "kind": "opt"
+            }
+          ]
+        }
+      ],
+      "name": "number"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "expr": {
+                "expr": {
+                  "alts": [
+                    {
+                      "kind": "terminal",
+                      "literal": "true"
+                    },
+                    {
+                      "kind": "terminal",
+                      "literal": "false"
+                    },
+                    {
+                      "kind": "terminal",
+                      "literal": "null"
+                    }
+                  ],
+                  "kind": "choice",
+                  "ordered": true
+                },
+                "kind": "group"
+              },
+              "kind": "predicate",
+              "positive": true
+            },
+            {
+              "expr": {
+                "kind": "charClass",
+                "pattern": "a-z"
+              },
+              "kind": "plus"
+            }
+          ]
+        }
+      ],
+      "name": "keyword"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "expr": {
+                "kind": "symbol",
+                "name": "keyword"
+              },
+              "kind": "predicate",
+              "positive": false
+            },
+            {
+              "kind": "anyChar"
+            }
+          ]
+        }
+      ],
+      "name": "other"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "expr": {
+                "kind": "charClass",
+                "pattern": " \\t\\r\\n"
+              },
+              "kind": "star"
+            }
+          ]
+        }
+      ],
+      "name": "_"
+    }
+  ],
+  "source": {
+    "dialect": "peggy",
+    "fileNames": [
+      "json.peggy"
+    ],
+    "format": "peg",
+    "frontend": {
+      "id": "peggy",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "literal": "\""
+    },
+    {
+      "literal": ","
+    },
+    {
+      "literal": "-"
+    },
+    {
+      "literal": "."
+    },
+    {
+      "literal": ":"
+    },
+    {
+      "literal": "["
+    },
+    {
+      "literal": "]"
+    },
+    {
+      "literal": "false"
+    },
+    {
+      "literal": "null"
+    },
+    {
+      "literal": "true"
+    },
+    {
+      "literal": "{"
+    },
+    {
+      "literal": "}"
+    }
+  ]
+}

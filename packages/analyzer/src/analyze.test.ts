@@ -114,7 +114,7 @@ describe("analyzeGrammar", () => {
   });
 
   it("warns when analyzing a future compatible v1 minor", () => {
-    const future = { ...fixtureIR("calc"), irVersion: "1.1.0" };
+    const future = { ...fixtureIR("calc"), irVersion: "1.2.0" };
     expect(analyzeGrammar(future).diagnostics).toContainEqual(
       expect.objectContaining({ code: "ANALYZER004_FUTURE_IR_MINOR" }),
     );

@@ -8,7 +8,7 @@ import {
 } from "./index.js";
 
 const baseIR = (): GrammarIR => ({
-  irVersion: "1.0.0",
+  irVersion: "1.1.0",
   source: {
     format: "yacc",
     frontend: { id: "test", version: "0.1.0" },
@@ -216,6 +216,27 @@ describe("Grammar IR canonical form", () => {
     if (!result.ok) {
       expect(result.issues.some((issue) => issue.code.startsWith("IR_CANON_"))).toBe(true);
     }
+  });
+
+  it("accounts for ordered rule alternatives in capability validation", () => {
+    const orderedRule: GrammarIR = {
+      ...baseIR(),
+      capabilities: { ...baseIR().capabilities, orderedChoice: true },
+      rules: [
+        {
+          name: "start",
+          orderedAlternatives: true,
+          alternatives: [{ items: [] }, { items: [{ kind: "terminal", literal: "x" }] }],
+        },
+      ],
+    };
+    expect(validateIR(orderedRule).ok).toBe(true);
+    expect(
+      validateIR({
+        ...orderedRule,
+        capabilities: { ...orderedRule.capabilities, orderedChoice: false },
+      }).ok,
+    ).toBe(false);
   });
 });
 
