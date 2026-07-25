@@ -3,9 +3,26 @@
   "version": "0.1.0",
   "author": "Yudai Takada",
   "description": "ANTLR4 grammar frontend for gramin",
+  "keywords": [
+    "grammar",
+    "parser",
+    "antlr",
+    "antlr4"
+  ],
+  "homepage": "https://github.com/ydah/gramin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ydah/gramin.git",
+    "directory": "packages/frontend-antlr"
+  },
+  "bugs": {
+    "url": "https://github.com/ydah/gramin/issues"
+  },
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/.tsbuildinfo"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,6 +39,9 @@
   },
   "dependencies": {
     "@gramin/core": "workspace:*"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public"

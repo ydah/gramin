@@ -3,10 +3,27 @@
   "version": "1.2.0",
   "author": "Yudai Takada",
   "description": "Versioned Grammar IR and feature contracts for gramin",
+  "keywords": [
+    "grammar",
+    "parser",
+    "typescript",
+    "json-schema"
+  ],
+  "homepage": "https://github.com/ydah/gramin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ydah/gramin.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/ydah/gramin/issues"
+  },
   "type": "module",
   "files": [
     "dist",
-    "schema"
+    "schema",
+    "!dist/**/*.test.*",
+    "!dist/.tsbuildinfo"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,6 +42,9 @@
   "dependencies": {
     "@sinclair/typebox": "0.34.52",
     "ajv": "8.20.0"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public"
