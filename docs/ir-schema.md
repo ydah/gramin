@@ -1,7 +1,7 @@
-# Grammar IR v0.2
+# Grammar IR v1
 
 The normative machine-readable contract is
-`packages/core/schema/grammar-ir-v0.2.schema.json`. `@gramin/core` exports the same
+`packages/core/schema/grammar-ir-v1.schema.json`. `@gramin/core` exports the same
 schema as `GrammarIRSchemaDocument`, its TypeScript type as `GrammarIR`, and the
 `validateIR` boundary.
 
@@ -37,5 +37,10 @@ Arrays retain their contract-defined order.
 ## Compatibility
 
 Additive compatible changes increment the minor version. Removal or semantic changes
-increment the major version. A contract change requires an RFC plus coordinated frontend,
-analyzer, documentation, and golden-fixture updates.
+increment the major version. Analyzer 1.x accepts structurally compatible v0.x documents
+with a migration warning; this compatibility ends no earlier than Analyzer 2.0. The
+historical `grammar-ir-v0.2.schema.json` remains packaged for old producers.
+
+A contract change requires an RFC plus coordinated frontend, analyzer, documentation, and
+golden-fixture updates. See
+[`RFC 0001`](./rfcs/0001-grammar-ir-v1.md) for the v1 evidence and migration policy.

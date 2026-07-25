@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { type GrammarIR, serializeCanonical } from "@gramin/core";
 import { describe, expect, it } from "vitest";
-import { analyzeGrammar } from "./analyze.js";
+import { analyzeGrammar, UnsupportedIRVersionError } from "./analyze.js";
 
 const fixtureIR = (name: string): GrammarIR =>
   JSON.parse(
@@ -101,5 +101,22 @@ describe("analyzeGrammar", () => {
   it("serializes deterministically", () => {
     const ir = fixtureIR("calc");
     expect(serializeCanonical(analyzeGrammar(ir))).toBe(serializeCanonical(analyzeGrammar(ir)));
+  });
+
+  it("supports v0 during migration and rejects unknown major versions", () => {
+    const legacy = { ...fixtureIR("calc"), irVersion: "0.2.0" };
+    expect(analyzeGrammar(legacy).diagnostics).toContainEqual(
+      expect.objectContaining({ code: "ANALYZER005_LEGACY_IR_VERSION" }),
+    );
+    expect(() => analyzeGrammar({ ...legacy, irVersion: "2.0.0" })).toThrow(
+      UnsupportedIRVersionError,
+    );
+  });
+
+  it("warns when analyzing a future compatible v1 minor", () => {
+    const future = { ...fixtureIR("calc"), irVersion: "1.1.0" };
+    expect(analyzeGrammar(future).diagnostics).toContainEqual(
+      expect.objectContaining({ code: "ANALYZER004_FUTURE_IR_MINOR" }),
+    );
   });
 });

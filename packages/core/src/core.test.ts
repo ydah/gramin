@@ -8,7 +8,7 @@ import {
 } from "./index.js";
 
 const baseIR = (): GrammarIR => ({
-  irVersion: "0.2.0",
+  irVersion: "1.0.0",
   source: {
     format: "yacc",
     frontend: { id: "test", version: "0.1.0" },
@@ -156,6 +156,7 @@ describe("Grammar IR schema", () => {
 
   it.each([
     { ...baseIR(), irVersion: "v1" },
+    { ...baseIR(), irVersion: "2.0.0" },
     { ...baseIR(), unexpected: true },
     { ...baseIR(), startSymbols: "start" },
     { ...baseIR(), terminals: [{}] },

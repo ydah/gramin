@@ -152,7 +152,17 @@ export const validateIR = (input: unknown): ValidationResult<GrammarIR> => {
     return { ok: false, issues: mapSchemaIssues(validateIRShape.errors) };
   }
 
-  const issues = inspectCanonicalForm(input);
+  const major = Number(input.irVersion.split(".", 1)[0]);
+  const issues =
+    major === 0 || major === 1
+      ? inspectCanonicalForm(input)
+      : [
+          {
+            code: "IR_VERSION_UNSUPPORTED",
+            path: "/irVersion",
+            message: `unsupported Grammar IR major version ${input.irVersion}`,
+          },
+        ];
   if (issues.length > 0) return { ok: false, issues };
   return { ok: true, value: input, issues: [] };
 };
