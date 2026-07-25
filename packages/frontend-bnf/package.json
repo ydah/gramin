@@ -1,15 +1,12 @@
 {
-  "name": "gramin",
+  "name": "@gramin/frontend-bnf",
   "version": "0.1.0",
   "author": "Yudai Takada",
-  "description": "Analyze parser grammar files as deterministic structural features",
+  "description": "BNF and EBNF frontend for gramin",
   "type": "module",
   "files": [
     "dist"
   ],
-  "bin": {
-    "gramin": "./dist/bin.js"
-  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -20,15 +17,11 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "test": "vitest run src --passWithNoTests",
+    "test": "vitest run src",
     "typecheck": "tsc -b --pretty false"
   },
   "dependencies": {
-    "@gramin/analyzer": "workspace:*",
-    "@gramin/core": "workspace:*",
-    "@gramin/frontend-bnf": "workspace:*",
-    "@gramin/frontend-yacc": "workspace:*",
-    "@gramin/reporter": "workspace:*"
+    "@gramin/core": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

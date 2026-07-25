@@ -6,3 +6,8 @@ export {
   EXIT_USAGE,
   runCli,
 } from "./cli.js";
+export {
+  type ExternalFrontendExecution,
+  type ExternalFrontendRunner,
+  runExternalFrontendProcess,
+} from "./external-frontend.js";

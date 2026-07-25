@@ -8,9 +8,11 @@ import {
   serializeCanonical,
   validateIR,
 } from "@gramin/core";
+import { bnfFrontend } from "@gramin/frontend-bnf";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { renderJson, renderLlmDigest, renderMarkdown } from "@gramin/reporter";
 import { type ParsedArguments, parseArguments } from "./arguments.js";
+import { type ExternalFrontendRunner, runExternalFrontendProcess } from "./external-frontend.js";
 
 export const EXIT_SUCCESS = 0;
 export const EXIT_PARTIAL = 1;
@@ -23,6 +25,7 @@ export interface CliIO {
   readonly writeTextFile: (path: string, content: string) => Promise<void>;
   readonly writeOut: (text: string) => void;
   readonly writeError: (text: string) => void;
+  readonly runExternalFrontend?: ExternalFrontendRunner;
 }
 
 const readStandardInput = async (): Promise<string> => {
@@ -39,12 +42,14 @@ const defaultIO: CliIO = {
   writeTextFile: (path, content) => writeFile(path, content),
   writeOut: (text) => process.stdout.write(text),
   writeError: (text) => process.stderr.write(text),
+  runExternalFrontend: runExternalFrontendProcess,
 };
 
-const frontends: readonly Frontend[] = [yaccFrontend];
+const frontends: readonly Frontend[] = [yaccFrontend, bnfFrontend];
 
 const usage = `Usage:
-  gramin analyze <file...> [--format json|md] [--frontend <id>] [--dialect <name>]
+  gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>]
+  gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>]
   gramin analyze --ir <ir.json|-> [--format json|md]
   gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc]
   gramin detect <file>
@@ -98,6 +103,45 @@ const parseSourceIR = async (
   if (options.files.length === 0) {
     io.writeError("INPUT_REQUIRED: provide a grammar file or --ir\n");
     return undefined;
+  }
+  if (options.frontendCommand) {
+    const useStdin = options.files.length === 1 && options.files[0] === "-";
+    const stdin = useStdin ? await io.readStdin() : undefined;
+    const args = [
+      "parse",
+      ...(options.dialect ? ["--dialect", options.dialect] : []),
+      ...(useStdin ? ["--stdin"] : [...options.files]),
+    ];
+    const execution = await (io.runExternalFrontend ?? runExternalFrontendProcess)(
+      options.frontendCommand,
+      args,
+      stdin,
+    );
+    if (execution.stderr.length > 0) io.writeError(execution.stderr);
+    if (execution.exitCode !== EXIT_SUCCESS && execution.exitCode !== EXIT_PARTIAL) {
+      io.writeError(
+        `FRONTEND_PROCESS_FAILED: external frontend exited with ${
+          execution.exitCode ?? "a signal"
+        }\n`,
+      );
+      return undefined;
+    }
+    let input: unknown;
+    try {
+      input = JSON.parse(execution.stdout);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      io.writeError(`FRONTEND_JSON_INVALID: ${message}\n`);
+      return undefined;
+    }
+    const validation = validateIR(input);
+    if (!validation.ok) {
+      validation.issues.forEach((issue) => {
+        io.writeError(issueText(issue.code, issue.path, issue.message));
+      });
+      return undefined;
+    }
+    return { ir: validation.value, exitCode: execution.exitCode };
   }
   const files = await Promise.all(
     options.files.map(async (name) => ({ name, content: await io.readTextFile(name) })),

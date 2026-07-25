@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+"""Small, dependency-free reference implementation of the gramin frontend protocol."""
+
+import argparse
+import json
+import re
+import sys
+
+TOKEN = re.compile(
+    r'::=|=|[|()[\]{}?*+;]|<[^>\n]+>|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|[\w.-]+',
+    re.UNICODE,
+)
+
+
+def nested(alternatives):
+    expressions = [
+        items[0] if len(items) == 1 else {"kind": "seq", "items": items}
+        for items in alternatives
+    ]
+    return (
+        expressions[0]
+        if len(expressions) == 1
+        else {"kind": "choice", "ordered": False, "alts": expressions}
+    )
+
+
+class Parser:
+    def __init__(self, tokens):
+        self.tokens = tokens
+        self.index = 0
+
+    def current(self):
+        return self.tokens[self.index] if self.index < len(self.tokens) else None
+
+    def choice(self, closing=None):
+        alternatives, sequence = [], []
+        while self.current() is not None and self.current() != closing:
+            if self.current() == "|":
+                alternatives.append(sequence)
+                sequence = []
+                self.index += 1
+            else:
+                sequence.append(self.term())
+        alternatives.append(sequence)
+        return alternatives
+
+    def term(self):
+        token = self.current()
+        self.index += 1
+        pairs = {"(": (")", "group"), "[": ("]", "opt"), "{": ("}", "star")}
+        if token in pairs:
+            closing, kind = pairs[token]
+            expression = {"kind": kind, "expr": nested(self.choice(closing))}
+            if self.current() != closing:
+                raise ValueError(f"expected {closing}")
+            self.index += 1
+        elif token and token[:1] in {'"', "'"}:
+            expression = {"kind": "terminal", "literal": bytes(token[1:-1], "utf8").decode("unicode_escape")}
+        else:
+            name = token[1:-1].strip() if token and token.startswith("<") else token
+            expression = {"kind": "symbol", "name": name}
+        postfix = self.current()
+        if postfix in {"?", "*", "+"}:
+            self.index += 1
+            expression = {
+                "kind": {"?": "opt", "*": "star", "+": "plus"}[postfix],
+                "expr": expression,
+            }
+        return expression
+
+
+def visit(expression, symbols, literals):
+    kind = expression["kind"]
+    if kind == "symbol":
+        symbols.add(expression["name"])
+    elif kind == "terminal":
+        literals.add(expression["literal"])
+    elif kind == "seq":
+        for item in expression["items"]:
+            visit(item, symbols, literals)
+    elif kind == "choice":
+        for item in expression["alts"]:
+            visit(item, symbols, literals)
+    elif kind in {"group", "opt", "star", "plus", "predicate"}:
+        visit(expression["expr"], symbols, literals)
+
+
+def main():
+    arguments = argparse.ArgumentParser()
+    arguments.add_argument("operation", choices=["parse"])
+    arguments.add_argument("files", nargs="*")
+    arguments.add_argument("--dialect")
+    arguments.add_argument("--stdin", action="store_true")
+    options = arguments.parse_args()
+    if options.stdin:
+        text, file_names = sys.stdin.read(), ["<stdin>"]
+    else:
+        if not options.files:
+            arguments.error("at least one input file or --stdin is required")
+        file_names = options.files
+        with open(options.files[0], encoding="utf-8") as source:
+            text = source.read()
+
+    rules = []
+    for statement in filter(None, re.split(r";|\n(?=\s*(?:<[^>]+>|[\w.-]+)\s*(?:::)?=)", text)):
+        statement = re.sub(r"#.*|//.*", "", statement).strip()
+        if not statement:
+            continue
+        match = re.match(r"\s*(<[^>]+>|[\w.-]+)\s*(::=|=)(.*)", statement, re.DOTALL)
+        if not match:
+            raise ValueError(f"expected a rule: {statement[:40]}")
+        name = match.group(1)
+        name = name[1:-1].strip() if name.startswith("<") else name
+        parser = Parser(TOKEN.findall(match.group(3)))
+        alternatives = parser.choice()
+        rules.append(
+            {
+                "name": name,
+                "alternatives": [{"items": items} for items in alternatives],
+            }
+        )
+
+    symbols, literals = set(), set()
+    for rule in rules:
+        for alternative in rule["alternatives"]:
+            for item in alternative["items"]:
+                visit(item, symbols, literals)
+    rule_names = {rule["name"] for rule in rules}
+    unresolved = sorted(symbols - rule_names)
+    has_sugar = any(token in text for token in ("[", "{", "?", "*", "+"))
+    dialect = options.dialect or ("bnf" if "::=" in text else "ebnf")
+    ir = {
+        "irVersion": "0.2.0",
+        "source": {
+            "format": "bnf",
+            "dialect": dialect,
+            "fileNames": file_names,
+            "frontend": {"id": "bnf", "version": "0.1.0"},
+        },
+        "capabilities": {
+            "orderedChoice": False,
+            "ebnfSugar": has_sugar,
+            "predicates": False,
+            "scannerless": False,
+            "precedenceTable": False,
+            "parameterizedRules": False,
+            "lexerRules": False,
+        },
+        "startSymbols": [rules[0]["name"]] if rules else [],
+        "terminals": [{"literal": literal} for literal in sorted(literals)],
+        "externalSymbols": [
+            {"name": name, "origin": "unresolved", "kind": "unknown"}
+            for name in unresolved
+        ],
+        "precedence": [],
+        "rules": rules,
+        "diagnostics": [
+            {
+                "severity": "warning",
+                "code": "BNF300_UNRESOLVED_SYMBOL",
+                "message": f"unresolved symbol {name}",
+            }
+            for name in unresolved
+        ],
+    }
+    json.dump(ir, sys.stdout, ensure_ascii=False, separators=(",", ":"))
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        print(f"external frontend: {error}", file=sys.stderr)
+        sys.exit(2)

@@ -3,6 +3,7 @@
   "references": [
     { "path": "packages/core" },
     { "path": "packages/analyzer" },
+    { "path": "packages/frontend-bnf" },
     { "path": "packages/frontend-yacc" },
     { "path": "packages/reporter" },
     { "path": "packages/cli" }
