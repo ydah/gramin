@@ -1,0 +1,17 @@
+export const MENHIR_STDLIB_RULES: ReadonlySet<string> = new Set([
+  "anonymous",
+  "delimited",
+  "endrule",
+  "flatten",
+  "ioption",
+  "list",
+  "midrule",
+  "nonempty_list",
+  "option",
+  "pair",
+  "preceded",
+  "rev",
+  "separated_list",
+  "separated_nonempty_list",
+  "terminated",
+]);

@@ -10,6 +10,7 @@ import {
 } from "@gramin/core";
 import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
+import { menhirFrontend } from "@gramin/frontend-menhir";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { renderJson, renderLlmDigest, renderMarkdown } from "@gramin/reporter";
@@ -47,7 +48,13 @@ const defaultIO: CliIO = {
   runExternalFrontend: runExternalFrontendProcess,
 };
 
-const frontends: readonly Frontend[] = [yaccFrontend, bnfFrontend, pegFrontend, antlrFrontend];
+const frontends: readonly Frontend[] = [
+  yaccFrontend,
+  bnfFrontend,
+  pegFrontend,
+  antlrFrontend,
+  menhirFrontend,
+];
 
 const usage = `Usage:
   gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>]

@@ -1,0 +1,126 @@
+{
+  "actions": {
+    "altActionCoverage": 1,
+    "avgActionLength": 9.5,
+    "maxActionLength": 10,
+    "midRuleActions": 0
+  },
+  "diagnostics": [],
+  "featuresVersion": "0.2.0",
+  "lexicon": {
+    "anyCharCount": 0,
+    "charClassCount": 0,
+    "keywordLike": [],
+    "literalOccurrences": 0,
+    "literalTokens": 0,
+    "namedTokens": 3,
+    "punctuationLike": []
+  },
+  "notable": {
+    "coreSymbols": [
+      "wrapper"
+    ],
+    "deepestRecursionMembers": [],
+    "largestRule": {
+      "line": 13,
+      "name": "main"
+    }
+  },
+  "precedence": {
+    "assocBreakdown": {
+      "left": 1,
+      "nonassoc": 0,
+      "precedence": 0,
+      "right": 0
+    },
+    "levels": 1,
+    "precOverrides": 0,
+    "tokensInPrecedence": {
+      "count": 1,
+      "ratio": 0.3333
+    }
+  },
+  "size": {
+    "alternatives": 2,
+    "avgAltPerRule": 1,
+    "avgRhsLength": 2,
+    "emptyAlternatives": 0,
+    "maxAltPerRule": {
+      "line": 13,
+      "rule": "main",
+      "value": 1
+    },
+    "maxRhsLength": {
+      "line": 13,
+      "rule": "main",
+      "value": 3
+    },
+    "nestedChoiceCount": 0,
+    "nonterminals": 2,
+    "rules": 2,
+    "terminals": 3,
+    "unresolvedSymbols": {
+      "count": 0,
+      "names": []
+    }
+  },
+  "source": {
+    "dialect": "menhir",
+    "fileNames": [
+      "lists.mly"
+    ],
+    "format": "menhir",
+    "frontend": {
+      "id": "menhir",
+      "version": "0.1.0"
+    }
+  },
+  "structure": {
+    "directLeftRecursiveRules": 0,
+    "directRightRecursiveRules": 0,
+    "largestSccSize": {
+      "members": [],
+      "value": 0
+    },
+    "maxDependencyDepth": 1,
+    "nullableRules": 0,
+    "recursionSccCount": 0,
+    "topFanIn": [
+      {
+        "count": 1,
+        "symbol": "wrapper"
+      },
+      {
+        "count": 0,
+        "symbol": "main"
+      }
+    ],
+    "topFanOut": [
+      {
+        "count": 1,
+        "symbol": "main"
+      },
+      {
+        "count": 0,
+        "symbol": "wrapper"
+      }
+    ],
+    "unreachableSymbols": []
+  },
+  "sugar": {
+    "inlineRules": 1,
+    "notApplicable": {
+      "opt": "ebnfSugar capability is false",
+      "plus": "ebnfSugar capability is false",
+      "star": "ebnfSugar capability is false"
+    },
+    "parameterizedCalls": {
+      "known": {
+        "option": 1,
+        "separated_list": 1
+      },
+      "total": 3
+    },
+    "parameterizedRuleDefs": 1
+  }
+}

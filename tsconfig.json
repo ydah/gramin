@@ -5,6 +5,7 @@
     { "path": "packages/analyzer" },
     { "path": "packages/frontend-antlr" },
     { "path": "packages/frontend-bnf" },
+    { "path": "packages/frontend-menhir" },
     { "path": "packages/frontend-peg" },
     { "path": "packages/frontend-yacc" },
     { "path": "packages/reporter" },

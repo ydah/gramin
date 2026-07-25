@@ -4,6 +4,7 @@ import { analyzeGrammar } from "../packages/analyzer/dist/index.js";
 import { serializeCanonical } from "../packages/core/dist/index.js";
 import { antlrFrontend } from "../packages/frontend-antlr/dist/index.js";
 import { bnfFrontend } from "../packages/frontend-bnf/dist/index.js";
+import { menhirFrontend } from "../packages/frontend-menhir/dist/index.js";
 import { pegFrontend } from "../packages/frontend-peg/dist/index.js";
 import { yaccFrontend } from "../packages/frontend-yacc/dist/index.js";
 
@@ -114,5 +115,31 @@ if (!process.argv.includes("--update-golden")) {
   await writeFile(
     resolve(antlrGoldenDirectory, "labels.features-loc.json"),
     serializeCanonical(analyzeGrammar(antlrResult.ir)),
+  );
+
+  const menhirFixtureDirectory = resolve("packages/frontend-menhir/fixtures");
+  const menhirGoldenDirectory = resolve(menhirFixtureDirectory, "golden");
+  await mkdir(menhirGoldenDirectory, { recursive: true });
+  const menhirContent = await readFile(resolve(menhirFixtureDirectory, "lists.mly"), "utf8");
+  const menhirResult = menhirFrontend.parse([{ name: "lists.mly", content: menhirContent }], {});
+  if (!menhirResult.ir) throw new Error("Could not generate IR for lists.mly");
+  const strippedMenhirIR = JSON.parse(
+    serializeCanonical(menhirResult.ir, { stripLocations: true }),
+  );
+  await writeFile(
+    resolve(menhirGoldenDirectory, "lists.ir.json"),
+    serializeCanonical(menhirResult.ir, { stripLocations: true }),
+  );
+  await writeFile(
+    resolve(menhirGoldenDirectory, "lists.ir-loc.json"),
+    serializeCanonical(menhirResult.ir),
+  );
+  await writeFile(
+    resolve(menhirGoldenDirectory, "lists.features.json"),
+    serializeCanonical(analyzeGrammar(strippedMenhirIR)),
+  );
+  await writeFile(
+    resolve(menhirGoldenDirectory, "lists.features-loc.json"),
+    serializeCanonical(analyzeGrammar(menhirResult.ir)),
   );
 }

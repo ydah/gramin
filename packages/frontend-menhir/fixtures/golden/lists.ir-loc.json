@@ -1,0 +1,181 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": true,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [],
+  "externalSymbols": [
+    {
+      "kind": "rule",
+      "name": "option",
+      "origin": "stdlib"
+    },
+    {
+      "kind": "rule",
+      "name": "separated_list",
+      "origin": "stdlib"
+    }
+  ],
+  "irVersion": "1.2.0",
+  "precedence": [
+    {
+      "assoc": "left",
+      "loc": {
+        "endCol": 12,
+        "endLine": 5,
+        "startCol": 1,
+        "startLine": 5
+      },
+      "tokens": [
+        "COMMA"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 9,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "symbol",
+              "label": "value",
+              "name": "X"
+            }
+          ],
+          "loc": {
+            "endCol": 8,
+            "endLine": 10,
+            "startCol": 3,
+            "startLine": 10
+          }
+        }
+      ],
+      "declaredType": "int",
+      "isInline": true,
+      "loc": {
+        "endCol": 16,
+        "endLine": 9,
+        "startCol": 9,
+        "startLine": 9
+      },
+      "name": "wrapper",
+      "params": [
+        "X"
+      ]
+    },
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 10,
+            "present": true
+          },
+          "items": [
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "name": "COMMA"
+                },
+                {
+                  "args": [
+                    {
+                      "kind": "terminal",
+                      "name": "INT"
+                    }
+                  ],
+                  "kind": "symbol",
+                  "name": "wrapper"
+                }
+              ],
+              "kind": "symbol",
+              "label": "values",
+              "name": "separated_list"
+            },
+            {
+              "args": [
+                {
+                  "kind": "terminal",
+                  "name": "INT"
+                }
+              ],
+              "kind": "symbol",
+              "label": "maybe",
+              "name": "option"
+            },
+            {
+              "kind": "terminal",
+              "name": "EOF"
+            }
+          ],
+          "loc": {
+            "endCol": 9,
+            "endLine": 14,
+            "startCol": 3,
+            "startLine": 14
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 5,
+        "endLine": 13,
+        "startCol": 1,
+        "startLine": 13
+      },
+      "name": "main"
+    }
+  ],
+  "source": {
+    "dialect": "menhir",
+    "fileNames": [
+      "lists.mly"
+    ],
+    "format": "menhir",
+    "frontend": {
+      "id": "menhir",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "main"
+  ],
+  "terminals": [
+    {
+      "declaredType": "int",
+      "loc": {
+        "endCol": 17,
+        "endLine": 1,
+        "startCol": 1,
+        "startLine": 1
+      },
+      "name": "INT"
+    },
+    {
+      "loc": {
+        "endCol": 17,
+        "endLine": 2,
+        "startCol": 1,
+        "startLine": 2
+      },
+      "name": "COMMA"
+    },
+    {
+      "loc": {
+        "endCol": 17,
+        "endLine": 2,
+        "startCol": 1,
+        "startLine": 2
+      },
+      "name": "EOF"
+    }
+  ]
+}
