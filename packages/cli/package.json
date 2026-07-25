@@ -26,6 +26,7 @@
   "dependencies": {
     "@gramin/analyzer": "workspace:*",
     "@gramin/core": "workspace:*",
+    "@gramin/frontend-antlr": "workspace:*",
     "@gramin/frontend-bnf": "workspace:*",
     "@gramin/frontend-peg": "workspace:*",
     "@gramin/frontend-yacc": "workspace:*",

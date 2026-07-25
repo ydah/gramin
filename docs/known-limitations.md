@@ -14,3 +14,16 @@ partial final action.
 
 Semantic action source is never parsed, retained in IR, or executed. Only presence,
 position, and character length are recorded.
+
+## ANTLR4 target code and lexer commands
+
+The ANTLR frontend parses grammar structure, not target-language code. Grammar actions and
+lexer actions emit `IR010_LOSSY_ACTION`; semantic predicates emit
+`IR011_LOSSY_SEMANTIC_PREDICATE`. Fragment lexer rules emit
+`IR016_LOSSY_ANTLR_FRAGMENT` and are intentionally excluded from terminal counts. Lexer
+modes are flattened with `IR014_LOSSY_LEXER_MODE`, and negated token sets are approximated
+with `IR015_LOSSY_ANTLR_NEGATION`.
+
+Lexer commands such as `skip`, `more`, `type`, and `channel` do not affect structural
+features. Parser wildcard `.` is represented as the named terminal `ANY_TOKEN`, not the
+scannerless `anyChar` node. Source action and predicate code is never retained or run.

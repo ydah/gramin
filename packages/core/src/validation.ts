@@ -57,12 +57,16 @@ const walkExpression = (
       "Alternative.items is already an implicit sequence",
     );
   }
-  if (parentKind === "alternative" && expression.kind === "group") {
+  if (
+    parentKind === "alternative" &&
+    expression.kind === "group" &&
+    expression.expr.kind !== "choice"
+  ) {
     addIssue(
       state,
       "IR_CANON_TOP_LEVEL_GROUP",
       path,
-      "groups are only valid inside another expression",
+      "a top-level group must directly preserve a nested choice",
     );
   }
   if (parentKind === "seq" && expression.kind === "seq") {

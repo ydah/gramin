@@ -1,0 +1,174 @@
+{
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": true,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [
+    {
+      "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+      "loc": {
+        "endCol": 15,
+        "endLine": 12,
+        "startCol": 10,
+        "startLine": 12
+      },
+      "message": "fragment DIGIT was excluded from terminals",
+      "severity": "info"
+    },
+    {
+      "code": "IR011_LOSSY_SEMANTIC_PREDICATE",
+      "loc": {
+        "endCol": 18,
+        "endLine": 7,
+        "startCol": 7,
+        "startLine": 7
+      },
+      "message": "ANTLR semantic predicate code was omitted",
+      "severity": "info"
+    }
+  ],
+  "externalSymbols": [],
+  "irVersion": "1.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "item"
+            },
+            {
+              "kind": "terminal",
+              "name": "EOF"
+            }
+          ]
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 3,
+        "startCol": 1,
+        "startLine": 3
+      },
+      "name": "start"
+    },
+    {
+      "alternatives": [
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "ID"
+            }
+          ],
+          "label": "Identifier"
+        },
+        {
+          "items": [
+            {
+              "kind": "terminal",
+              "literal": "["
+            },
+            {
+              "kind": "symbol",
+              "name": "item"
+            },
+            {
+              "expr": {
+                "expr": {
+                  "items": [
+                    {
+                      "kind": "terminal",
+                      "literal": ","
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "item"
+                    }
+                  ],
+                  "kind": "seq"
+                },
+                "kind": "group"
+              },
+              "kind": "star"
+            },
+            {
+              "kind": "terminal",
+              "literal": "]"
+            }
+          ],
+          "label": "List"
+        },
+        {
+          "items": [
+            {
+              "kind": "symbol",
+              "name": "item"
+            }
+          ],
+          "label": "Guarded"
+        }
+      ],
+      "loc": {
+        "endCol": 5,
+        "endLine": 4,
+        "startCol": 1,
+        "startLine": 4
+      },
+      "name": "item"
+    }
+  ],
+  "source": {
+    "dialect": "antlr4",
+    "fileNames": [
+      "Labels.g4"
+    ],
+    "format": "antlr4",
+    "frontend": {
+      "id": "antlr4",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "start"
+  ],
+  "terminals": [
+    {
+      "loc": {
+        "endCol": 3,
+        "endLine": 10,
+        "startCol": 1,
+        "startLine": 10
+      },
+      "name": "ID"
+    },
+    {
+      "loc": {
+        "endCol": 3,
+        "endLine": 11,
+        "startCol": 1,
+        "startLine": 11
+      },
+      "name": "WS"
+    },
+    {
+      "name": "EOF"
+    },
+    {
+      "literal": "["
+    },
+    {
+      "literal": ","
+    },
+    {
+      "literal": "]"
+    }
+  ]
+}

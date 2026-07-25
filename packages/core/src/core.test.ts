@@ -8,7 +8,7 @@ import {
 } from "./index.js";
 
 const baseIR = (): GrammarIR => ({
-  irVersion: "1.1.0",
+  irVersion: "1.2.0",
   source: {
     format: "yacc",
     frontend: { id: "test", version: "0.1.0" },
@@ -237,6 +237,24 @@ describe("Grammar IR canonical form", () => {
         capabilities: { ...orderedRule.capabilities, orderedChoice: false },
       }).ok,
     ).toBe(false);
+  });
+
+  it("allows a top-level group only to preserve a nested choice", () => {
+    expect(
+      validateIR(
+        withOnlyItem({
+          kind: "group",
+          expr: {
+            kind: "choice",
+            ordered: false,
+            alts: [
+              { kind: "terminal", literal: "x" },
+              { kind: "terminal", literal: "y" },
+            ],
+          },
+        }),
+      ).ok,
+    ).toBe(true);
   });
 });
 

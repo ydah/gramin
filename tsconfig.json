@@ -3,6 +3,7 @@
   "references": [
     { "path": "packages/core" },
     { "path": "packages/analyzer" },
+    { "path": "packages/frontend-antlr" },
     { "path": "packages/frontend-bnf" },
     { "path": "packages/frontend-peg" },
     { "path": "packages/frontend-yacc" },

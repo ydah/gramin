@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
 import { analyzeGrammar } from "@gramin/analyzer";
+import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
 import { serializeCanonical, validateIR } from "@gramin/core";
 import { pegFrontend } from "@gramin/frontend-peg";
@@ -179,6 +180,52 @@ describe("gramin CLI", () => {
     expect(await runCli(["analyze", "json.peggy", "--format", "llm"], test.io)).toBe(EXIT_SUCCESS);
     expect(test.stdout.join("")).toContain("left recursion is usually a defect signal");
     expect(test.stdout.join("")).toContain("Scannerless note");
+  });
+
+  it("matches the committed ANTLR features golden", () => {
+    const content = readFileSync(
+      new URL("../../frontend-antlr/fixtures/Labels.g4", import.meta.url),
+      "utf8",
+    );
+    const parsed = antlrFrontend.parse([{ name: "Labels.g4", content }], {});
+    if (!parsed.ir) throw new Error("expected ANTLR IR");
+    const stripped = validateIR(
+      JSON.parse(serializeCanonical(parsed.ir, { stripLocations: true })) as unknown,
+    );
+    if (!stripped.ok) throw new Error("expected valid stripped ANTLR IR");
+    const actual = serializeCanonical(analyzeGrammar(stripped.value));
+    const expected = readFileSync(
+      new URL("../../frontend-antlr/fixtures/golden/labels.features.json", import.meta.url),
+      "utf8",
+    );
+    expect(actual).toBe(expected);
+  });
+
+  const antlrCorpusRoot = new URL("../../../fixtures/downloaded/antlr/", import.meta.url);
+  const hasAntlrCorpus = existsSync(new URL("json/JSON.g4", antlrCorpusRoot));
+  it.runIf(hasAntlrCorpus)("analyzes three pinned grammars-v4 grammar sets without errors", () => {
+    const cases = [
+      ["json/JSON.g4"],
+      ["sqlite/SQLiteParser.g4", "sqlite/SQLiteLexer.g4"],
+      ["java/JavaParser.g4", "java/JavaLexer.g4"],
+    ] as const;
+    cases.forEach((names) => {
+      const files = names.map((name) => ({
+        name,
+        content: readFileSync(new URL(name, antlrCorpusRoot), "utf8"),
+      }));
+      const parsed = antlrFrontend.parse(files, {});
+      expect(
+        parsed.diagnostics.filter(({ severity }) => severity === "error"),
+        names.join(", "),
+      ).toEqual([]);
+      expect(validateIR(parsed.ir).ok, names.join(", ")).toBe(true);
+      if (!parsed.ir) return;
+      expect(analyzeGrammar(parsed.ir).size.unresolvedSymbols, names.join(", ")).toEqual({
+        count: 0,
+        names: [],
+      });
+    });
   });
 
   it.runIf(existsSync(new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url)))(

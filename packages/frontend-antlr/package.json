@@ -1,12 +1,11 @@
 {
-  "name": "@gramin/core",
-  "version": "1.2.0",
+  "name": "@gramin/frontend-antlr",
+  "version": "0.1.0",
   "author": "Yudai Takada",
-  "description": "Versioned Grammar IR and feature contracts for gramin",
+  "description": "ANTLR4 grammar frontend for gramin",
   "type": "module",
   "files": [
-    "dist",
-    "schema"
+    "dist"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,17 +13,15 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./schema/*": "./schema/*"
+    }
   },
   "scripts": {
-    "build": "tsc -b && node dist/write-schemas.js",
+    "build": "tsc -b",
     "test": "vitest run src",
     "typecheck": "tsc -b --pretty false"
   },
   "dependencies": {
-    "@sinclair/typebox": "0.34.52",
-    "ajv": "8.20.0"
+    "@gramin/core": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
