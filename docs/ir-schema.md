@@ -1,5 +1,7 @@
 # Grammar IR v1
 
+The current producer version is 1.2.0.
+
 The normative machine-readable contract is
 `packages/core/schema/grammar-ir-v1.schema.json`. `@gramin/core` exports the same
 schema as `GrammarIRSchemaDocument`, its TypeScript type as `GrammarIR`, and the

@@ -1,15 +1,20 @@
 import { readFileSync } from "node:fs";
-import { type GrammarIR, serializeCanonical } from "@gramin/core";
+import { type GrammarIR, serializeCanonical, validateIR } from "@gramin/core";
 import { describe, expect, it } from "vitest";
 import { analyzeGrammar, UnsupportedIRVersionError } from "./analyze.js";
 
-const fixtureIR = (name: string): GrammarIR =>
-  JSON.parse(
-    readFileSync(
-      new URL(`../../frontend-yacc/fixtures/golden/${name}.ir.json`, import.meta.url),
-      "utf8",
-    ),
-  ) as GrammarIR;
+const fixtureIR = (name: string): GrammarIR => {
+  const result = validateIR(
+    JSON.parse(
+      readFileSync(
+        new URL(`../../frontend-yacc/fixtures/golden/${name}.ir.json`, import.meta.url),
+        "utf8",
+      ),
+    ) as unknown,
+  );
+  if (!result.ok) throw new Error(`invalid ${name}.ir.json fixture`);
+  return result.value;
+};
 
 describe("analyzeGrammar", () => {
   it("matches hand-calculated calculator metrics", () => {

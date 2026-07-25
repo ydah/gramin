@@ -15,5 +15,8 @@ following sections:
 - `actions`: action coverage and opaque source-length measures;
 - `notable`: concrete rules and symbols that help locate high-impact grammar regions.
 
-A capability-dependent section omits an inapplicable metric and records the reason in
-its `notApplicable` map. It must not emit a misleading zero or `null`.
+A capability-dependent section omits an inapplicable optional metric and records the
+reason in its `notApplicable` map. It must not emit a misleading zero or `null`.
+For features v0.2 compatibility, required lexicon declaration counts remain present for
+scannerless grammars, but `lexicon.notApplicable` directs consumers to
+`literalOccurrences`, `charClassCount`, and `anyCharCount`.

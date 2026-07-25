@@ -18,4 +18,6 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+scripts/fetch-corpus.sh
+pnpm benchmark:corpus
 ```
