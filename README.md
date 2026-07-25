@@ -57,7 +57,9 @@ pnpm benchmark:corpus
 ```
 
 On the pinned Ruby `parse.y`, the frontend and analyzer must finish within three seconds,
-emit no error diagnostics, and report no unresolved symbols.
+emit no error diagnostics, and report no unresolved symbols. The same fetch also enables
+error-free, unresolved-free integration tests for grammars-v4 JSON, SQLite, and Java,
+including split parser/lexer grammars.
 
 ## Architecture
 

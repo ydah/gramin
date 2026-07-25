@@ -213,9 +213,14 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
     ? { ir: await readJsonIR(options.irInput, io), exitCode: EXIT_SUCCESS }
     : await parseSourceIR(options, io);
   if (!parsed?.ir) return EXIT_FATAL;
-  const ir = options.stripLocations
-    ? (canonicalize(parsed.ir, { stripLocations: true }) as GrammarIR)
-    : parsed.ir;
+  let ir = parsed.ir;
+  if (options.stripLocations) {
+    const stripped = validateIR(canonicalize(parsed.ir, { stripLocations: true }));
+    if (!stripped.ok) {
+      throw new Error("location stripping produced invalid Grammar IR");
+    }
+    ir = stripped.value;
+  }
 
   if (options.command === "ir") {
     await output(serializeCanonical(ir), options.output, io);
