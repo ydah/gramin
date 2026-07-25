@@ -1,0 +1,58 @@
+name: Release npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      dist-tag:
+        description: npm distribution tag
+        required: true
+        default: latest
+        type: choice
+        options:
+          - next
+          - latest
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm install --global npm@11.18.0
+      - name: Require the CLI release tag
+        env:
+          RELEASE_REF_NAME: ${{ github.ref_name }}
+          RELEASE_REF_TYPE: ${{ github.ref_type }}
+        run: |
+          if [ "$RELEASE_REF_TYPE" != "tag" ]; then
+            echo "Run this workflow from a version tag."
+            exit 1
+          fi
+          cli_version="$(node -p "require('./packages/cli/package.json').version")"
+          if [ "$RELEASE_REF_NAME" != "v$cli_version" ]; then
+            echo "Expected tag v$cli_version, got $RELEASE_REF_NAME."
+            exit 1
+          fi
+      - run: pnpm install --frozen-lockfile
+      - run: scripts/fetch-corpus.sh
+      - run: pnpm release:check
+      - name: Publish unpublished versions
+        env:
+          NPM_DIST_TAG: ${{ inputs.dist-tag }}
+        run: node scripts/publish-release.mjs --tag "$NPM_DIST_TAG"

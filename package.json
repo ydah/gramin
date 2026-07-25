@@ -25,6 +25,9 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint . && pnpm check:boundaries",
+    "release:check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm benchmark:corpus && pnpm release:pack && pnpm release:smoke",
+    "release:pack": "pnpm clean && pnpm build && node scripts/pack-release.mjs",
+    "release:smoke": "node scripts/smoke-release.mjs",
     "test": "vitest run",
     "typecheck": "tsc -b --pretty false",
     "update-golden": "pnpm build && node scripts/update-golden.mjs --update-golden"
