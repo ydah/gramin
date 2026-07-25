@@ -43,6 +43,7 @@ describe("yacc-family parser and lowering", () => {
     "adversarial-actions.y",
     "raw-string.y",
     "lrama.y",
+    "json.y",
   ])("produces canonical IR for %s", (name) => {
     const result = parseFixture(name);
     expect(result.ir).not.toBeNull();

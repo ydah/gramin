@@ -10,6 +10,7 @@ const goldenCases = [
   "alias",
   "precedence-override",
   "lrama",
+  "json",
 ] as const;
 
 describe("IR to features golden files", () => {

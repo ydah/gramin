@@ -69,4 +69,5 @@ core <- (frontend-* | analyzer | reporter) <- cli
 
 `@gramin/core` publishes TypeScript contracts and JSON Schemas for Grammar IR and features.
 See `docs/ir-schema.md`, `docs/features-schema.md`, and `docs/metrics-catalog.md` for the
-normative definitions. Architectural decisions are recorded in `docs/decisions/`.
+normative definitions. Format comparison guidance is in `docs/cross-format-notes.md`.
+Architectural decisions are recorded in `docs/decisions/`.

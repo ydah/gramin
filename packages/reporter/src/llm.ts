@@ -12,7 +12,8 @@ const codeSpan = (value: string): string => {
 };
 
 const codeList = (values: readonly string[], limit: number): string => {
-  if (limit === 0 || values.length === 0) return "_omitted or empty_";
+  if (values.length === 0) return "_empty_";
+  if (limit === 0) return "_list truncated for budget_";
   const rendered = values.slice(0, limit).map(codeSpan).join(", ");
   return values.length > limit ? `${rendered} — _list truncated_` : rendered;
 };
@@ -23,6 +24,22 @@ const notApplicable = (value: Readonly<Record<string, string>> | undefined): str
         .map(([metric, reason]) => `${codeSpan(metric)}: ${reason}`)
         .join("; ")
     : "none";
+
+const formatInterpretation = (features: GrammarFeatures): string => {
+  if (features.source.format === "peg") {
+    return "PEG uses ordered, scannerless expressions; compare alternative and recursion counts together with sugar and nested-choice counts.";
+  }
+  if (features.source.format === "antlr4") {
+    return "ANTLR parser EBNF can compress explicit CFG productions; lexer rules are reduced to terminal declarations.";
+  }
+  if (features.source.format === "bnf") {
+    return "BNF/EBNF notation may compress explicit productions through nested choices and sugar.";
+  }
+  if (features.source.format === "lrama" || features.source.format === "menhir") {
+    return "Parameterized standard-library calls can replace explicit productions and recursion.";
+  }
+  return "Explicit CFG productions make structural counts representation-dependent but directly observable.";
+};
 
 interface DigestDetail {
   readonly listLimit: number;
@@ -56,6 +73,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 - Format: ${codeSpan(features.source.format)}
 - Files: ${codeList(features.source.fileNames ?? [], detail.listLimit)}
 - Frontend: ${codeSpan(features.source.frontend.id)} ${codeSpan(features.source.frontend.version)}
+- Format interpretation: ${formatInterpretation(features)}
 
 ## Size
 

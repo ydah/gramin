@@ -23,6 +23,7 @@ if (!process.argv.includes("--update-golden")) {
     "adversarial-actions",
     "raw-string",
     "lrama",
+    "json",
   ];
   await mkdir(goldenDirectory, { recursive: true });
   for (const name of names) {
@@ -96,26 +97,33 @@ if (!process.argv.includes("--update-golden")) {
   const antlrFixtureDirectory = resolve("packages/frontend-antlr/fixtures");
   const antlrGoldenDirectory = resolve(antlrFixtureDirectory, "golden");
   await mkdir(antlrGoldenDirectory, { recursive: true });
-  const antlrContent = await readFile(resolve(antlrFixtureDirectory, "Labels.g4"), "utf8");
-  const antlrResult = antlrFrontend.parse([{ name: "Labels.g4", content: antlrContent }], {});
-  if (!antlrResult.ir) throw new Error("Could not generate IR for Labels.g4");
-  const strippedAntlrIR = JSON.parse(serializeCanonical(antlrResult.ir, { stripLocations: true }));
-  await writeFile(
-    resolve(antlrGoldenDirectory, "labels.ir.json"),
-    serializeCanonical(antlrResult.ir, { stripLocations: true }),
-  );
-  await writeFile(
-    resolve(antlrGoldenDirectory, "labels.ir-loc.json"),
-    serializeCanonical(antlrResult.ir),
-  );
-  await writeFile(
-    resolve(antlrGoldenDirectory, "labels.features.json"),
-    serializeCanonical(analyzeGrammar(strippedAntlrIR)),
-  );
-  await writeFile(
-    resolve(antlrGoldenDirectory, "labels.features-loc.json"),
-    serializeCanonical(analyzeGrammar(antlrResult.ir)),
-  );
+  for (const [name, fileName] of [
+    ["labels", "Labels.g4"],
+    ["json", "Json.g4"],
+  ]) {
+    const antlrContent = await readFile(resolve(antlrFixtureDirectory, fileName), "utf8");
+    const antlrResult = antlrFrontend.parse([{ name: fileName, content: antlrContent }], {});
+    if (!antlrResult.ir) throw new Error(`Could not generate IR for ${fileName}`);
+    const strippedAntlrIR = JSON.parse(
+      serializeCanonical(antlrResult.ir, { stripLocations: true }),
+    );
+    await writeFile(
+      resolve(antlrGoldenDirectory, `${name}.ir.json`),
+      serializeCanonical(antlrResult.ir, { stripLocations: true }),
+    );
+    await writeFile(
+      resolve(antlrGoldenDirectory, `${name}.ir-loc.json`),
+      serializeCanonical(antlrResult.ir),
+    );
+    await writeFile(
+      resolve(antlrGoldenDirectory, `${name}.features.json`),
+      serializeCanonical(analyzeGrammar(strippedAntlrIR)),
+    );
+    await writeFile(
+      resolve(antlrGoldenDirectory, `${name}.features-loc.json`),
+      serializeCanonical(analyzeGrammar(antlrResult.ir)),
+    );
+  }
 
   const menhirFixtureDirectory = resolve("packages/frontend-menhir/fixtures");
   const menhirGoldenDirectory = resolve(menhirFixtureDirectory, "golden");

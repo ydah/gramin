@@ -219,6 +219,79 @@ describe("gramin CLI", () => {
     });
   });
 
+  it("compares authored JSON grammars across Yacc, ANTLR, and Peggy", async () => {
+    const yaccContent = readFileSync(
+      new URL("../../frontend-yacc/fixtures/json.y", import.meta.url),
+      "utf8",
+    );
+    const antlrContent = readFileSync(
+      new URL("../../frontend-antlr/fixtures/Json.g4", import.meta.url),
+      "utf8",
+    );
+    const pegContent = readFileSync(
+      new URL("../../frontend-peg/fixtures/json.peggy", import.meta.url),
+      "utf8",
+    );
+    const parsed = [
+      yaccFrontend.parse([{ name: "json.y", content: yaccContent }], {}),
+      antlrFrontend.parse([{ name: "Json.g4", content: antlrContent }], {}),
+      pegFrontend.parse([{ name: "json.peggy", content: pegContent }], {}),
+    ];
+    const features = parsed.map((result) => {
+      if (!result.ir) throw new Error("expected cross-format IR");
+      return analyzeGrammar(result.ir);
+    });
+    expect(features.map((value) => value.size.unresolvedSymbols.count)).toEqual([0, 0, 0]);
+    expect(features.map((value) => value.source.format)).toEqual(["yacc", "antlr4", "peg"]);
+    expect(features[0]?.structure.nullableRules).toBeTypeOf("number");
+    expect(features[1]?.structure.nullableRules).toBeTypeOf("number");
+    expect(features[2]?.structure.nullableRules).toBeUndefined();
+
+    const digest = harness({ "Json.g4": antlrContent });
+    expect(await runCli(["analyze", "Json.g4", "--format", "llm"], digest.io)).toBe(EXIT_SUCCESS);
+    expect(digest.stdout.join("")).toContain("ANTLR parser EBNF can compress");
+  });
+
+  it("matches PEG, ANTLR JSON, and Menhir features goldens", () => {
+    const pegContent = readFileSync(
+      new URL("../../frontend-peg/fixtures/json.peggy", import.meta.url),
+      "utf8",
+    );
+    const antlrContent = readFileSync(
+      new URL("../../frontend-antlr/fixtures/Json.g4", import.meta.url),
+      "utf8",
+    );
+    const menhirContent = readFileSync(
+      new URL("../../frontend-menhir/fixtures/lists.mly", import.meta.url),
+      "utf8",
+    );
+    const cases = [
+      {
+        result: pegFrontend.parse([{ name: "json.peggy", content: pegContent }], {}),
+        golden: new URL("../../frontend-peg/fixtures/golden/json.features.json", import.meta.url),
+      },
+      {
+        result: antlrFrontend.parse([{ name: "Json.g4", content: antlrContent }], {}),
+        golden: new URL("../../frontend-antlr/fixtures/golden/json.features.json", import.meta.url),
+      },
+      {
+        result: menhirFrontend.parse([{ name: "lists.mly", content: menhirContent }], {}),
+        golden: new URL(
+          "../../frontend-menhir/fixtures/golden/lists.features.json",
+          import.meta.url,
+        ),
+      },
+    ];
+    cases.forEach(({ result, golden }) => {
+      if (!result.ir) throw new Error("expected IR for features golden");
+      const stripped = validateIR(
+        JSON.parse(serializeCanonical(result.ir, { stripLocations: true })) as unknown,
+      );
+      if (!stripped.ok) throw new Error("expected valid stripped IR");
+      expect(serializeCanonical(analyzeGrammar(stripped.value))).toBe(readFileSync(golden, "utf8"));
+    });
+  });
+
   const antlrCorpusRoot = new URL("../../../fixtures/downloaded/antlr/", import.meta.url);
   const hasAntlrCorpus = existsSync(new URL("json/JSON.g4", antlrCorpusRoot));
   it.runIf(hasAntlrCorpus)("analyzes three pinned grammars-v4 grammar sets without errors", () => {
