@@ -9,6 +9,7 @@ const goldenCases = [
   "indirect-recursion",
   "alias",
   "precedence-override",
+  "lrama",
 ] as const;
 
 describe("IR to features golden files", () => {

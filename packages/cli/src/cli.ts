@@ -9,7 +9,7 @@ import {
   validateIR,
 } from "@gramin/core";
 import { yaccFrontend } from "@gramin/frontend-yacc";
-import { renderJson, renderMarkdown } from "@gramin/reporter";
+import { renderJson, renderLlmDigest, renderMarkdown } from "@gramin/reporter";
 import { type ParsedArguments, parseArguments } from "./arguments.js";
 
 export const EXIT_SUCCESS = 0;
@@ -168,12 +168,15 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
     await output(serializeCanonical(ir), options.output, io);
     return parsed.exitCode;
   }
-  if (options.format === "llm") {
-    io.writeError("FORMAT_UNAVAILABLE: llm output is not enabled yet\n");
-    return EXIT_USAGE;
-  }
   const features = analyzeGrammar(ir);
-  const report = options.format === "md" ? renderMarkdown(features) : renderJson(features);
+  const report =
+    options.format === "md"
+      ? renderMarkdown(features)
+      : options.format === "llm"
+        ? renderLlmDigest(features, {
+            ...(options.budgetChars === undefined ? {} : { budgetChars: options.budgetChars }),
+          })
+        : renderJson(features);
   await output(report, options.output, io);
   return parsed.exitCode;
 };

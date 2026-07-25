@@ -1,4 +1,5 @@
-import type { YaccAst, YaccTerminal } from "./ast.js";
+import type { YaccAst, YaccRule, YaccTerminal } from "./ast.js";
+import { parseRuleDefinition } from "./rules.js";
 import type { Token } from "./token.js";
 import type { TokenStream } from "./token-stream.js";
 
@@ -7,6 +8,7 @@ export interface DeclarationResult {
   readonly precedence: YaccAst["precedence"][number][];
   readonly startSymbols: string[];
   readonly declaredTypes: ReadonlyMap<string, string>;
+  readonly preambleRules: readonly YaccRule[];
   readonly lramaSyntaxSeen: boolean;
 }
 
@@ -86,9 +88,19 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
   const precedence: YaccAst["precedence"][number][] = [];
   const startSymbols: string[] = [];
   const declaredTypes = new Map<string, string>();
+  const preambleRules: YaccRule[] = [];
   let lramaSyntaxSeen = false;
 
   while (stream.peek().kind !== "section" && stream.peek().kind !== "eof") {
+    if (
+      stream.peek().kind === "directive" &&
+      (stream.peek().value === "rule" || stream.peek().value === "inline")
+    ) {
+      const parsed = parseRuleDefinition(stream, declaredTypes);
+      if (parsed.rule) preambleRules.push(parsed.rule);
+      if (parsed.lramaSyntaxSeen) lramaSyntaxSeen = true;
+      continue;
+    }
     const directive = stream.match("directive");
     if (!directive) {
       stream.consume();
@@ -146,6 +158,7 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
     precedence,
     startSymbols,
     declaredTypes,
+    preambleRules,
     lramaSyntaxSeen,
   };
 };

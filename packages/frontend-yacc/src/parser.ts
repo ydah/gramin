@@ -25,10 +25,15 @@ export const parseYaccAst = (
   return {
     ast: {
       dialect,
-      startSymbols: declarations.startSymbols,
+      startSymbols:
+        declarations.startSymbols.length > 0
+          ? declarations.startSymbols
+          : parsedRules.rules[0]
+            ? [parsedRules.rules[0].name]
+            : [],
       terminals: declarations.terminals,
       precedence: declarations.precedence,
-      rules: parsedRules.rules,
+      rules: [...declarations.preambleRules, ...parsedRules.rules],
       diagnostics,
     },
     diagnostics,

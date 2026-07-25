@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc -b && node packages/core/dist/write-schemas.js",
+    "benchmark:corpus": "pnpm build && node scripts/benchmark-corpus.mjs",
     "check:boundaries": "node scripts/check-boundaries.mjs",
     "clean": "tsc -b --clean",
     "format": "biome format --write .",
