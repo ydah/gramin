@@ -48,6 +48,16 @@ const harness = (
 };
 
 describe("gramin CLI", () => {
+  it("prints help and version as successful global options", async () => {
+    const help = harness();
+    expect(await runCli(["--help"], help.io)).toBe(EXIT_SUCCESS);
+    expect(help.stdout.join("")).toContain("gramin analyze");
+
+    const version = harness();
+    expect(await runCli(["--version"], version.io)).toBe(EXIT_SUCCESS);
+    expect(version.stdout.join("")).toBe("0.1.0\n");
+  });
+
   it("runs grammar to IR to features as a byte-identical pipeline", async () => {
     const irRun = harness();
     expect(await runCli(["ir", "calc.y", "--strip-loc"], irRun.io)).toBe(EXIT_SUCCESS);

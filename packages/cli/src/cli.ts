@@ -16,6 +16,7 @@ import { yaccFrontend } from "@gramin/frontend-yacc";
 import { renderJson, renderLlmDigest, renderMarkdown } from "@gramin/reporter";
 import { type ParsedArguments, parseArguments } from "./arguments.js";
 import { type ExternalFrontendRunner, runExternalFrontendProcess } from "./external-frontend.js";
+import { CLI_VERSION } from "./version.js";
 
 export const EXIT_SUCCESS = 0;
 export const EXIT_PARTIAL = 1;
@@ -63,6 +64,8 @@ const usage = `Usage:
   gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc]
   gramin detect <file>
   gramin validate-ir <ir.json>
+  gramin --help
+  gramin --version
 `;
 
 const issueText = (code: string, path: string, message: string): string =>
@@ -240,6 +243,14 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
 };
 
 export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Promise<number> => {
+  if (argv.length === 1 && ["--help", "-h", "help"].includes(argv[0] ?? "")) {
+    io.writeOut(usage);
+    return EXIT_SUCCESS;
+  }
+  if (argv.length === 1 && ["--version", "-v", "version"].includes(argv[0] ?? "")) {
+    io.writeOut(`${CLI_VERSION}\n`);
+    return EXIT_SUCCESS;
+  }
   const parsed = parseArguments(argv);
   if (!parsed.ok) {
     io.writeError(`${parsed.message}\n${usage}`);
