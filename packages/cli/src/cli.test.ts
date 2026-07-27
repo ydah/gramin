@@ -186,11 +186,14 @@ describe("gramin CLI", () => {
     expect(features.structure.notApplicable?.nullableRules).toContain("orderedChoice");
     expect(features.lexicon.charClassCount).toBeGreaterThan(0);
     expect(features.lexicon.anyCharCount).toBe(1);
+    expect(features.actions.completeness).toBe("partial");
+    expect(features.actions.totalActions).toBeUndefined();
 
     const test = harness({ "json.peggy": content });
     expect(await runCli(["analyze", "json.peggy", "--format", "llm"], test.io)).toBe(EXIT_SUCCESS);
     expect(test.stdout.join("")).toContain("left recursion is usually a defect signal");
     expect(test.stdout.join("")).toContain("Scannerless note");
+    expect(test.stdout.join("")).toContain("Numeric action measurements are suppressed");
   });
 
   it("matches the committed ANTLR features golden", () => {
@@ -253,13 +256,31 @@ describe("gramin CLI", () => {
     });
     expect(features.map((value) => value.size.unresolvedSymbols.count)).toEqual([0, 0, 0]);
     expect(features.map((value) => value.source.format)).toEqual(["yacc", "antlr4", "peg"]);
+    expect(features.map((value) => value.size.altPerRulePercentiles)).toEqual([
+      { p50: 2, p95: 7 },
+      { p50: 1, p95: 7 },
+      { p50: 1, p95: 7 },
+    ]);
+    expect(features.map((value) => value.structure.recursiveRules)).toEqual([
+      { count: 6, ratio: 0.8571 },
+      { count: 4, ratio: 0.8 },
+      { count: 4, ratio: 0.5 },
+    ]);
+    expect(features.map((value) => value.actions.completeness)).toEqual([
+      "complete",
+      "complete",
+      "partial",
+    ]);
     expect(features[0]?.structure.nullableRules).toBeTypeOf("number");
     expect(features[1]?.structure.nullableRules).toBeTypeOf("number");
     expect(features[2]?.structure.nullableRules).toBeUndefined();
 
     const digest = harness({ "Json.g4": antlrContent });
     expect(await runCli(["analyze", "Json.g4", "--format", "llm"], digest.io)).toBe(EXIT_SUCCESS);
-    expect(digest.stdout.join("")).toContain("ANTLR parser EBNF can compress");
+    expect(digest.stdout.join("")).toContain("EBNF expressions can compress");
+    expect(digest.stdout.join("")).toContain(
+      "Lexer rules are represented as terminal declarations",
+    );
   });
 
   it("matches PEG, ANTLR JSON, and Menhir features goldens", () => {
@@ -350,6 +371,20 @@ describe("gramin CLI", () => {
         [],
       );
       expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
+      expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
+      expect(features.size.rhsLengthPercentiles).toEqual({ p50: 1, p95: 5 });
+      expect(features.structure.recursiveRules).toEqual({ count: 143, ratio: 0.572 });
+      expect(features.precedence).toMatchObject({
+        maxTokensPerLevel: 6,
+        rulesWithPrecOverrides: 8,
+        precOverrideAlternativeRatio: 0.0154,
+      });
+      expect(features.actions).toMatchObject({
+        completeness: "complete",
+        trailingActions: 495,
+        totalActions: 536,
+        rulesWithActions: 206,
+      });
       expect(performance.now() - startedAt).toBeLessThan(3_000);
     },
   );
@@ -369,5 +404,58 @@ describe("gramin CLI", () => {
     const features = analyzeGrammar(parsed.ir);
     expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
     expect(features.structure.unreachableSymbols).toEqual([]);
+    expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 9 });
+    expect(features.size.rhsLengthPercentiles).toEqual({ p50: 2, p95: 6 });
+    expect(features.structure.recursiveRules).toEqual({ count: 90, ratio: 0.7895 });
+    expect(features.precedence).toMatchObject({
+      maxTokensPerLevel: 5,
+      rulesWithPrecOverrides: 16,
+      precOverrideAlternativeRatio: 0.1121,
+    });
+    expect(features.actions).toMatchObject({
+      completeness: "complete",
+      trailingActions: 268,
+      totalActions: 292,
+      rulesWithActions: 99,
+    });
   });
+
+  const phpCorpus = new URL(
+    "../../../fixtures/downloaded/php/zend_language_parser.y",
+    import.meta.url,
+  );
+  it.runIf(existsSync(phpCorpus))(
+    "analyzes the pinned PHP zend_language_parser.y corpus without errors",
+    () => {
+      const parsed = yaccFrontend.parse(
+        [
+          {
+            name: "zend_language_parser.y",
+            content: readFileSync(phpCorpus, "utf8"),
+          },
+        ],
+        { dialect: "bison" },
+      );
+      expect(parsed.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
+      expect(validateIR(parsed.ir).ok).toBe(true);
+      if (!parsed.ir) return;
+      const features = analyzeGrammar(parsed.ir);
+      expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
+      expect(features.structure.unreachableSymbols).toEqual([]);
+      expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
+      expect(features.size.rhsLengthPercentiles).toEqual({ p50: 2, p95: 5 });
+      expect(features.structure.recursiveRules).toEqual({ count: 119, ratio: 0.6723 });
+      expect(features.precedence).toMatchObject({
+        maxTokensPerLevel: 14,
+        rulesWithPrecOverrides: 3,
+        precOverrideAlternativeRatio: 0.0064,
+      });
+      expect(features.actions).toMatchObject({
+        completeness: "complete",
+        trailingActions: 541,
+        totalActions: 552,
+        rulesWithActions: 173,
+      });
+    },
+  );
 });
