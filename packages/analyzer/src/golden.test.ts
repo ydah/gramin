@@ -9,6 +9,7 @@ const goldenCases = [
   "indirect-recursion",
   "alias",
   "precedence-override",
+  "bison-named-references",
   "lrama",
   "json",
 ] as const;

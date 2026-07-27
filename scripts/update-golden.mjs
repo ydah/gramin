@@ -22,6 +22,7 @@ if (!process.argv.includes("--update-golden")) {
     "precedence-override",
     "adversarial-actions",
     "raw-string",
+    "bison-named-references",
     "lrama",
     "json",
   ];

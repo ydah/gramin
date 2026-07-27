@@ -86,6 +86,37 @@ const parseItem = (stream: TokenStream): YaccItem | undefined => {
   return undefined;
 };
 
+const isRuleDefinitionStart = (stream: TokenStream): boolean => {
+  let distance = 0;
+  while (
+    stream.peek(distance).kind === "directive" &&
+    ["inline", "rule"].includes(stream.peek(distance).value)
+  ) {
+    distance += 1;
+  }
+  if (stream.peek(distance).kind !== "identifier") return false;
+  distance += 1;
+
+  if (stream.peek(distance).kind === "lparen") {
+    do {
+      distance += 1;
+    } while (!["eof", "rparen"].includes(stream.peek(distance).kind));
+    if (stream.peek(distance).kind !== "rparen") return false;
+    distance += 1;
+  }
+
+  if (stream.peek(distance).kind === "lbracket") {
+    distance += 1;
+    if (stream.peek(distance).kind !== "identifier") return false;
+    distance += 1;
+    if (stream.peek(distance).kind !== "rbracket") return false;
+    distance += 1;
+  }
+
+  if (stream.peek(distance).kind === "tag") distance += 1;
+  return stream.peek(distance).kind === "colon";
+};
+
 const alternativeSpan = (first: Token, last: Token): SourceSpan => ({
   startLine: first.loc.startLine,
   startCol: first.loc.startCol,
@@ -99,7 +130,10 @@ const parseAlternative = (stream: TokenStream, fallback: Token): YaccAlternative
   let precedence: string | undefined;
   let last = fallback;
 
-  while (!["bar", "semicolon", "section", "eof"].includes(stream.peek().kind)) {
+  while (
+    !["bar", "semicolon", "section", "eof"].includes(stream.peek().kind) &&
+    !isRuleDefinitionStart(stream)
+  ) {
     const item = parseItem(stream);
     if (item) {
       items.push(item);
@@ -161,7 +195,12 @@ const parseParameters = (stream: TokenStream): string[] | undefined => {
 };
 
 const recoverRule = (stream: TokenStream): void => {
-  while (!["semicolon", "section", "eof"].includes(stream.peek().kind)) stream.consume();
+  while (
+    !["semicolon", "section", "eof"].includes(stream.peek().kind) &&
+    !isRuleDefinitionStart(stream)
+  ) {
+    stream.consume();
+  }
   stream.match("semicolon");
 };
 
@@ -199,6 +238,16 @@ export const parseRuleDefinition = (
   }
   const params = parseParameters(stream);
   if (params) lramaSyntaxSeen = true;
+  const labelStart = stream.peek();
+  const label = parseLabel(stream);
+  if (label !== undefined) {
+    stream.diagnostics.push({
+      severity: "info",
+      code: "IR014_LOSSY_RULE_LABEL",
+      message: `rule label ${label} is not represented in Grammar IR v0.2`,
+      loc: labelStart.loc,
+    });
+  }
   const inlineType = stream.match("tag")?.value;
   if (!stream.match("colon")) {
     stream.report("error", "YACC208_EXPECTED_COLON", `expected : after rule ${name.value}`);
@@ -211,7 +260,11 @@ export const parseRuleDefinition = (
     alternatives.push(parseAlternative(stream, name));
   } while (stream.match("bar"));
 
-  if (!stream.match("semicolon")) {
+  if (
+    !stream.match("semicolon") &&
+    !isRuleDefinitionStart(stream) &&
+    !["eof", "section"].includes(stream.peek().kind)
+  ) {
     stream.report("error", "YACC209_EXPECTED_SEMICOLON", `expected ; after rule ${name.value}`);
     recoverRule(stream);
   }

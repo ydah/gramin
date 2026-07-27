@@ -11,6 +11,7 @@ const goldenCases = [
   "precedence-override",
   "adversarial-actions",
   "raw-string",
+  "bison-named-references",
   "lrama",
   "json",
 ] as const;
