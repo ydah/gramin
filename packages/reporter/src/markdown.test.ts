@@ -29,5 +29,22 @@ describe("feature reporters", () => {
     for (const number of collectNumbers(features)) expect(markdown).toContain(String(number));
     expect(markdown).toContain("keywordLike (approximate)");
     expect(markdown).toContain("punctuationLike (approximate)");
+    expect(markdown).toContain("## Capabilities");
+  });
+
+  it("suppresses incomplete action numbers in human-readable output", () => {
+    const partial = {
+      ...features,
+      actions: {
+        ...features.actions,
+        completeness: "partial" as const,
+        notApplicable: {
+          altActionCoverage: "source action metadata was omitted by the frontend",
+        },
+      },
+    };
+    const markdown = renderMarkdown(partial);
+    expect(markdown).toContain("| `completeness` | `partial` |");
+    expect(markdown).not.toContain("| `altActionCoverage` |");
   });
 });

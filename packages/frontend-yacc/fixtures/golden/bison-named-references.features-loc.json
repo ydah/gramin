@@ -2,8 +2,21 @@
   "actions": {
     "altActionCoverage": 1,
     "avgActionLength": 14.5,
+    "completeness": "complete",
     "maxActionLength": 15,
-    "midRuleActions": 0
+    "midRuleActions": 0,
+    "rulesWithActions": 2,
+    "totalActions": 2,
+    "trailingActions": 2
+  },
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
   },
   "diagnostics": [
     {
@@ -40,7 +53,7 @@
       "severity": "info"
     }
   ],
-  "featuresVersion": "0.2.0",
+  "featuresVersion": "0.3.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -68,13 +81,20 @@
       "right": 0
     },
     "levels": 0,
+    "maxTokensPerLevel": 0,
+    "precOverrideAlternativeRatio": 0,
     "precOverrides": 0,
+    "rulesWithPrecOverrides": 0,
     "tokensInPrecedence": {
       "count": 0,
       "ratio": 0
     }
   },
   "size": {
+    "altPerRulePercentiles": {
+      "p50": 1,
+      "p95": 1
+    },
     "alternatives": 2,
     "avgAltPerRule": 1,
     "avgRhsLength": 1,
@@ -91,6 +111,10 @@
     },
     "nestedChoiceCount": 0,
     "nonterminals": 2,
+    "rhsLengthPercentiles": {
+      "p50": 1,
+      "p95": 1
+    },
     "rules": 2,
     "terminals": 1,
     "unresolvedSymbols": {
@@ -112,13 +136,23 @@
   "structure": {
     "directLeftRecursiveRules": 0,
     "directRightRecursiveRules": 0,
+    "largestRecursiveComponent": {
+      "members": [],
+      "ratio": 0,
+      "value": 0
+    },
     "largestSccSize": {
       "members": [],
       "value": 0
     },
     "maxDependencyDepth": 1,
     "nullableRules": 0,
+    "reachableRules": 2,
     "recursionSccCount": 0,
+    "recursiveRules": {
+      "count": 0,
+      "ratio": 0
+    },
     "topFanIn": [
       {
         "count": 1,

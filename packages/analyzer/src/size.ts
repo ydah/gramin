@@ -1,6 +1,6 @@
 import type { GrammarFeatures, GrammarIR } from "@gramin/core";
 import { alternativeRhsLength, collectReferences, walkExpression } from "./expressions.js";
-import { compareBytes, round4 } from "./numbers.js";
+import { compareBytes, nearestRankPercentile, round4 } from "./numbers.js";
 
 const maxRuleMetric = (
   entries: readonly { readonly rule: string; readonly value: number; readonly line?: number }[],
@@ -50,6 +50,19 @@ export const sizeFeatures = (ir: GrammarIR): GrammarFeatures["size"] => {
   const unresolved = unresolvedSymbols(ir);
   const alternativeCount = alternatives.length;
   const rhsTotal = rhsLengths.reduce((total, entry) => total + entry.value, 0);
+  const altCounts = ir.rules.map((rule) => rule.alternatives.length);
+  const rhsValues = rhsLengths.map((entry) => entry.value);
+  const altP50 = nearestRankPercentile(altCounts, 0.5);
+  const altP95 = nearestRankPercentile(altCounts, 0.95);
+  const rhsP50 = nearestRankPercentile(rhsValues, 0.5);
+  const rhsP95 = nearestRankPercentile(rhsValues, 0.95);
+  const notApplicable: Record<string, string> = {};
+  if (altP50 === undefined || altP95 === undefined) {
+    notApplicable.altPerRulePercentiles = "grammar has no rules";
+  }
+  if (rhsP50 === undefined || rhsP95 === undefined) {
+    notApplicable.rhsLengthPercentiles = "grammar has no alternatives";
+  }
 
   return {
     terminals: ir.terminals.length,
@@ -69,5 +82,12 @@ export const sizeFeatures = (ir: GrammarIR): GrammarFeatures["size"] => {
     maxRhsLength: maxRuleMetric(rhsLengths),
     nestedChoiceCount,
     emptyAlternatives: rhsLengths.filter((entry) => entry.value === 0).length,
+    ...(altP50 === undefined || altP95 === undefined
+      ? {}
+      : { altPerRulePercentiles: { p50: altP50, p95: altP95 } }),
+    ...(rhsP50 === undefined || rhsP95 === undefined
+      ? {}
+      : { rhsLengthPercentiles: { p50: rhsP50, p95: rhsP95 } }),
+    ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
   };
 };

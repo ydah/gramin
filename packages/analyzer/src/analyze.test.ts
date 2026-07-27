@@ -29,18 +29,33 @@ describe("analyzeGrammar", () => {
       maxAltPerRule: { value: 5, rule: "expr" },
       maxRhsLength: { value: 3, rule: "expr" },
       emptyAlternatives: 1,
+      altPerRulePercentiles: { p50: 2, p95: 5 },
+      rhsLengthPercentiles: { p50: 2, p95: 3 },
+    });
+    expect(features.capabilities).toEqual(fixtureIR("calc").capabilities);
+    expect(features.structure).toMatchObject({
+      reachableRules: 2,
+      recursiveRules: { count: 2, ratio: 1 },
+      largestRecursiveComponent: { value: 1, ratio: 0.5, members: ["expr"] },
     });
     expect(features.precedence).toMatchObject({
       levels: 2,
       assocBreakdown: { left: 1, right: 1, nonassoc: 0, precedence: 0 },
       precOverrides: 1,
+      maxTokensPerLevel: 2,
+      rulesWithPrecOverrides: 1,
+      precOverrideAlternativeRatio: 0.1429,
       tokensInPrecedence: { count: 3, ratio: 0.5 },
     });
     expect(features.actions).toEqual({
+      completeness: "complete",
       altActionCoverage: 0.1429,
       midRuleActions: 1,
       avgActionLength: 15,
       maxActionLength: 15,
+      trailingActions: 1,
+      totalActions: 2,
+      rulesWithActions: 1,
     });
   });
 
@@ -49,6 +64,13 @@ describe("analyzeGrammar", () => {
     expect(features.structure).toMatchObject({
       recursionSccCount: 1,
       largestSccSize: { value: 2, members: ["first", "second"] },
+      reachableRules: 3,
+      recursiveRules: { count: 2, ratio: 0.6667 },
+      largestRecursiveComponent: {
+        value: 2,
+        ratio: 0.6667,
+        members: ["first", "second"],
+      },
       maxDependencyDepth: 1,
       nullableRules: 2,
     });
@@ -101,6 +123,53 @@ describe("analyzeGrammar", () => {
     const features = analyzeGrammar(ir);
     expect(features.structure.nullableRules).toBeUndefined();
     expect(features.structure.notApplicable?.nullableRules).toContain("orderedChoice");
+  });
+
+  it("marks empty-sample ratios and percentiles as not applicable", () => {
+    const ir: GrammarIR = {
+      ...fixtureIR("calc"),
+      capabilities: {
+        ...fixtureIR("calc").capabilities,
+        precedenceTable: false,
+      },
+      startSymbols: [],
+      terminals: [],
+      precedence: [],
+      rules: [],
+    };
+    const features = analyzeGrammar(ir);
+    expect(features.size.altPerRulePercentiles).toBeUndefined();
+    expect(features.size.rhsLengthPercentiles).toBeUndefined();
+    expect(features.size.notApplicable).toEqual({
+      altPerRulePercentiles: "grammar has no rules",
+      rhsLengthPercentiles: "grammar has no alternatives",
+    });
+    expect(features.structure).toMatchObject({
+      reachableRules: 0,
+      recursiveRules: { count: 0 },
+      largestRecursiveComponent: { value: 0, members: [] },
+    });
+    expect(features.structure.recursiveRules.ratio).toBeUndefined();
+    expect(features.structure.largestRecursiveComponent.ratio).toBeUndefined();
+  });
+
+  it("marks action measurements partial when a frontend reports omitted actions", () => {
+    const ir: GrammarIR = {
+      ...fixtureIR("calc"),
+      diagnostics: [
+        {
+          severity: "info",
+          code: "IR010_LOSSY_ACTION",
+          message: "action omitted",
+        },
+      ],
+    };
+    const actions = analyzeGrammar(ir).actions;
+    expect(actions.completeness).toBe("partial");
+    expect(actions.trailingActions).toBeUndefined();
+    expect(actions.totalActions).toBeUndefined();
+    expect(actions.rulesWithActions).toBeUndefined();
+    expect(actions.notApplicable?.totalActions).toContain("omitted");
   });
 
   it("serializes deterministically", () => {

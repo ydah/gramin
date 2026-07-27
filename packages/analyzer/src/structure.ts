@@ -7,7 +7,7 @@ import {
   reachableRules,
   stronglyConnectedComponents,
 } from "./graph.js";
-import { compareBytes } from "./numbers.js";
+import { compareBytes, round4 } from "./numbers.js";
 
 const computeNullableRules = (ir: GrammarIR): Set<string> => {
   const nullable = new Set<string>();
@@ -42,6 +42,21 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
         right.length - left.length || compareBytes(left.join("\0"), right.join("\0")),
     )[0] ?? [];
   const reachable = reachableRules(graph, ir.startSymbols);
+  const reachableRecursiveComponents = components.filter((component) => {
+    if (!component.some((member) => reachable.has(member))) return false;
+    if (component.length >= 2) return true;
+    const member = component[0];
+    return member !== undefined && graph.get(member)?.has(member) === true;
+  });
+  const largestReachableRecursive =
+    [...reachableRecursiveComponents].sort(
+      (left, right) =>
+        right.length - left.length || compareBytes(left.join("\0"), right.join("\0")),
+    )[0] ?? [];
+  const recursiveRuleCount = reachableRecursiveComponents.reduce(
+    (count, component) => count + component.length,
+    0,
+  );
   const fan = rankFan(graph);
   const directLeftRecursiveRules = ir.rules.filter((rule) =>
     rule.alternatives.some(
@@ -54,6 +69,16 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
     ),
   ).length;
   const nullable = ir.capabilities.orderedChoice ? undefined : computeNullableRules(ir);
+  const notApplicable: Record<string, string> = {};
+  if (nullable === undefined) {
+    notApplicable.nullableRules =
+      "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation";
+  }
+  if (reachable.size === 0) {
+    const reason = "grammar has no rule reachable from a start symbol";
+    notApplicable["recursiveRules.ratio"] = reason;
+    notApplicable["largestRecursiveComponent.ratio"] = reason;
+  }
 
   return {
     features: {
@@ -70,15 +95,20 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
       unreachableSymbols: [...graph.keys()]
         .filter((name) => !reachable.has(name))
         .sort(compareBytes),
+      reachableRules: reachable.size,
+      recursiveRules: {
+        count: recursiveRuleCount,
+        ...(reachable.size === 0 ? {} : { ratio: round4(recursiveRuleCount / reachable.size) }),
+      },
+      largestRecursiveComponent: {
+        value: largestReachableRecursive.length,
+        members: [...largestReachableRecursive],
+        ...(reachable.size === 0
+          ? {}
+          : { ratio: round4(largestReachableRecursive.length / reachable.size) }),
+      },
       ...(nullable === undefined ? {} : { nullableRules: nullable.size }),
-      ...(nullable === undefined
-        ? {
-            notApplicable: {
-              nullableRules:
-                "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation",
-            },
-          }
-        : {}),
+      ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
     },
     largestRecursiveMembers: largestRecursive,
     coreSymbols: fan.in.filter((entry) => entry.count > 0).map((entry) => entry.symbol),

@@ -1,7 +1,15 @@
 import { type Static, Type } from "@sinclair/typebox";
 import { DiagnosticSchema, SemverStringSchema } from "./primitives.js";
+import { CapabilitiesSchema } from "./ir.js";
 
 const NotApplicableSchema = Type.Record(Type.String(), Type.String({ minLength: 1 }));
+const PercentilesSchema = Type.Object(
+  {
+    p50: Type.Integer({ minimum: 0 }),
+    p95: Type.Integer({ minimum: 0 }),
+  },
+  { additionalProperties: false },
+);
 const NameListSchema = Type.Object(
   {
     count: Type.Integer({ minimum: 0 }),
@@ -38,6 +46,9 @@ const SizeFeaturesSchema = Type.Object(
     maxRhsLength: MaximumRuleSchema,
     nestedChoiceCount: Type.Integer({ minimum: 0 }),
     emptyAlternatives: Type.Integer({ minimum: 0 }),
+    altPerRulePercentiles: Type.Optional(PercentilesSchema),
+    rhsLengthPercentiles: Type.Optional(PercentilesSchema),
+    notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
 );
@@ -59,6 +70,22 @@ const StructureFeaturesSchema = Type.Object(
     topFanOut: Type.Array(RankedSymbolSchema),
     unreachableSymbols: Type.Array(Type.String()),
     nullableRules: Type.Optional(Type.Integer({ minimum: 0 })),
+    reachableRules: Type.Integer({ minimum: 0 }),
+    recursiveRules: Type.Object(
+      {
+        count: Type.Integer({ minimum: 0 }),
+        ratio: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
+      },
+      { additionalProperties: false },
+    ),
+    largestRecursiveComponent: Type.Object(
+      {
+        value: Type.Integer({ minimum: 0 }),
+        ratio: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
+        members: Type.Array(Type.String()),
+      },
+      { additionalProperties: false },
+    ),
     notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
@@ -79,6 +106,9 @@ const PrecedenceFeaturesSchema = Type.Object(
       ),
     ),
     precOverrides: Type.Optional(Type.Integer({ minimum: 0 })),
+    maxTokensPerLevel: Type.Optional(Type.Integer({ minimum: 0 })),
+    rulesWithPrecOverrides: Type.Optional(Type.Integer({ minimum: 0 })),
+    precOverrideAlternativeRatio: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
     tokensInPrecedence: Type.Optional(
       Type.Object(
         {
@@ -130,10 +160,15 @@ const SugarFeaturesSchema = Type.Object(
 
 const ActionFeaturesSchema = Type.Object(
   {
+    completeness: Type.Union([Type.Literal("complete"), Type.Literal("partial")]),
     altActionCoverage: Type.Number({ minimum: 0, maximum: 1 }),
     midRuleActions: Type.Integer({ minimum: 0 }),
     avgActionLength: Type.Number({ minimum: 0 }),
     maxActionLength: Type.Integer({ minimum: 0 }),
+    trailingActions: Type.Optional(Type.Integer({ minimum: 0 })),
+    totalActions: Type.Optional(Type.Integer({ minimum: 0 })),
+    rulesWithActions: Type.Optional(Type.Integer({ minimum: 0 })),
+    notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
 );
@@ -173,6 +208,7 @@ export const GrammarFeaturesSchema = Type.Object(
       },
       { additionalProperties: false },
     ),
+    capabilities: CapabilitiesSchema,
     size: SizeFeaturesSchema,
     structure: StructureFeaturesSchema,
     precedence: PrecedenceFeaturesSchema,
@@ -182,7 +218,7 @@ export const GrammarFeaturesSchema = Type.Object(
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.2.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.3.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;

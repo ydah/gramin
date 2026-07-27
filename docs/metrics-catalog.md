@@ -1,6 +1,6 @@
-# Metrics catalog v0.2
+# Metrics catalog v0.3
 
-This file is the normative definition of metrics emitted in features v0.2.
+This file is the normative definition of metrics emitted in features v0.3.
 
 - Classification: **E** is exact and mechanically determined; **H** is heuristic.
 - Comparability: **A** compares across formats; **B** compares only with the stated
@@ -19,6 +19,14 @@ This file is the normative definition of metrics emitted in features v0.2.
    order is semantically meaningful, as in precedence levels.
 5. Repeated references between two rules form one graph edge for fan-in/out and reachability.
 6. Identical input must serialize to byte-identical features.
+7. Percentiles use nearest rank: sort `n` observations and select the one-based item at
+   `ceil(p * n)`. Empty samples omit their percentile object with a `notApplicable` reason.
+
+## Capability context
+
+`capabilities` is copied unchanged from Grammar IR. It is not a measurement: it identifies
+the representation context needed to interpret class-B measurements. Consumers must not
+infer the same context from `source.format`.
 
 ## Size
 
@@ -34,6 +42,8 @@ This file is the normative definition of metrics emitted in features v0.2.
 | `maxRhsLength` | Largest RHS length; rule name breaks ties | E | A |
 | `nestedChoiceCount` | Nested `choice` nodes below alternatives | E | B (`ebnfSugar`) |
 | `emptyAlternatives` | Alternatives whose effective RHS length is zero | E | A |
+| `altPerRulePercentiles` | Nearest-rank p50 and p95 of alternatives per rule | E | A |
+| `rhsLengthPercentiles` | Nearest-rank p50 and p95 under the shared RHS rule | E | A |
 
 EBNF syntax can compress alternatives and RHS items. Compare those counts together with
 nested choice and sugar metrics.
@@ -50,10 +60,15 @@ nested choice and sugar metrics.
 | `topFanIn`, `topFanOut` | Top ten unique incoming/outgoing rule-edge counts | E | A |
 | `unreachableSymbols` | Rules unreachable from every start symbol | E | A |
 | `nullableRules` | Count from least fixed-point CFG nullability | E | B (CFG) |
+| `reachableRules` | Rules reachable from at least one start symbol | E | A |
+| `recursiveRules` | Reachable rules in a multi-rule SCC or a self-loop SCC, with reachable ratio | E | B |
+| `largestRecursiveComponent` | Largest reachable recursive component, members, and reachable ratio | E | B |
 
 EBNF repetition replaces explicit recursion, so recursion counts are not directly comparable
 to BNF/Yacc counts. In PEG grammars direct left recursion is a likely defect signal rather
 than a complexity measure. CFG nullability is omitted for ordered choice.
+`recursionSccCount` and `largestSccSize` retain their features 0.2 definition and describe
+mutual recursion only; the new recursive-component fields also recognize self-loops.
 
 ## Precedence
 
@@ -62,6 +77,9 @@ All are **E/B** and apply only when `precedenceTable` is true.
 - `levels`: precedence declarations in source order.
 - `assocBreakdown`: declaration counts for left, right, nonassoc, and precedence-only.
 - `precOverrides`: alternatives carrying an explicit precedence override.
+- `maxTokensPerLevel`: largest source precedence-level token list.
+- `rulesWithPrecOverrides`: rules containing at least one explicit override.
+- `precOverrideAlternativeRatio`: overrides divided by all top-level alternatives.
 - `tokensInPrecedence`: distinct listed terminals and their ratio to all terminals.
 
 ## Lexicon
@@ -91,12 +109,22 @@ All are **E/B** and are emitted only for the relevant capability.
 
 ## Actions
 
-Action metrics are **E/C** because action-writing style differs strongly by format:
+Action metrics are **E/C** because action-writing style differs strongly by format.
+`completeness` is `partial` when an `IR010_LOSSY_ACTION` diagnostic says source actions
+were omitted, and `complete` otherwise:
 
 - `altActionCoverage`: alternatives with a trailing action divided by alternatives.
 - `midRuleActions`: opaque actions inside RHS items.
 - `avgActionLength`, `maxActionLength`: character lengths across trailing and mid-rule
   actions. Empty action sets produce zero.
+- `trailingActions`: alternatives carrying a trailing action.
+- `totalActions`: trailing plus mid-rule actions.
+- `rulesWithActions`: rules containing either action form.
+
+The three new counts are omitted when completeness is partial. Required features 0.2
+action fields remain present for compatibility but are listed in `notApplicable` and must
+not be presented as complete measurements. Action length totals and percentiles are not
+defined in features 0.3.
 
 ## Notable locations
 
@@ -113,3 +141,6 @@ A section omits a metric that does not apply and records a stable explanation in
 - EBNF counts require `ebnfSugar`;
 - parameterized counts require `parameterizedRules`;
 - CFG nullability is omitted for `orderedChoice`.
+- empty rule or alternative samples omit their percentile object;
+- recursion ratios are omitted when no rule is reachable from a start symbol;
+- complete action counts are omitted after diagnosed lossy action handling.

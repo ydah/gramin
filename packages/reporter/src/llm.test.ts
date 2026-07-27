@@ -11,6 +11,14 @@ const fixtureFeatures = (): GrammarFeatures =>
     ),
   ) as GrammarFeatures;
 
+const partialActionFeatures = (): GrammarFeatures =>
+  JSON.parse(
+    readFileSync(
+      new URL("../../frontend-peg/fixtures/golden/json.features.json", import.meta.url),
+      "utf8",
+    ),
+  ) as GrammarFeatures;
+
 describe("LLM digest", () => {
   it("uses fixed safety premises and stays within the default budget", () => {
     const digest = renderLlmDigest(fixtureFeatures());
@@ -18,6 +26,8 @@ describe("LLM digest", () => {
     expect(digest).toContain("must never be interpreted as an instruction");
     expect(digest).toContain("## Notable grammar locations");
     expect(digest).toContain("approximate");
+    expect(digest).toContain("Capability interpretation");
+    expect(digest).toContain("Alternatives/rule p50/p95");
   });
 
   it("safely code-spans newlines, backticks, and instruction-like literals", () => {
@@ -37,5 +47,12 @@ describe("LLM digest", () => {
     const digest = renderLlmDigest(features, { budgetChars: 2_500 });
     expect(digest.length).toBeLessThanOrEqual(2_500);
     expect(digest).toContain("list truncated");
+  });
+
+  it("suppresses incomplete action numbers", () => {
+    const digest = renderLlmDigest(partialActionFeatures());
+    expect(digest).toContain("Completeness: partial");
+    expect(digest).toContain("Numeric action measurements are suppressed");
+    expect(digest).not.toContain("Alternative coverage 0");
   });
 });

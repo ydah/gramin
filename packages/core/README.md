@@ -20,7 +20,8 @@ import {
 
 JSON Schemas are available through the `@gramin/core/schema/*` export. Contract evolution
 and compatibility are documented in the
-[IR schema guide](https://github.com/ydah/gramin/blob/main/docs/ir-schema.md).
+[IR schema guide](https://github.com/ydah/gramin/blob/main/docs/ir-schema.md) and
+[features schema guide](https://github.com/ydah/gramin/blob/main/docs/features-schema.md).
 
 ## License
 

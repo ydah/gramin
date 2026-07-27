@@ -2,8 +2,21 @@
   "actions": {
     "altActionCoverage": 0,
     "avgActionLength": 0,
+    "completeness": "complete",
     "maxActionLength": 0,
-    "midRuleActions": 0
+    "midRuleActions": 0,
+    "rulesWithActions": 0,
+    "totalActions": 0,
+    "trailingActions": 0
+  },
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": true,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": false,
+    "scannerless": false
   },
   "diagnostics": [
     {
@@ -12,7 +25,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.2.0",
+  "featuresVersion": "0.3.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -54,11 +67,18 @@
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
       "levels": "precedenceTable capability is false",
+      "maxTokensPerLevel": "precedenceTable capability is false",
+      "precOverrideAlternativeRatio": "precedenceTable capability is false",
       "precOverrides": "precedenceTable capability is false",
+      "rulesWithPrecOverrides": "precedenceTable capability is false",
       "tokensInPrecedence": "precedenceTable capability is false"
     }
   },
   "size": {
+    "altPerRulePercentiles": {
+      "p50": 1,
+      "p95": 7
+    },
     "alternatives": 11,
     "avgAltPerRule": 2.2,
     "avgRhsLength": 1.6364,
@@ -73,6 +93,10 @@
     },
     "nestedChoiceCount": 0,
     "nonterminals": 5,
+    "rhsLengthPercentiles": {
+      "p50": 1,
+      "p95": 3
+    },
     "rules": 5,
     "terminals": 13,
     "unresolvedSymbols": {
@@ -94,6 +118,16 @@
   "structure": {
     "directLeftRecursiveRules": 0,
     "directRightRecursiveRules": 0,
+    "largestRecursiveComponent": {
+      "members": [
+        "array",
+        "member",
+        "object",
+        "value"
+      ],
+      "ratio": 0.8,
+      "value": 4
+    },
     "largestSccSize": {
       "members": [
         "array",
@@ -105,7 +139,12 @@
     },
     "maxDependencyDepth": 1,
     "nullableRules": 0,
+    "reachableRules": 5,
     "recursionSccCount": 1,
+    "recursiveRules": {
+      "count": 4,
+      "ratio": 0.8
+    },
     "topFanIn": [
       {
         "count": 3,

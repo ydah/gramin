@@ -2,6 +2,7 @@ import type { GrammarFeatures } from "@gramin/core";
 
 const sectionTitles: Readonly<Record<string, string>> = {
   source: "Source",
+  capabilities: "Capabilities",
   size: "Size",
   structure: "Structure",
   precedence: "Precedence",
@@ -53,7 +54,15 @@ const renderSection = (key: string, value: unknown): string => {
 export const renderMarkdown = (features: GrammarFeatures): string => {
   const sections = Object.entries(features)
     .filter(([key]) => key !== "featuresVersion")
-    .map(([key, value]) => renderSection(key, value))
+    .map(([key, value]) => {
+      if (key !== "actions" || features.actions.completeness !== "partial") {
+        return renderSection(key, value);
+      }
+      return renderSection(key, {
+        completeness: features.actions.completeness,
+        notApplicable: features.actions.notApplicable,
+      });
+    })
     .join("\n\n");
   return `# Grammar feature report\n\nFeatures version: \`${features.featuresVersion}\`\n\n${sections}\n`;
 };

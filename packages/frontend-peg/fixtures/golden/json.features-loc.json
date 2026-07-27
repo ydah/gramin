@@ -2,8 +2,27 @@
   "actions": {
     "altActionCoverage": 0,
     "avgActionLength": 0,
+    "completeness": "partial",
     "maxActionLength": 0,
-    "midRuleActions": 0
+    "midRuleActions": 0,
+    "notApplicable": {
+      "altActionCoverage": "source action metadata was omitted by the frontend",
+      "avgActionLength": "source action metadata was omitted by the frontend",
+      "maxActionLength": "source action metadata was omitted by the frontend",
+      "midRuleActions": "source action metadata was omitted by the frontend",
+      "rulesWithActions": "source action metadata was omitted by the frontend",
+      "totalActions": "source action metadata was omitted by the frontend",
+      "trailingActions": "source action metadata was omitted by the frontend"
+    }
+  },
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": false,
+    "orderedChoice": true,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": true,
+    "scannerless": true
   },
   "diagnostics": [
     {
@@ -34,7 +53,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.2.0",
+  "featuresVersion": "0.3.0",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -88,11 +107,18 @@
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
       "levels": "precedenceTable capability is false",
+      "maxTokensPerLevel": "precedenceTable capability is false",
+      "precOverrideAlternativeRatio": "precedenceTable capability is false",
       "precOverrides": "precedenceTable capability is false",
+      "rulesWithPrecOverrides": "precedenceTable capability is false",
       "tokensInPrecedence": "precedenceTable capability is false"
     }
   },
   "size": {
+    "altPerRulePercentiles": {
+      "p50": 1,
+      "p95": 7
+    },
     "alternatives": 16,
     "avgAltPerRule": 1.6,
     "avgRhsLength": 2.25,
@@ -109,6 +135,10 @@
     },
     "nestedChoiceCount": 1,
     "nonterminals": 10,
+    "rhsLengthPercentiles": {
+      "p50": 1,
+      "p95": 5
+    },
     "rules": 10,
     "terminals": 12,
     "unresolvedSymbols": {
@@ -130,6 +160,16 @@
   "structure": {
     "directLeftRecursiveRules": 0,
     "directRightRecursiveRules": 0,
+    "largestRecursiveComponent": {
+      "members": [
+        "array",
+        "member",
+        "object",
+        "value"
+      ],
+      "ratio": 0.5,
+      "value": 4
+    },
     "largestSccSize": {
       "members": [
         "array",
@@ -143,7 +183,12 @@
     "notApplicable": {
       "nullableRules": "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation"
     },
+    "reachableRules": 8,
     "recursionSccCount": 1,
+    "recursiveRules": {
+      "count": 4,
+      "ratio": 0.5
+    },
     "topFanIn": [
       {
         "count": 4,

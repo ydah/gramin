@@ -10,12 +10,16 @@ export const precedenceFeatures = (ir: GrammarIR): GrammarFeatures["precedence"]
         levels: reason,
         assocBreakdown: reason,
         precOverrides: reason,
+        maxTokensPerLevel: reason,
+        rulesWithPrecOverrides: reason,
+        precOverrideAlternativeRatio: reason,
         tokensInPrecedence: reason,
       },
     };
   }
 
   const tokens = new Set(ir.precedence.flatMap((level) => level.tokens));
+  const alternatives = ir.rules.flatMap((rule) => rule.alternatives);
   const assocBreakdown = { left: 0, right: 0, nonassoc: 0, precedence: 0 };
   ir.precedence.forEach((level) => {
     assocBreakdown[level.assoc] += 1;
@@ -25,14 +29,27 @@ export const precedenceFeatures = (ir: GrammarIR): GrammarFeatures["precedence"]
       count + rule.alternatives.filter((alternative) => alternative.precedence).length,
     0,
   );
+  const rulesWithPrecOverrides = ir.rules.filter((rule) =>
+    rule.alternatives.some((alternative) => alternative.precedence !== undefined),
+  ).length;
+  const notApplicable =
+    alternatives.length === 0
+      ? { precOverrideAlternativeRatio: "grammar has no alternatives" }
+      : undefined;
   return {
     levels: ir.precedence.length,
     assocBreakdown,
     precOverrides,
+    maxTokensPerLevel: Math.max(0, ...ir.precedence.map((level) => level.tokens.length)),
+    rulesWithPrecOverrides,
+    ...(alternatives.length === 0
+      ? {}
+      : { precOverrideAlternativeRatio: round4(precOverrides / alternatives.length) }),
     tokensInPrecedence: {
       count: tokens.size,
       ratio: round4(ir.terminals.length === 0 ? 0 : tokens.size / ir.terminals.length),
     },
+    ...(notApplicable === undefined ? {} : { notApplicable }),
   };
 };
 
@@ -144,27 +161,54 @@ export const actionFeatures = (ir: GrammarIR): GrammarFeatures["actions"] => {
   const lengths: number[] = [];
   let alternativesWithActions = 0;
   let midRuleActions = 0;
-  alternatives.forEach((alternative) => {
-    if (alternative.action) {
-      alternativesWithActions += 1;
-      lengths.push(alternative.action.codeLength);
-    }
-    alternative.items.forEach((item) => {
-      walkExpression(item, (expression) => {
-        if (expression.kind === "midRuleAction") {
-          midRuleActions += 1;
-          lengths.push(expression.codeLength);
-        }
+  let rulesWithActions = 0;
+  ir.rules.forEach((rule) => {
+    let ruleHasAction = false;
+    rule.alternatives.forEach((alternative) => {
+      if (alternative.action) {
+        alternativesWithActions += 1;
+        ruleHasAction = true;
+        lengths.push(alternative.action.codeLength);
+      }
+      alternative.items.forEach((item) => {
+        walkExpression(item, (expression) => {
+          if (expression.kind === "midRuleAction") {
+            midRuleActions += 1;
+            ruleHasAction = true;
+            lengths.push(expression.codeLength);
+          }
+        });
       });
     });
+    if (ruleHasAction) rulesWithActions += 1;
   });
   const totalLength = lengths.reduce((total, length) => total + length, 0);
+  const complete = !ir.diagnostics.some((diagnostic) => diagnostic.code === "IR010_LOSSY_ACTION");
+  const incompleteReason = "source action metadata was omitted by the frontend";
   return {
+    completeness: complete ? "complete" : "partial",
     altActionCoverage: round4(
       alternatives.length === 0 ? 0 : alternativesWithActions / alternatives.length,
     ),
     midRuleActions,
     avgActionLength: round4(lengths.length === 0 ? 0 : totalLength / lengths.length),
     maxActionLength: Math.max(0, ...lengths),
+    ...(complete
+      ? {
+          trailingActions: alternativesWithActions,
+          totalActions: lengths.length,
+          rulesWithActions,
+        }
+      : {
+          notApplicable: {
+            altActionCoverage: incompleteReason,
+            avgActionLength: incompleteReason,
+            maxActionLength: incompleteReason,
+            midRuleActions: incompleteReason,
+            rulesWithActions: incompleteReason,
+            totalActions: incompleteReason,
+            trailingActions: incompleteReason,
+          },
+        }),
   };
 };
