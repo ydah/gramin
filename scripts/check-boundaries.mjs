@@ -58,6 +58,12 @@ for (const [packageName, allowed] of allowedImports) {
   const files = await collectSourceFiles(fileURLToPath(sourceDirectory));
   for (const file of files) {
     const source = await readFile(file, "utf8");
+    if (
+      (packageName === "analyzer" || packageName === "reporter") &&
+      /(?:source\.format\s*(?:===|!==|==|!=)|switch\s*\(\s*[^)]*source\.format)/u.test(source)
+    ) {
+      failures.push(`${relative(workspacePath, file)}: source-format branch outside a frontend`);
+    }
     const imports = source.matchAll(/(?:from\s+|import\s*\()\s*["'](@gramin\/[^"']+)/g);
     for (const match of imports) {
       const specifier = match[1];

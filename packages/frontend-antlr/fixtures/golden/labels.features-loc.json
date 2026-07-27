@@ -2,8 +2,21 @@
   "actions": {
     "altActionCoverage": 0,
     "avgActionLength": 0,
+    "completeness": "complete",
     "maxActionLength": 0,
-    "midRuleActions": 0
+    "midRuleActions": 0,
+    "rulesWithActions": 0,
+    "totalActions": 0,
+    "trailingActions": 0
+  },
+  "capabilities": {
+    "ebnfSugar": true,
+    "lexerRules": true,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": false,
+    "predicates": false,
+    "scannerless": false
   },
   "diagnostics": [
     {
@@ -34,7 +47,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.2.0",
+  "featuresVersion": "0.3.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -62,11 +75,18 @@
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
       "levels": "precedenceTable capability is false",
+      "maxTokensPerLevel": "precedenceTable capability is false",
+      "precOverrideAlternativeRatio": "precedenceTable capability is false",
       "precOverrides": "precedenceTable capability is false",
+      "rulesWithPrecOverrides": "precedenceTable capability is false",
       "tokensInPrecedence": "precedenceTable capability is false"
     }
   },
   "size": {
+    "altPerRulePercentiles": {
+      "p50": 1,
+      "p95": 3
+    },
     "alternatives": 4,
     "avgAltPerRule": 2,
     "avgRhsLength": 2,
@@ -83,6 +103,10 @@
     },
     "nestedChoiceCount": 0,
     "nonterminals": 2,
+    "rhsLengthPercentiles": {
+      "p50": 1,
+      "p95": 4
+    },
     "rules": 2,
     "terminals": 6,
     "unresolvedSymbols": {
@@ -104,13 +128,25 @@
   "structure": {
     "directLeftRecursiveRules": 1,
     "directRightRecursiveRules": 1,
+    "largestRecursiveComponent": {
+      "members": [
+        "item"
+      ],
+      "ratio": 0.5,
+      "value": 1
+    },
     "largestSccSize": {
       "members": [],
       "value": 0
     },
     "maxDependencyDepth": 1,
     "nullableRules": 0,
+    "reachableRules": 2,
     "recursionSccCount": 0,
+    "recursiveRules": {
+      "count": 1,
+      "ratio": 0.5
+    },
     "topFanIn": [
       {
         "count": 2,

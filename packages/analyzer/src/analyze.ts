@@ -113,6 +113,7 @@ export const analyzeGrammar = (ir: GrammarIR): GrammarFeatures => {
   const features: GrammarFeatures = {
     featuresVersion: FEATURES_VERSION,
     source: { ...ir.source },
+    capabilities: { ...ir.capabilities },
     size,
     structure: structure.features,
     precedence: precedenceFeatures(ir),
