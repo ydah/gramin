@@ -353,4 +353,21 @@ describe("gramin CLI", () => {
       expect(performance.now() - startedAt).toBeLessThan(3_000);
     },
   );
+
+  const perlCorpus = new URL("../../../fixtures/downloaded/perl/perly.y", import.meta.url);
+  it.runIf(existsSync(perlCorpus))("analyzes the pinned Perl perly.y corpus without errors", () => {
+    const parsed = yaccFrontend.parse(
+      [{ name: "perly.y", content: readFileSync(perlCorpus, "utf8") }],
+      { dialect: "bison" },
+    );
+    expect(parsed.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
+    expect(validateIR(parsed.ir).ok).toBe(true);
+    if (!parsed.ir) return;
+    expect(parsed.ir.rules.map(({ name }) => name)).toEqual(
+      expect.arrayContaining(["nexpr", "sigslurpelem", "subsigguts", "term"]),
+    );
+    const features = analyzeGrammar(parsed.ir);
+    expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
+    expect(features.structure.unreachableSymbols).toEqual([]);
+  });
 });
