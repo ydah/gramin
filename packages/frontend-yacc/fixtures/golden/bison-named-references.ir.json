@@ -1,0 +1,87 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [
+    {
+      "code": "IR014_LOSSY_RULE_LABEL",
+      "message": "rule label result is not represented in Grammar IR v0.2",
+      "severity": "info"
+    },
+    {
+      "code": "IR014_LOSSY_RULE_LABEL",
+      "message": "rule label value is not represented in Grammar IR v0.2",
+      "severity": "info"
+    },
+    {
+      "code": "IR012_LOSSY_TERMINAL_LABEL",
+      "message": "terminal label number is not represented in Grammar IR v0.2",
+      "severity": "info"
+    }
+  ],
+  "externalSymbols": [],
+  "irVersion": "1.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 14,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "symbol",
+              "label": "value",
+              "name": "expression"
+            }
+          ]
+        }
+      ],
+      "name": "input"
+    },
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 15,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ]
+        }
+      ],
+      "name": "expression"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "bison-named-references.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "input"
+  ],
+  "terminals": [
+    {
+      "name": "NUMBER"
+    }
+  ]
+}

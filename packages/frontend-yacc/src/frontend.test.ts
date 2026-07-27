@@ -42,6 +42,7 @@ describe("yacc-family parser and lowering", () => {
     "precedence-override.y",
     "adversarial-actions.y",
     "raw-string.y",
+    "bison-named-references.y",
     "lrama.y",
     "json.y",
   ])("produces canonical IR for %s", (name) => {
@@ -64,6 +65,20 @@ describe("yacc-family parser and lowering", () => {
     const result = parseFixture("syntax-error-recovery.y");
     expect(result.ir?.rules.map((rule) => rule.name)).toContain("valid");
     expect(result.diagnostics.some((diagnostic) => diagnostic.severity === "error")).toBe(true);
+  });
+
+  it("accepts optional rule terminators and Bison named references", () => {
+    const result = parseFixture("bison-named-references.y");
+    expect(result.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
+    expect(result.ir?.rules.map((rule) => rule.name)).toEqual(["input", "expression"]);
+    expect(result.ir?.rules[0]?.alternatives[0]?.items[0]).toMatchObject({
+      kind: "symbol",
+      name: "expression",
+      label: "value",
+    });
+    expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual(
+      expect.arrayContaining(["IR012_LOSSY_TERMINAL_LABEL", "IR014_LOSSY_RULE_LABEL"]),
+    );
   });
 
   it("is deterministic with stripped locations", () => {

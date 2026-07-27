@@ -89,6 +89,14 @@ const lowerItem = (item: YaccItem, context: LoweringContext): Expr => {
   const args = item.args?.map((argument) => lowerItem(argument, context));
   const literal = context.terminalLiterals.get(item.name);
   if (context.terminalNames.has(item.name)) {
+    if (item.label !== undefined) {
+      context.diagnostics.push({
+        severity: "info",
+        code: "IR012_LOSSY_TERMINAL_LABEL",
+        message: `terminal label ${item.label} is not represented in Grammar IR v0.2`,
+        loc: item.loc,
+      });
+    }
     return {
       kind: "terminal",
       name: item.name,

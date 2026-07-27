@@ -1,0 +1,135 @@
+{
+  "capabilities": {
+    "ebnfSugar": false,
+    "lexerRules": false,
+    "orderedChoice": false,
+    "parameterizedRules": false,
+    "precedenceTable": true,
+    "predicates": false,
+    "scannerless": false
+  },
+  "diagnostics": [
+    {
+      "code": "IR014_LOSSY_RULE_LABEL",
+      "loc": {
+        "endCol": 7,
+        "endLine": 5,
+        "startCol": 6,
+        "startLine": 5
+      },
+      "message": "rule label result is not represented in Grammar IR v0.2",
+      "severity": "info"
+    },
+    {
+      "code": "IR014_LOSSY_RULE_LABEL",
+      "loc": {
+        "endCol": 12,
+        "endLine": 8,
+        "startCol": 11,
+        "startLine": 8
+      },
+      "message": "rule label value is not represented in Grammar IR v0.2",
+      "severity": "info"
+    },
+    {
+      "code": "IR012_LOSSY_TERMINAL_LABEL",
+      "loc": {
+        "endCol": 11,
+        "endLine": 9,
+        "startCol": 5,
+        "startLine": 9
+      },
+      "message": "terminal label number is not represented in Grammar IR v0.2",
+      "severity": "info"
+    }
+  ],
+  "externalSymbols": [],
+  "irVersion": "1.2.0",
+  "precedence": [],
+  "rules": [
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 14,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "symbol",
+              "label": "value",
+              "name": "expression"
+            }
+          ],
+          "loc": {
+            "endCol": 39,
+            "endLine": 6,
+            "startCol": 5,
+            "startLine": 6
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 6,
+        "endLine": 5,
+        "startCol": 1,
+        "startLine": 5
+      },
+      "name": "input"
+    },
+    {
+      "alternatives": [
+        {
+          "action": {
+            "codeLength": 15,
+            "present": true
+          },
+          "items": [
+            {
+              "kind": "terminal",
+              "name": "NUMBER"
+            }
+          ],
+          "loc": {
+            "endCol": 37,
+            "endLine": 9,
+            "startCol": 5,
+            "startLine": 9
+          }
+        }
+      ],
+      "loc": {
+        "endCol": 11,
+        "endLine": 8,
+        "startCol": 1,
+        "startLine": 8
+      },
+      "name": "expression"
+    }
+  ],
+  "source": {
+    "dialect": "yacc",
+    "fileNames": [
+      "bison-named-references.y"
+    ],
+    "format": "yacc",
+    "frontend": {
+      "id": "yacc-family",
+      "version": "0.1.0"
+    }
+  },
+  "startSymbols": [
+    "input"
+  ],
+  "terminals": [
+    {
+      "loc": {
+        "endCol": 14,
+        "endLine": 2,
+        "startCol": 8,
+        "startLine": 2
+      },
+      "name": "NUMBER"
+    }
+  ]
+}
