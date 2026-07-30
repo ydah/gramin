@@ -1,5 +1,8 @@
 # gramin
 
+[![npm version](https://img.shields.io/npm/v/@gramin/cli.svg)](https://www.npmjs.com/package/@gramin/cli)
+[![CI](https://github.com/ydah/gramin/actions/workflows/ci.yml/badge.svg)](https://github.com/ydah/gramin/actions/workflows/ci.yml)
+
 `gramin` converts parser grammar files into deterministic, versioned structural features
 for tooling, review, and LLM-assisted analysis. It never executes semantic actions.
 
