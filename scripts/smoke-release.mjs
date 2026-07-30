@@ -81,9 +81,9 @@ try {
     stdio: "inherit",
   });
 
-  const cli = join(smokeDirectory, "node_modules", "gramin", "dist", "bin.js");
+  const cli = join(smokeDirectory, "node_modules", "@gramin", "cli", "dist", "bin.js");
   const version = run("node", [cli, "--version"], { cwd: smokeDirectory }).trim();
-  if (version !== artifactVersion(manifest.artifacts, "gramin")) {
+  if (version !== artifactVersion(manifest.artifacts, "@gramin/cli")) {
     throw new Error(`installed CLI reported unexpected version ${version}`);
   }
   const help = run("node", [cli, "--help"], { cwd: smokeDirectory });
@@ -112,7 +112,7 @@ import { menhirFrontend } from "@gramin/frontend-menhir";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { renderJson } from "@gramin/reporter";
-import { CLI_VERSION } from "gramin";
+import { CLI_VERSION } from "@gramin/cli";
 
 const functions = [analyzeGrammar, validateIR, renderJson];
 if (functions.some((value) => typeof value !== "function")) {
