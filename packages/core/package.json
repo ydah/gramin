@@ -1,6 +1,6 @@
 {
   "name": "@gramin/core",
-  "version": "1.2.0",
+  "version": "0.1.0",
   "author": "Yudai Takada",
   "description": "Versioned Grammar IR and feature contracts for gramin",
   "keywords": [

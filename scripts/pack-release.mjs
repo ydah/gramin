@@ -104,9 +104,17 @@ if (basename(releaseDirectory) !== ".release") {
 rmSync(releaseDirectory, { recursive: true, force: true });
 mkdirSync(releaseDirectory, { recursive: true });
 
-const artifacts = releasePackages.map(({ name, directory }) => {
+const preparedPackages = releasePackages.map(({ name, directory }) => {
   const sourceManifest = readJsonObject(join(repositoryRoot, directory, "package.json"));
   const version = stringField(sourceManifest, "version", `${directory}/package.json`);
+  return { name, directory, version };
+});
+const releaseVersions = new Set(preparedPackages.map(({ version }) => version));
+if (releaseVersions.size !== 1) {
+  throw new Error("public packages must use one release version");
+}
+
+const artifacts = preparedPackages.map(({ name, directory, version }) => {
   run("pnpm", ["--filter", name, "pack", "--pack-destination", releaseDirectory]);
   const file = tarballName(name, version);
   const tarball = join(releaseDirectory, file);
