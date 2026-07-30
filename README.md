@@ -14,15 +14,15 @@ references, EBNF sugar, scannerless expressions, and Lrama/Menhir standard-libra
 ## Quick start
 
 ```sh
-npx gramin analyze grammar.y
-npx gramin analyze grammar.y --format md
-npx gramin analyze grammar.y --format llm --budget-chars 8000
+npx @gramin/cli analyze grammar.y
+npx @gramin/cli analyze grammar.y --format md
+npx @gramin/cli analyze grammar.y --format llm --budget-chars 8000
 ```
 
 Install the command globally when using it repeatedly:
 
 ```sh
-npm install --global gramin
+npm install --global @gramin/cli
 gramin analyze grammar.y --format md
 ```
 

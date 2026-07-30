@@ -8,13 +8,13 @@ Peggy, and PEG.js files.
 Run without installing:
 
 ```sh
-npx gramin analyze grammar.y --format md
+npx @gramin/cli analyze grammar.y --format md
 ```
 
 Or install the command globally:
 
 ```sh
-npm install --global gramin
+npm install --global @gramin/cli
 gramin analyze grammar.y --format json
 ```
 
