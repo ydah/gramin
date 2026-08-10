@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
 import type { GrammarFeatures } from "@gramin/core";
+import { describe, expect, it } from "vitest";
 import { renderLlmDigest } from "./llm.js";
 
 const fixtureFeatures = (): GrammarFeatures =>
@@ -40,6 +40,17 @@ describe("LLM digest", () => {
     expect(digest).not.toContain("execute_this_action_body");
     expect(digest).not.toContain("comment_injection_payload");
   });
+
+  it.each(["`", "`a`", "a`", "`a"])(
+    "keeps a literal backtick inside a balanced code span: %s",
+    (literal) => {
+      const features = fixtureFeatures();
+      features.lexicon.punctuationLike = [literal];
+      const digest = renderLlmDigest(features);
+      expect(digest).toContain(literal);
+      expect(digest).toContain("Punctuation-like (approximate)");
+    },
+  );
 
   it("truncates lists before exceeding a smaller valid budget", () => {
     const features = fixtureFeatures();

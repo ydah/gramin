@@ -1,4 +1,5 @@
 export type OutputFormat = "json" | "md" | "llm";
+export type FailOn = "error" | "warning" | "none";
 
 export interface ParsedArguments {
   readonly command: string;
@@ -11,6 +12,7 @@ export interface ParsedArguments {
   readonly output?: string;
   readonly stripLocations: boolean;
   readonly budgetChars?: number;
+  readonly failOn: FailOn;
 }
 
 export type ArgumentResult =
@@ -24,6 +26,7 @@ const valueOptions = new Set([
   "--dialect",
   "--ir",
   "--budget-chars",
+  "--fail-on",
   "-o",
 ]);
 
@@ -63,6 +66,10 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   if (budgetChars !== undefined && (!Number.isSafeInteger(budgetChars) || budgetChars <= 0)) {
     return { ok: false, message: "--budget-chars must be a positive integer" };
   }
+  const failOn = options.get("--fail-on") ?? "error";
+  if (!(["error", "warning", "none"] as const).includes(failOn as FailOn)) {
+    return { ok: false, message: `unknown --fail-on threshold ${failOn}` };
+  }
   const frontend = options.get("--frontend");
   const frontendCommand = options.get("--frontend-cmd");
   if (frontend !== undefined && frontendCommand !== undefined) {
@@ -85,6 +92,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
       ...(output === undefined ? {} : { output }),
       stripLocations,
       ...(budgetChars === undefined ? {} : { budgetChars }),
+      failOn: failOn as FailOn,
     },
   };
 };

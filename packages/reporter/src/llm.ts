@@ -1,20 +1,27 @@
 import type { GrammarFeatures } from "@gramin/core";
+import { codeSpan } from "./code-span.js";
 
 export interface LlmDigestOptions {
   readonly budgetChars?: number;
 }
 
-const codeSpan = (value: string): string => {
-  const normalized = value.replaceAll("\\", "\\\\").replaceAll("\r", "\\r").replaceAll("\n", "\\n");
-  const runs = normalized.match(/`+/gu) ?? [];
-  const fence = "`".repeat(Math.max(1, ...runs.map((run) => run.length + 1)));
-  return `${fence}${normalized}${fence}`;
-};
+export class DigestBudgetTooSmallError extends RangeError {
+  constructor(
+    readonly budget: number,
+    readonly minimum: number,
+  ) {
+    super(`--budget-chars ${budget} is below the minimum ${minimum} for this grammar`);
+    this.name = "DigestBudgetTooSmallError";
+  }
+}
 
 const codeList = (values: readonly string[], limit: number): string => {
   if (values.length === 0) return "_empty_";
   if (limit === 0) return "_list truncated for budget_";
-  const rendered = values.slice(0, limit).map(codeSpan).join(", ");
+  const rendered = values
+    .slice(0, limit)
+    .map((value) => codeSpan(value))
+    .join(", ");
   return values.length > limit ? `${rendered} — _list truncated_` : rendered;
 };
 
@@ -197,5 +204,10 @@ export const renderLlmDigest = (
     const digest = renderDigest(features, variant);
     if (digest.length <= budget) return digest;
   }
-  throw new RangeError(`--budget-chars ${budget} is too small for the fixed safe digest headings`);
+  const minimum = renderDigest(features, {
+    listLimit: 0,
+    includeDiagnosticCodes: false,
+    compact: true,
+  });
+  throw new DigestBudgetTooSmallError(budget, minimum.length);
 };

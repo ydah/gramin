@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { analyzeGrammar } from "@gramin/analyzer";
 import {
   canonicalize,
+  type Diagnostic,
   type Frontend,
   type GrammarIR,
   type SourceFile,
@@ -13,8 +14,13 @@ import { bnfFrontend } from "@gramin/frontend-bnf";
 import { menhirFrontend } from "@gramin/frontend-menhir";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
-import { renderJson, renderLlmDigest, renderMarkdown } from "@gramin/reporter";
-import { type ParsedArguments, parseArguments } from "./arguments.js";
+import {
+  DigestBudgetTooSmallError,
+  renderJson,
+  renderLlmDigest,
+  renderMarkdown,
+} from "@gramin/reporter";
+import { type FailOn, type ParsedArguments, parseArguments } from "./arguments.js";
 import { type ExternalFrontendRunner, runExternalFrontendProcess } from "./external-frontend.js";
 import { CLI_VERSION } from "./version.js";
 
@@ -58,7 +64,7 @@ const frontends: readonly Frontend[] = [
 ];
 
 const usage = `Usage:
-  gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>]
+  gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
   gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>]
   gramin analyze --ir <ir.json|-> [--format json|md]
   gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc]
@@ -71,10 +77,31 @@ const usage = `Usage:
 const issueText = (code: string, path: string, message: string): string =>
   `${code} ${path}: ${message}\n`;
 
-const readJsonIR = async (path: string, io: CliIO): Promise<GrammarIR | undefined> => {
+interface ParsedIR {
+  readonly ir: GrammarIR;
+  readonly exitCode: number;
+}
+
+const severityRank = { info: 0, warning: 1, error: 2 } as const;
+
+const exitCodeForDiagnostics = (diagnostics: readonly Diagnostic[], failOn: FailOn): number => {
+  if (failOn === "none") return EXIT_SUCCESS;
+  const threshold = severityRank[failOn];
+  const worst = diagnostics.reduce(
+    (maximum, diagnostic) => Math.max(maximum, severityRank[diagnostic.severity]),
+    -1,
+  );
+  return worst >= threshold ? EXIT_PARTIAL : EXIT_SUCCESS;
+};
+
+const readJsonIR = async (
+  path: string,
+  io: CliIO,
+  failOn: FailOn,
+): Promise<ParsedIR | undefined> => {
+  const content = path === "-" ? await io.readStdin() : await io.readTextFile(path);
   let input: unknown;
   try {
-    const content = path === "-" ? await io.readStdin() : await io.readTextFile(path);
     input = JSON.parse(content);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
@@ -82,18 +109,31 @@ const readJsonIR = async (path: string, io: CliIO): Promise<GrammarIR | undefine
     return undefined;
   }
   const result = validateIR(input);
-  if (result.ok) return result.value;
+  if (result.ok) {
+    return {
+      ir: result.value,
+      exitCode: exitCodeForDiagnostics(result.value.diagnostics, failOn),
+    };
+  }
   result.issues.forEach((issue) => {
     io.writeError(issueText(issue.code, issue.path, issue.message));
   });
   return undefined;
 };
 
+interface FrontendSelection {
+  readonly frontend: Frontend;
+  readonly diagnostic?: Diagnostic;
+}
+
 const selectFrontend = (
   files: readonly SourceFile[],
   explicitId: string | undefined,
-): Frontend | undefined => {
-  if (explicitId) return frontends.find((frontend) => frontend.id === explicitId);
+): FrontendSelection | undefined => {
+  if (explicitId) {
+    const frontend = frontends.find((candidate) => candidate.id === explicitId);
+    return frontend ? { frontend } : undefined;
+  }
   const first = files[0];
   if (!first) return undefined;
   const ranked = frontends
@@ -103,9 +143,24 @@ const selectFrontend = (
       confidence: frontend.detect(first.name, first.content.slice(0, 4096)),
     }))
     .sort((left, right) => right.confidence - left.confidence || left.index - right.index);
-  return ranked[0]?.confidence !== undefined && ranked[0].confidence >= 0.3
-    ? ranked[0].frontend
-    : undefined;
+  const best = ranked[0];
+  if (!best || best.confidence < 0.3) return undefined;
+  const second = ranked[1];
+  const ambiguous = second !== undefined && best.confidence - second.confidence < 0.1;
+  return {
+    frontend: best.frontend,
+    ...(ambiguous
+      ? {
+          diagnostic: {
+            severity: "warning",
+            code: "DETECT_AMBIGUOUS",
+            message:
+              `format detection is ambiguous (${best.frontend.id}=${best.confidence}, ` +
+              `${second.frontend.id}=${second.confidence}); pass --frontend to disambiguate`,
+          } satisfies Diagnostic,
+        }
+      : {}),
+  };
 };
 
 const parseSourceIR = async (
@@ -153,13 +208,16 @@ const parseSourceIR = async (
       });
       return undefined;
     }
-    return { ir: validation.value, exitCode: execution.exitCode };
+    return {
+      ir: validation.value,
+      exitCode: exitCodeForDiagnostics(validation.value.diagnostics, options.failOn),
+    };
   }
   const files = await Promise.all(
     options.files.map(async (name) => ({ name, content: await io.readTextFile(name) })),
   );
-  const frontend = selectFrontend(files, options.frontend);
-  if (!frontend) {
+  const selection = selectFrontend(files, options.frontend);
+  if (!selection) {
     io.writeError(
       `FORMAT_UNDETECTED: no frontend reached the 0.3 threshold${
         options.frontend ? ` or matched ${options.frontend}` : ""
@@ -167,7 +225,7 @@ const parseSourceIR = async (
     );
     return undefined;
   }
-  const parsed = frontend.parse(files, {
+  const parsed = selection.frontend.parse(files, {
     ...(options.dialect ? { dialect: options.dialect } : {}),
   });
   if (!parsed.ir) {
@@ -176,7 +234,11 @@ const parseSourceIR = async (
     });
     return undefined;
   }
-  const validation = validateIR(parsed.ir);
+  const detectionDiagnostics = selection.diagnostic ? [selection.diagnostic] : [];
+  const validation = validateIR({
+    ...parsed.ir,
+    diagnostics: [...parsed.ir.diagnostics, ...detectionDiagnostics],
+  });
   if (!validation.ok) {
     validation.issues.forEach((issue) => {
       io.writeError(issueText(issue.code, issue.path, issue.message));
@@ -185,16 +247,29 @@ const parseSourceIR = async (
   }
   return {
     ir: validation.value,
-    exitCode: parsed.diagnostics.some((diagnostic) => diagnostic.severity === "error")
-      ? EXIT_PARTIAL
-      : EXIT_SUCCESS,
+    exitCode: exitCodeForDiagnostics(
+      [...parsed.diagnostics, ...detectionDiagnostics],
+      options.failOn,
+    ),
   };
 };
 
 const output = async (content: string, path: string | undefined, io: CliIO): Promise<void> => {
-  if (path) await io.writeTextFile(path, content);
-  else io.writeOut(content);
+  try {
+    if (path) await io.writeTextFile(path, content);
+    else io.writeOut(content);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new OutputIOError(message);
+  }
 };
+
+class OutputIOError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "OutputIOError";
+  }
+}
 
 const runDetect = async (options: ParsedArguments, io: CliIO): Promise<number> => {
   const fileName = options.files[0];
@@ -205,7 +280,16 @@ const runDetect = async (options: ParsedArguments, io: CliIO): Promise<number> =
     confidence: frontend.detect(fileName, content.slice(0, 4096)),
   }));
   await output(`${JSON.stringify({ fileName, candidates }, null, 2)}\n`, options.output, io);
-  if (Math.max(...candidates.map(({ confidence }) => confidence)) >= 0.3) return EXIT_SUCCESS;
+  const best = [...candidates].sort((left, right) => right.confidence - left.confidence)[0];
+  const second = [...candidates].sort((left, right) => right.confidence - left.confidence)[1];
+  if (best && best.confidence >= 0.3) {
+    if (second && best.confidence - second.confidence < 0.1) {
+      io.writeError(
+        `DETECT_AMBIGUOUS: ${best.frontend}=${best.confidence}, ${second.frontend}=${second.confidence}; pass --frontend to disambiguate\n`,
+      );
+    }
+    return EXIT_SUCCESS;
+  }
   io.writeError("FORMAT_UNDETECTED: no frontend reached the 0.3 threshold\n");
   return EXIT_FATAL;
 };
@@ -213,7 +297,7 @@ const runDetect = async (options: ParsedArguments, io: CliIO): Promise<number> =
 const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number> => {
   if (options.irInput && options.files.length > 0) return EXIT_USAGE;
   const parsed = options.irInput
-    ? { ir: await readJsonIR(options.irInput, io), exitCode: EXIT_SUCCESS }
+    ? await readJsonIR(options.irInput, io, options.failOn)
     : await parseSourceIR(options, io);
   if (!parsed?.ir) return EXIT_FATAL;
   let ir = parsed.ir;
@@ -227,7 +311,7 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
 
   if (options.command === "ir") {
     await output(serializeCanonical(ir), options.output, io);
-    return parsed.exitCode;
+    return exitCodeForDiagnostics(ir.diagnostics, options.failOn);
   }
   const features = analyzeGrammar(ir);
   const report =
@@ -239,11 +323,17 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
           })
         : renderJson(features);
   await output(report, options.output, io);
-  return parsed.exitCode;
+  return exitCodeForDiagnostics(features.diagnostics, options.failOn);
 };
 
 export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Promise<number> => {
-  if (argv.length === 1 && ["--help", "-h", "help"].includes(argv[0] ?? "")) {
+  if (
+    ((argv.length === 1 || argv.length === 2) &&
+      ["--help", "-h", "help"].includes(argv.at(-1) ?? "")) ||
+    (argv.length > 2 &&
+      ["analyze", "ir", "detect", "validate-ir"].includes(argv[0] ?? "") &&
+      argv.includes("--help"))
+  ) {
     io.writeOut(usage);
     return EXIT_SUCCESS;
   }
@@ -258,21 +348,38 @@ export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Pr
   }
   const options = parsed.value;
   try {
-    if (options.command === "detect") return runDetect(options, io);
+    if (options.command === "detect") return await runDetect(options, io);
     if (options.command === "validate-ir") {
       if (options.files.length !== 1) return EXIT_USAGE;
       const fileName = options.files[0];
       if (fileName === undefined) return EXIT_USAGE;
-      const ir = await readJsonIR(fileName, io);
+      const ir = await readJsonIR(fileName, io, options.failOn);
       if (!ir) return EXIT_FATAL;
       io.writeOut("valid\n");
-      return EXIT_SUCCESS;
+      return ir.exitCode;
     }
     if (options.command === "analyze" || options.command === "ir") {
-      return runPipeline(options, io);
+      return await runPipeline(options, io);
     }
   } catch (error: unknown) {
+    if (error instanceof DigestBudgetTooSmallError) {
+      io.writeError(`${error.message}\n`);
+      return EXIT_USAGE;
+    }
+    if (error instanceof RangeError) {
+      io.writeError(`INTERNAL_LIMIT_EXCEEDED: ${error.message}\n`);
+      return EXIT_FATAL;
+    }
+    if (error instanceof OutputIOError) {
+      io.writeError(`IO_ERROR: ${error.message}\n`);
+      return EXIT_FATAL;
+    }
+    const code = (error as NodeJS.ErrnoException)?.code;
     const message = error instanceof Error ? error.message : String(error);
+    if (code === "ENOENT" || code === "EACCES" || code === "EISDIR") {
+      io.writeError(`INPUT_UNREADABLE: ${message}\n`);
+      return EXIT_FATAL;
+    }
     io.writeError(`IO_ERROR: ${message}\n`);
     return EXIT_FATAL;
   }

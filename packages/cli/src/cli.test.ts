@@ -2,15 +2,15 @@ import { existsSync, readFileSync } from "node:fs";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
 import { analyzeGrammar } from "@gramin/analyzer";
+import { serializeCanonical, validateIR } from "@gramin/core";
 import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
-import { serializeCanonical, validateIR } from "@gramin/core";
 import { menhirFrontend } from "@gramin/frontend-menhir";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { describe, expect, it } from "vitest";
 import type { CliIO } from "./cli.js";
-import { EXIT_FATAL, EXIT_SUCCESS, EXIT_USAGE, runCli } from "./cli.js";
+import { EXIT_FATAL, EXIT_PARTIAL, EXIT_SUCCESS, EXIT_USAGE, runCli } from "./cli.js";
 
 const calc = readFileSync(new URL("../../frontend-yacc/fixtures/calc.y", import.meta.url), "utf8");
 
@@ -56,6 +56,9 @@ describe("gramin CLI", () => {
     const version = harness();
     expect(await runCli(["--version"], version.io)).toBe(EXIT_SUCCESS);
     expect(version.stdout.join("")).toBe("0.1.0\n");
+
+    const commandHelp = harness();
+    expect(await runCli(["analyze", "--help"], commandHelp.io)).toBe(EXIT_SUCCESS);
   });
 
   it("runs grammar to IR to features as a byte-identical pipeline", async () => {
@@ -69,6 +72,64 @@ describe("gramin CLI", () => {
     const direct = harness();
     expect(await runCli(["analyze", "calc.y", "--strip-loc"], direct.io)).toBe(EXIT_SUCCESS);
     expect(piped.stdout.join("")).toBe(direct.stdout.join(""));
+  });
+
+  it("preserves error diagnostics and applies fail-on thresholds through --ir", async () => {
+    const irRun = harness();
+    await runCli(["ir", "calc.y"], irRun.io);
+    const document = JSON.parse(irRun.stdout.join("")) as Record<string, unknown>;
+    document.diagnostics = [
+      {
+        severity: "error",
+        code: "TEST_ERROR",
+        message: "synthetic error",
+      },
+    ];
+    const input = harness({ "error.json": JSON.stringify(document) });
+    expect(await runCli(["analyze", "--ir", "error.json"], input.io)).toBe(EXIT_PARTIAL);
+
+    const warnings = harness({
+      "warning.y": "%%\nstart: missing ;\n%%\n",
+    });
+    expect(await runCli(["analyze", "warning.y"], warnings.io)).toBe(EXIT_SUCCESS);
+    expect(await runCli(["analyze", "warning.y", "--fail-on", "warning"], warnings.io)).toBe(
+      EXIT_PARTIAL,
+    );
+    expect(await runCli(["analyze", "warning.y", "--fail-on", "none"], warnings.io)).toBe(
+      EXIT_SUCCESS,
+    );
+  });
+
+  it("maps unreadable input, output failures, and too-small budgets to stable contracts", async () => {
+    const unreadable = harness();
+    const unreadableIO = {
+      ...unreadable.io,
+      readTextFile: async () => {
+        const error = new Error("file is missing") as NodeJS.ErrnoException;
+        error.code = "ENOENT";
+        throw error;
+      },
+    };
+    expect(await runCli(["analyze", "missing.y"], unreadableIO)).toBe(EXIT_FATAL);
+    expect(unreadable.stderr.join("")).toContain("INPUT_UNREADABLE");
+
+    const outputFailure = harness();
+    const outputFailureIO = {
+      ...outputFailure.io,
+      writeTextFile: async () => {
+        throw new Error("cannot write output");
+      },
+    };
+    expect(await runCli(["analyze", "calc.y", "-o", "report.json"], outputFailureIO)).toBe(
+      EXIT_FATAL,
+    );
+    expect(outputFailure.stderr.join("")).toContain("IO_ERROR");
+
+    const budget = harness();
+    expect(
+      await runCli(["analyze", "calc.y", "--format", "llm", "--budget-chars", "1"], budget.io),
+    ).toBe(EXIT_USAGE);
+    expect(budget.stderr.join("")).toContain("--budget-chars 1 is below the minimum");
   });
 
   it("renders Markdown and writes to a selected output", async () => {
@@ -108,6 +169,12 @@ describe("gramin CLI", () => {
     const test = harness();
     expect(await runCli(["detect", "calc.y"], test.io)).toBe(EXIT_SUCCESS);
     expect(test.stdout.join("")).toContain('"frontend": "yacc-family"');
+  });
+
+  it("reports ambiguous content detection instead of hiding the tie", async () => {
+    const test = harness({ ambiguous: 'start = "x"\n' });
+    expect(await runCli(["detect", "ambiguous"], test.io)).toBe(EXIT_SUCCESS);
+    expect(test.stderr.join("")).toContain("DETECT_AMBIGUOUS");
   });
 
   it("returns usage errors for invalid options", async () => {
