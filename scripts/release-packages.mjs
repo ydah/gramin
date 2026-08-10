@@ -32,3 +32,14 @@ export const commandForPlatform = (command) =>
   process.platform === "win32" && (command === "npm" || command === "pnpm")
     ? `${command}.cmd`
     : command;
+
+export const spawnSpecForPlatform = (command, args) => {
+  const platformCommand = commandForPlatform(command);
+  if (platformCommand === command) {
+    return { command: platformCommand, args };
+  }
+  return {
+    command: process.env.ComSpec ?? "cmd.exe",
+    args: ["/d", "/s", "/c", platformCommand, ...args],
+  };
+};

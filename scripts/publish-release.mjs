@@ -7,11 +7,12 @@ import {
   releaseDirectory,
   releasePackages,
   repositoryRoot,
-  commandForPlatform,
+  spawnSpecForPlatform,
 } from "./release-packages.mjs";
 
 const run = (command, args) => {
-  const result = spawnSync(commandForPlatform(command), args, {
+  const spawnSpec = spawnSpecForPlatform(command, args);
+  const result = spawnSync(spawnSpec.command, spawnSpec.args, {
     cwd: repositoryRoot,
     encoding: "utf8",
   });
