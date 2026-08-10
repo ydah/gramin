@@ -72,6 +72,19 @@ Use `--source-root <dir>` for byte-stable multi-file output, or `--source-name <
 single input. Parser nesting is limited to 500 levels by default and can be adjusted up to 1,000 with
 `--max-nesting-depth`.
 
+For GitHub Actions, the composite action emits a SARIF file that can be uploaded with Code
+Scanning:
+
+```yaml
+- uses: ydah/gramin@v1
+  id: gramin
+  with:
+    files: grammar.y
+- uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: ${{ steps.gramin.outputs.report }}
+```
+
 ## Development
 
 Development requires pnpm 10:

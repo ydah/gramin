@@ -1,0 +1,58 @@
+name: gramin
+description: Analyze grammar files and emit a SARIF report
+author: Yudai Takada
+
+inputs:
+  files:
+    description: Newline-separated grammar file paths
+    required: true
+  baseline:
+    description: Optional features JSON baseline used for regression checks
+    required: false
+  fail-on:
+    description: Diagnostic threshold (error, warning, or none)
+    required: false
+    default: error
+  fail-on-regression:
+    description: Fail when tracked feature regressions are found against the baseline
+    required: false
+    default: "false"
+  output:
+    description: SARIF output path
+    required: false
+    default: gramin.sarif
+
+outputs:
+  report:
+    description: Path to the generated SARIF report
+    value: ${{ steps.analyze.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - id: analyze
+      shell: bash
+      env:
+        GRAMIN_FILES: ${{ inputs.files }}
+        GRAMIN_BASELINE: ${{ inputs.baseline }}
+        GRAMIN_FAIL_ON: ${{ inputs.fail-on }}
+        GRAMIN_FAIL_ON_REGRESSION: ${{ inputs.fail-on-regression }}
+        GRAMIN_OUTPUT: ${{ inputs.output }}
+      run: |
+        set -euo pipefail
+        mapfile -t grammar_files < <(printf '%s\n' "$GRAMIN_FILES" | awk 'NF')
+        if (( ${#grammar_files[@]} == 0 )); then
+          echo "gramin action requires at least one grammar file" >&2
+          exit 3
+        fi
+
+        args=(analyze "${grammar_files[@]}" --format sarif --fail-on "$GRAMIN_FAIL_ON" -o "$GRAMIN_OUTPUT")
+        if [[ -n "$GRAMIN_BASELINE" ]]; then
+          args+=(--baseline "$GRAMIN_BASELINE")
+        fi
+        if [[ "$GRAMIN_FAIL_ON_REGRESSION" == "true" ]]; then
+          args+=(--fail-on-regression)
+        fi
+
+        npx --yes @gramin/cli@0.1.0 "${args[@]}"
+        echo "report=$GRAMIN_OUTPUT" >> "$GITHUB_OUTPUT"
