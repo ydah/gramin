@@ -17,6 +17,10 @@ const empty = readFileSync(
   new URL("../../frontend-yacc/fixtures/empty.y", import.meta.url),
   "utf8",
 );
+const unclosedAction = readFileSync(
+  new URL("../../frontend-yacc/fixtures/unclosed-action.y", import.meta.url),
+  "utf8",
+);
 
 const harness = (
   files: Readonly<Record<string, string>> = { "calc.y": calc },
@@ -217,6 +221,24 @@ describe("gramin CLI", () => {
       ),
     ).toBe(EXIT_PARTIAL);
     expect(gated.stdout.join("")).toContain("REGRESSION_METRIC_INCREASE");
+  });
+
+  it("requires a baseline when regression failure is requested", async () => {
+    const test = harness();
+    expect(await runCli(["analyze", "calc.y", "--fail-on-regression"], test.io)).toBe(EXIT_USAGE);
+    expect(test.stderr.join("")).toContain("requires --baseline");
+
+    const diff = harness({ "old.y": empty, "new.y": calc });
+    expect(await runCli(["diff", "old.y", "new.y", "--baseline", "ignored.json"], diff.io)).toBe(
+      EXIT_USAGE,
+    );
+  });
+
+  it("preserves partial parse status in feature diffs", async () => {
+    const test = harness({ "broken.y": unclosedAction, "new.y": calc });
+    expect(await runCli(["diff", "broken.y", "new.y", "--frontend", "yacc-family"], test.io)).toBe(
+      EXIT_PARTIAL,
+    );
   });
 
   it("renders a budgeted LLM digest", async () => {

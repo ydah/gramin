@@ -26,7 +26,7 @@ change the exit status; `--fail-on warning` makes them a CI gate.
 | `MENHIR300_UNRESOLVED_SYMBOL` | Menhir reference is not declared | warning |
 | `MENHIR400`–`MENHIR402` | Menhir input or file handling problem | error or warning |
 | `YACC001`–`YACC003` | Yacc literal/action lexical problem | error or warning |
-| `YACC004`, `YACC100`–`YACC102`, `YACC200`–`YACC209` | Yacc declaration or rule parse problem | error or warning |
+| `YACC004`–`YACC005`, `YACC100`–`YACC102`, `YACC200`–`YACC209` | Yacc declaration, nesting-limit, or rule parse problem | error or warning |
 | `YACC300_UNRESOLVED_SYMBOL` | Yacc reference is not declared | warning |
 | `YACC400`–`YACC402` | Yacc input or file handling problem | error or warning |
 | `IR010`–`IR016` | Frontend omitted or approximated source constructs | info |

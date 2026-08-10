@@ -69,7 +69,7 @@ for exit-status purposes. `--fail-on-regression` makes tracked complexity increa
 baseline return exit code 1.
 
 Use `--source-root <dir>` for byte-stable multi-file output, or `--source-name <name>` for a
-single input. Parser nesting is limited to 500 levels by default and can be lowered with
+single input. Parser nesting is limited to 500 levels by default and can be adjusted up to 1,000 with
 `--max-nesting-depth`.
 
 ## Development

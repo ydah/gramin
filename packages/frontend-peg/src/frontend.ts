@@ -5,6 +5,8 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  DEFAULT_MAX_NESTING_DEPTH,
+  MAX_SUPPORTED_NESTING_DEPTH,
   mergeRulesByName,
   type SourceFile,
   type SourceSpan,
@@ -492,7 +494,11 @@ const parse = (
     return { ir: null, diagnostics: [diagnostic] };
   }
   const lexical = lex(first.content);
-  const parser = new Parser(lexical.tokens, lexical.diagnostics, options.maxNestingDepth ?? 500);
+  const parser = new Parser(
+    lexical.tokens,
+    lexical.diagnostics,
+    Math.min(options.maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH, MAX_SUPPORTED_NESTING_DEPTH),
+  );
   const parsedRules = parser.parse();
   if (parser.diagnostics.some((diagnostic) => diagnostic.code === "PEG101_NESTING_TOO_DEEP")) {
     return { ir: null, diagnostics: parser.diagnostics };

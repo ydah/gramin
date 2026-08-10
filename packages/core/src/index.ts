@@ -4,6 +4,7 @@ export type {
   FrontendResult,
   SourceFile,
 } from "./frontend.js";
+export { DEFAULT_MAX_NESTING_DEPTH, MAX_SUPPORTED_NESTING_DEPTH } from "./frontend.js";
 export { compareBytes } from "./ordering.js";
 export { mergeRulesByName } from "./rules.js";
 export {

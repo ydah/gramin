@@ -365,6 +365,10 @@ const runDetect = async (options: ParsedArguments, io: CliIO): Promise<number> =
 const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number> => {
   if (options.irInput && options.files.length > 0) return EXIT_USAGE;
   if (options.command === "ir" && (options.baseline || options.failOnRegression)) return EXIT_USAGE;
+  if (options.command === "analyze" && options.failOnRegression && options.baseline === undefined) {
+    io.writeError("--fail-on-regression requires --baseline <features.json>\n");
+    return EXIT_USAGE;
+  }
   const parsed = options.irInput
     ? await readJsonIR(options.irInput, io, options.failOn)
     : await parseSourceIR(options, io);
@@ -423,7 +427,12 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
 };
 
 const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => {
-  if (options.files.length !== 2 || options.format === "llm" || options.format === "sarif") {
+  if (
+    options.files.length !== 2 ||
+    options.format === "llm" ||
+    options.format === "sarif" ||
+    options.baseline !== undefined
+  ) {
     return EXIT_USAGE;
   }
   const beforeFile = options.files[0];
@@ -440,7 +449,7 @@ const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => 
   await output(report, options.output, io);
   return options.failOnRegression && comparison.regressions.length > 0
     ? EXIT_PARTIAL
-    : EXIT_SUCCESS;
+    : Math.max(before.exitCode, after.exitCode);
 };
 
 export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Promise<number> => {

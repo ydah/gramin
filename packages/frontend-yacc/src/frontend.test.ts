@@ -34,6 +34,20 @@ describe("yacc-family lexer", () => {
 });
 
 describe("yacc-family parser and lowering", () => {
+  it("rejects excessive parameter nesting before recursive lowering", () => {
+    const nested = `%%\nstart: f(${"f(".repeat(2_000)}TOKEN${")".repeat(2_000)});\n%%\n`;
+    const result = yaccFrontend.parse([{ name: "deep.y", content: nested }], {
+      maxNestingDepth: 5_000,
+    });
+
+    expect(result.ir).toBeNull();
+    expect(result.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: "YACC005_NESTING_TOO_DEEP", severity: "error" }),
+      ]),
+    );
+  });
+
   it.each([
     "calc.y",
     "empty.y",
