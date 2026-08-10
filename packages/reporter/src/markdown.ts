@@ -1,4 +1,5 @@
 import type { GrammarFeatures } from "@gramin/core";
+import { tableCodeSpan } from "./code-span.js";
 
 const sectionTitles: Readonly<Record<string, string>> = {
   source: "Source",
@@ -15,14 +16,11 @@ const sectionTitles: Readonly<Record<string, string>> = {
 
 const heuristicMetrics = new Set(["lexicon.keywordLike", "lexicon.punctuationLike"]);
 
-const escapeCell = (value: string): string =>
-  value.replaceAll("\\", "\\\\").replaceAll("|", "\\|").replaceAll("\n", "\\n");
-
 const renderValue = (value: unknown): string => {
-  if (value === null) return "`null`";
-  if (typeof value === "string") return `\`${escapeCell(value)}\``;
+  if (value === null) return tableCodeSpan("null");
+  if (typeof value === "string") return tableCodeSpan(value);
   if (typeof value === "number" || typeof value === "boolean") return String(value);
-  return `\`${escapeCell(JSON.stringify(value))}\``;
+  return tableCodeSpan(JSON.stringify(value) ?? "undefined");
 };
 
 const flatten = (
@@ -45,7 +43,7 @@ const renderSection = (key: string, value: unknown): string => {
           .map(({ name, value: metricValue }) => {
             const fullName = `${key}.${name}`;
             const label = heuristicMetrics.has(fullName) ? `${name} (approximate)` : name;
-            return `| \`${escapeCell(label)}\` | ${renderValue(metricValue)} |`;
+            return `| ${tableCodeSpan(label)} | ${renderValue(metricValue)} |`;
           })
           .join("\n");
   return `## ${sectionTitles[key] ?? key}\n\n| Metric | Value |\n|---|---:|\n${body}`;

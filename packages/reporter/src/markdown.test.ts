@@ -47,4 +47,16 @@ describe("feature reporters", () => {
     expect(markdown).toContain("| `completeness` | `partial` |");
     expect(markdown).not.toContain("| `altActionCoverage` |");
   });
+
+  it("keeps backticks and pipes inside Markdown table cells", () => {
+    const hostile = {
+      ...features,
+      lexicon: {
+        ...features.lexicon,
+        punctuationLike: ["`|"],
+      },
+    };
+    const markdown = renderMarkdown(hostile);
+    expect(markdown).toContain('``["`\\|"]``');
+  });
 });
