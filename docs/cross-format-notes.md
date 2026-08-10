@@ -6,9 +6,9 @@ This comparison uses three authored fixtures for the same small JSON value langu
 - ANTLR4: `packages/frontend-antlr/fixtures/Json.g4`
 - Peggy: `packages/frontend-peg/fixtures/json.peggy`
 
-The table is generated conceptually from committed, location-stripped features goldens.
-All three inputs have zero unresolved symbols and pass the same Grammar IR canonical
-validator.
+The observed table below is generated from the committed, location-stripped features
+goldens. All three inputs have zero unresolved symbols and pass the same Grammar IR
+canonical validator.
 
 ## Observed features
 
@@ -43,7 +43,7 @@ unreachable demonstration rules (`keyword` and `other`) that exercise predicates
 changing the start rule's JSON language. Those source choices explain the different rule,
 alternative, depth, and unreachable counts.
 
-Class B metrics require the `capabilities` object emitted in features 0.3. Yacc's left
+Class B metrics require the `capabilities` object emitted in features 0.4. Yacc's left
 recursion and ANTLR/Peggy repetition describe similar repetition strategies but are not
 numerically interchangeable. Peggy ordered choice makes CFG nullability inapplicable. Its
 lexicon is represented by literal occurrences, character classes, and `anyChar`, while

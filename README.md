@@ -84,7 +84,7 @@ scripts/fetch-corpus.sh
 pnpm benchmark:corpus
 ```
 
-On the pinned Ruby `parse.y`, the frontend and analyzer must finish within three seconds,
+On the pinned Ruby `parse.y`, the frontend and analyzer must finish within 500 ms,
 emit no error diagnostics, and report no unresolved symbols. Pinned Perl `perly.y` and PHP
 `zend_language_parser.y` corpora additionally lock distribution, reachable-recursion,
 precedence-shape, and action-count profiles. The same fetch enables error-free,

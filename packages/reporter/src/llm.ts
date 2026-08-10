@@ -195,9 +195,10 @@ export const renderLlmDigest = (
 ): string => {
   const budget = options.budgetChars ?? 8_000;
   const variants: readonly DigestDetail[] = [
-    { listLimit: 10, includeDiagnosticCodes: true, compact: false },
-    { listLimit: 5, includeDiagnosticCodes: true, compact: false },
-    { listLimit: 2, includeDiagnosticCodes: false, compact: true },
+    ...[10, 7, 5, 3, 2, 1, 0].flatMap((listLimit) => [
+      { listLimit, includeDiagnosticCodes: true, compact: false },
+      { listLimit, includeDiagnosticCodes: true, compact: true },
+    ]),
     { listLimit: 0, includeDiagnosticCodes: false, compact: true },
   ];
   for (const variant of variants) {

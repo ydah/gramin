@@ -1,33 +1,30 @@
 import type { Alternative, Expr } from "@gramin/core";
 
 export const walkExpression = (expression: Expr, visit: (node: Expr) => void): void => {
-  visit(expression);
-  if (expression.kind === "symbol") {
-    expression.args?.forEach((argument) => {
-      walkExpression(argument, visit);
-    });
-    return;
-  }
-  if (expression.kind === "seq") {
-    expression.items.forEach((item) => {
-      walkExpression(item, visit);
-    });
-    return;
-  }
-  if (expression.kind === "choice") {
-    expression.alts.forEach((alternative) => {
-      walkExpression(alternative, visit);
-    });
-    return;
-  }
-  if (
-    expression.kind === "opt" ||
-    expression.kind === "star" ||
-    expression.kind === "plus" ||
-    expression.kind === "predicate" ||
-    expression.kind === "group"
-  ) {
-    walkExpression(expression.expr, visit);
+  const pending = [expression];
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (!current) break;
+    visit(current);
+    const children =
+      current.kind === "symbol"
+        ? current.args
+        : current.kind === "seq"
+          ? current.items
+          : current.kind === "choice"
+            ? current.alts
+            : current.kind === "opt" ||
+                current.kind === "star" ||
+                current.kind === "plus" ||
+                current.kind === "predicate" ||
+                current.kind === "group"
+              ? [current.expr]
+              : undefined;
+    if (!children) continue;
+    for (let index = children.length - 1; index >= 0; index -= 1) {
+      const child = children[index];
+      if (child) pending.push(child);
+    }
   }
 };
 

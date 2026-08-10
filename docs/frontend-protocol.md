@@ -67,6 +67,12 @@ The CLI starts the executable with `shell: false`, captures stdout/stderr, and t
 
 Exit 1 is preserved after a valid partial IR has been analyzed and reported.
 
+The CLI terminates an external frontend after 30 seconds by default and limits stdout and
+stderr to 64 MiB each. Use `--frontend-timeout <ms>` to select a shorter or longer timeout;
+these limits prevent a hung or unexpectedly verbose frontend from blocking or exhausting the
+analysis process. Exceeding either limit is a fatal `FRONTEND_TIMEOUT` or
+`FRONTEND_OUTPUT_TOO_LARGE` failure.
+
 ## Implementation checklist
 
 - [ ] Accept `parse`, optional `--dialect`, and one-or-more paths or `--stdin`.

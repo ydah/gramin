@@ -10,22 +10,22 @@ antlr_commit=e756f2a2ee5565a9300666f100ba6acd874664f7
 
 mkdir -p "$destination/bison" "$destination/perl" "$destination/ruby" "$destination/php" \
   "$destination/antlr/json" "$destination/antlr/sqlite" "$destination/antlr/java"
-curl -fsSL "https://raw.githubusercontent.com/akimd/bison/$bison_commit/examples/c/calc/calc.y" \
-  -o "$destination/bison/calc.y"
-curl -fsSL "https://raw.githubusercontent.com/Perl/perl5/$perl_commit/perly.y" \
-  -o "$destination/perl/perly.y"
-curl -fsSL "https://raw.githubusercontent.com/ruby/ruby/$ruby_commit/parse.y" \
-  -o "$destination/ruby/parse.y"
-curl -fsSL \
-  "https://raw.githubusercontent.com/php/php-src/$php_commit/Zend/zend_language_parser.y" \
-  -o "$destination/php/zend_language_parser.y"
-curl -fsSL "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/json/JSON.g4" \
-  -o "$destination/antlr/json/JSON.g4"
-curl -fsSL "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/sql/sqlite/SQLiteParser.g4" \
-  -o "$destination/antlr/sqlite/SQLiteParser.g4"
-curl -fsSL "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/sql/sqlite/SQLiteLexer.g4" \
-  -o "$destination/antlr/sqlite/SQLiteLexer.g4"
-curl -fsSL "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/java/java/JavaParser.g4" \
-  -o "$destination/antlr/java/JavaParser.g4"
-curl -fsSL "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/java/java/JavaLexer.g4" \
-  -o "$destination/antlr/java/JavaLexer.g4"
+fetch() {
+  curl -fsSL --retry 3 --retry-delay 2 --retry-all-errors "$1" -o "$2"
+}
+fetch "https://raw.githubusercontent.com/akimd/bison/$bison_commit/examples/c/calc/calc.y" \
+  "$destination/bison/calc.y"
+fetch "https://raw.githubusercontent.com/Perl/perl5/$perl_commit/perly.y" "$destination/perl/perly.y"
+fetch "https://raw.githubusercontent.com/ruby/ruby/$ruby_commit/parse.y" "$destination/ruby/parse.y"
+fetch "https://raw.githubusercontent.com/php/php-src/$php_commit/Zend/zend_language_parser.y" \
+  "$destination/php/zend_language_parser.y"
+fetch "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/json/JSON.g4" \
+  "$destination/antlr/json/JSON.g4"
+fetch "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/sql/sqlite/SQLiteParser.g4" \
+  "$destination/antlr/sqlite/SQLiteParser.g4"
+fetch "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/sql/sqlite/SQLiteLexer.g4" \
+  "$destination/antlr/sqlite/SQLiteLexer.g4"
+fetch "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/java/java/JavaParser.g4" \
+  "$destination/antlr/java/JavaParser.g4"
+fetch "https://raw.githubusercontent.com/antlr/grammars-v4/$antlr_commit/java/java/JavaLexer.g4" \
+  "$destination/antlr/java/JavaLexer.g4"

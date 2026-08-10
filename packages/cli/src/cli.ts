@@ -21,7 +21,11 @@ import {
   renderMarkdown,
 } from "@gramin/reporter";
 import { type FailOn, type ParsedArguments, parseArguments } from "./arguments.js";
-import { type ExternalFrontendRunner, runExternalFrontendProcess } from "./external-frontend.js";
+import {
+  ExternalFrontendLimitError,
+  type ExternalFrontendRunner,
+  runExternalFrontendProcess,
+} from "./external-frontend.js";
 import { CLI_VERSION } from "./version.js";
 
 export const EXIT_SUCCESS = 0;
@@ -65,9 +69,9 @@ const frontends: readonly Frontend[] = [
 
 const usage = `Usage:
   gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
-  gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>]
+  gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>] [--frontend-timeout <ms>]
   gramin analyze --ir <ir.json|-> [--format json|md]
-  gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc]
+  gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc] [--source-name <name>]
   gramin detect <file>
   gramin validate-ir <ir.json>
   gramin --help
@@ -81,6 +85,9 @@ interface ParsedIR {
   readonly ir: GrammarIR;
   readonly exitCode: number;
 }
+
+const applySourceName = (ir: GrammarIR, sourceName: string | undefined): GrammarIR =>
+  sourceName === undefined ? ir : { ...ir, source: { ...ir.source, fileNames: [sourceName] } };
 
 const severityRank = { info: 0, warning: 1, error: 2 } as const;
 
@@ -183,6 +190,7 @@ const parseSourceIR = async (
       options.frontendCommand,
       args,
       stdin,
+      options.frontendTimeoutMs === undefined ? {} : { timeoutMs: options.frontendTimeoutMs },
     );
     if (execution.stderr.length > 0) io.writeError(execution.stderr);
     if (execution.exitCode !== EXIT_SUCCESS && execution.exitCode !== EXIT_PARTIAL) {
@@ -209,13 +217,21 @@ const parseSourceIR = async (
       return undefined;
     }
     return {
-      ir: validation.value,
+      ir: applySourceName(validation.value, options.sourceName),
       exitCode: exitCodeForDiagnostics(validation.value.diagnostics, options.failOn),
     };
   }
   const files = await Promise.all(
     options.files.map(async (name) => ({ name, content: await io.readTextFile(name) })),
   );
+  const namedFiles =
+    options.sourceName === undefined
+      ? files
+      : files.map((file, index) =>
+          index === 0 && options.sourceName !== undefined
+            ? { ...file, name: options.sourceName }
+            : file,
+        );
   const selection = selectFrontend(files, options.frontend);
   if (!selection) {
     io.writeError(
@@ -225,7 +241,7 @@ const parseSourceIR = async (
     );
     return undefined;
   }
-  const parsed = selection.frontend.parse(files, {
+  const parsed = selection.frontend.parse(namedFiles, {
     ...(options.dialect ? { dialect: options.dialect } : {}),
   });
   if (!parsed.ir) {
@@ -368,6 +384,10 @@ export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Pr
     }
     if (error instanceof RangeError) {
       io.writeError(`INTERNAL_LIMIT_EXCEEDED: ${error.message}\n`);
+      return EXIT_FATAL;
+    }
+    if (error instanceof ExternalFrontendLimitError) {
+      io.writeError(`${error.code}: ${error.message}\n`);
       return EXIT_FATAL;
     }
     if (error instanceof OutputIOError) {

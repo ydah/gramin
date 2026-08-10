@@ -18,8 +18,14 @@
     "predicates": false,
     "scannerless": false
   },
-  "diagnostics": [],
-  "featuresVersion": "0.3.0",
+  "diagnostics": [
+    {
+      "code": "ANALYZER006_UNPRODUCTIVE_RULES",
+      "message": "unproductive rules: wrapper",
+      "severity": "warning"
+    }
+  ],
+  "featuresVersion": "0.4.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -138,6 +144,9 @@
         "count": 0,
         "symbol": "wrapper"
       }
+    ],
+    "unproductiveSymbols": [
+      "wrapper"
     ],
     "unreachableSymbols": []
   },

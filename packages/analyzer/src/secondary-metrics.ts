@@ -40,7 +40,10 @@ export const precedenceFeatures = (ir: GrammarIR): GrammarFeatures["precedence"]
     levels: ir.precedence.length,
     assocBreakdown,
     precOverrides,
-    maxTokensPerLevel: Math.max(0, ...ir.precedence.map((level) => level.tokens.length)),
+    maxTokensPerLevel: ir.precedence.reduce(
+      (maximum, level) => Math.max(maximum, level.tokens.length),
+      0,
+    ),
     rulesWithPrecOverrides,
     ...(alternatives.length === 0
       ? {}
@@ -192,7 +195,7 @@ export const actionFeatures = (ir: GrammarIR): GrammarFeatures["actions"] => {
     ),
     midRuleActions,
     avgActionLength: round4(lengths.length === 0 ? 0 : totalLength / lengths.length),
-    maxActionLength: Math.max(0, ...lengths),
+    maxActionLength: lengths.reduce((maximum, length) => Math.max(maximum, length), 0),
     ...(complete
       ? {
           trailingActions: alternativesWithActions,

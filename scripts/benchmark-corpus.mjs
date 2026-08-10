@@ -22,4 +22,4 @@ const summary = {
 process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
 
 if (errors.length > 0 || features.size.unresolvedSymbols.count > 0) process.exitCode = 1;
-if (elapsedMilliseconds > 3_000) process.exitCode = 1;
+if (elapsedMilliseconds > 500) process.exitCode = 1;
