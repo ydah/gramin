@@ -14,15 +14,15 @@ change the exit status; `--fail-on warning` makes them a CI gate.
 | `ANALYZER004_FUTURE_IR_MINOR`, `ANALYZER005_LEGACY_IR_VERSION` | The IR minor version is future-compatible or legacy | warning |
 | `ANALYZER006_UNPRODUCTIVE_RULES` | A rule cannot derive a terminal sequence | warning |
 | `DETECT_AMBIGUOUS` | Automatic frontend detection has tied or near-tied candidates | warning |
-| `BNF001`–`BNF004`, `BNF100`–`BNF102` | BNF/EBNF lexical or structural parse problem | error or warning |
+| `BNF001`–`BNF004`, `BNF100`–`BNF103` | BNF/EBNF lexical, structural, or nesting-limit parse problem | error or warning |
 | `BNF300_UNRESOLVED_SYMBOL` | BNF/EBNF reference is not declared | warning |
 | `BNF400`–`BNF402` | BNF/EBNF input or file handling problem | error or warning |
-| `PEG001`–`PEG003`, `PEG100_UNCLOSED_GROUP` | Peggy lexical or structural parse problem | error or warning |
+| `PEG001`–`PEG003`, `PEG100`–`PEG101` | Peggy lexical, structural, or nesting-limit parse problem | error or warning |
 | `PEG300_UNRESOLVED_SYMBOL` | Peggy reference is not declared | warning |
 | `PEG400`–`PEG402` | Peggy input or file handling problem | error or warning |
-| `ANTLR001`–`ANTLR002` | ANTLR lexical/action parse problem | error |
+| `ANTLR001`–`ANTLR003` | ANTLR lexical/action or nesting-limit parse problem | error |
 | `ANTLR400`–`ANTLR401` | ANTLR input or parser-rule problem | error |
-| `MENHIR001`–`MENHIR003` | Menhir preamble, comment, or action problem | error |
+| `MENHIR001`–`MENHIR004` | Menhir preamble, comment, action, or nesting-limit problem | error |
 | `MENHIR300_UNRESOLVED_SYMBOL` | Menhir reference is not declared | warning |
 | `MENHIR400`–`MENHIR402` | Menhir input or file handling problem | error or warning |
 | `YACC001`–`YACC003` | Yacc literal/action lexical problem | error or warning |
@@ -30,6 +30,7 @@ change the exit status; `--fail-on warning` makes them a CI gate.
 | `YACC300_UNRESOLVED_SYMBOL` | Yacc reference is not declared | warning |
 | `YACC400`–`YACC402` | Yacc input or file handling problem | error or warning |
 | `IR010`–`IR016` | Frontend omitted or approximated source constructs | info |
+| `REGRESSION_METRIC_INCREASE` | A tracked feature increased relative to `--baseline` | warning |
 
 Process-level failures use `INPUT_UNREADABLE`, `IO_ERROR`, `FRONTEND_TIMEOUT`,
 `FRONTEND_OUTPUT_TOO_LARGE`, and `INTERNAL_LIMIT_EXCEEDED`; these return exit code 2.

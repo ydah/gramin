@@ -39,3 +39,10 @@ The newer `let ... :=` syntax and attributes beyond `%public` are not expanded i
 initial frontend. Projects that require exact handling can provide an OCaml implementation
 through the external frontend protocol, as described by ADR 0003. Unsupported constructs
 must be reported rather than executed.
+
+## Resource limits
+
+Expression parsers enforce a configurable nesting limit of 500 by default. Inputs that exceed
+the limit return a frontend nesting diagnostic and do not produce an IR. The analyzer, canonical
+IR validation, and dependency graph traversal use explicit work stacks for expression trees and
+large rule chains; semantic parser-generator conflicts remain outside gramin's scope.

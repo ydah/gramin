@@ -56,12 +56,21 @@ Other useful commands:
 ```sh
 gramin detect grammar.y
 gramin validate-ir grammar-ir.json
+gramin diff base.y changed.y --format md
+gramin analyze changed.y --baseline base.features.json --fail-on-regression
+gramin analyze grammar.y --format sarif
 ```
 
 Exit codes are 0 for success, 1 for diagnostics at the selected `--fail-on` threshold, 2
-for fatal input or frontend failures, and 3 for invalid command usage. The default threshold
-is `error`; use `--fail-on warning` to gate on warnings or `--fail-on none` to ignore
-diagnostics for exit-status purposes.
+for fatal input or frontend failures, and 3 for invalid command usage. Ambiguous automatic
+frontend detection is fatal; pass `--frontend` to select explicitly. The default threshold is
+`error`; use `--fail-on warning` to gate on warnings or `--fail-on none` to ignore diagnostics
+for exit-status purposes. `--fail-on-regression` makes tracked complexity increases against a
+baseline return exit code 1.
+
+Use `--source-root <dir>` for byte-stable multi-file output, or `--source-name <name>` for a
+single input. Parser nesting is limited to 500 levels by default and can be lowered with
+`--max-nesting-depth`.
 
 ## Development
 
@@ -80,16 +89,15 @@ pnpm build
 Third-party grammars are downloaded at fixed commits and are not vendored:
 
 ```sh
-scripts/fetch-corpus.sh
+node scripts/fetch-corpus.mjs
 pnpm benchmark:corpus
 ```
 
-On the pinned Ruby `parse.y`, the frontend and analyzer must finish within 500 ms,
-emit no error diagnostics, and report no unresolved symbols. Pinned Perl `perly.y` and PHP
-`zend_language_parser.y` corpora additionally lock distribution, reachable-recursion,
-precedence-shape, and action-count profiles. The same fetch enables error-free,
-unresolved-free integration tests for grammars-v4 JSON, SQLite, and Java, including split
-parser/lexer grammars.
+The benchmark checks Ruby `parse.y` and the pinned grammars-v4 JSON, SQLite, and Java
+parser/lexer pairs against `fixtures/perf-baseline.json`. All cases must finish within their
+limits, emit no error diagnostics, and report no unresolved symbols. Pinned Perl `perly.y` and
+PHP `zend_language_parser.y` corpora additionally lock distribution, reachable-recursion,
+precedence-shape, and action-count profiles.
 
 ## Architecture
 

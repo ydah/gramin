@@ -67,6 +67,10 @@ The CLI starts the executable with `shell: false`, captures stdout/stderr, and t
 
 Exit 1 is preserved after a valid partial IR has been analyzed and reported.
 
+For reproducible multi-file reports, use `gramin analyze ... --source-root <dir>`. A single
+`--source-name` is accepted only for one input file. Automatic format detection refuses tied or
+near-tied candidates; pass `--frontend` when the content is ambiguous.
+
 The CLI terminates an external frontend after 30 seconds by default and limits stdout and
 stderr to 64 MiB each. Use `--frontend-timeout <ms>` to select a shorter or longer timeout;
 these limits prevent a hung or unexpectedly verbose frontend from blocking or exhausting the
