@@ -94,6 +94,12 @@ const verifyEntries = (entries, manifest, artifact) => {
   if (forbidden) throw new Error(`${artifact.name} contains forbidden artifact ${forbidden}`);
 };
 
+const archiveEntries = (output) =>
+  output
+    .split(/\r?\n/)
+    .map((entry) => entry.replaceAll("\\", "/"))
+    .filter(Boolean);
+
 const allowDirty = process.argv.includes("--allow-dirty");
 const status = run("git", ["status", "--porcelain"]).trim();
 if (status.length > 0 && !allowDirty) {
@@ -120,7 +126,7 @@ const artifacts = preparedPackages.map(({ name, directory, version }) => {
   run("pnpm", ["--filter", name, "pack", "--pack-destination", releaseDirectory]);
   const file = tarballName(name, version);
   const tarball = join(releaseDirectory, file);
-  const entries = run("tar", ["-tzf", tarball]).trim().split("\n").filter(Boolean);
+  const entries = archiveEntries(run("tar", ["-tzf", tarball]).trim());
   const packedManifest = JSON.parse(run("tar", ["-xOzf", tarball, "package/package.json"]));
   verifyPackedManifest(packedManifest, { name, version });
   verifyEntries(entries, packedManifest, { name, version });
