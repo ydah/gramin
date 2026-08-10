@@ -1,4 +1,45 @@
 import { spawn } from "node:child_process";
+import { readFile } from "node:fs/promises";
+
+interface SpawnSpec {
+  readonly command: string;
+  readonly args: readonly string[];
+}
+
+const WINDOWS_PLATFORM = "win32";
+const WINDOWS_SHEBANG = /^#!\s*(?<interpreter>\S+)(?:\s+(?<arguments>.*))?$/;
+
+const resolveWindowsShebang = async (
+  command: string,
+  args: readonly string[],
+): Promise<SpawnSpec> => {
+  if (process.platform !== WINDOWS_PLATFORM) return { command, args };
+
+  let firstLine: string;
+  try {
+    firstLine = (await readFile(command, "utf8")).split(/\r?\n/u, 1)[0] ?? "";
+  } catch {
+    return { command, args };
+  }
+  const match = WINDOWS_SHEBANG.exec(firstLine);
+  if (!match?.groups?.interpreter) return { command, args };
+
+  const shebangParts = [
+    match.groups.interpreter,
+    ...(match.groups.arguments?.trim().split(/\s+/u) ?? []),
+  ];
+  const envIndex = shebangParts.findIndex((part) => part.endsWith("/env"));
+  const interpreterIndex = envIndex >= 0 ? envIndex + 1 : 0;
+  const interpreter = shebangParts[interpreterIndex];
+  if (!interpreter) return { command, args };
+
+  const normalizedInterpreter =
+    interpreter === "python3" || interpreter.endsWith("/python3") ? "python" : interpreter;
+  return {
+    command: normalizedInterpreter,
+    args: [...shebangParts.slice(interpreterIndex + 1), command, ...args],
+  };
+};
 
 export interface ExternalFrontendExecution {
   readonly exitCode: number | null;
@@ -28,16 +69,17 @@ export type ExternalFrontendRunner = (
   options?: ExternalFrontendOptions,
 ) => Promise<ExternalFrontendExecution>;
 
-export const runExternalFrontendProcess: ExternalFrontendRunner = (
+export const runExternalFrontendProcess: ExternalFrontendRunner = async (
   command,
   args,
   stdin,
   options = {},
-) =>
-  new Promise((resolve, reject) => {
+) => {
+  const spawnSpec = await resolveWindowsShebang(command, args);
+  return new Promise((resolve, reject) => {
     const timeoutMs = options.timeoutMs ?? 30_000;
     const maxOutputBytes = options.maxOutputBytes ?? 64 * 1024 * 1024;
-    const child = spawn(command, args, {
+    const child = spawn(spawnSpec.command, spawnSpec.args, {
       shell: false,
       stdio: ["pipe", "pipe", "pipe"],
     });
@@ -96,3 +138,4 @@ export const runExternalFrontendProcess: ExternalFrontendRunner = (
     );
     child.stdin.end(stdin);
   });
+};
