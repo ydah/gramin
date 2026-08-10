@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.3.0",
+  "featuresVersion": "0.4.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -209,6 +209,7 @@
         "symbol": "object"
       }
     ],
+    "unproductiveSymbols": [],
     "unreachableSymbols": []
   },
   "sugar": {

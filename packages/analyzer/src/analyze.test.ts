@@ -76,6 +76,39 @@ describe("analyzeGrammar", () => {
     });
   });
 
+  it("reports reachable rules that cannot derive a terminal sequence", () => {
+    const base = fixtureIR("empty");
+    const ir: GrammarIR = {
+      ...base,
+      startSymbols: ["input"],
+      rules: [
+        {
+          name: "input",
+          alternatives: [
+            { items: [{ kind: "symbol", name: "loop" }] },
+            { items: [{ kind: "terminal", literal: "NUM" }] },
+          ],
+        },
+        {
+          name: "loop",
+          alternatives: [
+            {
+              items: [
+                { kind: "symbol", name: "loop" },
+                { kind: "terminal", literal: "NUM" },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const features = analyzeGrammar(ir);
+    expect(features.structure.unproductiveSymbols).toEqual(["loop"]);
+    expect(features.diagnostics).toContainEqual(
+      expect.objectContaining({ code: "ANALYZER006_UNPRODUCTIVE_RULES" }),
+    );
+  });
+
   it("uses byte-order tie breaking for rankings", () => {
     const ir = fixtureIR("empty");
     const features = analyzeGrammar(ir);

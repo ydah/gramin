@@ -1,7 +1,7 @@
-# Grammar features v0.3
+# Grammar features v0.4
 
 The normative machine-readable contract is
-`packages/core/schema/features-v0.3.schema.json`. `@gramin/core` exports the schema,
+`packages/core/schema/features-v0.4.schema.json`. `@gramin/core` exports the schema,
 the `GrammarFeatures` TypeScript type, and `validateFeatures`.
 The previous `features-v0.2.schema.json` remains packaged for existing consumers.
 
@@ -11,7 +11,7 @@ diagnostics, and the following sections:
 - `size`: symbol, rule, alternative, RHS, percentile, nested-choice, and
   empty-alternative measurements;
 - `structure`: direct, mutual, and reachable recursion, dependency depth, fan-in/out,
-  reachability, and nullability;
+  reachability, nullability, and productive-rule analysis;
 - `precedence`: levels, associativity, override usage, per-level shape, and covered
   terminals;
 - `lexicon`: named/literal tokens and scannerless lexical expression counts;
@@ -26,5 +26,7 @@ Required legacy fields can remain present for minor-version compatibility, but a
 This applies to scannerless declaration counts and to features 0.2 action measurements
 when `actions.completeness` is `partial`.
 
-Features 0.3 is defined by
+Features 0.4 adds exact `structure.unproductiveSymbols` and the corresponding
+`ANALYZER006_UNPRODUCTIVE_RULES` diagnostic. Features 0.3 remains packaged for consumers
+that need the previous contract. The preceding changes are defined by
 [`RFC 0004`](./rfcs/0004-contextual-structural-features.md).

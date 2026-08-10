@@ -25,7 +25,7 @@
       "severity": "info"
     }
   ],
-  "featuresVersion": "0.3.0",
+  "featuresVersion": "0.4.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -151,6 +151,7 @@
         "symbol": "expr"
       }
     ],
+    "unproductiveSymbols": [],
     "unreachableSymbols": []
   },
   "sugar": {
