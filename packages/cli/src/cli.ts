@@ -218,7 +218,10 @@ const parseSourceIR = async (
     }
     return {
       ir: applySourceName(validation.value, options.sourceName),
-      exitCode: exitCodeForDiagnostics(validation.value.diagnostics, options.failOn),
+      exitCode:
+        execution.exitCode === EXIT_PARTIAL
+          ? EXIT_PARTIAL
+          : exitCodeForDiagnostics(validation.value.diagnostics, options.failOn),
     };
   }
   const files = await Promise.all(
