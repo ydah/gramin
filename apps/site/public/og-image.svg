@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title">
+  <title id="title">Gramin — Structural analysis for parser grammars</title>
+  <rect width="1200" height="630" fill="#f5f2ea"/>
+  <circle cx="1050" cy="80" r="230" fill="#d7e7df"/>
+  <circle cx="1040" cy="510" r="180" fill="#f0d6c6"/>
+  <text x="96" y="220" fill="#0b6b66" font-family="Arial, sans-serif" font-size="92" font-weight="700">Gramin</text>
+  <text x="100" y="310" fill="#172522" font-family="Arial, sans-serif" font-size="42">Structural analysis for parser grammars</text>
+  <text x="100" y="400" fill="#4f5e5a" font-family="monospace" font-size="26">grammar → IR → features → reviewable facts</text>
+</svg>

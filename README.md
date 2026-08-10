@@ -3,8 +3,12 @@
 [![npm version](https://img.shields.io/npm/v/@gramin/cli.svg)](https://www.npmjs.com/package/@gramin/cli)
 [![CI](https://github.com/ydah/gramin/actions/workflows/ci.yml/badge.svg)](https://github.com/ydah/gramin/actions/workflows/ci.yml)
 
+[Product site](https://ydah.github.io/gramin/) · [Try the browser sandbox](https://ydah.github.io/gramin/sandbox) · [Documentation](https://ydah.github.io/gramin/guide/getting-started)
+
 `gramin` converts parser grammar files into deterministic, versioned structural features
 for tooling, review, and LLM-assisted analysis. It never executes semantic actions.
+
+The [Gramin product site](https://ydah.github.io/gramin/) explains the analysis model and includes a browser-local sandbox for trying supported formats without installing the CLI.
 
 The current release supports POSIX Yacc, Bison, Lrama, BNF, EBNF, ANTLR4, Menhir, and
 Peggy/PEG.js, including split parser/lexer grammars, parameterized rules, named

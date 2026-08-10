@@ -1,0 +1,28 @@
+{
+  "name": "@gramin/site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Gramin product site and browser sandbox",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@gramin/analyzer": "workspace:*",
+    "@gramin/core": "workspace:*",
+    "@gramin/frontend-antlr": "workspace:*",
+    "@gramin/frontend-bnf": "workspace:*",
+    "@gramin/frontend-menhir": "workspace:*",
+    "@gramin/frontend-peg": "workspace:*",
+    "@gramin/frontend-yacc": "workspace:*",
+    "@gramin/reporter": "workspace:*",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "vitepress": "^1.6.4"
+  }
+}

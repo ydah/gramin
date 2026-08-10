@@ -5,7 +5,7 @@
   "description": "Grammar analysis packages and command-line tooling",
   "private": true,
   "license": "MIT",
-  "homepage": "https://github.com/ydah/gramin#readme",
+  "homepage": "https://ydah.github.io/gramin/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ydah/gramin.git"
@@ -29,6 +29,9 @@
     "release:check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm benchmark:corpus && pnpm release:pack && pnpm release:smoke",
     "release:pack": "pnpm clean && pnpm build && node scripts/pack-release.mjs",
     "release:smoke": "node scripts/smoke-release.mjs",
+    "site:build": "pnpm build && pnpm --filter @gramin/site build",
+    "site:check": "pnpm build && pnpm --filter @gramin/site typecheck && pnpm --filter @gramin/site build && pnpm site:links",
+    "site:links": "node scripts/check-site-links.mjs",
     "test": "vitest run",
     "typecheck": "tsc -b --pretty false",
     "update-golden": "pnpm build && node scripts/update-golden.mjs --update-golden"

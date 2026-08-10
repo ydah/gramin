@@ -1,0 +1,2 @@
+export const MAX_BROWSER_INPUT_CHARS = 250_000;
+export const BROWSER_WORKER_TIMEOUT_MS = 10_000;
