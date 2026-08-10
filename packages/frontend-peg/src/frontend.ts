@@ -5,6 +5,7 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  mergeRulesByName,
   type SourceFile,
   type SourceSpan,
 } from "@gramin/core";
@@ -536,12 +537,14 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
       kind: "unknown" as const,
     })),
     precedence: [],
-    rules: parsedRules.map((rule) => ({
-      name: rule.name,
-      ...(rule.ordered ? { orderedAlternatives: true } : {}),
-      alternatives: rule.alternatives.map((items) => ({ items })),
-      loc: rule.loc,
-    })),
+    rules: mergeRulesByName(
+      parsedRules.map((rule) => ({
+        name: rule.name,
+        ...(rule.ordered ? { orderedAlternatives: true } : {}),
+        alternatives: rule.alternatives.map((items) => ({ items })),
+        loc: rule.loc,
+      })),
+    ),
     diagnostics,
   };
   return { ir, diagnostics };

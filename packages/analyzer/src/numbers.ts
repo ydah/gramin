@@ -12,9 +12,4 @@ export const nearestRankPercentile = (
   const sorted = [...values].sort((left, right) => left - right);
   return sorted[Math.ceil(percentile * sorted.length) - 1];
 };
-
-export const compareBytes = (left: string, right: string): number => {
-  if (left < right) return -1;
-  if (left > right) return 1;
-  return 0;
-};
+export { compareBytes } from "@gramin/core";

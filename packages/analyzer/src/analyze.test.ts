@@ -86,6 +86,31 @@ describe("analyzeGrammar", () => {
     ]);
   });
 
+  it("unions dependencies when a noncanonical IR repeats a rule name", () => {
+    const base = fixtureIR("empty");
+    const ir: GrammarIR = {
+      ...base,
+      startSymbols: ["input"],
+      rules: [
+        {
+          name: "input",
+          alternatives: [{ items: [{ kind: "symbol", name: "helper" }] }],
+        },
+        {
+          name: "input",
+          alternatives: [{ items: [{ kind: "terminal", literal: "x" }] }],
+        },
+        {
+          name: "helper",
+          alternatives: [{ items: [{ kind: "terminal", literal: "x" }] }],
+        },
+      ],
+    };
+    const features = analyzeGrammar(ir);
+    expect(features.structure.reachableRules).toBe(2);
+    expect(features.structure.unreachableSymbols).toEqual([]);
+  });
+
   it("omits CFG nullability for ordered choice with a reason", () => {
     const ir: GrammarIR = {
       ...fixtureIR("empty"),

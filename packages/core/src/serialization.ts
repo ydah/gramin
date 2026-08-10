@@ -1,8 +1,4 @@
-const compareBytes = (left: string, right: string): number => {
-  if (left < right) return -1;
-  if (left > right) return 1;
-  return 0;
-};
+import { compareBytes } from "./ordering.js";
 
 const normalizeValue = (value: unknown, stripLocations: boolean): unknown => {
   if (Array.isArray(value)) {

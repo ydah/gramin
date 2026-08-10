@@ -6,6 +6,7 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  mergeRulesByName,
   type SourceFile,
   type SourceSpan,
   type TerminalDecl,
@@ -670,7 +671,7 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
       ...(builtinError ? [{ name: "error", origin: "builtin", kind: "terminal" as const }] : []),
     ],
     precedence: declaration.precedence,
-    rules,
+    rules: mergeRulesByName(rules),
     diagnostics,
   };
   return { ir, diagnostics };

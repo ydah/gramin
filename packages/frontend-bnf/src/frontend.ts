@@ -5,6 +5,7 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  mergeRulesByName,
   type SourceFile,
   type SourceSpan,
 } from "@gramin/core";
@@ -480,11 +481,13 @@ const lower = (
       kind: "unknown" as const,
     })),
     precedence: [],
-    rules: rules.map((rule) => ({
-      name: rule.name,
-      alternatives: rule.alternatives.map((items) => ({ items, loc: rule.loc })),
-      loc: rule.loc,
-    })),
+    rules: mergeRulesByName(
+      rules.map((rule) => ({
+        name: rule.name,
+        alternatives: rule.alternatives.map((items) => ({ items, loc: rule.loc })),
+        loc: rule.loc,
+      })),
+    ),
     diagnostics,
   };
 };
