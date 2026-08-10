@@ -8,6 +8,7 @@ import {
   releasePackages,
   repositoryRoot,
   tarballName,
+  commandForPlatform,
 } from "./release-packages.mjs";
 
 const EXPECTED_AUTHOR = "Yudai Takada";
@@ -15,7 +16,7 @@ const EXPECTED_LICENSE = "MIT";
 const EXPECTED_REPOSITORY = "git+https://github.com/ydah/gramin.git";
 
 const run = (command, args) => {
-  const result = spawnSync(command, args, {
+  const result = spawnSync(commandForPlatform(command), args, {
     cwd: repositoryRoot,
     encoding: "utf8",
   });

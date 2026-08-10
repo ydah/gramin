@@ -27,3 +27,8 @@ export const readJsonObject = (path) => {
 
 export const tarballName = (name, version) =>
   `${name.replace(/^@/, "").replaceAll("/", "-")}-${version}.tgz`;
+
+export const commandForPlatform = (command) =>
+  process.platform === "win32" && (command === "npm" || command === "pnpm")
+    ? `${command}.cmd`
+    : command;
