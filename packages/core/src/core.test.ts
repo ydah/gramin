@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Expr, GrammarIR } from "./index.js";
 import {
+  compareBytes,
   GrammarFeaturesSchemaDocument,
   GrammarIRSchemaDocument,
   serializeCanonical,
@@ -257,9 +258,35 @@ describe("Grammar IR canonical form", () => {
       ).ok,
     ).toBe(true);
   });
+
+  it("rejects repeated rule names in the canonical form", () => {
+    const firstRule = baseIR().rules[0];
+    if (!firstRule) throw new Error("expected base rule");
+    const duplicate = {
+      ...baseIR(),
+      rules: [
+        firstRule,
+        { ...firstRule, alternatives: [{ items: [{ kind: "terminal", literal: "x" }] }] },
+      ],
+    };
+    const result = validateIR(duplicate);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.issues).toContainEqual(
+        expect.objectContaining({
+          code: "IR_CANON_DUPLICATE_RULE",
+          path: "/rules/1/name",
+        }),
+      );
+    }
+  });
 });
 
 describe("canonical serialization", () => {
+  it("orders strings by UTF-8 bytes", () => {
+    expect(compareBytes("\u{1D400}x", "\uFF21x")).toBe(1);
+  });
+
   it("is byte deterministic and can remove source locations", () => {
     const sample = baseIR();
     const first = serializeCanonical(sample);

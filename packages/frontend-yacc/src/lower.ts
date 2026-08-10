@@ -4,6 +4,7 @@ import {
   type Expr,
   type GrammarIR,
   IR_VERSION,
+  mergeRulesByName,
   type TerminalDecl,
 } from "@gramin/core";
 import type { YaccAst, YaccItem } from "./ast.js";
@@ -207,22 +208,24 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
     unresolved: new Set(),
   };
 
-  const rules = ast.rules.map((rule) => {
-    const ruleContext: LoweringContext = {
-      ...context,
-      parameterNames: new Set(rule.params ?? []),
-    };
-    return {
-      name: rule.name,
-      ...(rule.params === undefined ? {} : { params: [...rule.params] }),
-      ...(rule.isInline === undefined ? {} : { isInline: rule.isInline }),
-      ...(rule.declaredType === undefined ? {} : { declaredType: rule.declaredType }),
-      alternatives: rule.alternatives.map((alternative) =>
-        lowerAlternative(alternative, ruleContext),
-      ),
-      loc: rule.loc,
-    };
-  });
+  const rules = mergeRulesByName(
+    ast.rules.map((rule) => {
+      const ruleContext: LoweringContext = {
+        ...context,
+        parameterNames: new Set(rule.params ?? []),
+      };
+      return {
+        name: rule.name,
+        ...(rule.params === undefined ? {} : { params: [...rule.params] }),
+        ...(rule.isInline === undefined ? {} : { isInline: rule.isInline }),
+        ...(rule.declaredType === undefined ? {} : { declaredType: rule.declaredType }),
+        alternatives: rule.alternatives.map((alternative) =>
+          lowerAlternative(alternative, ruleContext),
+        ),
+        loc: rule.loc,
+      };
+    }),
+  );
 
   return {
     irVersion: IR_VERSION,

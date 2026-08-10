@@ -118,6 +118,19 @@ const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
     issues: [],
   };
 
+  const seenRuleNames = new Set<string>();
+  ir.rules.forEach((rule, ruleIndex) => {
+    if (seenRuleNames.has(rule.name)) {
+      addIssue(
+        state,
+        "IR_CANON_DUPLICATE_RULE",
+        `/rules/${ruleIndex}/name`,
+        "rule names must be unique; merge alternatives of a repeated LHS",
+      );
+    }
+    seenRuleNames.add(rule.name);
+  });
+
   ir.rules.forEach((rule, ruleIndex) => {
     rule.alternatives.forEach((alternative, alternativeIndex) => {
       alternative.items.forEach((item, itemIndex) => {

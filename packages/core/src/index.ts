@@ -4,6 +4,8 @@ export type {
   FrontendResult,
   SourceFile,
 } from "./frontend.js";
+export { compareBytes } from "./ordering.js";
+export { mergeRulesByName } from "./rules.js";
 export {
   GrammarFeaturesSchemaDocument,
   GrammarIRSchemaDocument,

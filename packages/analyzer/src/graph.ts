@@ -1,4 +1,5 @@
 import type { GrammarIR } from "@gramin/core";
+import { compareBytes } from "@gramin/core";
 import { collectReferences } from "./expressions.js";
 
 export type DependencyGraph = ReadonlyMap<string, ReadonlySet<string>>;
@@ -9,25 +10,19 @@ const required = <K, V>(map: ReadonlyMap<K, V>, key: K, label: string): V => {
   return value;
 };
 
-const compareBytes = (left: string, right: string): number => {
-  if (left < right) return -1;
-  if (left > right) return 1;
-  return 0;
-};
-
 export const buildDependencyGraph = (ir: GrammarIR): DependencyGraph => {
   const ruleNames = new Set(ir.rules.map((rule) => rule.name));
-  return new Map(
-    ir.rules.map((rule) => {
-      const references = new Set<string>();
-      for (const alternative of rule.alternatives) {
-        for (const reference of collectReferences(alternative)) {
-          if (ruleNames.has(reference)) references.add(reference);
-        }
+  const graph = new Map<string, Set<string>>();
+  for (const rule of ir.rules) {
+    const references = graph.get(rule.name) ?? new Set<string>();
+    for (const alternative of rule.alternatives) {
+      for (const reference of collectReferences(alternative)) {
+        if (ruleNames.has(reference)) references.add(reference);
       }
-      return [rule.name, references] as const;
-    }),
-  );
+    }
+    graph.set(rule.name, references);
+  }
+  return graph;
 };
 
 export const stronglyConnectedComponents = (graph: DependencyGraph): string[][] => {
@@ -150,12 +145,38 @@ export const maxCondensedDepth = (
   const depth = (component: number): number => {
     const known = memo.get(component);
     if (known !== undefined) return known;
-    const value = Math.max(0, ...[...(edges.get(component) ?? [])].map((next) => 1 + depth(next)));
-    memo.set(component, value);
-    return value;
+    const pending = [component];
+    const visiting = new Set<number>();
+    while (pending.length > 0) {
+      const current = pending.at(-1);
+      if (current === undefined) break;
+      const currentKnown = memo.get(current);
+      if (currentKnown !== undefined) {
+        pending.pop();
+        continue;
+      }
+      if (!visiting.has(current)) {
+        visiting.add(current);
+        for (const next of edges.get(current) ?? []) {
+          if (!memo.has(next)) pending.push(next);
+        }
+        continue;
+      }
+      let value = 0;
+      for (const next of edges.get(current) ?? []) {
+        value = Math.max(value, 1 + (memo.get(next) ?? 0));
+      }
+      memo.set(current, value);
+      visiting.delete(current);
+      pending.pop();
+    }
+    return memo.get(component) ?? 0;
   };
   const reachableComponents = new Set(
     [...reachable].map((node) => required(componentByNode, node, "reachable component")),
   );
-  return Math.max(0, ...[...reachableComponents].map(depth));
+  return [...reachableComponents].reduce(
+    (maximum, component) => Math.max(maximum, depth(component)),
+    0,
+  );
 };

@@ -81,6 +81,23 @@ describe("yacc-family parser and lowering", () => {
     );
   });
 
+  it("merges repeated rule declarations into one canonical rule", () => {
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "duplicate.y",
+          content: "%%\ninput: helper ;\ninput: NUM ;\nhelper: NUM ;\n%%\n",
+        },
+      ],
+      {},
+    );
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.ir?.rules.map((rule) => [rule.name, rule.alternatives.length])).toEqual([
+      ["input", 2],
+      ["helper", 1],
+    ]);
+  });
+
   it("is deterministic with stripped locations", () => {
     const result = parseFixture("calc.y");
     expect(serializeCanonical(result.ir, { stripLocations: true })).toBe(

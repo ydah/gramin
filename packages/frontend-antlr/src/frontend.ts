@@ -6,6 +6,7 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  mergeRulesByName,
   type SourceFile,
   type SourceSpan,
   type TerminalDecl,
@@ -644,7 +645,7 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
       left.name < right.name ? -1 : left.name > right.name ? 1 : 0,
     ),
     precedence: [],
-    rules: loweredRules,
+    rules: mergeRulesByName(loweredRules),
     diagnostics,
   };
   return { ir, diagnostics };
