@@ -327,6 +327,7 @@ class RuleParser {
     diagnostics: readonly Diagnostic[],
     private readonly terminalNames: ReadonlySet<string>,
     private readonly aliases: ReadonlyMap<string, string>,
+    private readonly maxNestingDepth: number,
   ) {
     this.diagnostics = [...diagnostics];
   }
@@ -427,6 +428,7 @@ class RuleParser {
     start: number,
     parameterNames: ReadonlySet<string>,
     label?: string,
+    depth = 0,
   ): { readonly expression?: Expr; readonly next: number } {
     const primary = tokens[start];
     if (!primary) return { next: start };
@@ -435,21 +437,31 @@ class RuleParser {
     if (primary.kind === "identifier") {
       const args: Expr[] = [];
       if (tokens[next]?.kind === "lparen") {
-        next += 1;
-        while (
-          next < tokens.length &&
-          tokens[next]?.kind !== "rparen" &&
-          tokens[next]?.kind !== "eof"
-        ) {
-          if (tokens[next]?.kind === "comma") {
-            next += 1;
-            continue;
+        if (depth >= this.maxNestingDepth) {
+          this.diagnostics.push({
+            severity: "error",
+            code: "MENHIR004_NESTING_TOO_DEEP",
+            message: `maximum nesting depth ${this.maxNestingDepth} exceeded`,
+            loc: primary.loc,
+          });
+          next = this.skipNested(tokens, next, "rparen");
+        } else {
+          next += 1;
+          while (
+            next < tokens.length &&
+            tokens[next]?.kind !== "rparen" &&
+            tokens[next]?.kind !== "eof"
+          ) {
+            if (tokens[next]?.kind === "comma") {
+              next += 1;
+              continue;
+            }
+            const argument = this.lowerPrimary(tokens, next, parameterNames, undefined, depth + 1);
+            if (argument.expression) args.push(argument.expression);
+            next = argument.next > next ? argument.next : next + 1;
           }
-          const argument = this.lowerPrimary(tokens, next, parameterNames);
-          if (argument.expression) args.push(argument.expression);
-          next = argument.next > next ? argument.next : next + 1;
+          if (tokens[next]?.kind === "rparen") next += 1;
         }
-        if (tokens[next]?.kind === "rparen") next += 1;
       }
       if (this.terminalNames.has(primary.value) && !parameterNames.has(primary.value)) {
         expression = { kind: "terminal", name: primary.value };
@@ -479,6 +491,17 @@ class RuleParser {
       };
     }
     return { expression, next };
+  }
+
+  private skipNested(tokens: readonly Token[], start: number, closing: TokenKind): number {
+    let depth = 1;
+    let index = start + 1;
+    while (depth > 0 && index < tokens.length && tokens[index]?.kind !== "eof") {
+      if (tokens[index]?.kind === "lparen") depth += 1;
+      if (tokens[index]?.kind === closing) depth -= 1;
+      index += 1;
+    }
+    return index;
   }
 
   private lowerAlternative(
@@ -566,7 +589,10 @@ const visit = (
   }
 };
 
-const parse = (files: readonly SourceFile[]): FrontendResult => {
+const parse = (
+  files: readonly SourceFile[],
+  options: { readonly maxNestingDepth?: number },
+): FrontendResult => {
   const first = files[0];
   if (!first) {
     const diagnostic: Diagnostic = {
@@ -589,8 +615,17 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
         : [],
     ),
   );
-  const parser = new RuleParser(lexical.tokens, diagnostics, declaredTerminalNames, aliases);
+  const parser = new RuleParser(
+    lexical.tokens,
+    diagnostics,
+    declaredTerminalNames,
+    aliases,
+    options.maxNestingDepth ?? 500,
+  );
   const parsedRules = parser.parse(declaration.types);
+  if (diagnostics.some((diagnostic) => diagnostic.code === "MENHIR004_NESTING_TOO_DEEP")) {
+    return { ir: null, diagnostics };
+  }
   if (parsedRules.length === 0) {
     const diagnostic: Diagnostic = {
       severity: "error",

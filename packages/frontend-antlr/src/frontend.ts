@@ -349,11 +349,12 @@ class ExpressionParser {
     private readonly tokens: readonly Token[],
     diagnostics: Diagnostic[],
     private readonly aliases: ReadonlyMap<string, string>,
+    private readonly maxNestingDepth: number,
   ) {
     this.diagnostics = diagnostics;
   }
 
-  alternatives(closing: TokenKind | "end" = "end"): Alternative[] {
+  alternatives(closing: TokenKind | "end" = "end", depth = 0): Alternative[] {
     const alternatives: Alternative[] = [];
     let items: Expr[] = [];
     let label: string | undefined;
@@ -375,7 +376,7 @@ class ExpressionParser {
       }
       if (token.kind === "arrow") break;
       const before = this.#index;
-      const expression = this.term();
+      const expression = this.term(depth);
       if (expression?.kind === "group" && expression.expr.kind === "seq") {
         items.push(...expression.expr.items);
       } else if (expression?.kind === "group" && expression.expr.kind !== "choice") {
@@ -392,7 +393,7 @@ class ExpressionParser {
     return this.tokens[this.#index];
   }
 
-  private term(): Expr | undefined {
+  private term(depth: number): Expr | undefined {
     let label: string | undefined;
     if (
       this.current()?.kind === "identifier" &&
@@ -441,20 +442,31 @@ class ExpressionParser {
       }
       this.#index += 1;
     } else if (token.kind === "lparen") {
-      this.#index += 1;
-      const nested = this.alternatives("rparen");
-      if (this.current()?.kind === "rparen") this.#index += 1;
-      const expressions = nested.map(
-        ({ items }): Expr =>
-          items.length === 1 ? (items[0] ?? { kind: "seq", items: [] }) : { kind: "seq", items },
-      );
-      expression = {
-        kind: "group",
-        expr:
-          expressions.length === 1
-            ? (expressions[0] ?? { kind: "seq", items: [] })
-            : { kind: "choice", ordered: false, alts: expressions },
-      };
+      if (depth >= this.maxNestingDepth) {
+        this.diagnostics.push({
+          severity: "error",
+          code: "ANTLR003_NESTING_TOO_DEEP",
+          message: `maximum nesting depth ${this.maxNestingDepth} exceeded`,
+          loc: token.loc,
+        });
+        this.skipNested("rparen");
+        expression = { kind: "seq", items: [] };
+      } else {
+        this.#index += 1;
+        const nested = this.alternatives("rparen", depth + 1);
+        if (this.current()?.kind === "rparen") this.#index += 1;
+        const expressions = nested.map(
+          ({ items }): Expr =>
+            items.length === 1 ? (items[0] ?? { kind: "seq", items: [] }) : { kind: "seq", items },
+        );
+        expression = {
+          kind: "group",
+          expr:
+            expressions.length === 1
+              ? (expressions[0] ?? { kind: "seq", items: [] })
+              : { kind: "choice", ordered: false, alts: expressions },
+        };
+      }
     } else if (token.kind === "action") {
       const predicate = this.tokens[this.#index + 1]?.kind === "question";
       this.diagnostics.push({
@@ -485,6 +497,16 @@ class ExpressionParser {
     }
     return expression;
   }
+
+  private skipNested(closing: TokenKind): void {
+    let depth = 1;
+    this.#index += 1;
+    while (depth > 0 && this.current()?.kind !== "eof") {
+      if (this.current()?.kind === "lparen") depth += 1;
+      if (this.current()?.kind === closing) depth -= 1;
+      this.#index += 1;
+    }
+  }
 }
 
 const terminalKey = (terminal: TerminalDecl): string =>
@@ -503,7 +525,10 @@ const hasSugar = (expression: Expr): boolean => {
   return false;
 };
 
-const parse = (files: readonly SourceFile[]): FrontendResult => {
+const parse = (
+  files: readonly SourceFile[],
+  options: { readonly maxNestingDepth?: number },
+): FrontendResult => {
   if (files.length === 0) {
     const diagnostic: Diagnostic = {
       severity: "error",
@@ -589,7 +614,12 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
   const localRuleNames = new Set(parserRules.map((rule) => rule.name));
   const loweredRules: GrammarIR["rules"] = [];
   parserRules.forEach((rule) => {
-    const parser = new ExpressionParser(rule.body, diagnostics, aliases);
+    const parser = new ExpressionParser(
+      rule.body,
+      diagnostics,
+      aliases,
+      options.maxNestingDepth ?? 500,
+    );
     const alternatives = parser.alternatives();
     parser.implicitLiterals.forEach((literal) => {
       const terminal: TerminalDecl = { literal };
@@ -611,6 +641,10 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
       loc: rule.loc,
     });
   });
+
+  if (diagnostics.some((diagnostic) => diagnostic.code === "ANTLR003_NESTING_TOO_DEEP")) {
+    return { ir: null, diagnostics };
+  }
 
   if (loweredRules.length === 0) {
     const diagnostic: Diagnostic = {

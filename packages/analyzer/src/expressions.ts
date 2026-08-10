@@ -29,9 +29,9 @@ export const walkExpression = (expression: Expr, visit: (node: Expr) => void): v
 };
 
 export const expressionRhsLength = (expression: Expr): number => {
-  if (expression.kind === "midRuleAction") return 0;
-  if (expression.kind === "group") return expressionRhsLength(expression.expr);
-  return 1;
+  let current = expression;
+  while (current.kind === "group") current = current.expr;
+  return current.kind === "midRuleAction" ? 0 : 1;
 };
 
 export const alternativeRhsLength = (alternative: Alternative): number =>
@@ -48,15 +48,28 @@ export const collectReferences = (alternative: Alternative): Set<string> => {
 };
 
 const edgeReference = (expression: Expr, direction: "first" | "last"): string | undefined => {
-  if (expression.kind === "symbol") return expression.name;
-  if (expression.kind === "group") return edgeReference(expression.expr, direction);
-  if (expression.kind !== "seq") return undefined;
-  const orderedItems = direction === "first" ? expression.items : [...expression.items].reverse();
-  for (const item of orderedItems) {
-    if (item.kind === "midRuleAction") continue;
-    return edgeReference(item, direction);
+  let current = expression;
+  while (true) {
+    if (current.kind === "symbol") return current.name;
+    if (current.kind === "group") {
+      current = current.expr;
+      continue;
+    }
+    if (current.kind !== "seq") return undefined;
+    const step = direction === "first" ? 1 : -1;
+    let index = direction === "first" ? 0 : current.items.length - 1;
+    let nextExpression: Expr | undefined;
+    while (index >= 0 && index < current.items.length) {
+      const item = current.items[index];
+      if (item?.kind !== "midRuleAction") {
+        nextExpression = item;
+        break;
+      }
+      index += step;
+    }
+    if (!nextExpression) return undefined;
+    current = nextExpression;
   }
-  return undefined;
 };
 
 export const alternativeEdgeReference = (
@@ -75,29 +88,54 @@ export const isExpressionNullable = (
   expression: Expr,
   nullableRules: ReadonlySet<string>,
 ): boolean => {
-  if (expression.kind === "symbol") return nullableRules.has(expression.name);
-  if (
-    expression.kind === "terminal" ||
-    expression.kind === "charClass" ||
-    expression.kind === "anyChar"
-  ) {
-    return false;
+  type WorkItem = { readonly value: Expr; readonly expanded: boolean };
+  const values = new Map<Expr, boolean>();
+  const pending: WorkItem[] = [{ value: expression, expanded: false }];
+  while (pending.length > 0) {
+    const item = pending.pop();
+    if (!item) break;
+    if (!item.expanded) {
+      pending.push({ ...item, expanded: true });
+      const children =
+        item.value.kind === "choice"
+          ? item.value.alts
+          : item.value.kind === "seq"
+            ? item.value.items
+            : item.value.kind === "plus" || item.value.kind === "group"
+              ? [item.value.expr]
+              : [];
+      for (let index = children.length - 1; index >= 0; index -= 1) {
+        const child = children[index];
+        if (child) pending.push({ value: child, expanded: false });
+      }
+      continue;
+    }
+    const current = item.value;
+    let result: boolean;
+    if (current.kind === "symbol") result = nullableRules.has(current.name);
+    else if (
+      current.kind === "terminal" ||
+      current.kind === "charClass" ||
+      current.kind === "anyChar"
+    ) {
+      result = false;
+    } else if (
+      current.kind === "midRuleAction" ||
+      current.kind === "opt" ||
+      current.kind === "star" ||
+      current.kind === "predicate"
+    ) {
+      result = true;
+    } else if (current.kind === "plus" || current.kind === "group") {
+      result = values.get(current.expr) === true;
+    } else if (current.kind === "seq") {
+      result = current.items.every((child) => values.get(child) === true);
+    } else {
+      result = current.alts.some((alternative) => values.get(alternative) === true);
+    }
+    values.set(current, result);
   }
-  if (
-    expression.kind === "midRuleAction" ||
-    expression.kind === "opt" ||
-    expression.kind === "star" ||
-    expression.kind === "predicate"
-  ) {
-    return true;
-  }
-  if (expression.kind === "plus" || expression.kind === "group") {
-    return isExpressionNullable(expression.expr, nullableRules);
-  }
-  if (expression.kind === "seq") {
-    return expression.items.every((item) => isExpressionNullable(item, nullableRules));
-  }
-  return expression.alts.some((alternative) => isExpressionNullable(alternative, nullableRules));
+  return values.get(expression) === true;
 };
 
 export const isAlternativeNullable = (

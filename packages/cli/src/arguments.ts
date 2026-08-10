@@ -1,4 +1,4 @@
-export type OutputFormat = "json" | "md" | "llm";
+export type OutputFormat = "json" | "md" | "llm" | "sarif";
 export type FailOn = "error" | "warning" | "none";
 
 export interface ParsedArguments {
@@ -14,7 +14,11 @@ export interface ParsedArguments {
   readonly budgetChars?: number;
   readonly failOn: FailOn;
   readonly frontendTimeoutMs?: number;
+  readonly maxNestingDepth?: number;
   readonly sourceName?: string;
+  readonly sourceRoot?: string;
+  readonly baseline?: string;
+  readonly failOnRegression: boolean;
 }
 
 export type ArgumentResult =
@@ -30,7 +34,10 @@ const valueOptions = new Set([
   "--budget-chars",
   "--fail-on",
   "--frontend-timeout",
+  "--max-nesting-depth",
   "--source-name",
+  "--source-root",
+  "--baseline",
   "-o",
 ]);
 
@@ -40,12 +47,17 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   const files: string[] = [];
   const options = new Map<string, string>();
   let stripLocations = false;
+  let failOnRegression = false;
 
   for (let index = 0; index < tokens.length; index += 1) {
     const token = tokens[index];
     if (token === undefined) break;
     if (token === "--strip-loc") {
       stripLocations = true;
+      continue;
+    }
+    if (token === "--fail-on-regression") {
+      failOnRegression = true;
       continue;
     }
     if (valueOptions.has(token)) {
@@ -62,7 +74,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   }
 
   const format = options.get("--format") ?? "json";
-  if (!["json", "md", "llm"].includes(format)) {
+  if (!["json", "md", "llm", "sarif"].includes(format)) {
     return { ok: false, message: `unknown format ${format}` };
   }
   const budgetText = options.get("--budget-chars");
@@ -78,6 +90,15 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
     (!Number.isSafeInteger(frontendTimeoutMs) || frontendTimeoutMs <= 0)
   ) {
     return { ok: false, message: "--frontend-timeout must be a positive integer" };
+  }
+  const maxNestingDepthText = options.get("--max-nesting-depth");
+  const maxNestingDepth =
+    maxNestingDepthText === undefined ? undefined : Number(maxNestingDepthText);
+  if (
+    maxNestingDepth !== undefined &&
+    (!Number.isSafeInteger(maxNestingDepth) || maxNestingDepth <= 0)
+  ) {
+    return { ok: false, message: "--max-nesting-depth must be a positive integer" };
   }
   const failOn = options.get("--fail-on") ?? "error";
   if (!(["error", "warning", "none"] as const).includes(failOn as FailOn)) {
@@ -95,6 +116,17 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   if (sourceName !== undefined && sourceName.length === 0) {
     return { ok: false, message: "--source-name must not be empty" };
   }
+  const sourceRoot = options.get("--source-root");
+  if (sourceRoot !== undefined && sourceRoot.length === 0) {
+    return { ok: false, message: "--source-root must not be empty" };
+  }
+  if (sourceName !== undefined && files.length > 1) {
+    return {
+      ok: false,
+      message: "--source-name accepts one input; use --source-root for multiple files",
+    };
+  }
+  const baseline = options.get("--baseline");
 
   return {
     ok: true,
@@ -111,7 +143,11 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
       ...(budgetChars === undefined ? {} : { budgetChars }),
       failOn: failOn as FailOn,
       ...(frontendTimeoutMs === undefined ? {} : { frontendTimeoutMs }),
+      ...(maxNestingDepth === undefined ? {} : { maxNestingDepth }),
       ...(sourceName === undefined ? {} : { sourceName }),
+      ...(sourceRoot === undefined ? {} : { sourceRoot }),
+      ...(baseline === undefined ? {} : { baseline }),
+      failOnRegression,
     },
   };
 };

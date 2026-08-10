@@ -229,6 +229,7 @@ class Parser {
   constructor(
     private readonly tokens: readonly Token[],
     diagnostics: readonly Diagnostic[],
+    private readonly maxNestingDepth: number,
   ) {
     this.diagnostics = [...diagnostics];
   }
@@ -306,6 +307,7 @@ class Parser {
   private parseChoice(
     closing: TokenKind,
     stopAtRule: boolean,
+    depth = 0,
   ): { readonly alternatives: Expr[][]; readonly usedChoice: boolean } {
     const alternatives: Expr[][] = [];
     let sequence: Expr[] = [];
@@ -334,7 +336,7 @@ class Parser {
         this.#index += 1;
         continue;
       }
-      const expression = this.parseTerm();
+      const expression = this.parseTerm(depth);
       if (expression) sequence.push(expression);
       else this.#index += 1;
     }
@@ -342,7 +344,7 @@ class Parser {
     return { alternatives, usedChoice };
   }
 
-  private parseTerm(): Expr | undefined {
+  private parseTerm(depth: number): Expr | undefined {
     let label: string | undefined;
     if (this.current().kind === "identifier" && this.tokens[this.#index + 1]?.kind === "colon") {
       label = this.current().value;
@@ -374,26 +376,37 @@ class Parser {
       expression = { kind: "anyChar" };
       this.#index += 1;
     } else if (token.kind === "lparen") {
-      this.#index += 1;
-      const nested = this.parseChoice("rparen", false);
-      if (this.current().kind === "rparen") this.#index += 1;
-      else {
+      if (depth >= this.maxNestingDepth) {
         this.diagnostics.push({
           severity: "error",
-          code: "PEG100_UNCLOSED_GROUP",
-          message: "expected closing parenthesis",
+          code: "PEG101_NESTING_TOO_DEEP",
+          message: `maximum nesting depth ${this.maxNestingDepth} exceeded`,
           loc: token.loc,
         });
+        this.skipNested("rparen");
+        expression = { kind: "seq", items: [] };
+      } else {
+        this.#index += 1;
+        const nested = this.parseChoice("rparen", false, depth + 1);
+        if (this.current().kind === "rparen") this.#index += 1;
+        else {
+          this.diagnostics.push({
+            severity: "error",
+            code: "PEG100_UNCLOSED_GROUP",
+            message: "expected closing parenthesis",
+            loc: token.loc,
+          });
+        }
+        const alternatives = nested.alternatives.map(
+          (items): Expr =>
+            items.length === 1 ? (items[0] ?? { kind: "seq", items: [] }) : { kind: "seq", items },
+        );
+        const nestedExpression: Expr =
+          alternatives.length === 1
+            ? (alternatives[0] ?? { kind: "seq", items: [] })
+            : { kind: "choice", ordered: true, alts: alternatives };
+        expression = { kind: "group", expr: nestedExpression };
       }
-      const alternatives = nested.alternatives.map(
-        (items): Expr =>
-          items.length === 1 ? (items[0] ?? { kind: "seq", items: [] }) : { kind: "seq", items },
-      );
-      const nestedExpression: Expr =
-        alternatives.length === 1
-          ? (alternatives[0] ?? { kind: "seq", items: [] })
-          : { kind: "choice", ordered: true, alts: alternatives };
-      expression = { kind: "group", expr: nestedExpression };
     } else {
       return undefined;
     }
@@ -417,6 +430,16 @@ class Parser {
       };
     }
     return expression;
+  }
+
+  private skipNested(closing: TokenKind): void {
+    let depth = 1;
+    this.#index += 1;
+    while (depth > 0 && this.current().kind !== "eof") {
+      if (this.current().kind === "lparen") depth += 1;
+      if (this.current().kind === closing) depth -= 1;
+      this.#index += 1;
+    }
   }
 }
 
@@ -455,7 +478,10 @@ const visit = (
   }
 };
 
-const parse = (files: readonly SourceFile[]): FrontendResult => {
+const parse = (
+  files: readonly SourceFile[],
+  options: { readonly maxNestingDepth?: number },
+): FrontendResult => {
   const first = files[0];
   if (!first) {
     const diagnostic: Diagnostic = {
@@ -466,8 +492,11 @@ const parse = (files: readonly SourceFile[]): FrontendResult => {
     return { ir: null, diagnostics: [diagnostic] };
   }
   const lexical = lex(first.content);
-  const parser = new Parser(lexical.tokens, lexical.diagnostics);
+  const parser = new Parser(lexical.tokens, lexical.diagnostics, options.maxNestingDepth ?? 500);
   const parsedRules = parser.parse();
+  if (parser.diagnostics.some((diagnostic) => diagnostic.code === "PEG101_NESTING_TOO_DEEP")) {
+    return { ir: null, diagnostics: parser.diagnostics };
+  }
   if (parsedRules.length === 0) {
     const diagnostic: Diagnostic = {
       severity: "error",
