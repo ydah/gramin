@@ -62,7 +62,11 @@ const isExpressionProductive = (
 
 const computeProductiveRules = (ir: GrammarIR): Set<string> => {
   const productive = new Set<string>();
-  const productiveExternalSymbols = new Set(ir.externalSymbols.map((symbol) => symbol.name));
+  const productiveExternalSymbols = new Set(
+    ir.externalSymbols
+      .filter((symbol) => symbol.kind === "rule" && symbol.origin !== "unresolved")
+      .map((symbol) => symbol.name),
+  );
   let changed = true;
   while (changed) {
     changed = false;

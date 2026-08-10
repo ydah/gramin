@@ -18,7 +18,8 @@ This file is the normative definition of metrics emitted in features v0.4.
 4. Equal rankings use symbol-name byte order. Symbol lists use the same order unless source
    order is semantically meaningful, as in precedence levels.
 5. Repeated references between two rules form one graph edge for fan-in/out and reachability.
-6. Identical input must serialize to byte-identical features.
+6. Identical input must serialize to byte-identical features when the source name is stable;
+   use CLI `--source-name` to remove invocation-path dependence.
 7. Percentiles use nearest rank: sort `n` observations and select the one-based item at
    `ceil(p * n)`. Empty samples omit their percentile object with a `notApplicable` reason.
 

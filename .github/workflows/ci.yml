@@ -12,6 +12,8 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      GRAMIN_REQUIRE_CORPUS: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -23,7 +25,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: scripts/fetch-corpus.sh
+      - run: pnpm format:check
       - run: pnpm lint
+      - run: pnpm check:cross-format
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

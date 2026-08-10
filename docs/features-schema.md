@@ -3,7 +3,8 @@
 The normative machine-readable contract is
 `packages/core/schema/features-v0.4.schema.json`. `@gramin/core` exports the schema,
 the `GrammarFeatures` TypeScript type, and `validateFeatures`.
-The previous `features-v0.2.schema.json` remains packaged for existing consumers.
+The previous `features-v0.3.schema.json` and `features-v0.2.schema.json` remain packaged for
+existing consumers.
 
 The envelope contains the source identity, Grammar IR `capabilities`, `featuresVersion`,
 diagnostics, and the following sections:

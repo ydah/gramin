@@ -13,10 +13,16 @@ export type ValidationResult<T> =
   | { readonly ok: false; readonly issues: readonly ValidationIssue[] };
 
 const ajv = new Ajv2020({ allErrors: true, strict: true });
-const validateIRShape = ajv.compile(GrammarIRSchema) as ValidateFunction<GrammarIR>;
-const validateFeaturesShape = ajv.compile(
-  GrammarFeaturesSchema,
-) as ValidateFunction<GrammarFeatures>;
+let validateIRShape: ValidateFunction<GrammarIR> | undefined;
+let validateFeaturesShape: ValidateFunction<GrammarFeatures> | undefined;
+
+const getIRValidator = (): ValidateFunction<GrammarIR> =>
+  (validateIRShape ??= ajv.compile(GrammarIRSchema) as ValidateFunction<GrammarIR>);
+
+const getFeaturesValidator = (): ValidateFunction<GrammarFeatures> =>
+  (validateFeaturesShape ??= ajv.compile(
+    GrammarFeaturesSchema,
+  ) as ValidateFunction<GrammarFeatures>);
 
 const mapSchemaIssues = (errors: ErrorObject[] | null | undefined): ValidationIssue[] =>
   (errors ?? []).map((error) => ({
@@ -165,8 +171,9 @@ const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
 };
 
 export const validateIR = (input: unknown): ValidationResult<GrammarIR> => {
-  if (!validateIRShape(input)) {
-    return { ok: false, issues: mapSchemaIssues(validateIRShape.errors) };
+  const validator = getIRValidator();
+  if (!validator(input)) {
+    return { ok: false, issues: mapSchemaIssues(validator.errors) };
   }
 
   const major = Number(input.irVersion.split(".", 1)[0]);
@@ -185,8 +192,9 @@ export const validateIR = (input: unknown): ValidationResult<GrammarIR> => {
 };
 
 export const validateFeatures = (input: unknown): ValidationResult<GrammarFeatures> => {
-  if (!validateFeaturesShape(input)) {
-    return { ok: false, issues: mapSchemaIssues(validateFeaturesShape.errors) };
+  const validator = getFeaturesValidator();
+  if (!validator(input)) {
+    return { ok: false, issues: mapSchemaIssues(validator.errors) };
   }
   return { ok: true, value: input, issues: [] };
 };

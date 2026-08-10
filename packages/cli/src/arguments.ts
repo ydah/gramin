@@ -13,6 +13,8 @@ export interface ParsedArguments {
   readonly stripLocations: boolean;
   readonly budgetChars?: number;
   readonly failOn: FailOn;
+  readonly frontendTimeoutMs?: number;
+  readonly sourceName?: string;
 }
 
 export type ArgumentResult =
@@ -27,6 +29,8 @@ const valueOptions = new Set([
   "--ir",
   "--budget-chars",
   "--fail-on",
+  "--frontend-timeout",
+  "--source-name",
   "-o",
 ]);
 
@@ -66,6 +70,15 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   if (budgetChars !== undefined && (!Number.isSafeInteger(budgetChars) || budgetChars <= 0)) {
     return { ok: false, message: "--budget-chars must be a positive integer" };
   }
+  const frontendTimeoutText = options.get("--frontend-timeout");
+  const frontendTimeoutMs =
+    frontendTimeoutText === undefined ? undefined : Number(frontendTimeoutText);
+  if (
+    frontendTimeoutMs !== undefined &&
+    (!Number.isSafeInteger(frontendTimeoutMs) || frontendTimeoutMs <= 0)
+  ) {
+    return { ok: false, message: "--frontend-timeout must be a positive integer" };
+  }
   const failOn = options.get("--fail-on") ?? "error";
   if (!(["error", "warning", "none"] as const).includes(failOn as FailOn)) {
     return { ok: false, message: `unknown --fail-on threshold ${failOn}` };
@@ -78,6 +91,10 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   const dialect = options.get("--dialect");
   const irInput = options.get("--ir");
   const output = options.get("-o");
+  const sourceName = options.get("--source-name");
+  if (sourceName !== undefined && sourceName.length === 0) {
+    return { ok: false, message: "--source-name must not be empty" };
+  }
 
   return {
     ok: true,
@@ -93,6 +110,8 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
       stripLocations,
       ...(budgetChars === undefined ? {} : { budgetChars }),
       failOn: failOn as FailOn,
+      ...(frontendTimeoutMs === undefined ? {} : { frontendTimeoutMs }),
+      ...(sourceName === undefined ? {} : { sourceName }),
     },
   };
 };

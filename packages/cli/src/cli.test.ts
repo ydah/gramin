@@ -140,6 +140,17 @@ describe("gramin CLI", () => {
     expect(test.written.get("report.md")).toContain("# Grammar feature report");
   });
 
+  it("can replace source paths for portable feature output", async () => {
+    const test = harness();
+    expect(
+      await runCli(["analyze", "calc.y", "--strip-loc", "--source-name", "grammar.y"], test.io),
+    ).toBe(EXIT_SUCCESS);
+    const features = JSON.parse(test.stdout.join("")) as {
+      source: { fileNames?: readonly string[] };
+    };
+    expect(features.source.fileNames).toEqual(["grammar.y"]);
+  });
+
   it("renders a budgeted LLM digest", async () => {
     const test = harness();
     expect(
@@ -392,7 +403,12 @@ describe("gramin CLI", () => {
 
   const antlrCorpusRoot = new URL("../../../fixtures/downloaded/antlr/", import.meta.url);
   const hasAntlrCorpus = existsSync(new URL("json/JSON.g4", antlrCorpusRoot));
-  it.runIf(hasAntlrCorpus)(
+  const requireCorpus = process.env.GRAMIN_REQUIRE_CORPUS === "1";
+  const corpusAvailable = (available: boolean, name: string): boolean => {
+    if (!available && requireCorpus) throw new Error(`required corpus is missing: ${name}`);
+    return available;
+  };
+  it.runIf(corpusAvailable(hasAntlrCorpus, "antlr"))(
     "analyzes three pinned grammars-v4 grammar sets without errors",
     { timeout: 15_000 },
     () => {
@@ -421,77 +437,80 @@ describe("gramin CLI", () => {
     },
   );
 
-  it.runIf(existsSync(new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url)))(
-    "analyzes the pinned Ruby parse.y corpus within the local target",
-    () => {
-      const name = "parse.y";
-      const content = readFileSync(
-        new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url),
-        "utf8",
-      );
-      const startedAt = performance.now();
-      const parsed = yaccFrontend.parse([{ name, content }], { dialect: "lrama" });
-      expect(parsed.ir).not.toBeNull();
-      if (!parsed.ir) return;
-      const features = analyzeGrammar(parsed.ir);
-      expect(parsed.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual(
-        [],
-      );
-      expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
-      expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
-      expect(features.size.rhsLengthPercentiles).toEqual({ p50: 1, p95: 5 });
-      expect(features.structure.recursiveRules).toEqual({ count: 143, ratio: 0.572 });
-      expect(features.precedence).toMatchObject({
-        maxTokensPerLevel: 6,
-        rulesWithPrecOverrides: 8,
-        precOverrideAlternativeRatio: 0.0154,
-      });
-      expect(features.actions).toMatchObject({
-        completeness: "complete",
-        trailingActions: 495,
-        totalActions: 536,
-        rulesWithActions: 206,
-      });
-      expect(performance.now() - startedAt).toBeLessThan(3_000);
-    },
-  );
-
-  const perlCorpus = new URL("../../../fixtures/downloaded/perl/perly.y", import.meta.url);
-  it.runIf(existsSync(perlCorpus))("analyzes the pinned Perl perly.y corpus without errors", () => {
-    const parsed = yaccFrontend.parse(
-      [{ name: "perly.y", content: readFileSync(perlCorpus, "utf8") }],
-      { dialect: "bison" },
+  it.runIf(
+    corpusAvailable(
+      existsSync(new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url)),
+      "ruby",
+    ),
+  )("analyzes the pinned Ruby parse.y corpus within the local target", () => {
+    const name = "parse.y";
+    const content = readFileSync(
+      new URL("../../../fixtures/downloaded/ruby/parse.y", import.meta.url),
+      "utf8",
     );
-    expect(parsed.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
-    expect(validateIR(parsed.ir).ok).toBe(true);
+    const startedAt = performance.now();
+    const parsed = yaccFrontend.parse([{ name, content }], { dialect: "lrama" });
+    expect(parsed.ir).not.toBeNull();
     if (!parsed.ir) return;
-    expect(parsed.ir.rules.map(({ name }) => name)).toEqual(
-      expect.arrayContaining(["nexpr", "sigslurpelem", "subsigguts", "term"]),
-    );
     const features = analyzeGrammar(parsed.ir);
+    expect(parsed.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
-    expect(features.structure.unreachableSymbols).toEqual([]);
-    expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 9 });
-    expect(features.size.rhsLengthPercentiles).toEqual({ p50: 2, p95: 6 });
-    expect(features.structure.recursiveRules).toEqual({ count: 90, ratio: 0.7895 });
+    expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
+    expect(features.size.rhsLengthPercentiles).toEqual({ p50: 1, p95: 5 });
+    expect(features.structure.recursiveRules).toEqual({ count: 143, ratio: 0.572 });
     expect(features.precedence).toMatchObject({
-      maxTokensPerLevel: 5,
-      rulesWithPrecOverrides: 16,
-      precOverrideAlternativeRatio: 0.1121,
+      maxTokensPerLevel: 6,
+      rulesWithPrecOverrides: 8,
+      precOverrideAlternativeRatio: 0.0154,
     });
     expect(features.actions).toMatchObject({
       completeness: "complete",
-      trailingActions: 268,
-      totalActions: 292,
-      rulesWithActions: 99,
+      trailingActions: 495,
+      totalActions: 536,
+      rulesWithActions: 206,
     });
+    expect(performance.now() - startedAt).toBeLessThan(3_000);
   });
+
+  const perlCorpus = new URL("../../../fixtures/downloaded/perl/perly.y", import.meta.url);
+  it.runIf(corpusAvailable(existsSync(perlCorpus), "perl"))(
+    "analyzes the pinned Perl perly.y corpus without errors",
+    () => {
+      const parsed = yaccFrontend.parse(
+        [{ name: "perly.y", content: readFileSync(perlCorpus, "utf8") }],
+        { dialect: "bison" },
+      );
+      expect(parsed.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
+      expect(validateIR(parsed.ir).ok).toBe(true);
+      if (!parsed.ir) return;
+      expect(parsed.ir.rules.map(({ name }) => name)).toEqual(
+        expect.arrayContaining(["nexpr", "sigslurpelem", "subsigguts", "term"]),
+      );
+      const features = analyzeGrammar(parsed.ir);
+      expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
+      expect(features.structure.unreachableSymbols).toEqual([]);
+      expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 9 });
+      expect(features.size.rhsLengthPercentiles).toEqual({ p50: 2, p95: 6 });
+      expect(features.structure.recursiveRules).toEqual({ count: 90, ratio: 0.7895 });
+      expect(features.precedence).toMatchObject({
+        maxTokensPerLevel: 5,
+        rulesWithPrecOverrides: 16,
+        precOverrideAlternativeRatio: 0.1121,
+      });
+      expect(features.actions).toMatchObject({
+        completeness: "complete",
+        trailingActions: 268,
+        totalActions: 292,
+        rulesWithActions: 99,
+      });
+    },
+  );
 
   const phpCorpus = new URL(
     "../../../fixtures/downloaded/php/zend_language_parser.y",
     import.meta.url,
   );
-  it.runIf(existsSync(phpCorpus))(
+  it.runIf(corpusAvailable(existsSync(phpCorpus), "php"))(
     "analyzes the pinned PHP zend_language_parser.y corpus without errors",
     () => {
       const parsed = yaccFrontend.parse(
