@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { MAX_BROWSER_INPUT_CHARS } from "./limits";
 import { analyzeRequest } from "./pipeline";
-import { defaultSample, sandboxSamples } from "./samples";
+import { defaultSample, irSample, sandboxSamples } from "./samples";
 
 describe("browser sandbox pipeline", () => {
   it.each(sandboxSamples)("analyzes the $label sample", (sample) => {
@@ -42,6 +42,19 @@ describe("browser sandbox pipeline", () => {
     expect(irResponse.ok).toBe(true);
     if (!irResponse.ok) return;
     expect(irResponse.reports.json).toBe(sourceResponse.reports.json);
+  });
+
+  it("analyzes the built-in Grammar IR sample", () => {
+    const response = analyzeRequest({
+      mode: "ir",
+      files: [{ name: "grammar-ir.json", content: irSample }],
+      frontendId: "auto",
+      budgetChars: 6000,
+    });
+
+    expect(response.ok).toBe(true);
+    if (!response.ok) return;
+    expect(response.ir.source.frontend.id).toBe("yacc-family");
   });
 
   it("reports a before/after feature diff", () => {

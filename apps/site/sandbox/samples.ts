@@ -103,6 +103,36 @@ broken VALUE ;
 valid: VALUE ;
 `;
 
+export const irSample = `{
+  "irVersion": "1.2.0",
+  "source": {
+    "format": "yacc",
+    "fileNames": ["input.y"],
+    "frontend": { "id": "yacc-family", "version": "0.1.0" }
+  },
+  "capabilities": {
+    "orderedChoice": false,
+    "ebnfSugar": false,
+    "predicates": false,
+    "scannerless": false,
+    "precedenceTable": false,
+    "parameterizedRules": false,
+    "lexerRules": false
+  },
+  "startSymbols": ["start"],
+  "terminals": [{ "name": "WORD" }],
+  "externalSymbols": [],
+  "precedence": [],
+  "rules": [
+    {
+      "name": "start",
+      "alternatives": [{ "items": [{ "kind": "symbol", "name": "WORD" }] }]
+    }
+  ],
+  "diagnostics": []
+}
+`;
+
 export const sandboxSamples: readonly SandboxSample[] = [
   {
     id: "json-yacc",

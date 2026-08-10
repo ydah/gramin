@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, ref } from "vue";
 import { frontendOptions } from "../sandbox/frontend-registry";
 import { BROWSER_WORKER_TIMEOUT_MS, MAX_BROWSER_INPUT_CHARS } from "../sandbox/limits";
-import { defaultSample, sandboxSamples } from "../sandbox/samples";
+import { defaultSample, irSample, sandboxSamples } from "../sandbox/samples";
 import type {
   AnalyzeRequest,
   AnalyzeResponse,
@@ -68,6 +68,16 @@ const setSample = (): void => {
   result.value = undefined;
   error.value = "";
   activeTab.value = "summary";
+};
+
+const setMode = (): void => {
+  if (mode.value === "ir") {
+    source.value = result.value?.reports.ir ?? irSample;
+    fileName.value = "grammar-ir.json";
+    result.value = undefined;
+    error.value = "";
+    activeTab.value = "summary";
+  }
 };
 
 const requestFor = (): AnalyzeRequest => {
@@ -176,7 +186,7 @@ onBeforeUnmount(() => {
     <div class="sandbox-toolbar">
       <label>
         <span>Mode</span>
-        <select v-model="mode" aria-label="Analysis mode">
+        <select v-model="mode" aria-label="Analysis mode" @change="setMode">
           <option value="source">Analyze source</option>
           <option value="ir">Analyze Grammar IR</option>
           <option value="compare">Compare before / after</option>
@@ -238,6 +248,7 @@ onBeforeUnmount(() => {
           </label>
         </div>
         <p class="sandbox-note">Runs locally in this browser. Semantic actions and external frontends are never executed. Input limit: {{ MAX_BROWSER_INPUT_CHARS.toLocaleString() }} characters.</p>
+        <p v-if="mode === 'ir'" class="sandbox-note">Paste canonical Grammar IR JSON. Source grammar syntax such as <code>%token</code> is not JSON.</p>
       </div>
 
       <div class="sandbox-pane sandbox-result">
