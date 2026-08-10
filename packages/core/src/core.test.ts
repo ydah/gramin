@@ -287,6 +287,22 @@ describe("canonical serialization", () => {
     expect(compareBytes("\u{1D400}x", "\uFF21x")).toBe(1);
   });
 
+  it("does not require Node's Buffer global", () => {
+    const nodeBuffer = globalThis.Buffer;
+    try {
+      Object.defineProperty(globalThis, "Buffer", {
+        configurable: true,
+        value: undefined,
+      });
+      expect(compareBytes("b", "a")).toBeGreaterThan(0);
+    } finally {
+      Object.defineProperty(globalThis, "Buffer", {
+        configurable: true,
+        value: nodeBuffer,
+      });
+    }
+  });
+
   it("is byte deterministic and can remove source locations", () => {
     const sample = baseIR();
     const first = serializeCanonical(sample);

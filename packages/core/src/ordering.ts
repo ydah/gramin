@@ -1,3 +1,13 @@
 /** Compare strings by their UTF-8 byte representation. */
-export const compareBytes = (left: string, right: string): number =>
-  Buffer.compare(Buffer.from(left, "utf8"), Buffer.from(right, "utf8"));
+const textEncoder = new TextEncoder();
+
+export const compareBytes = (left: string, right: string): number => {
+  const leftBytes = textEncoder.encode(left);
+  const rightBytes = textEncoder.encode(right);
+  const sharedLength = Math.min(leftBytes.length, rightBytes.length);
+  for (let index = 0; index < sharedLength; index += 1) {
+    const difference = (leftBytes[index] ?? 0) - (rightBytes[index] ?? 0);
+    if (difference !== 0) return difference;
+  }
+  return leftBytes.length - rightBytes.length;
+};
