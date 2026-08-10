@@ -1,3 +1,5 @@
+import { MAX_SUPPORTED_NESTING_DEPTH } from "@gramin/core";
+
 export type OutputFormat = "json" | "md" | "llm" | "sarif";
 export type FailOn = "error" | "warning" | "none";
 
@@ -99,6 +101,12 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
     (!Number.isSafeInteger(maxNestingDepth) || maxNestingDepth <= 0)
   ) {
     return { ok: false, message: "--max-nesting-depth must be a positive integer" };
+  }
+  if (maxNestingDepth !== undefined && maxNestingDepth > MAX_SUPPORTED_NESTING_DEPTH) {
+    return {
+      ok: false,
+      message: `--max-nesting-depth must be at most ${MAX_SUPPORTED_NESTING_DEPTH}`,
+    };
   }
   const failOn = options.get("--fail-on") ?? "error";
   if (!(["error", "warning", "none"] as const).includes(failOn as FailOn)) {

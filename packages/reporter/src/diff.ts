@@ -38,6 +38,24 @@ const REGRESSION_METRICS = new Set([
 const isRecord = (value: unknown): value is Readonly<Record<string, unknown>> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
+const equalValue = (left: unknown, right: unknown): boolean => {
+  if (Object.is(left, right)) return true;
+  if (Array.isArray(left) && Array.isArray(right)) {
+    return (
+      left.length === right.length && left.every((value, index) => equalValue(value, right[index]))
+    );
+  }
+  if (isRecord(left) && isRecord(right)) {
+    const leftKeys = Object.keys(left).sort();
+    const rightKeys = Object.keys(right).sort();
+    return (
+      leftKeys.length === rightKeys.length &&
+      leftKeys.every((key, index) => key === rightKeys[index] && equalValue(left[key], right[key]))
+    );
+  }
+  return false;
+};
+
 const valueText = (value: unknown): string => {
   if (value === undefined) return "—";
   return JSON.stringify(value) ?? String(value);
@@ -49,6 +67,7 @@ const collectChanges = (
   path: string,
   changes: FeatureChange[],
 ): void => {
+  if (equalValue(before, after)) return;
   if (isRecord(before) && isRecord(after)) {
     const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
     [...keys].sort().forEach((key) => {
@@ -60,6 +79,12 @@ const collectChanges = (
   const kind = before === undefined ? "added" : after === undefined ? "removed" : "changed";
   changes.push({ path, before, after, kind });
 };
+
+const REGRESSION_LISTS = new Set([
+  "/size/unresolvedSymbols/names",
+  "/structure/unreachableSymbols",
+  "/structure/unproductiveSymbols",
+]);
 
 const diagnosticRegressions = (
   before: GrammarFeatures,
@@ -104,6 +129,20 @@ export const diffFeatures = (before: GrammarFeatures, after: GrammarFeatures): F
       ...change,
       reason: "a tracked complexity metric increased",
     }));
+  regressions.push(
+    ...changes
+      .filter(
+        (change) =>
+          REGRESSION_LISTS.has(change.path) &&
+          Array.isArray(change.before) &&
+          Array.isArray(change.after) &&
+          change.after.length > change.before.length,
+      )
+      .map((change) => ({
+        ...change,
+        reason: "a tracked structural issue list grew",
+      })),
+  );
   regressions.push(...diagnosticRegressions(before, after));
   return { changes, regressions };
 };

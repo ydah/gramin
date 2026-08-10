@@ -6,6 +6,8 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  DEFAULT_MAX_NESTING_DEPTH,
+  MAX_SUPPORTED_NESTING_DEPTH,
   mergeRulesByName,
   type SourceFile,
   type SourceSpan,
@@ -618,7 +620,7 @@ const parse = (
       rule.body,
       diagnostics,
       aliases,
-      options.maxNestingDepth ?? 500,
+      Math.min(options.maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH, MAX_SUPPORTED_NESTING_DEPTH),
     );
     const alternatives = parser.alternatives();
     parser.implicitLiterals.forEach((literal) => {

@@ -1,9 +1,11 @@
-import type {
-  Diagnostic,
-  Frontend,
-  FrontendOptions,
-  FrontendResult,
-  SourceFile,
+import {
+  type Diagnostic,
+  type Frontend,
+  type FrontendOptions,
+  type FrontendResult,
+  type SourceFile,
+  DEFAULT_MAX_NESTING_DEPTH,
+  MAX_SUPPORTED_NESTING_DEPTH,
 } from "@gramin/core";
 import { lowerYaccAst } from "./lower.js";
 import { parseYaccAst } from "./parser.js";
@@ -32,7 +34,15 @@ const parse = (files: readonly SourceFile[], options: FrontendOptions): Frontend
     };
   }
 
-  const parsed = parseYaccAst(first.content, options.dialect);
+  const parsed = parseYaccAst(first.content, options.dialect, {
+    maxNestingDepth: Math.min(
+      options.maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH,
+      MAX_SUPPORTED_NESTING_DEPTH,
+    ),
+  });
+  if (parsed.diagnostics.some((diagnostic) => diagnostic.code === "YACC005_NESTING_TOO_DEEP")) {
+    return { ir: null, diagnostics: [...parsed.diagnostics] };
+  }
   const extraFileDiagnostic: Diagnostic[] =
     files.length > 1
       ? [

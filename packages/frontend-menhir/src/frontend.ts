@@ -6,6 +6,8 @@ import {
   type FrontendResult,
   type GrammarIR,
   IR_VERSION,
+  DEFAULT_MAX_NESTING_DEPTH,
+  MAX_SUPPORTED_NESTING_DEPTH,
   mergeRulesByName,
   type SourceFile,
   type SourceSpan,
@@ -620,7 +622,7 @@ const parse = (
     diagnostics,
     declaredTerminalNames,
     aliases,
-    options.maxNestingDepth ?? 500,
+    Math.min(options.maxNestingDepth ?? DEFAULT_MAX_NESTING_DEPTH, MAX_SUPPORTED_NESTING_DEPTH),
   );
   const parsedRules = parser.parse(declaration.types);
   if (diagnostics.some((diagnostic) => diagnostic.code === "MENHIR004_NESTING_TOO_DEEP")) {
