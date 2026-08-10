@@ -50,7 +50,7 @@ jobs:
             exit 1
           fi
       - run: pnpm install --frozen-lockfile
-      - run: scripts/fetch-corpus.sh
+      - run: node scripts/fetch-corpus.mjs
       - run: pnpm release:check
       - name: Publish unpublished versions
         env:

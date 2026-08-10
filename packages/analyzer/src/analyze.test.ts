@@ -144,6 +144,30 @@ describe("analyzeGrammar", () => {
     expect(features.structure.unreachableSymbols).toEqual([]);
   });
 
+  it("handles a long dependency chain without recursive Tarjan frames", () => {
+    const base = fixtureIR("empty");
+    const ruleCount = 5_000;
+    const rules: GrammarIR["rules"] = Array.from({ length: ruleCount }, (_, index) => ({
+      name: `r${index}`,
+      alternatives: [
+        {
+          items:
+            index + 1 < ruleCount
+              ? [{ kind: "symbol", name: `r${index + 1}` }]
+              : [{ kind: "terminal", literal: "END" }],
+        },
+      ],
+    }));
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["r0"],
+      terminals: [{ name: "END" }],
+      rules,
+    });
+    expect(features.structure.reachableRules).toBe(ruleCount);
+    expect(features.structure.maxDependencyDepth).toBe(ruleCount - 1);
+  });
+
   it("omits CFG nullability for ordered choice with a reason", () => {
     const ir: GrammarIR = {
       ...fixtureIR("empty"),
