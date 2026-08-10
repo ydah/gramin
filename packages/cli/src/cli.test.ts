@@ -168,6 +168,14 @@ describe("gramin CLI", () => {
     expect(features.source.fileNames).toEqual(["grammar.y"]);
   });
 
+  it("requires source-root instead of a single source name for split inputs", async () => {
+    const test = harness({ "one.g4": "grammar One; start: A; A: 'a';", "two.g4": "" });
+    expect(
+      await runCli(["analyze", "one.g4", "two.g4", "--source-name", "grammar.g4"], test.io),
+    ).toBe(EXIT_USAGE);
+    expect(test.stderr.join("")).toContain("use --source-root");
+  });
+
   it("rejects ambiguous automatic analysis and supports SARIF output", async () => {
     const ambiguous = harness({ ambiguous: 'start = "x"\n' });
     expect(await runCli(["analyze", "ambiguous"], ambiguous.io)).toBe(EXIT_FATAL);

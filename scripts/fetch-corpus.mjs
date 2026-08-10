@@ -2,6 +2,9 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
 const destination = resolve(process.argv[2] ?? "fixtures/downloaded");
+if (process.env.NODE_TLS_REJECT_UNAUTHORIZED === "0") {
+  throw new Error("refusing corpus download with TLS certificate verification disabled");
+}
 const sources = [
   [
     "bison/calc.y",
