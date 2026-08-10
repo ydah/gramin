@@ -1,6 +1,6 @@
 import { type Static, Type } from "@sinclair/typebox";
-import { DiagnosticSchema, SemverStringSchema } from "./primitives.js";
 import { CapabilitiesSchema } from "./ir.js";
+import { DiagnosticSchema, SemverStringSchema } from "./primitives.js";
 
 const NotApplicableSchema = Type.Record(Type.String(), Type.String({ minLength: 1 }));
 const PercentilesSchema = Type.Object(
@@ -69,6 +69,7 @@ const StructureFeaturesSchema = Type.Object(
     topFanIn: Type.Array(RankedSymbolSchema),
     topFanOut: Type.Array(RankedSymbolSchema),
     unreachableSymbols: Type.Array(Type.String()),
+    unproductiveSymbols: Type.Array(Type.String()),
     nullableRules: Type.Optional(Type.Integer({ minimum: 0 })),
     reachableRules: Type.Integer({ minimum: 0 }),
     recursiveRules: Type.Object(
@@ -218,7 +219,7 @@ export const GrammarFeaturesSchema = Type.Object(
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.3.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.4.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;

@@ -26,6 +26,61 @@ const computeNullableRules = (ir: GrammarIR): Set<string> => {
   return nullable;
 };
 
+const isExpressionProductive = (
+  expression: GrammarIR["rules"][number]["alternatives"][number]["items"][number],
+  productiveRules: ReadonlySet<string>,
+  productiveExternalSymbols: ReadonlySet<string>,
+): boolean => {
+  if (expression.kind === "symbol") {
+    return productiveRules.has(expression.name) || productiveExternalSymbols.has(expression.name);
+  }
+  if (
+    expression.kind === "terminal" ||
+    expression.kind === "charClass" ||
+    expression.kind === "anyChar" ||
+    expression.kind === "midRuleAction"
+  ) {
+    return true;
+  }
+  if (expression.kind === "opt" || expression.kind === "star") return true;
+  if (
+    expression.kind === "plus" ||
+    expression.kind === "predicate" ||
+    expression.kind === "group"
+  ) {
+    return isExpressionProductive(expression.expr, productiveRules, productiveExternalSymbols);
+  }
+  if (expression.kind === "seq") {
+    return expression.items.every((item) =>
+      isExpressionProductive(item, productiveRules, productiveExternalSymbols),
+    );
+  }
+  return expression.alts.some((alternative) =>
+    isExpressionProductive(alternative, productiveRules, productiveExternalSymbols),
+  );
+};
+
+const computeProductiveRules = (ir: GrammarIR): Set<string> => {
+  const productive = new Set<string>();
+  const productiveExternalSymbols = new Set(ir.externalSymbols.map((symbol) => symbol.name));
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const rule of ir.rules) {
+      if (productive.has(rule.name)) continue;
+      const isProductive = rule.alternatives.some((alternative) =>
+        alternative.items.every((item) =>
+          isExpressionProductive(item, productive, productiveExternalSymbols),
+        ),
+      );
+      if (!isProductive) continue;
+      productive.add(rule.name);
+      changed = true;
+    }
+  }
+  return productive;
+};
+
 export interface StructureResult {
   readonly features: GrammarFeatures["structure"];
   readonly largestRecursiveMembers: readonly string[];
@@ -69,6 +124,7 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
     ),
   ).length;
   const nullable = ir.capabilities.orderedChoice ? undefined : computeNullableRules(ir);
+  const productive = computeProductiveRules(ir);
   const notApplicable: Record<string, string> = {};
   if (nullable === undefined) {
     notApplicable.nullableRules =
@@ -94,6 +150,9 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
       topFanOut: fan.out,
       unreachableSymbols: [...graph.keys()]
         .filter((name) => !reachable.has(name))
+        .sort(compareBytes),
+      unproductiveSymbols: [...graph.keys()]
+        .filter((name) => !productive.has(name))
         .sort(compareBytes),
       reachableRules: reachable.size,
       recursiveRules: {

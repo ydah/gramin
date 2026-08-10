@@ -1,6 +1,6 @@
-# Metrics catalog v0.3
+# Metrics catalog v0.4
 
-This file is the normative definition of metrics emitted in features v0.3.
+This file is the normative definition of metrics emitted in features v0.4.
 
 - Classification: **E** is exact and mechanically determined; **H** is heuristic.
 - Comparability: **A** compares across formats; **B** compares only with the stated
@@ -59,6 +59,7 @@ nested choice and sugar metrics.
 | `maxDependencyDepth` | Longest edge path from a start symbol in the SCC-condensed reachable DAG | E | A |
 | `topFanIn`, `topFanOut` | Top ten unique incoming/outgoing rule-edge counts | E | A |
 | `unreachableSymbols` | Rules unreachable from every start symbol | E | A |
+| `unproductiveSymbols` | Rules that cannot derive any terminal sequence | E | A |
 | `nullableRules` | Count from least fixed-point CFG nullability | E | B (CFG) |
 | `reachableRules` | Rules reachable from at least one start symbol | E | A |
 | `recursiveRules` | Reachable rules in a multi-rule SCC or a self-loop SCC, with reachable ratio | E | B |
@@ -69,6 +70,9 @@ to BNF/Yacc counts. In PEG grammars direct left recursion is a likely defect sig
 than a complexity measure. CFG nullability is omitted for ordered choice.
 `recursionSccCount` and `largestSccSize` retain their features 0.2 definition and describe
 mutual recursion only; the new recursive-component fields also recognize self-loops.
+`unproductiveSymbols` is computed by a least fixed point over productive terminals and
+rules; unresolved symbols are not assumed to be productive. A non-empty list also produces
+`ANALYZER006_UNPRODUCTIVE_RULES`.
 
 ## Precedence
 

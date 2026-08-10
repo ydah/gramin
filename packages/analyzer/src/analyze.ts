@@ -86,6 +86,13 @@ const analysisDiagnostics = (
       message: `unreachable rules: ${structure.unreachableSymbols.join(", ")}`,
     });
   }
+  if (structure.unproductiveSymbols.length > 0) {
+    diagnostics.push({
+      severity: "warning",
+      code: "ANALYZER006_UNPRODUCTIVE_RULES",
+      message: `unproductive rules: ${structure.unproductiveSymbols.join(", ")}`,
+    });
+  }
   const used = usedTerminalKeys(ir);
   const unused = ir.terminals
     .filter((terminal) => !used.has(terminalKey(terminal)))

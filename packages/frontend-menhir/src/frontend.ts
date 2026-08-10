@@ -363,7 +363,12 @@ class RuleParser {
       this.#index += 1;
       const alternatives: Alternative[] = [];
       let tokens: Token[] = [];
-      while (this.current().kind !== "semi" && this.current().kind !== "eof") {
+      const bodyStart = this.#index;
+      while (
+        this.current().kind !== "semi" &&
+        this.current().kind !== "eof" &&
+        (this.#index === bodyStart || !this.isRuleStart(this.#index))
+      ) {
         if (this.current().kind === "pipe") {
           if (tokens.length > 0 || alternatives.length > 0) {
             alternatives.push(this.lowerAlternative(tokens, new Set(params)));
@@ -388,6 +393,17 @@ class RuleParser {
       });
     }
     return this.rules;
+  }
+
+  private isRuleStart(index: number): boolean {
+    let cursor = index;
+    while (
+      this.tokens[cursor]?.kind === "directive" &&
+      (this.tokens[cursor]?.value === "inline" || this.tokens[cursor]?.value === "public")
+    ) {
+      cursor += 1;
+    }
+    return this.tokens[cursor]?.kind === "identifier" && this.tokens[cursor + 1]?.kind === "colon";
   }
 
   private current(): Token {

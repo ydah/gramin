@@ -34,7 +34,7 @@ Example Markdown output:
 ```text
 # Grammar feature report
 
-Features version: `0.3.0`
+Features version: `0.4.0`
 
 ## Size
 
@@ -58,8 +58,10 @@ gramin detect grammar.y
 gramin validate-ir grammar-ir.json
 ```
 
-Exit codes are 0 for success, 1 for partial analysis with error diagnostics, 2 for fatal
-input or frontend failures, and 3 for invalid command usage.
+Exit codes are 0 for success, 1 for diagnostics at the selected `--fail-on` threshold, 2
+for fatal input or frontend failures, and 3 for invalid command usage. The default threshold
+is `error`; use `--fail-on warning` to gate on warnings or `--fail-on none` to ignore
+diagnostics for exit-status purposes.
 
 ## Development
 

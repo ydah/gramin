@@ -31,4 +31,27 @@ describe("Menhir frontend", () => {
       readFileSync(new URL("../fixtures/golden/lists.ir-loc.json", import.meta.url), "utf8"),
     );
   });
+
+  it("recognizes a new rule when Menhir omits the optional semicolon", () => {
+    const result = menhirFrontend.parse(
+      [
+        {
+          name: "lists-no-semicolon.mly",
+          content: readFileSync(
+            new URL("../fixtures/lists-no-semicolon.mly", import.meta.url),
+            "utf8",
+          ),
+        },
+      ],
+      {},
+    );
+    expect(result.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
+    const normalized = {
+      ...result.ir,
+      source: { ...result.ir?.source, fileNames: ["lists.mly"] },
+    };
+    expect(serializeCanonical(normalized, { stripLocations: true })).toBe(
+      readFileSync(new URL("../fixtures/golden/lists.ir.json", import.meta.url), "utf8"),
+    );
+  });
 });
