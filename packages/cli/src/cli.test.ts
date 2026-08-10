@@ -13,6 +13,10 @@ import type { CliIO } from "./cli.js";
 import { EXIT_FATAL, EXIT_PARTIAL, EXIT_SUCCESS, EXIT_USAGE, runCli } from "./cli.js";
 
 const calc = readFileSync(new URL("../../frontend-yacc/fixtures/calc.y", import.meta.url), "utf8");
+const empty = readFileSync(
+  new URL("../../frontend-yacc/fixtures/empty.y", import.meta.url),
+  "utf8",
+);
 
 const harness = (
   files: Readonly<Record<string, string>> = { "calc.y": calc },
@@ -100,6 +104,19 @@ describe("gramin CLI", () => {
     );
   });
 
+  it("preserves a partial external frontend exit code", async () => {
+    const parsed = yaccFrontend.parse([{ name: "calc.y", content: calc }], {});
+    if (!parsed.ir) throw new Error("expected a valid fixture IR");
+    const test = harness({}, async () => ({
+      exitCode: EXIT_PARTIAL,
+      stdout: serializeCanonical(parsed.ir),
+      stderr: "",
+    }));
+    expect(await runCli(["analyze", "calc.y", "--frontend-cmd", "mock"], test.io)).toBe(
+      EXIT_PARTIAL,
+    );
+  });
+
   it("maps unreadable input, output failures, and too-small budgets to stable contracts", async () => {
     const unreadable = harness();
     const unreadableIO = {
@@ -149,6 +166,49 @@ describe("gramin CLI", () => {
       source: { fileNames?: readonly string[] };
     };
     expect(features.source.fileNames).toEqual(["grammar.y"]);
+  });
+
+  it("rejects ambiguous automatic analysis and supports SARIF output", async () => {
+    const ambiguous = harness({ ambiguous: 'start = "x"\n' });
+    expect(await runCli(["analyze", "ambiguous"], ambiguous.io)).toBe(EXIT_FATAL);
+    expect(ambiguous.stderr.join("")).toContain("DETECT_AMBIGUOUS");
+
+    const sarif = harness({ "warning.y": "%%\nstart: missing ;\n%%\n" });
+    expect(await runCli(["analyze", "warning.y", "--format", "sarif"], sarif.io)).toBe(
+      EXIT_SUCCESS,
+    );
+    const document = JSON.parse(sarif.stdout.join("")) as {
+      version: string;
+      runs: readonly { results: readonly { ruleId: string }[] }[];
+    };
+    expect(document.version).toBe("2.1.0");
+    expect(document.runs[0]?.results[0]?.ruleId).toBe("YACC300_UNRESOLVED_SYMBOL");
+  });
+
+  it("diffs features and gates tracked regressions against a baseline", async () => {
+    const diff = harness({ "old.y": empty, "new.y": calc });
+    expect(await runCli(["diff", "old.y", "new.y", "--frontend", "yacc-family"], diff.io)).toBe(
+      EXIT_SUCCESS,
+    );
+    expect(JSON.parse(diff.stdout.join("")).changes).not.toHaveLength(0);
+
+    const baseline = harness();
+    expect(await runCli(["analyze", "calc.y"], baseline.io)).toBe(EXIT_SUCCESS);
+    const baselineDocument = JSON.parse(baseline.stdout.join("")) as {
+      size: { rules: number };
+    };
+    baselineDocument.size.rules = 0;
+    const gated = harness({
+      "calc.y": calc,
+      "baseline.json": JSON.stringify(baselineDocument),
+    });
+    expect(
+      await runCli(
+        ["analyze", "calc.y", "--baseline", "baseline.json", "--fail-on-regression"],
+        gated.io,
+      ),
+    ).toBe(EXIT_PARTIAL);
+    expect(gated.stdout.join("")).toContain("REGRESSION_METRIC_INCREASE");
   });
 
   it("renders a budgeted LLM digest", async () => {

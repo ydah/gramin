@@ -36,4 +36,16 @@ describe("BNF frontend", () => {
       readFileSync(new URL("../fixtures/golden/arithmetic.ir-loc.json", import.meta.url), "utf8"),
     );
   });
+
+  it("reports excessive nesting without overflowing the call stack", () => {
+    const depth = 20;
+    const result = bnfFrontend.parse(
+      [{ name: "deep.ebnf", content: `start = ${"(".repeat(depth)}"x"${")".repeat(depth)};` }],
+      { maxNestingDepth: 5 },
+    );
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({ code: "BNF103_NESTING_TOO_DEEP", severity: "error" }),
+    );
+    expect(result.ir).toBeNull();
+  });
 });

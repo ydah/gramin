@@ -33,45 +33,62 @@ export const stronglyConnectedComponents = (graph: DependencyGraph): string[][] 
   const onStack = new Set<string>();
   const components: string[][] = [];
 
-  const connect = (node: string): void => {
-    const index = nextIndex;
-    nextIndex += 1;
-    indices.set(node, index);
-    lowLinks.set(node, index);
-    stack.push(node);
-    onStack.add(node);
+  type Frame = { readonly node: string; readonly neighbors: readonly string[]; next: number };
+  const connect = (root: string): void => {
+    const enter = (node: string): Frame => {
+      const index = nextIndex;
+      nextIndex += 1;
+      indices.set(node, index);
+      lowLinks.set(node, index);
+      stack.push(node);
+      onStack.add(node);
+      return { node, neighbors: [...(graph.get(node) ?? [])], next: 0 };
+    };
+    const frames: Frame[] = [enter(root)];
+    while (frames.length > 0) {
+      const frame = frames.at(-1);
+      if (!frame) break;
+      const neighbor = frame.neighbors[frame.next];
+      if (neighbor !== undefined) {
+        frame.next += 1;
+        if (!indices.has(neighbor)) {
+          frames.push(enter(neighbor));
+          continue;
+        }
+        if (onStack.has(neighbor)) {
+          lowLinks.set(
+            frame.node,
+            Math.min(
+              required(lowLinks, frame.node, "low link"),
+              required(indices, neighbor, "neighbor index"),
+            ),
+          );
+        }
+        continue;
+      }
 
-    for (const neighbor of graph.get(node) ?? []) {
-      if (!indices.has(neighbor)) {
-        connect(neighbor);
+      frames.pop();
+      const parent = frames.at(-1);
+      if (parent) {
         lowLinks.set(
-          node,
+          parent.node,
           Math.min(
-            required(lowLinks, node, "low link"),
-            required(lowLinks, neighbor, "neighbor low link"),
-          ),
-        );
-      } else if (onStack.has(neighbor)) {
-        lowLinks.set(
-          node,
-          Math.min(
-            required(lowLinks, node, "low link"),
-            required(indices, neighbor, "neighbor index"),
+            required(lowLinks, parent.node, "low link"),
+            required(lowLinks, frame.node, "child low link"),
           ),
         );
       }
+      if (lowLinks.get(frame.node) !== indices.get(frame.node)) continue;
+      const component: string[] = [];
+      while (stack.length > 0) {
+        const member = stack.pop();
+        if (member === undefined) break;
+        onStack.delete(member);
+        component.push(member);
+        if (member === frame.node) break;
+      }
+      components.push(component.sort(compareBytes));
     }
-
-    if (lowLinks.get(node) !== indices.get(node)) return;
-    const component: string[] = [];
-    while (stack.length > 0) {
-      const member = stack.pop();
-      if (member === undefined) break;
-      onStack.delete(member);
-      component.push(member);
-      if (member === node) break;
-    }
-    components.push(component.sort(compareBytes));
   };
 
   [...graph.keys()].sort(compareBytes).forEach((node) => {

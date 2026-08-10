@@ -47,73 +47,93 @@ const walkExpression = (
   state: CanonicalState,
   parentKind: Expr["kind"] | "alternative",
 ): void => {
-  if (parentKind === "alternative" && expression.kind === "choice") {
-    addIssue(
-      state,
-      "IR_CANON_TOP_LEVEL_CHOICE",
-      path,
-      "top-level choices must be flattened into Rule.alternatives",
-    );
-  }
-  if (parentKind === "alternative" && expression.kind === "seq") {
-    addIssue(
-      state,
-      "IR_CANON_TOP_LEVEL_SEQ",
-      path,
-      "Alternative.items is already an implicit sequence",
-    );
-  }
-  if (
-    parentKind === "alternative" &&
-    expression.kind === "group" &&
-    expression.expr.kind !== "choice"
-  ) {
-    addIssue(
-      state,
-      "IR_CANON_TOP_LEVEL_GROUP",
-      path,
-      "a top-level group must directly preserve a nested choice",
-    );
-  }
-  if (parentKind === "seq" && expression.kind === "seq") {
-    addIssue(state, "IR_CANON_NESTED_SEQ", path, "nested sequences must be flattened");
-  }
-
-  if (expression.kind === "choice") {
-    if (expression.ordered) state.hasOrderedChoice = true;
-    expression.alts.forEach((alternative, index) => {
-      walkExpression(alternative, `${path}/alts/${index}`, state, "choice");
-    });
-    return;
-  }
-
-  if (expression.kind === "seq") {
-    expression.items.forEach((item, index) => {
-      walkExpression(item, `${path}/items/${index}`, state, "seq");
-    });
-    return;
-  }
-
-  if (
-    expression.kind === "opt" ||
-    expression.kind === "star" ||
-    expression.kind === "plus" ||
-    expression.kind === "predicate" ||
-    expression.kind === "group"
-  ) {
-    walkExpression(expression.expr, `${path}/expr`, state, expression.kind);
-    return;
-  }
-
-  if (expression.kind === "symbol" && expression.args) {
-    expression.args.forEach((argument, index) => {
-      walkExpression(argument, `${path}/args/${index}`, state, "symbol");
-    });
-    return;
-  }
-
-  if (expression.kind === "charClass" || expression.kind === "anyChar") {
-    state.hasScannerlessNode = true;
+  const pending: {
+    expression: Expr;
+    path: string;
+    parentKind: Expr["kind"] | "alternative";
+  }[] = [{ expression, path, parentKind }];
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (!current) break;
+    const { expression: node, path: nodePath, parentKind: nodeParentKind } = current;
+    if (nodeParentKind === "alternative" && node.kind === "choice") {
+      addIssue(
+        state,
+        "IR_CANON_TOP_LEVEL_CHOICE",
+        nodePath,
+        "top-level choices must be flattened into Rule.alternatives",
+      );
+    }
+    if (nodeParentKind === "alternative" && node.kind === "seq") {
+      addIssue(
+        state,
+        "IR_CANON_TOP_LEVEL_SEQ",
+        nodePath,
+        "Alternative.items is already an implicit sequence",
+      );
+    }
+    if (nodeParentKind === "alternative" && node.kind === "group" && node.expr.kind !== "choice") {
+      addIssue(
+        state,
+        "IR_CANON_TOP_LEVEL_GROUP",
+        nodePath,
+        "a top-level group must directly preserve a nested choice",
+      );
+    }
+    if (nodeParentKind === "seq" && node.kind === "seq") {
+      addIssue(state, "IR_CANON_NESTED_SEQ", nodePath, "nested sequences must be flattened");
+    }
+    if (node.kind === "choice") {
+      if (node.ordered) state.hasOrderedChoice = true;
+      for (let index = node.alts.length - 1; index >= 0; index -= 1) {
+        const alternative = node.alts[index];
+        if (alternative) {
+          pending.push({
+            expression: alternative,
+            path: `${nodePath}/alts/${index}`,
+            parentKind: "choice",
+          });
+        }
+      }
+      continue;
+    }
+    if (node.kind === "seq") {
+      for (let index = node.items.length - 1; index >= 0; index -= 1) {
+        const item = node.items[index];
+        if (item) {
+          pending.push({
+            expression: item,
+            path: `${nodePath}/items/${index}`,
+            parentKind: "seq",
+          });
+        }
+      }
+      continue;
+    }
+    if (
+      node.kind === "opt" ||
+      node.kind === "star" ||
+      node.kind === "plus" ||
+      node.kind === "predicate" ||
+      node.kind === "group"
+    ) {
+      pending.push({ expression: node.expr, path: `${nodePath}/expr`, parentKind: node.kind });
+      continue;
+    }
+    if (node.kind === "symbol" && node.args) {
+      for (let index = node.args.length - 1; index >= 0; index -= 1) {
+        const argument = node.args[index];
+        if (argument) {
+          pending.push({
+            expression: argument,
+            path: `${nodePath}/args/${index}`,
+            parentKind: "symbol",
+          });
+        }
+      }
+      continue;
+    }
+    if (node.kind === "charClass" || node.kind === "anyChar") state.hasScannerlessNode = true;
   }
 };
 

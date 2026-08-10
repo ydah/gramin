@@ -7,6 +7,7 @@ export interface SourceFile {
 
 export interface FrontendOptions {
   readonly dialect?: string;
+  readonly maxNestingDepth?: number;
 }
 
 export interface FrontendResult {

@@ -228,10 +228,12 @@ class Parser {
   readonly diagnostics: Diagnostic[];
   readonly rules: ParsedRule[] = [];
   #index = 0;
+  #nestingDepth = 0;
 
   constructor(
     private readonly tokens: readonly Token[],
     diagnostics: readonly Diagnostic[],
+    private readonly maxNestingDepth: number,
   ) {
     this.diagnostics = [...diagnostics];
   }
@@ -350,8 +352,18 @@ class Parser {
   }
 
   private parseNested(closing: TokenKind): Expr {
+    if (this.#nestingDepth >= this.maxNestingDepth) {
+      this.error(
+        "BNF103_NESTING_TOO_DEEP",
+        `maximum nesting depth ${this.maxNestingDepth} exceeded`,
+      );
+      this.skipNested(closing);
+      return { kind: "seq", items: [] };
+    }
     this.#index += 1;
+    this.#nestingDepth += 1;
     const alternatives = this.parseChoice(new Set([closing, "eof"]));
+    this.#nestingDepth -= 1;
     if (this.current().kind === closing) {
       this.#index += 1;
     } else {
@@ -364,6 +376,28 @@ class Parser {
     return expressions.length === 1
       ? (expressions[0] ?? { kind: "seq", items: [] })
       : { kind: "choice", ordered: false, alts: expressions };
+  }
+
+  private skipNested(closing: TokenKind): void {
+    const expected: TokenKind[] = [closing];
+    this.#index += 1;
+    while (expected.length > 0 && this.current().kind !== "eof") {
+      const token = this.current();
+      const nestedClosing =
+        token.kind === "lparen"
+          ? "rparen"
+          : token.kind === "lbracket"
+            ? "rbracket"
+            : token.kind === "lbrace"
+              ? "rbrace"
+              : undefined;
+      if (nestedClosing) {
+        expected.push(nestedClosing);
+      } else if (token.kind === expected.at(-1)) {
+        expected.pop();
+      }
+      this.#index += 1;
+    }
   }
 
   private error(code: string, message: string): void {
@@ -494,7 +528,7 @@ const lower = (
 
 const parse = (
   files: readonly SourceFile[],
-  options: { readonly dialect?: string },
+  options: { readonly dialect?: string; readonly maxNestingDepth?: number },
 ): FrontendResult => {
   const first = files[0];
   if (!first) {
@@ -506,8 +540,11 @@ const parse = (
     return { ir: null, diagnostics: [diagnostic] };
   }
   const lexical = lex(first.content);
-  const parser = new Parser(lexical.tokens, lexical.diagnostics);
+  const parser = new Parser(lexical.tokens, lexical.diagnostics, options.maxNestingDepth ?? 500);
   const rules = parser.parse();
+  if (parser.diagnostics.some((diagnostic) => diagnostic.code === "BNF103_NESTING_TOO_DEEP")) {
+    return { ir: null, diagnostics: parser.diagnostics };
+  }
   if (rules.length === 0) {
     const diagnostic: Diagnostic = {
       severity: "error",

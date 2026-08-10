@@ -1,12 +1,15 @@
 import { readFile, writeFile } from "node:fs/promises";
+import { relative, resolve, sep } from "node:path";
 import { analyzeGrammar } from "@gramin/analyzer";
 import {
   canonicalize,
   type Diagnostic,
   type Frontend,
+  type GrammarFeatures,
   type GrammarIR,
   type SourceFile,
   serializeCanonical,
+  validateFeatures,
   validateIR,
 } from "@gramin/core";
 import { antlrFrontend } from "@gramin/frontend-antlr";
@@ -16,9 +19,13 @@ import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import {
   DigestBudgetTooSmallError,
+  diffFeatures,
   renderJson,
+  renderFeatureDiffJson,
+  renderFeatureDiffMarkdown,
   renderLlmDigest,
   renderMarkdown,
+  renderSarif,
 } from "@gramin/reporter";
 import { type FailOn, type ParsedArguments, parseArguments } from "./arguments.js";
 import {
@@ -68,10 +75,12 @@ const frontends: readonly Frontend[] = [
 ];
 
 const usage = `Usage:
-  gramin analyze <file...> [--format json|md|llm] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
+  gramin analyze <file...> [--format json|md|llm|sarif] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
+    [--source-name <name> | --source-root <dir>] [--max-nesting-depth <n>] [--baseline <features.json>] [--fail-on-regression]
   gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>] [--frontend-timeout <ms>]
-  gramin analyze --ir <ir.json|-> [--format json|md]
-  gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc] [--source-name <name>]
+  gramin analyze --ir <ir.json|-> [--format json|md|sarif]
+  gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc] [--source-name <name> | --source-root <dir>]
+  gramin diff <old-file> <new-file> [--format json|md]
   gramin detect <file>
   gramin validate-ir <ir.json>
   gramin --help
@@ -88,6 +97,20 @@ interface ParsedIR {
 
 const applySourceName = (ir: GrammarIR, sourceName: string | undefined): GrammarIR =>
   sourceName === undefined ? ir : { ...ir, source: { ...ir.source, fileNames: [sourceName] } };
+
+const normalizeSourcePath = (fileName: string, sourceRoot: string): string => {
+  if (fileName === "-") return fileName;
+  return relative(resolve(sourceRoot), resolve(fileName)).split(sep).join("/");
+};
+
+const applySourcePathOptions = (ir: GrammarIR, options: ParsedArguments): GrammarIR => {
+  if (options.sourceName !== undefined) return applySourceName(ir, options.sourceName);
+  if (options.sourceRoot === undefined || ir.source.fileNames === undefined) return ir;
+  const names = options.files
+    .slice(0, ir.source.fileNames.length)
+    .map((fileName) => normalizeSourcePath(fileName, options.sourceRoot as string));
+  return { ...ir, source: { ...ir.source, fileNames: names } };
+};
 
 const severityRank = { info: 0, warning: 1, error: 2 } as const;
 
@@ -128,9 +151,27 @@ const readJsonIR = async (
   return undefined;
 };
 
+const readFeatures = async (path: string, io: CliIO): Promise<GrammarFeatures | undefined> => {
+  let input: unknown;
+  try {
+    input = JSON.parse(await io.readTextFile(path));
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    io.writeError(`BASELINE_INVALID ${path}: ${message}\n`);
+    return undefined;
+  }
+  const result = validateFeatures(input);
+  if (result.ok) return result.value;
+  result.issues.forEach((issue) => {
+    io.writeError(`BASELINE_INVALID ${path} ${issue.path}: ${issue.message}\n`);
+  });
+  return undefined;
+};
+
 interface FrontendSelection {
   readonly frontend: Frontend;
   readonly diagnostic?: Diagnostic;
+  readonly ambiguous: boolean;
 }
 
 const selectFrontend = (
@@ -139,7 +180,7 @@ const selectFrontend = (
 ): FrontendSelection | undefined => {
   if (explicitId) {
     const frontend = frontends.find((candidate) => candidate.id === explicitId);
-    return frontend ? { frontend } : undefined;
+    return frontend ? { frontend, ambiguous: false } : undefined;
   }
   const first = files[0];
   if (!first) return undefined;
@@ -156,6 +197,7 @@ const selectFrontend = (
   const ambiguous = second !== undefined && best.confidence - second.confidence < 0.1;
   return {
     frontend: best.frontend,
+    ambiguous,
     ...(ambiguous
       ? {
           diagnostic: {
@@ -217,7 +259,7 @@ const parseSourceIR = async (
       return undefined;
     }
     return {
-      ir: applySourceName(validation.value, options.sourceName),
+      ir: applySourcePathOptions(validation.value, options),
       exitCode:
         execution.exitCode === EXIT_PARTIAL
           ? EXIT_PARTIAL
@@ -227,14 +269,13 @@ const parseSourceIR = async (
   const files = await Promise.all(
     options.files.map(async (name) => ({ name, content: await io.readTextFile(name) })),
   );
-  const namedFiles =
-    options.sourceName === undefined
-      ? files
-      : files.map((file, index) =>
-          index === 0 && options.sourceName !== undefined
-            ? { ...file, name: options.sourceName }
-            : file,
-        );
+  const sourceRoot = options.sourceRoot;
+  const namedFiles = files.map((file) => ({
+    ...file,
+    name:
+      options.sourceName ??
+      (sourceRoot === undefined ? file.name : normalizeSourcePath(file.name, sourceRoot)),
+  }));
   const selection = selectFrontend(files, options.frontend);
   if (!selection) {
     io.writeError(
@@ -244,8 +285,16 @@ const parseSourceIR = async (
     );
     return undefined;
   }
+  if (selection.ambiguous) {
+    const diagnostic = selection.diagnostic;
+    io.writeError(
+      `${diagnostic?.code ?? "DETECT_AMBIGUOUS"}: ${diagnostic?.message ?? "format detection is ambiguous"}\n`,
+    );
+    return undefined;
+  }
   const parsed = selection.frontend.parse(namedFiles, {
     ...(options.dialect ? { dialect: options.dialect } : {}),
+    ...(options.maxNestingDepth === undefined ? {} : { maxNestingDepth: options.maxNestingDepth }),
   });
   if (!parsed.ir) {
     parsed.diagnostics.forEach((diagnostic) => {
@@ -315,6 +364,7 @@ const runDetect = async (options: ParsedArguments, io: CliIO): Promise<number> =
 
 const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number> => {
   if (options.irInput && options.files.length > 0) return EXIT_USAGE;
+  if (options.command === "ir" && (options.baseline || options.failOnRegression)) return EXIT_USAGE;
   const parsed = options.irInput
     ? await readJsonIR(options.irInput, io, options.failOn)
     : await parseSourceIR(options, io);
@@ -330,9 +380,31 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
 
   if (options.command === "ir") {
     await output(serializeCanonical(ir), options.output, io);
-    return exitCodeForDiagnostics(ir.diagnostics, options.failOn);
+    return Math.max(parsed.exitCode, exitCodeForDiagnostics(ir.diagnostics, options.failOn));
   }
-  const features = analyzeGrammar(ir);
+  let features = analyzeGrammar(ir);
+  let regressionCount = 0;
+  if (options.baseline !== undefined) {
+    const baseline = await readFeatures(options.baseline, io);
+    if (!baseline) return EXIT_FATAL;
+    const diff = diffFeatures(baseline, features);
+    regressionCount = diff.regressions.length;
+    if (regressionCount > 0) {
+      features = {
+        ...features,
+        diagnostics: [
+          ...features.diagnostics,
+          ...diff.regressions.map(
+            (regression): Diagnostic => ({
+              severity: "warning",
+              code: "REGRESSION_METRIC_INCREASE",
+              message: `${regression.path}: ${regression.reason} (${String(regression.before)} -> ${String(regression.after)})`,
+            }),
+          ),
+        ],
+      };
+    }
+  }
   const report =
     options.format === "md"
       ? renderMarkdown(features)
@@ -340,9 +412,35 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
         ? renderLlmDigest(features, {
             ...(options.budgetChars === undefined ? {} : { budgetChars: options.budgetChars }),
           })
-        : renderJson(features);
+        : options.format === "sarif"
+          ? renderSarif(features)
+          : renderJson(features);
   await output(report, options.output, io);
-  return exitCodeForDiagnostics(features.diagnostics, options.failOn);
+  const diagnosticExit = exitCodeForDiagnostics(features.diagnostics, options.failOn);
+  return options.failOnRegression && regressionCount > 0
+    ? EXIT_PARTIAL
+    : Math.max(parsed.exitCode, diagnosticExit);
+};
+
+const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => {
+  if (options.files.length !== 2 || options.format === "llm" || options.format === "sarif") {
+    return EXIT_USAGE;
+  }
+  const beforeFile = options.files[0];
+  const afterFile = options.files[1];
+  if (!beforeFile || !afterFile) return EXIT_USAGE;
+  const before = await parseSourceIR({ ...options, command: "analyze", files: [beforeFile] }, io);
+  const after = await parseSourceIR({ ...options, command: "analyze", files: [afterFile] }, io);
+  if (!before?.ir || !after?.ir) return EXIT_FATAL;
+  const comparison = diffFeatures(analyzeGrammar(before.ir), analyzeGrammar(after.ir));
+  const report =
+    options.format === "md"
+      ? renderFeatureDiffMarkdown(comparison)
+      : renderFeatureDiffJson(comparison);
+  await output(report, options.output, io);
+  return options.failOnRegression && comparison.regressions.length > 0
+    ? EXIT_PARTIAL
+    : EXIT_SUCCESS;
 };
 
 export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Promise<number> => {
@@ -350,7 +448,7 @@ export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Pr
     ((argv.length === 1 || argv.length === 2) &&
       ["--help", "-h", "help"].includes(argv.at(-1) ?? "")) ||
     (argv.length > 2 &&
-      ["analyze", "ir", "detect", "validate-ir"].includes(argv[0] ?? "") &&
+      ["analyze", "ir", "diff", "detect", "validate-ir"].includes(argv[0] ?? "") &&
       argv.includes("--help"))
   ) {
     io.writeOut(usage);
@@ -368,6 +466,7 @@ export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Pr
   const options = parsed.value;
   try {
     if (options.command === "detect") return await runDetect(options, io);
+    if (options.command === "diff") return await runDiff(options, io);
     if (options.command === "validate-ir") {
       if (options.files.length !== 1) return EXIT_USAGE;
       const fileName = options.files[0];
