@@ -1,0 +1,6 @@
+{
+  "ruby/parse.y": 500,
+  "antlr/json/JSON.g4": 500,
+  "antlr/sqlite/SQLiteParser.g4+SQLiteLexer.g4": 1000,
+  "antlr/java/JavaParser.g4+JavaLexer.g4": 1000
+}
