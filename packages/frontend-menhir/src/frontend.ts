@@ -698,7 +698,13 @@ export const menhirFrontend: Frontend = {
   version: FRONTEND_MENHIR_VERSION,
   detect(fileName, head4k) {
     const extensionScore = /\.mly$/iu.test(fileName) ? 0.7 : 0;
-    const signatureScore = /(?:^|\n)\s*%(?:token|start|type|inline)\b/u.test(head4k) ? 0.3 : 0;
+    const signatureScore = Math.min(
+      0.9,
+      (/\b(?:separated_list|option)\s*\(/u.test(head4k) ? 0.25 : 0) +
+        (/(?:^|\n)\s*%start\s+<[^>]+>/u.test(head4k) ? 0.35 : 0) +
+        (/(?:^|\n)\s*%(?:public|inline)\b/u.test(head4k) ? 0.4 : 0) +
+        (/(?:^|\n)\s*%(?:token|type)\b/u.test(head4k) ? 0.1 : 0),
+    );
     return Math.min(1, extensionScore + signatureScore);
   },
   parse,

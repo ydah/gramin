@@ -188,6 +188,21 @@ describe("gramin CLI", () => {
     expect(test.stderr.join("")).toContain("DETECT_AMBIGUOUS");
   });
 
+  it("detects Menhir from distinctive content without an extension", async () => {
+    const content = readFileSync(
+      new URL("../../frontend-menhir/fixtures/lists-no-semicolon.mly", import.meta.url),
+      "utf8",
+    );
+    const test = harness({ grammar: content });
+    expect(await runCli(["analyze", "grammar"], test.io)).toBe(EXIT_SUCCESS);
+    const features = JSON.parse(test.stdout.join("")) as {
+      source: { format: string };
+      size: { rules: number; alternatives: number };
+    };
+    expect(features.source.format).toBe("menhir");
+    expect(features.size).toMatchObject({ rules: 2, alternatives: 2 });
+  });
+
   it("returns usage errors for invalid options", async () => {
     const test = harness();
     expect(await runCli(["analyze", "--format", "xml", "calc.y"], test.io)).toBe(EXIT_USAGE);
