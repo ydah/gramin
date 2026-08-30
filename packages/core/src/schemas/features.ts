@@ -24,6 +24,20 @@ const RankedSymbolSchema = Type.Object(
   },
   { additionalProperties: false },
 );
+const DistributionSchema = Type.Object(
+  {
+    average: Type.Number({ minimum: 0 }),
+    maximum: Type.Object(
+      {
+        value: Type.Integer({ minimum: 0 }),
+        rule: Type.String(),
+      },
+      { additionalProperties: false },
+    ),
+    percentiles: Type.Optional(PercentilesSchema),
+  },
+  { additionalProperties: false },
+);
 const MaximumRuleSchema = Type.Object(
   {
     value: Type.Integer({ minimum: 0 }),
@@ -174,6 +188,41 @@ const ActionFeaturesSchema = Type.Object(
   { additionalProperties: false },
 );
 
+const ParseabilityFeaturesSchema = Type.Object(
+  {
+    firstSetSize: Type.Optional(DistributionSchema),
+    followSetSize: Type.Optional(DistributionSchema),
+    ll1Conflicts: Type.Optional(
+      Type.Object(
+        {
+          firstFirst: Type.Integer({ minimum: 0 }),
+          firstFollow: Type.Integer({ minimum: 0 }),
+          total: Type.Integer({ minimum: 0 }),
+        },
+        { additionalProperties: false },
+      ),
+    ),
+    unitRules: Type.Integer({ minimum: 0 }),
+    cyclicUnitRules: Type.Array(Type.Array(Type.String(), { minItems: 1 })),
+    notApplicable: Type.Optional(NotApplicableSchema),
+  },
+  { additionalProperties: false },
+);
+
+const RedundancyFeaturesSchema = Type.Object(
+  {
+    commonPrefixPairs: Type.Integer({ minimum: 0 }),
+    maxCommonPrefixLength: Type.Integer({ minimum: 0 }),
+    duplicateAlternatives: Type.Integer({ minimum: 0 }),
+    structuralCloneGroups: Type.Integer({ minimum: 0 }),
+    singleReferenceRules: Type.Array(Type.String()),
+    unusedTerminals: Type.Array(Type.String()),
+    unusedPrecedenceTokens: Type.Array(Type.String()),
+    undefinedPrecedenceOverrides: Type.Array(Type.String()),
+  },
+  { additionalProperties: false },
+);
+
 const NotableFeaturesSchema = Type.Object(
   {
     largestRule: Type.Optional(
@@ -216,10 +265,12 @@ export const GrammarFeaturesSchema = Type.Object(
     lexicon: LexiconFeaturesSchema,
     sugar: SugarFeaturesSchema,
     actions: ActionFeaturesSchema,
+    parseability: ParseabilityFeaturesSchema,
+    redundancy: RedundancyFeaturesSchema,
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.4.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.5.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;

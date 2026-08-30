@@ -78,6 +78,69 @@ describe("analyzeGrammar", () => {
     });
   });
 
+  it("computes CFG parseability and refactoring candidates", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["start"],
+      terminals: [{ name: "A" }, { name: "B" }, { name: "UNUSED" }],
+      precedence: [{ assoc: "left", tokens: ["A", "STALE"] }],
+      capabilities: { ...base.capabilities, precedenceTable: true },
+      rules: [
+        {
+          name: "start",
+          alternatives: [
+            {
+              items: [
+                { kind: "terminal", name: "A" },
+                { kind: "symbol", name: "tail" },
+              ],
+            },
+            {
+              items: [
+                { kind: "terminal", name: "A" },
+                { kind: "terminal", name: "B" },
+              ],
+            },
+            { items: [{ kind: "symbol", name: "empty" }] },
+          ],
+        },
+        { name: "tail", alternatives: [{ items: [{ kind: "terminal", name: "B" }] }] },
+        { name: "empty", alternatives: [{ items: [] }] },
+      ],
+    });
+    expect(features.parseability).toMatchObject({
+      firstSetSize: { average: 0.6667, maximum: { value: 1, rule: "start" } },
+      ll1Conflicts: { firstFirst: 1, firstFollow: 0, total: 1 },
+      unitRules: 1,
+      cyclicUnitRules: [],
+    });
+    expect(features.redundancy).toMatchObject({
+      commonPrefixPairs: 1,
+      maxCommonPrefixLength: 1,
+      singleReferenceRules: ["empty", "tail"],
+      unusedTerminals: ["UNUSED"],
+      unusedPrecedenceTokens: ["STALE"],
+    });
+  });
+
+  it("diagnoses cycles made only of unit rules", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["a"],
+      terminals: [],
+      rules: [
+        { name: "a", alternatives: [{ items: [{ kind: "symbol", name: "b" }] }] },
+        { name: "b", alternatives: [{ items: [{ kind: "symbol", name: "a" }] }] },
+      ],
+    });
+    expect(features.parseability.cyclicUnitRules).toEqual([["a", "b"]]);
+    expect(features.diagnostics).toContainEqual(
+      expect.objectContaining({ code: "ANALYZER007_CYCLIC_UNIT_RULES", severity: "error" }),
+    );
+  });
+
   it("reports reachable rules that cannot derive a terminal sequence", () => {
     const base = fixtureIR("empty");
     const ir: GrammarIR = {

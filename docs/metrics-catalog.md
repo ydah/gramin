@@ -1,6 +1,6 @@
-# Metrics catalog v0.4
+# Metrics catalog v0.5
 
-This file is the normative definition of metrics emitted in features v0.4.
+This file is the normative definition of metrics emitted in features v0.5.
 
 - Classification: **E** is exact and mechanically determined; **H** is heuristic.
 - Comparability: **A** compares across formats; **B** compares only with the stated
@@ -131,6 +131,31 @@ action fields remain present for compatibility but are listed in `notApplicable`
 not be presented as complete measurements. Action length totals and percentiles are not
 defined in features 0.3.
 
+## Parseability
+
+FIRST and FOLLOW measurements are **E/B (CFG)** and are omitted for ordered choice.
+Terminal identities distinguish symbolic names, literals, character classes, any-char,
+external symbols, and end-of-input.
+
+- `firstSetSize`, `followSetSize`: average, maximum, p50, and p95 rule-set cardinality.
+- `ll1Conflicts.firstFirst`: alternative pairs in one rule with intersecting FIRST sets.
+- `ll1Conflicts.firstFollow`: pairs where one nullable alternative conflicts with the
+  other alternative through the rule FOLLOW set.
+- `unitRules`: alternatives whose effective RHS is one nonterminal reference (**E/A**).
+- `cyclicUnitRules`: sorted SCCs made entirely from unit-rule edges (**E/B**). A non-empty
+  result produces `ANALYZER007_CYCLIC_UNIT_RULES`.
+
+## Redundancy and refactoring candidates
+
+- `commonPrefixPairs`, `maxCommonPrefixLength`: alternative pairs in one rule sharing
+  direct, structurally equal RHS items (**E/A**).
+- `duplicateAlternatives`: repeated syntax and precedence after ignoring actions (**E/A**).
+- `structuralCloneGroups`: expression subtrees of at least three nodes repeated in two or
+  more alternatives (**E/B**).
+- `singleReferenceRules`: rules referenced exactly once in all RHS expressions (**E/A**).
+- `unusedTerminals`, `unusedPrecedenceTokens`, `undefinedPrecedenceOverrides`: sorted
+  declaration consistency lists (**E/B**).
+
 ## Notable locations
 
 `largestRule`, `deepestRecursionMembers`, and `coreSymbols` expose exact names and available
@@ -146,6 +171,7 @@ A section omits a metric that does not apply and records a stable explanation in
 - EBNF counts require `ebnfSugar`;
 - parameterized counts require `parameterizedRules`;
 - CFG nullability is omitted for `orderedChoice`.
+- CFG FIRST/FOLLOW and LL(1) conflicts are omitted for `orderedChoice`.
 - empty rule or alternative samples omit their percentile object;
 - recursion ratios are omitted when no rule is reachable from a start symbol;
 - complete action counts are omitted after diagnosed lossy action handling.

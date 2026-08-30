@@ -10,6 +10,8 @@ const sectionTitles: Readonly<Record<string, string>> = {
   lexicon: "Lexicon",
   sugar: "Sugar and extensions",
   actions: "Actions",
+  parseability: "Parseability",
+  redundancy: "Redundancy and refactoring candidates",
   notable: "Notable grammar locations",
   diagnostics: "Diagnostics",
 };

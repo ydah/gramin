@@ -9,7 +9,7 @@ import {
 } from "./graph.js";
 import { compareBytes, round4 } from "./numbers.js";
 
-const computeNullableRules = (ir: GrammarIR): Set<string> => {
+export const computeNullableRules = (ir: GrammarIR): Set<string> => {
   const nullable = new Set<string>();
   let changed = true;
   while (changed) {

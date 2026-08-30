@@ -25,7 +25,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.4.0",
+  "featuresVersion": "0.5.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -44,6 +44,37 @@
       "name": "main"
     }
   },
+  "parseability": {
+    "cyclicUnitRules": [],
+    "firstSetSize": {
+      "average": 1,
+      "maximum": {
+        "rule": "main",
+        "value": 1
+      },
+      "percentiles": {
+        "p50": 1,
+        "p95": 1
+      }
+    },
+    "followSetSize": {
+      "average": 0.5,
+      "maximum": {
+        "rule": "main",
+        "value": 1
+      },
+      "percentiles": {
+        "p50": 0,
+        "p95": 1
+      }
+    },
+    "ll1Conflicts": {
+      "firstFirst": 0,
+      "firstFollow": 0,
+      "total": 0
+    },
+    "unitRules": 0
+  },
   "precedence": {
     "assocBreakdown": {
       "left": 1,
@@ -60,6 +91,18 @@
       "count": 1,
       "ratio": 0.3333
     }
+  },
+  "redundancy": {
+    "commonPrefixPairs": 0,
+    "duplicateAlternatives": 0,
+    "maxCommonPrefixLength": 0,
+    "singleReferenceRules": [
+      "wrapper"
+    ],
+    "structuralCloneGroups": 0,
+    "undefinedPrecedenceOverrides": [],
+    "unusedPrecedenceTokens": [],
+    "unusedTerminals": []
   },
   "size": {
     "altPerRulePercentiles": {

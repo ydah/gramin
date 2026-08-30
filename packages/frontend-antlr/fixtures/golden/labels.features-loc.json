@@ -42,12 +42,17 @@
       "severity": "info"
     },
     {
+      "code": "ANALYZER007_CYCLIC_UNIT_RULES",
+      "message": "cyclic unit rules: item",
+      "severity": "error"
+    },
+    {
       "code": "ANALYZER003_UNUSED_TERMINALS",
       "message": "unused terminals: WS",
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.4.0",
+  "featuresVersion": "0.5.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -71,6 +76,41 @@
       "name": "item"
     }
   },
+  "parseability": {
+    "cyclicUnitRules": [
+      [
+        "item"
+      ]
+    ],
+    "firstSetSize": {
+      "average": 2,
+      "maximum": {
+        "rule": "item",
+        "value": 2
+      },
+      "percentiles": {
+        "p50": 2,
+        "p95": 2
+      }
+    },
+    "followSetSize": {
+      "average": 2,
+      "maximum": {
+        "rule": "item",
+        "value": 3
+      },
+      "percentiles": {
+        "p50": 1,
+        "p95": 3
+      }
+    },
+    "ll1Conflicts": {
+      "firstFirst": 2,
+      "firstFollow": 0,
+      "total": 2
+    },
+    "unitRules": 1
+  },
   "precedence": {
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
@@ -81,6 +121,18 @@
       "rulesWithPrecOverrides": "precedenceTable capability is false",
       "tokensInPrecedence": "precedenceTable capability is false"
     }
+  },
+  "redundancy": {
+    "commonPrefixPairs": 0,
+    "duplicateAlternatives": 0,
+    "maxCommonPrefixLength": 0,
+    "singleReferenceRules": [],
+    "structuralCloneGroups": 0,
+    "undefinedPrecedenceOverrides": [],
+    "unusedPrecedenceTokens": [],
+    "unusedTerminals": [
+      "WS"
+    ]
   },
   "size": {
     "altPerRulePercentiles": {

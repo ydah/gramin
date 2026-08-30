@@ -25,7 +25,7 @@
       "severity": "info"
     }
   ],
-  "featuresVersion": "0.4.0",
+  "featuresVersion": "0.5.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -51,6 +51,37 @@
       "name": "expr"
     }
   },
+  "parseability": {
+    "cyclicUnitRules": [],
+    "firstSetSize": {
+      "average": 3,
+      "maximum": {
+        "rule": "expr",
+        "value": 3
+      },
+      "percentiles": {
+        "p50": 3,
+        "p95": 3
+      }
+    },
+    "followSetSize": {
+      "average": 3.5,
+      "maximum": {
+        "rule": "input",
+        "value": 4
+      },
+      "percentiles": {
+        "p50": 3,
+        "p95": 4
+      }
+    },
+    "ll1Conflicts": {
+      "firstFirst": 7,
+      "firstFollow": 1,
+      "total": 8
+    },
+    "unitRules": 0
+  },
   "precedence": {
     "assocBreakdown": {
       "left": 1,
@@ -67,6 +98,20 @@
       "count": 3,
       "ratio": 0.5
     }
+  },
+  "redundancy": {
+    "commonPrefixPairs": 1,
+    "duplicateAlternatives": 0,
+    "maxCommonPrefixLength": 1,
+    "singleReferenceRules": [
+      "input"
+    ],
+    "structuralCloneGroups": 0,
+    "undefinedPrecedenceOverrides": [],
+    "unusedPrecedenceTokens": [],
+    "unusedTerminals": [
+      "UMINUS"
+    ]
   },
   "size": {
     "altPerRulePercentiles": {

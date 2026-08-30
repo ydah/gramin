@@ -13,6 +13,7 @@ change the exit status; `--fail-on warning` makes them a CI gate.
 | `ANALYZER003_UNUSED_TERMINALS` | A declared terminal has no occurrence | warning |
 | `ANALYZER004_FUTURE_IR_MINOR`, `ANALYZER005_LEGACY_IR_VERSION` | The IR minor version is future-compatible or legacy | warning |
 | `ANALYZER006_UNPRODUCTIVE_RULES` | A rule cannot derive a terminal sequence | warning |
+| `ANALYZER007_CYCLIC_UNIT_RULES` | Unit productions alone form a cycle | error |
 | `DETECT_AMBIGUOUS` | Automatic frontend detection has tied or near-tied candidates | warning |
 | `BNF001`–`BNF004`, `BNF100`–`BNF103` | BNF/EBNF lexical, structural, or nesting-limit parse problem | error or warning |
 | `BNF300_UNRESOLVED_SYMBOL` | BNF/EBNF reference is not declared | warning |

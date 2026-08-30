@@ -53,7 +53,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.4.0",
+  "featuresVersion": "0.5.0",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -103,6 +103,15 @@
       "name": "value"
     }
   },
+  "parseability": {
+    "cyclicUnitRules": [],
+    "notApplicable": {
+      "firstSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
+      "followSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
+      "ll1Conflicts": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
+    },
+    "unitRules": 4
+  },
   "precedence": {
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
@@ -113,6 +122,21 @@
       "rulesWithPrecOverrides": "precedenceTable capability is false",
       "tokensInPrecedence": "precedenceTable capability is false"
     }
+  },
+  "redundancy": {
+    "commonPrefixPairs": 0,
+    "duplicateAlternatives": 0,
+    "maxCommonPrefixLength": 0,
+    "singleReferenceRules": [
+      "array",
+      "keyword",
+      "number",
+      "object"
+    ],
+    "structuralCloneGroups": 0,
+    "undefinedPrecedenceOverrides": [],
+    "unusedPrecedenceTokens": [],
+    "unusedTerminals": []
   },
   "size": {
     "altPerRulePercentiles": {

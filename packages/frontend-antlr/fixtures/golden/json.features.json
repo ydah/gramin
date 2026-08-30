@@ -25,7 +25,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.4.0",
+  "featuresVersion": "0.5.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -63,6 +63,37 @@
       "name": "value"
     }
   },
+  "parseability": {
+    "cyclicUnitRules": [],
+    "firstSetSize": {
+      "average": 3.4,
+      "maximum": {
+        "rule": "json",
+        "value": 7
+      },
+      "percentiles": {
+        "p50": 1,
+        "p95": 7
+      }
+    },
+    "followSetSize": {
+      "average": 3,
+      "maximum": {
+        "rule": "array",
+        "value": 4
+      },
+      "percentiles": {
+        "p50": 4,
+        "p95": 4
+      }
+    },
+    "ll1Conflicts": {
+      "firstFirst": 0,
+      "firstFollow": 0,
+      "total": 0
+    },
+    "unitRules": 2
+  },
   "precedence": {
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
@@ -73,6 +104,21 @@
       "rulesWithPrecOverrides": "precedenceTable capability is false",
       "tokensInPrecedence": "precedenceTable capability is false"
     }
+  },
+  "redundancy": {
+    "commonPrefixPairs": 0,
+    "duplicateAlternatives": 0,
+    "maxCommonPrefixLength": 0,
+    "singleReferenceRules": [
+      "array",
+      "object"
+    ],
+    "structuralCloneGroups": 0,
+    "undefinedPrecedenceOverrides": [],
+    "unusedPrecedenceTokens": [],
+    "unusedTerminals": [
+      "WS"
+    ]
   },
   "size": {
     "altPerRulePercentiles": {

@@ -1,9 +1,9 @@
-# Grammar features v0.4
+# Grammar features v0.5
 
 The normative machine-readable contract is
-`packages/core/schema/features-v0.4.schema.json`. `@gramin/core` exports the schema,
+`packages/core/schema/features-v0.5.schema.json`. `@gramin/core` exports the schema,
 the `GrammarFeatures` TypeScript type, and `validateFeatures`.
-The previous `features-v0.3.schema.json` and `features-v0.2.schema.json` remain packaged for
+The previous feature schemas remain packaged for
 existing consumers.
 
 The envelope contains the source identity, Grammar IR `capabilities`, `featuresVersion`,
@@ -18,6 +18,8 @@ diagnostics, and the following sections:
 - `lexicon`: named/literal tokens and scannerless lexical expression counts;
 - `sugar`: EBNF and parameterized-rule usage;
 - `actions`: completeness, action counts, coverage, and opaque source-length measures;
+- `parseability`: CFG FIRST/FOLLOW distributions, LL(1) conflicts, and unit-rule cycles;
+- `redundancy`: common prefixes, duplicate alternatives, clones, and unused declarations;
 - `notable`: concrete rules and symbols that help locate high-impact grammar regions.
 
 A capability-dependent section omits an inapplicable optional metric and records the
@@ -27,7 +29,6 @@ Required legacy fields can remain present for minor-version compatibility, but a
 This applies to scannerless declaration counts and to features 0.2 action measurements
 when `actions.completeness` is `partial`.
 
-Features 0.4 adds exact `structure.unproductiveSymbols` and the corresponding
-`ANALYZER006_UNPRODUCTIVE_RULES` diagnostic. Features 0.3 remains packaged for consumers
-that need the previous contract. The preceding changes are defined by
-[`RFC 0004`](./rfcs/0004-contextual-structural-features.md).
+Features 0.5 adds parseability and refactoring-candidate measurements. CFG-only fields are
+omitted for ordered-choice grammars. Features 0.4 remains packaged for consumers that need
+the previous contract.

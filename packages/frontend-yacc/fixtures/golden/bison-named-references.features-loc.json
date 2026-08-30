@@ -53,7 +53,7 @@
       "severity": "info"
     }
   ],
-  "featuresVersion": "0.4.0",
+  "featuresVersion": "0.5.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -73,6 +73,37 @@
       "name": "expression"
     }
   },
+  "parseability": {
+    "cyclicUnitRules": [],
+    "firstSetSize": {
+      "average": 1,
+      "maximum": {
+        "rule": "expression",
+        "value": 1
+      },
+      "percentiles": {
+        "p50": 1,
+        "p95": 1
+      }
+    },
+    "followSetSize": {
+      "average": 1,
+      "maximum": {
+        "rule": "expression",
+        "value": 1
+      },
+      "percentiles": {
+        "p50": 1,
+        "p95": 1
+      }
+    },
+    "ll1Conflicts": {
+      "firstFirst": 0,
+      "firstFollow": 0,
+      "total": 0
+    },
+    "unitRules": 1
+  },
   "precedence": {
     "assocBreakdown": {
       "left": 0,
@@ -89,6 +120,18 @@
       "count": 0,
       "ratio": 0
     }
+  },
+  "redundancy": {
+    "commonPrefixPairs": 0,
+    "duplicateAlternatives": 0,
+    "maxCommonPrefixLength": 0,
+    "singleReferenceRules": [
+      "expression"
+    ],
+    "structuralCloneGroups": 0,
+    "undefinedPrecedenceOverrides": [],
+    "unusedPrecedenceTokens": [],
+    "unusedTerminals": []
   },
   "size": {
     "altPerRulePercentiles": {

@@ -6,6 +6,8 @@ import {
   validateFeatures,
 } from "@gramin/core";
 import { walkExpression } from "./expressions.js";
+import { parseabilityFeatures } from "./parseability.js";
+import { redundancyFeatures } from "./redundancy.js";
 import {
   actionFeatures,
   lexiconFeatures,
@@ -70,6 +72,7 @@ const analysisDiagnostics = (
   ir: GrammarIR,
   size: GrammarFeatures["size"],
   structure: GrammarFeatures["structure"],
+  parseability: GrammarFeatures["parseability"],
 ): Diagnostic[] => {
   const diagnostics: Diagnostic[] = [];
   if (size.unresolvedSymbols.count > 0) {
@@ -93,6 +96,13 @@ const analysisDiagnostics = (
       message: `unproductive rules: ${structure.unproductiveSymbols.join(", ")}`,
     });
   }
+  if (parseability.cyclicUnitRules.length > 0) {
+    diagnostics.push({
+      severity: "error",
+      code: "ANALYZER007_CYCLIC_UNIT_RULES",
+      message: `cyclic unit rules: ${parseability.cyclicUnitRules.map((members) => members.join(" -> ")).join("; ")}`,
+    });
+  }
   const used = usedTerminalKeys(ir);
   const unused = ir.terminals
     .filter((terminal) => !used.has(terminalKey(terminal)))
@@ -112,10 +122,11 @@ const analysisDiagnostics = (
 export const analyzeGrammar = (ir: GrammarIR): GrammarFeatures => {
   const size = sizeFeatures(ir);
   const structure = structureFeatures(ir);
+  const parseability = parseabilityFeatures(ir);
   const diagnostics = [
     ...ir.diagnostics,
     ...versionDiagnostics(ir.irVersion),
-    ...analysisDiagnostics(ir, size, structure.features),
+    ...analysisDiagnostics(ir, size, structure.features, parseability),
   ];
   const features: GrammarFeatures = {
     featuresVersion: FEATURES_VERSION,
@@ -127,6 +138,8 @@ export const analyzeGrammar = (ir: GrammarIR): GrammarFeatures => {
     lexicon: lexiconFeatures(ir),
     sugar: sugarFeatures(ir),
     actions: actionFeatures(ir),
+    parseability,
+    redundancy: redundancyFeatures(ir),
     notable: {
       ...(size.maxAltPerRule.rule
         ? {

@@ -11,6 +11,8 @@ Metrics are facts with definitions, not an implied ranking of grammar quality. E
 | --- | --- | --- |
 | Size | rules, alternatives, terminals | A |
 | Structure | reachable, recursive, productive rules | A or B |
+| Parseability | FIRST/FOLLOW sizes, LL(1) conflicts, unit-rule cycles | A or B |
+| Redundancy | common prefixes, duplicates, clones, unused declarations | A or B |
 | Representation | ordered choice, EBNF sugar, precedence | B or C |
 | Review signals | unresolved symbols, diagnostics | A for the same policy |
 
