@@ -15,6 +15,10 @@ partial final action.
 Semantic action source is never parsed, retained in IR, or executed. Only presence,
 position, and character length are recorded.
 
+Grammar IR also does not retain comments, `%destructor`, `%printer`, `%union`, `%code`, or
+whether an empty RHS used `%empty`. Metrics that require these details are explicitly
+listed as not applicable.
+
 ## ANTLR4 target code and lexer commands
 
 The ANTLR frontend parses grammar structure, not target-language code. Grammar actions and
@@ -45,4 +49,5 @@ must be reported rather than executed.
 Expression parsers enforce a configurable nesting limit of 500 by default (up to 1,000). Inputs that exceed
 the limit return a frontend nesting diagnostic and do not produce an IR. The analyzer, canonical
 IR validation, and dependency graph traversal use explicit work stacks for expression trees and
-large rule chains; semantic parser-generator conflicts remain outside gramin's scope.
+large rule chains. Raw SLR conflicts can be computed with `--analysis lr`; precedence
+resolution and LALR parser-generator behavior remain outside gramin's scope.

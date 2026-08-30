@@ -142,6 +142,12 @@ The baseline and current run should use the same frontend selection and source i
 Do not reduce a grammar to one universal “complexity score”: metric comparability depends on
 the grammar representation and the capabilities available to the frontend.
 
+Canonical LR(0) state construction is opt-in because it is more expensive:
+
+```sh
+gramin analyze grammar.y --analysis lr
+```
+
 ### Inspect the Grammar IR
 
 Grammar IR is a versioned, machine-readable boundary for caching, validation, and custom

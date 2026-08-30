@@ -101,6 +101,44 @@ const StructureFeaturesSchema = Type.Object(
       },
       { additionalProperties: false },
     ),
+    articulationPoints: Type.Array(Type.String()),
+    bridges: Type.Array(
+      Type.Object(
+        { source: Type.String(), target: Type.String() },
+        { additionalProperties: false },
+      ),
+    ),
+    topBetweenness: Type.Array(
+      Type.Object(
+        { symbol: Type.String(), value: Type.Number({ minimum: 0 }) },
+        { additionalProperties: false },
+      ),
+    ),
+    fanInGini: Type.Number({ minimum: 0, maximum: 1 }),
+    fanInEntropy: Type.Number({ minimum: 0 }),
+    shortestDerivation: Type.Array(
+      Type.Object(
+        { rule: Type.String(), length: Type.Integer({ minimum: 0 }) },
+        { additionalProperties: false },
+      ),
+    ),
+    shortestDerivationUnknown: Type.Array(Type.String()),
+    startSymbolReachability: Type.Object(
+      {
+        entries: Type.Array(
+          Type.Object(
+            {
+              symbol: Type.String(),
+              reachableRules: Type.Integer({ minimum: 0 }),
+            },
+            { additionalProperties: false },
+          ),
+        ),
+        overlapRatio: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
+      },
+      { additionalProperties: false },
+    ),
+    maxExpressionNestingDepth: Type.Integer({ minimum: 0 }),
     notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
@@ -147,6 +185,21 @@ const LexiconFeaturesSchema = Type.Object(
     anyCharCount: Type.Integer({ minimum: 0 }),
     keywordLike: Type.Array(Type.String()),
     punctuationLike: Type.Array(Type.String()),
+    literalPrefixCollisions: Type.Array(
+      Type.Object(
+        { prefix: Type.String(), literal: Type.String() },
+        { additionalProperties: false },
+      ),
+    ),
+    keywordIdentifierCollisions: Type.Array(Type.String()),
+    tokenUsage: Type.Object(
+      {
+        used: Type.Integer({ minimum: 0 }),
+        coverage: Type.Number({ minimum: 0, maximum: 1 }),
+        singleUse: Type.Array(Type.String()),
+      },
+      { additionalProperties: false },
+    ),
     notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
@@ -204,6 +257,16 @@ const ParseabilityFeaturesSchema = Type.Object(
     ),
     unitRules: Type.Integer({ minimum: 0 }),
     cyclicUnitRules: Type.Array(Type.Array(Type.String(), { minItems: 1 })),
+    slr: Type.Optional(
+      Type.Object(
+        {
+          states: Type.Integer({ minimum: 0 }),
+          shiftReduceConflicts: Type.Integer({ minimum: 0 }),
+          reduceReduceConflicts: Type.Integer({ minimum: 0 }),
+        },
+        { additionalProperties: false },
+      ),
+    ),
     notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
@@ -219,8 +282,79 @@ const RedundancyFeaturesSchema = Type.Object(
     unusedTerminals: Type.Array(Type.String()),
     unusedPrecedenceTokens: Type.Array(Type.String()),
     undefinedPrecedenceOverrides: Type.Array(Type.String()),
+    listRecursion: Type.Object(
+      {
+        left: Type.Integer({ minimum: 0 }),
+        right: Type.Integer({ minimum: 0 }),
+        mixed: Type.Integer({ minimum: 0 }),
+        consistency: Type.Number({ minimum: 0, maximum: 1 }),
+      },
+      { additionalProperties: false },
+    ),
   },
   { additionalProperties: false },
+);
+
+const PegFeaturesSchema = Type.Object(
+  {
+    predicates: Type.Optional(Type.Integer({ minimum: 0 })),
+    maxPredicateNestingDepth: Type.Optional(Type.Integer({ minimum: 0 })),
+    shadowedAlternativePairs: Type.Optional(Type.Integer({ minimum: 0 })),
+    backtrackingHotspots: Type.Optional(
+      Type.Array(
+        Type.Object(
+          { rule: Type.String(), score: Type.Integer({ minimum: 0 }) },
+          { additionalProperties: false },
+        ),
+      ),
+    ),
+    charClassOverlapPairs: Type.Optional(Type.Integer({ minimum: 0 })),
+    notApplicable: Type.Optional(NotApplicableSchema),
+  },
+  { additionalProperties: false },
+);
+
+const OperationsFeaturesSchema = Type.Object(
+  {
+    errorTokenUses: Type.Integer({ minimum: 0 }),
+    rulesWithErrorRecovery: Type.Integer({ minimum: 0 }),
+    recoveryRuleRatio: Type.Number({ minimum: 0, maximum: 1 }),
+    namedReferences: Type.Integer({ minimum: 0 }),
+    symbolReferences: Type.Integer({ minimum: 0 }),
+    namedReferenceRatio: Type.Number({ minimum: 0, maximum: 1 }),
+    notApplicable: Type.Optional(NotApplicableSchema),
+  },
+  { additionalProperties: false },
+);
+
+const StyleFeaturesSchema = Type.Object(
+  {
+    terminalUpperCaseRatio: Type.Number({ minimum: 0, maximum: 1 }),
+    nonterminalConvention: Type.Union([
+      Type.Literal("snake_case"),
+      Type.Literal("camelCase"),
+      Type.Literal("mixed"),
+      Type.Literal("none"),
+    ]),
+    nonterminalConventionRatio: Type.Number({ minimum: 0, maximum: 1 }),
+    namingOutliers: Type.Array(Type.String()),
+    notApplicable: Type.Optional(NotApplicableSchema),
+  },
+  { additionalProperties: false },
+);
+
+const PerRuleFeaturesSchema = Type.Array(
+  Type.Object(
+    {
+      rule: Type.String(),
+      alternatives: Type.Integer({ minimum: 0 }),
+      rhsItems: Type.Integer({ minimum: 0 }),
+      references: Type.Array(Type.String()),
+      referencedBy: Type.Array(Type.String()),
+      shortestDerivation: Type.Optional(Type.Integer({ minimum: 0 })),
+    },
+    { additionalProperties: false },
+  ),
 );
 
 const NotableFeaturesSchema = Type.Object(
@@ -267,6 +401,10 @@ export const GrammarFeaturesSchema = Type.Object(
     actions: ActionFeaturesSchema,
     parseability: ParseabilityFeaturesSchema,
     redundancy: RedundancyFeaturesSchema,
+    peg: PegFeaturesSchema,
+    operations: OperationsFeaturesSchema,
+    style: StyleFeaturesSchema,
+    perRule: PerRuleFeaturesSchema,
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },

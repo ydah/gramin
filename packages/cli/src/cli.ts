@@ -20,9 +20,9 @@ import { yaccFrontend } from "@gramin/frontend-yacc";
 import {
   DigestBudgetTooSmallError,
   diffFeatures,
-  renderJson,
   renderFeatureDiffJson,
   renderFeatureDiffMarkdown,
+  renderJson,
   renderLlmDigest,
   renderMarkdown,
   renderSarif,
@@ -76,7 +76,7 @@ const frontends: readonly Frontend[] = [
 
 const usage = `Usage:
   gramin analyze <file...> [--format json|md|llm|sarif] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
-    [--source-name <name> | --source-root <dir>] [--max-nesting-depth <n>] [--baseline <features.json>] [--fail-on-regression]
+    [--source-name <name> | --source-root <dir>] [--max-nesting-depth <n>] [--analysis lr] [--baseline <features.json>] [--fail-on-regression]
   gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>] [--frontend-timeout <ms>]
   gramin analyze --ir <ir.json|-> [--format json|md|sarif]
   gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc] [--source-name <name> | --source-root <dir>]
@@ -386,7 +386,7 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
     await output(serializeCanonical(ir), options.output, io);
     return Math.max(parsed.exitCode, exitCodeForDiagnostics(ir.diagnostics, options.failOn));
   }
-  let features = analyzeGrammar(ir);
+  let features = analyzeGrammar(ir, { lr: options.analysis === "lr" });
   let regressionCount = 0;
   if (options.baseline !== undefined) {
     const baseline = await readFeatures(options.baseline, io);
@@ -441,7 +441,11 @@ const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => 
   const before = await parseSourceIR({ ...options, command: "analyze", files: [beforeFile] }, io);
   const after = await parseSourceIR({ ...options, command: "analyze", files: [afterFile] }, io);
   if (!before?.ir || !after?.ir) return EXIT_FATAL;
-  const comparison = diffFeatures(analyzeGrammar(before.ir), analyzeGrammar(after.ir));
+  const comparison = diffFeatures(
+    analyzeGrammar(before.ir, { lr: options.analysis === "lr" }),
+    analyzeGrammar(after.ir, { lr: options.analysis === "lr" }),
+    { beforeIR: before.ir, afterIR: after.ir },
+  );
   const report =
     options.format === "md"
       ? renderFeatureDiffMarkdown(comparison)

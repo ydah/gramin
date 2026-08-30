@@ -3,9 +3,10 @@ import {
   FEATURES_VERSION,
   type GrammarFeatures,
   type GrammarIR,
+  mergeRulesByName,
   validateFeatures,
 } from "@gramin/core";
-import { walkExpression } from "./expressions.js";
+import { alternativeRhsLength, walkExpression } from "./expressions.js";
 import { parseabilityFeatures } from "./parseability.js";
 import { redundancyFeatures } from "./redundancy.js";
 import {
@@ -15,6 +16,7 @@ import {
   sugarFeatures,
 } from "./secondary-metrics.js";
 import { sizeFeatures } from "./size.js";
+import { operationsFeatures, pegFeatures, styleFeatures } from "./specialized-metrics.js";
 import { structureFeatures } from "./structure.js";
 
 export class UnsupportedIRVersionError extends Error {
@@ -119,15 +121,43 @@ const analysisDiagnostics = (
   return diagnostics;
 };
 
-export const analyzeGrammar = (ir: GrammarIR): GrammarFeatures => {
+export interface AnalyzeOptions {
+  readonly lr?: boolean;
+}
+
+export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): GrammarFeatures => {
   const size = sizeFeatures(ir);
   const structure = structureFeatures(ir);
-  const parseability = parseabilityFeatures(ir);
+  const parseability = parseabilityFeatures(ir, options);
   const diagnostics = [
     ...ir.diagnostics,
     ...versionDiagnostics(ir.irVersion),
     ...analysisDiagnostics(ir, size, structure.features, parseability),
   ];
+  const incoming = new Map([...structure.graph.keys()].map((name) => [name, new Set<string>()]));
+  structure.graph.forEach((targets, source) => {
+    targets.forEach((target) => {
+      incoming.get(target)?.add(source);
+    });
+  });
+  const perRule = mergeRulesByName(ir.rules)
+    .map((rule) => {
+      const shortestDerivation = structure.shortestDerivations.get(rule.name);
+      return {
+        rule: rule.name,
+        alternatives: rule.alternatives.length,
+        rhsItems: rule.alternatives.reduce(
+          (total, alternative) => total + alternativeRhsLength(alternative),
+          0,
+        ),
+        references: [...(structure.graph.get(rule.name) ?? [])].sort(),
+        referencedBy: [...(incoming.get(rule.name) ?? [])].sort(),
+        ...(shortestDerivation === undefined || !Number.isFinite(shortestDerivation)
+          ? {}
+          : { shortestDerivation }),
+      };
+    })
+    .sort((left, right) => left.rule.localeCompare(right.rule));
   const features: GrammarFeatures = {
     featuresVersion: FEATURES_VERSION,
     source: { ...ir.source },
@@ -140,6 +170,10 @@ export const analyzeGrammar = (ir: GrammarIR): GrammarFeatures => {
     actions: actionFeatures(ir),
     parseability,
     redundancy: redundancyFeatures(ir),
+    peg: pegFeatures(ir),
+    operations: operationsFeatures(ir),
+    style: styleFeatures(ir),
+    perRule,
     notable: {
       ...(size.maxAltPerRule.rule
         ? {

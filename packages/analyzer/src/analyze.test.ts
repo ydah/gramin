@@ -141,6 +141,131 @@ describe("analyzeGrammar", () => {
     );
   });
 
+  it("computes advanced graph shape and shortest derivations", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["a"],
+      terminals: [{ name: "END" }],
+      rules: [
+        { name: "a", alternatives: [{ items: [{ kind: "symbol", name: "b" }] }] },
+        { name: "b", alternatives: [{ items: [{ kind: "symbol", name: "c" }] }] },
+        { name: "c", alternatives: [{ items: [{ kind: "terminal", name: "END" }] }] },
+      ],
+    });
+    expect(features.structure).toMatchObject({
+      articulationPoints: ["b"],
+      bridges: [
+        { source: "a", target: "b" },
+        { source: "b", target: "c" },
+      ],
+      shortestDerivation: [
+        { rule: "a", length: 1 },
+        { rule: "b", length: 1 },
+        { rule: "c", length: 1 },
+      ],
+      startSymbolReachability: {
+        entries: [{ symbol: "a", reachableRules: 3 }],
+        overlapRatio: 1,
+      },
+      maxExpressionNestingDepth: 1,
+    });
+    expect(features.structure.topBetweenness[0]).toEqual({ symbol: "b", value: 1 });
+    expect(features.perRule.find(({ rule }) => rule === "b")).toMatchObject({
+      references: ["c"],
+      referencedBy: ["a"],
+      shortestDerivation: 1,
+    });
+  });
+
+  it("runs opt-in SLR analysis", () => {
+    const base = fixtureIR("empty");
+    const ir: GrammarIR = {
+      ...base,
+      startSymbols: ["start"],
+      terminals: [{ name: "A" }],
+      rules: [{ name: "start", alternatives: [{ items: [{ kind: "terminal", name: "A" }] }] }],
+    };
+    expect(analyzeGrammar(ir).parseability.slr).toBeUndefined();
+    expect(analyzeGrammar(ir, { lr: true }).parseability.slr).toEqual({
+      states: 3,
+      shiftReduceConflicts: 0,
+      reduceReduceConflicts: 0,
+    });
+  });
+
+  it("finds ordered-choice, recovery, and naming signals", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      capabilities: {
+        ...base.capabilities,
+        orderedChoice: true,
+        predicates: true,
+        scannerless: true,
+      },
+      startSymbols: ["startRule"],
+      terminals: [{ name: "error" }, { name: "IDENTIFIER" }],
+      rules: [
+        {
+          name: "startRule",
+          orderedAlternatives: true,
+          alternatives: [
+            { items: [{ kind: "terminal", literal: "a" }] },
+            { items: [{ kind: "terminal", literal: "ab" }] },
+            {
+              items: [
+                { kind: "terminal", literal: "x" },
+                { kind: "charClass", pattern: "a-z" },
+              ],
+            },
+            {
+              items: [
+                { kind: "terminal", literal: "x" },
+                {
+                  kind: "predicate",
+                  positive: true,
+                  expr: {
+                    kind: "predicate",
+                    positive: false,
+                    expr: { kind: "charClass", pattern: "m-z" },
+                  },
+                },
+              ],
+            },
+            { items: [{ kind: "terminal", name: "error" }] },
+            { items: [{ kind: "symbol", name: "classChoice" }] },
+          ],
+        },
+        {
+          name: "classChoice",
+          orderedAlternatives: true,
+          alternatives: [
+            { items: [{ kind: "charClass", pattern: "a-z" }] },
+            { items: [{ kind: "charClass", pattern: "m-z" }] },
+          ],
+        },
+      ],
+    });
+    expect(features.peg).toMatchObject({
+      predicates: 2,
+      maxPredicateNestingDepth: 2,
+      shadowedAlternativePairs: 1,
+      charClassOverlapPairs: 1,
+    });
+    expect(features.peg.backtrackingHotspots?.[0]).toMatchObject({ rule: "startRule" });
+    expect(features.operations).toMatchObject({
+      errorTokenUses: 1,
+      rulesWithErrorRecovery: 1,
+      recoveryRuleRatio: 0.5,
+    });
+    expect(features.style).toMatchObject({
+      terminalUpperCaseRatio: 0.5,
+      nonterminalConvention: "camelCase",
+      nonterminalConventionRatio: 1,
+    });
+  });
+
   it("reports reachable rules that cannot derive a terminal sequence", () => {
     const base = fixtureIR("empty");
     const ir: GrammarIR = {

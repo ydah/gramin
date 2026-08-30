@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import type { GrammarFeatures } from "@gramin/core";
+import type { GrammarFeatures, GrammarIR } from "@gramin/core";
 import { describe, expect, it } from "vitest";
 import { diffFeatures } from "./diff.js";
 
@@ -31,5 +31,32 @@ describe("feature diffs", () => {
 
     expect(diff.changes).toEqual([]);
     expect(diff.regressions).toEqual([]);
+  });
+
+  it("reports structural edit distance and dependency blast radius", () => {
+    const features = fixtureFeatures();
+    const grammar = (literal: string): GrammarIR => ({
+      irVersion: "1.2.0",
+      source: features.source,
+      capabilities: features.capabilities,
+      startSymbols: ["start"],
+      terminals: [],
+      externalSymbols: [],
+      precedence: [],
+      rules: [
+        { name: "start", alternatives: [{ items: [{ kind: "symbol", name: "value" }] }] },
+        { name: "value", alternatives: [{ items: [{ kind: "terminal", literal }] }] },
+      ],
+      diagnostics: [],
+    });
+    const beforeIR = grammar("a");
+    const afterIR = grammar("b");
+    const diff = diffFeatures(features, structuredClone(features), { beforeIR, afterIR });
+
+    expect(diff.structural).toMatchObject({
+      changedRules: ["value"],
+      blastRadius: { forward: 1, reverse: 2, total: 2, rules: ["start", "value"] },
+    });
+    expect(diff.structural?.editDistance).toBeGreaterThan(0);
   });
 });

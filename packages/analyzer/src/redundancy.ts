@@ -6,8 +6,8 @@ import {
   type GrammarIR,
   mergeRulesByName,
 } from "@gramin/core";
-import { walkExpression } from "./expressions.js";
-import { compareBytes } from "./numbers.js";
+import { alternativeEdgeReference, alternativeRhsLength, walkExpression } from "./expressions.js";
+import { compareBytes, round4 } from "./numbers.js";
 
 const expressionKey = (expression: Expr): string => JSON.stringify(canonicalize(expression));
 
@@ -39,9 +39,25 @@ export const redundancyFeatures = (ir: GrammarIR): GrammarFeatures["redundancy"]
   const cloneLocations = new Map<string, Set<string>>();
   const referenceCounts = new Map(rules.map((rule) => [rule.name, 0]));
   const usedTerminals = new Set<string>();
+  let leftLists = 0;
+  let rightLists = 0;
+  let mixedLists = 0;
 
   rules.forEach((rule) => {
     const seenAlternatives = new Set<string>();
+    const leftRecursive = rule.alternatives.some(
+      (alternative) =>
+        alternativeRhsLength(alternative) > 1 &&
+        alternativeEdgeReference(alternative, "first") === rule.name,
+    );
+    const rightRecursive = rule.alternatives.some(
+      (alternative) =>
+        alternativeRhsLength(alternative) > 1 &&
+        alternativeEdgeReference(alternative, "last") === rule.name,
+    );
+    if (leftRecursive && rightRecursive) mixedLists += 1;
+    else if (leftRecursive) leftLists += 1;
+    else if (rightRecursive) rightLists += 1;
     rule.alternatives.forEach((alternative, alternativeIndex) => {
       const key = alternativeKey(alternative);
       if (seenAlternatives.has(key)) duplicateAlternatives += 1;
@@ -114,5 +130,15 @@ export const redundancyFeatures = (ir: GrammarIR): GrammarFeatures["redundancy"]
     undefinedPrecedenceOverrides: [...overrides]
       .filter((token) => !precedenceTokens.has(token))
       .sort(compareBytes),
+    listRecursion: {
+      left: leftLists,
+      right: rightLists,
+      mixed: mixedLists,
+      consistency: round4(
+        leftLists + rightLists + mixedLists === 0
+          ? 0
+          : Math.max(leftLists, rightLists) / (leftLists + rightLists + mixedLists),
+      ),
+    },
   };
 };

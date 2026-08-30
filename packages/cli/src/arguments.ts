@@ -21,6 +21,7 @@ export interface ParsedArguments {
   readonly sourceRoot?: string;
   readonly baseline?: string;
   readonly failOnRegression: boolean;
+  readonly analysis?: "lr";
 }
 
 export type ArgumentResult =
@@ -40,6 +41,7 @@ const valueOptions = new Set([
   "--source-name",
   "--source-root",
   "--baseline",
+  "--analysis",
   "-o",
 ]);
 
@@ -135,6 +137,10 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
     };
   }
   const baseline = options.get("--baseline");
+  const analysis = options.get("--analysis");
+  if (analysis !== undefined && analysis !== "lr") {
+    return { ok: false, message: `unknown analysis ${analysis}` };
+  }
 
   return {
     ok: true,
@@ -156,6 +162,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
       ...(sourceRoot === undefined ? {} : { sourceRoot }),
       ...(baseline === undefined ? {} : { baseline }),
       failOnRegression,
+      ...(analysis === undefined ? {} : { analysis }),
     },
   };
 };

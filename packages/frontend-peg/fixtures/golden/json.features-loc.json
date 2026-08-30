@@ -57,12 +57,14 @@
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
+    "keywordIdentifierCollisions": [],
     "keywordLike": [
       "false",
       "null",
       "true"
     ],
     "literalOccurrences": 17,
+    "literalPrefixCollisions": [],
     "literalTokens": 12,
     "namedTokens": 0,
     "notApplicable": {
@@ -79,7 +81,20 @@
       "]",
       "{",
       "}"
-    ]
+    ],
+    "tokenUsage": {
+      "coverage": 1,
+      "singleUse": [
+        "-",
+        ".",
+        ":",
+        "[",
+        "]",
+        "{",
+        "}"
+      ],
+      "used": 12
+    }
   },
   "notable": {
     "coreSymbols": [
@@ -103,15 +118,160 @@
       "name": "value"
     }
   },
+  "operations": {
+    "errorTokenUses": 0,
+    "namedReferenceRatio": 0.0417,
+    "namedReferences": 1,
+    "notApplicable": {
+      "actionReferences": "actions are retained only as opaque lengths",
+      "declarationDirectives": "Grammar IR does not retain %destructor, %printer, %union, or %code",
+      "explicitEmptyAlternatives": "Grammar IR does not distinguish %empty from an implicit empty RHS"
+    },
+    "recoveryRuleRatio": 0,
+    "rulesWithErrorRecovery": 0,
+    "symbolReferences": 24
+  },
   "parseability": {
     "cyclicUnitRules": [],
     "notApplicable": {
       "firstSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
       "followSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
-      "ll1Conflicts": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
+      "ll1Conflicts": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
+      "slr": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
     },
     "unitRules": 4
   },
+  "peg": {
+    "backtrackingHotspots": [],
+    "charClassOverlapPairs": 0,
+    "maxPredicateNestingDepth": 1,
+    "predicates": 2,
+    "shadowedAlternativePairs": 0
+  },
+  "perRule": [
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "array",
+        "member",
+        "object",
+        "start"
+      ],
+      "references": [],
+      "rhsItems": 1,
+      "rule": "_",
+      "shortestDerivation": 0
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "value"
+      ],
+      "references": [
+        "_",
+        "value"
+      ],
+      "rhsItems": 5,
+      "rule": "array",
+      "shortestDerivation": 2
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "other"
+      ],
+      "references": [],
+      "rhsItems": 2,
+      "rule": "keyword",
+      "shortestDerivation": 1
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "object"
+      ],
+      "references": [
+        "_",
+        "string",
+        "value"
+      ],
+      "rhsItems": 5,
+      "rule": "member",
+      "shortestDerivation": 4
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "value"
+      ],
+      "references": [],
+      "rhsItems": 3,
+      "rule": "number",
+      "shortestDerivation": 1
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "value"
+      ],
+      "references": [
+        "_",
+        "member"
+      ],
+      "rhsItems": 5,
+      "rule": "object",
+      "shortestDerivation": 2
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [],
+      "references": [
+        "keyword"
+      ],
+      "rhsItems": 2,
+      "rule": "other",
+      "shortestDerivation": 1
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [],
+      "references": [
+        "_",
+        "value"
+      ],
+      "rhsItems": 3,
+      "rule": "start",
+      "shortestDerivation": 1
+    },
+    {
+      "alternatives": 1,
+      "referencedBy": [
+        "member",
+        "value"
+      ],
+      "references": [],
+      "rhsItems": 3,
+      "rule": "string",
+      "shortestDerivation": 2
+    },
+    {
+      "alternatives": 7,
+      "referencedBy": [
+        "array",
+        "member",
+        "start"
+      ],
+      "references": [
+        "array",
+        "number",
+        "object",
+        "string"
+      ],
+      "rhsItems": 7,
+      "rule": "value",
+      "shortestDerivation": 1
+    }
+  ],
   "precedence": {
     "notApplicable": {
       "assocBreakdown": "precedenceTable capability is false",
@@ -126,6 +286,12 @@
   "redundancy": {
     "commonPrefixPairs": 0,
     "duplicateAlternatives": 0,
+    "listRecursion": {
+      "consistency": 0,
+      "left": 0,
+      "mixed": 0,
+      "right": 0
+    },
     "maxCommonPrefixLength": 0,
     "singleReferenceRules": [
       "array",
@@ -182,8 +348,23 @@
     }
   },
   "structure": {
+    "articulationPoints": [
+      "value"
+    ],
+    "bridges": [
+      {
+        "source": "keyword",
+        "target": "other"
+      },
+      {
+        "source": "number",
+        "target": "value"
+      }
+    ],
     "directLeftRecursiveRules": 0,
     "directRightRecursiveRules": 0,
+    "fanInEntropy": 2.7534,
+    "fanInGini": 0.4429,
     "largestRecursiveComponent": {
       "members": [
         "array",
@@ -204,6 +385,7 @@
       "value": 4
     },
     "maxDependencyDepth": 2,
+    "maxExpressionNestingDepth": 7,
     "notApplicable": {
       "nullableRules": "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation"
     },
@@ -213,6 +395,100 @@
       "count": 4,
       "ratio": 0.5
     },
+    "shortestDerivation": [
+      {
+        "length": 0,
+        "rule": "_"
+      },
+      {
+        "length": 2,
+        "rule": "array"
+      },
+      {
+        "length": 1,
+        "rule": "keyword"
+      },
+      {
+        "length": 4,
+        "rule": "member"
+      },
+      {
+        "length": 1,
+        "rule": "number"
+      },
+      {
+        "length": 2,
+        "rule": "object"
+      },
+      {
+        "length": 1,
+        "rule": "other"
+      },
+      {
+        "length": 1,
+        "rule": "start"
+      },
+      {
+        "length": 2,
+        "rule": "string"
+      },
+      {
+        "length": 1,
+        "rule": "value"
+      }
+    ],
+    "shortestDerivationUnknown": [],
+    "startSymbolReachability": {
+      "entries": [
+        {
+          "reachableRules": 8,
+          "symbol": "start"
+        }
+      ],
+      "overlapRatio": 1
+    },
+    "topBetweenness": [
+      {
+        "symbol": "value",
+        "value": 14
+      },
+      {
+        "symbol": "member",
+        "value": 4
+      },
+      {
+        "symbol": "object",
+        "value": 3.5
+      },
+      {
+        "symbol": "array",
+        "value": 0.5
+      },
+      {
+        "symbol": "_",
+        "value": 0
+      },
+      {
+        "symbol": "keyword",
+        "value": 0
+      },
+      {
+        "symbol": "number",
+        "value": 0
+      },
+      {
+        "symbol": "other",
+        "value": 0
+      },
+      {
+        "symbol": "start",
+        "value": 0
+      },
+      {
+        "symbol": "string",
+        "value": 0
+      }
+    ],
     "topFanIn": [
       {
         "count": 4,
@@ -302,6 +578,17 @@
       "keyword",
       "other"
     ]
+  },
+  "style": {
+    "namingOutliers": [
+      "_"
+    ],
+    "nonterminalConvention": "snake_case",
+    "nonterminalConventionRatio": 0.9,
+    "notApplicable": {
+      "commentDensity": "Grammar IR does not retain comments"
+    },
+    "terminalUpperCaseRatio": 0
   },
   "sugar": {
     "notApplicable": {

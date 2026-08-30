@@ -144,6 +144,10 @@ external symbols, and end-of-input.
 - `unitRules`: alternatives whose effective RHS is one nonterminal reference (**E/A**).
 - `cyclicUnitRules`: sorted SCCs made entirely from unit-rule edges (**E/B**). A non-empty
   result produces `ANALYZER007_CYCLIC_UNIT_RULES`.
+- `slr`: canonical LR(0) state count and raw SLR shift/reduce and reduce/reduce
+  conflict-cell counts before precedence resolution (**E/B (plain CFG)**). It is opt-in
+  through `--analysis lr` and omitted when the IR contains expressions that require EBNF
+  expansion.
 
 ## Redundancy and refactoring candidates
 
@@ -155,6 +159,55 @@ external symbols, and end-of-input.
 - `singleReferenceRules`: rules referenced exactly once in all RHS expressions (**E/A**).
 - `unusedTerminals`, `unusedPrecedenceTokens`, `undefinedPrecedenceOverrides`: sorted
   declaration consistency lists (**E/B**).
+- `listRecursion`: likely list rules grouped by left, right, or mixed recursion, plus the
+  dominant-direction ratio (**H/C**).
+
+## Advanced structure
+
+- `articulationPoints`, `bridges`: vertices and edges in the undirected dependency graph
+  whose removal disconnects a component (**E/A**).
+- `topBetweenness`: top ten directed, unweighted Brandes betweenness values (**E/A**).
+- `fanInGini`, `fanInEntropy`: Gini coefficient and base-2 Shannon entropy of unique
+  incoming dependency counts (**E/A**).
+- `shortestDerivation`: least fixed-point minimum consumed-terminal length per rule;
+  `shortestDerivationUnknown` lists rules without a finite result (**E/B**).
+- `startSymbolReachability`: reachable-rule counts for each start symbol and intersection
+  divided by union across start symbols (**E/A**).
+- `maxExpressionNestingDepth`: deepest IR expression node below an alternative (**E/B**).
+
+## PEG and ordered choice
+
+These fields are omitted unless `orderedChoice` is true.
+
+- `predicates`, `maxPredicateNestingDepth`: syntactic predicate count and nesting (**E/B**).
+- `shadowedAlternativePairs`: structurally provable ordered-choice prefix shadowing (**E/B**).
+- `backtrackingHotspots`: top rules ranked by shared direct-prefix length weighted by the
+  later alternative position (**H/C**).
+- `charClassOverlapPairs`: intersecting leading character classes between alternatives in
+  the same ordered choice (**E/B**). It is omitted when Unicode property escapes prevent
+  exact interval expansion.
+
+## Lexical usage
+
+- `literalPrefixCollisions`: distinct non-empty literal-prefix pairs (**E/B**).
+- `keywordIdentifierCollisions`: keyword-like literals when an identifier-like declaration
+  or rule exists (**H/C**).
+- `tokenUsage`: declaration coverage and terminals used exactly once (**E/A**).
+
+## Error recovery, style, and per-rule records
+
+- `operations.errorTokenUses`, `rulesWithErrorRecovery`, `recoveryRuleRatio`: explicit
+  `error` token adoption (**E/B**).
+- `operations.namedReferences`, `symbolReferences`, `namedReferenceRatio`: labeled symbol
+  reference adoption (**E/C**).
+- `style`: uppercase terminal ratio, dominant snake/camel nonterminal convention, and
+  deviations (**H/C**). Comment density is unavailable because Grammar IR omits comments.
+- `perRule`: name, alternative and RHS counts, incoming/outgoing dependencies, and finite
+  shortest derivation. Records use symbol byte order and are not collapsed into a score.
+
+Source-to-source `gramin diff` additionally emits normalized rule-tree edit distance and
+the union of forward and reverse dependency reachability from changed rules. A features
+baseline cannot provide these structural fields because it does not contain rule trees.
 
 ## Notable locations
 
@@ -172,6 +225,8 @@ A section omits a metric that does not apply and records a stable explanation in
 - parameterized counts require `parameterizedRules`;
 - CFG nullability is omitted for `orderedChoice`.
 - CFG FIRST/FOLLOW and LL(1) conflicts are omitted for `orderedChoice`.
+- SLR metrics require `--analysis lr` and plain BNF expressions.
+- PEG metrics require `orderedChoice`.
 - empty rule or alternative samples omit their percentile object;
 - recursion ratios are omitted when no rule is reachable from a start symbol;
 - complete action counts are omitted after diagnosed lossy action handling.

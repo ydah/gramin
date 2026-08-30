@@ -188,7 +188,159 @@ const unitTarget = (
     : undefined;
 };
 
-export const parseabilityFeatures = (ir: GrammarIR): GrammarFeatures["parseability"] => {
+interface ParseabilityOptions {
+  readonly lr?: boolean;
+}
+
+interface Production {
+  readonly lhs: string;
+  readonly rhs: readonly string[];
+  readonly augmented: boolean;
+}
+
+const productionItems = (
+  expression: Expr,
+  ruleNames: ReadonlySet<string>,
+): string[] | undefined => {
+  if (expression.kind === "symbol") {
+    return [
+      ruleNames.has(expression.name) ? `N:${expression.name}` : `T:symbol:${expression.name}`,
+    ];
+  }
+  if (expression.kind === "terminal") return [`T:${terminalKey(expression)}`];
+  if (expression.kind === "charClass") return [`T:class:${expression.pattern}`];
+  if (expression.kind === "anyChar") return ["T:any-char"];
+  if (expression.kind === "midRuleAction") return [];
+  if (expression.kind === "group" || expression.kind === "seq") {
+    const items = expression.kind === "group" ? [expression.expr] : expression.items;
+    const flattened: string[] = [];
+    for (const item of items) {
+      const result = productionItems(item, ruleNames);
+      if (!result) return undefined;
+      flattened.push(...result);
+    }
+    return flattened;
+  }
+  return undefined;
+};
+
+const slrFeatures = (
+  ir: GrammarIR,
+  follow: ReadonlyMap<string, ReadonlySet<string>>,
+): NonNullable<GrammarFeatures["parseability"]["slr"]> | undefined => {
+  const rules = mergeRulesByName(ir.rules);
+  const ruleNames = new Set(rules.map((rule) => rule.name));
+  const productions: Production[] = ir.startSymbols
+    .filter((symbol) => ruleNames.has(symbol))
+    .map((symbol) => ({ lhs: "@start", rhs: [`N:${symbol}`], augmented: true }));
+  const startProductionCount = productions.length;
+  for (const rule of rules) {
+    for (const alternative of rule.alternatives) {
+      const rhs = productionItems({ kind: "seq", items: alternative.items }, ruleNames);
+      if (!rhs) return undefined;
+      productions.push({ lhs: rule.name, rhs, augmented: false });
+    }
+  }
+  if (startProductionCount === 0)
+    return { states: 0, shiftReduceConflicts: 0, reduceReduceConflicts: 0 };
+  const byLhs = new Map<string, number[]>();
+  productions.forEach((production, index) => {
+    const entries = byLhs.get(production.lhs) ?? [];
+    entries.push(index);
+    byLhs.set(production.lhs, entries);
+  });
+  const itemKey = (production: number, dot: number): string => `${production}:${dot}`;
+  const parseItem = (item: string): [number, number] => {
+    const [production, dot] = item.split(":").map(Number);
+    return [production ?? 0, dot ?? 0];
+  };
+  const closure = (seed: Iterable<string>): string[] => {
+    const items = new Set(seed);
+    const pending = [...items];
+    while (pending.length > 0) {
+      const item = pending.pop();
+      if (item === undefined) break;
+      const [productionIndex, dot] = parseItem(item);
+      const symbol = productions[productionIndex]?.rhs[dot];
+      if (!symbol?.startsWith("N:")) continue;
+      for (const next of byLhs.get(symbol.slice(2)) ?? []) {
+        const key = itemKey(next, 0);
+        if (items.has(key)) continue;
+        items.add(key);
+        pending.push(key);
+      }
+    }
+    return [...items].sort(compareBytes);
+  };
+  const stateKey = (items: readonly string[]): string => items.join("|");
+  const initial = closure(
+    productions.flatMap((production, index) => (production.augmented ? [itemKey(index, 0)] : [])),
+  );
+  const states = [initial];
+  const stateByKey = new Map([[stateKey(initial), 0]]);
+  const transitions = new Map<string, number>();
+  for (let state = 0; state < states.length; state += 1) {
+    const grouped = new Map<string, string[]>();
+    for (const item of states[state] ?? []) {
+      const [productionIndex, dot] = parseItem(item);
+      const symbol = productions[productionIndex]?.rhs[dot];
+      if (symbol === undefined) continue;
+      const target = grouped.get(symbol) ?? [];
+      target.push(itemKey(productionIndex, dot + 1));
+      grouped.set(symbol, target);
+    }
+    for (const [symbol, items] of grouped) {
+      const targetItems = closure(items);
+      const key = stateKey(targetItems);
+      let target = stateByKey.get(key);
+      if (target === undefined) {
+        target = states.length;
+        stateByKey.set(key, target);
+        states.push(targetItems);
+      }
+      transitions.set(`${state}\0${symbol}`, target);
+    }
+  }
+
+  let shiftReduceConflicts = 0;
+  let reduceReduceConflicts = 0;
+  states.forEach((items, state) => {
+    const actions = new Map<string, Set<string>>();
+    const addAction = (token: string, action: string): void => {
+      const entries = actions.get(token) ?? new Set<string>();
+      entries.add(action);
+      actions.set(token, entries);
+    };
+    items.forEach((item) => {
+      const [productionIndex, dot] = parseItem(item);
+      const production = productions[productionIndex];
+      if (!production) return;
+      const symbol = production.rhs[dot];
+      if (symbol?.startsWith("T:")) {
+        const target = transitions.get(`${state}\0${symbol}`);
+        if (target !== undefined) addAction(symbol.slice(2), `shift:${target}`);
+      } else if (symbol === undefined && production.augmented) {
+        addAction("end-of-input", "accept");
+      } else if (symbol === undefined) {
+        (follow.get(production.lhs) ?? []).forEach((token) => {
+          addAction(token, `reduce:${productionIndex}`);
+        });
+      }
+    });
+    actions.forEach((entries) => {
+      const shifts = [...entries].filter((entry) => entry.startsWith("shift:")).length;
+      const reductions = [...entries].filter((entry) => entry.startsWith("reduce:")).length;
+      if (shifts > 0 && reductions > 0) shiftReduceConflicts += 1;
+      if (reductions > 1) reduceReduceConflicts += 1;
+    });
+  });
+  return { states: states.length, shiftReduceConflicts, reduceReduceConflicts };
+};
+
+export const parseabilityFeatures = (
+  ir: GrammarIR,
+  options: ParseabilityOptions = {},
+): GrammarFeatures["parseability"] => {
   const rules = mergeRulesByName(ir.rules);
   const ruleNames = new Set(rules.map((rule) => rule.name));
   const unitGraph = new Map<string, Set<string>>(rules.map((rule) => [rule.name, new Set()]));
@@ -213,7 +365,12 @@ export const parseabilityFeatures = (ir: GrammarIR): GrammarFeatures["parseabili
     return {
       unitRules,
       cyclicUnitRules,
-      notApplicable: { firstSetSize: reason, followSetSize: reason, ll1Conflicts: reason },
+      notApplicable: {
+        firstSetSize: reason,
+        followSetSize: reason,
+        ll1Conflicts: reason,
+        slr: reason,
+      },
     };
   }
 
@@ -245,19 +402,21 @@ export const parseabilityFeatures = (ir: GrammarIR): GrammarFeatures["parseabili
   });
   const firstSetSize = distribution(first);
   const followSetSize = distribution(follow);
+  const slr = options.lr ? slrFeatures({ ...ir, rules }, follow) : undefined;
+  const notApplicable: Record<string, string> = {};
+  if (!options.lr) notApplicable.slr = "requires --analysis lr";
+  else if (slr === undefined) notApplicable.slr = "SLR analysis requires plain BNF expressions";
+  if (rules.length === 0) {
+    notApplicable.firstSetSize = "grammar has no rules";
+    notApplicable.followSetSize = "grammar has no rules";
+  }
   return {
     ...(firstSetSize === undefined ? {} : { firstSetSize }),
     ...(followSetSize === undefined ? {} : { followSetSize }),
     ll1Conflicts: { firstFirst, firstFollow, total: firstFirst + firstFollow },
     unitRules,
     cyclicUnitRules,
-    ...(rules.length === 0
-      ? {
-          notApplicable: {
-            firstSetSize: "grammar has no rules",
-            followSetSize: "grammar has no rules",
-          },
-        }
-      : {}),
+    ...(slr === undefined ? {} : { slr }),
+    ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
   };
 };

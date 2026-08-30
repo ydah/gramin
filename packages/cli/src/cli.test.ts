@@ -82,6 +82,19 @@ describe("gramin CLI", () => {
     expect(piped.stdout.join("")).toBe(direct.stdout.join(""));
   });
 
+  it("runs expensive LR analysis only when requested", async () => {
+    const regular = harness();
+    expect(await runCli(["analyze", "calc.y"], regular.io)).toBe(EXIT_SUCCESS);
+    expect(JSON.parse(regular.stdout.join("")).parseability.slr).toBeUndefined();
+
+    const lr = harness();
+    expect(await runCli(["analyze", "calc.y", "--analysis", "lr"], lr.io)).toBe(EXIT_SUCCESS);
+    expect(JSON.parse(lr.stdout.join("")).parseability.slr.states).toBeGreaterThan(0);
+
+    const invalid = harness();
+    expect(await runCli(["analyze", "calc.y", "--analysis", "lalr"], invalid.io)).toBe(EXIT_USAGE);
+  });
+
   it("preserves error diagnostics and applies fail-on thresholds through --ir", async () => {
     const irRun = harness();
     await runCli(["ir", "calc.y"], irRun.io);

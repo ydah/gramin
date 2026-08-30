@@ -29,11 +29,18 @@
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
+    "keywordIdentifierCollisions": [],
     "keywordLike": [],
     "literalOccurrences": 0,
+    "literalPrefixCollisions": [],
     "literalTokens": 0,
     "namedTokens": 1,
-    "punctuationLike": []
+    "punctuationLike": [],
+    "tokenUsage": {
+      "coverage": 1,
+      "singleUse": [],
+      "used": 1
+    }
   },
   "notable": {
     "coreSymbols": [
@@ -44,6 +51,19 @@
       "line": 4,
       "name": "items"
     }
+  },
+  "operations": {
+    "errorTokenUses": 0,
+    "namedReferenceRatio": 0,
+    "namedReferences": 0,
+    "notApplicable": {
+      "actionReferences": "actions are retained only as opaque lengths",
+      "declarationDirectives": "Grammar IR does not retain %destructor, %printer, %union, or %code",
+      "explicitEmptyAlternatives": "Grammar IR does not distinguish %empty from an implicit empty RHS"
+    },
+    "recoveryRuleRatio": 0,
+    "rulesWithErrorRecovery": 0,
+    "symbolReferences": 1
   },
   "parseability": {
     "cyclicUnitRules": [],
@@ -74,8 +94,42 @@
       "firstFollow": 1,
       "total": 1
     },
+    "notApplicable": {
+      "slr": "requires --analysis lr"
+    },
     "unitRules": 0
   },
+  "peg": {
+    "notApplicable": {
+      "backtrackingHotspots": "orderedChoice capability is false",
+      "charClassOverlapPairs": "orderedChoice capability is false",
+      "maxPredicateNestingDepth": "orderedChoice capability is false",
+      "predicates": "orderedChoice capability is false",
+      "shadowedAlternativePairs": "orderedChoice capability is false"
+    }
+  },
+  "perRule": [
+    {
+      "alternatives": 2,
+      "referencedBy": [
+        "items"
+      ],
+      "references": [
+        "items"
+      ],
+      "rhsItems": 2,
+      "rule": "items",
+      "shortestDerivation": 0
+    },
+    {
+      "alternatives": 2,
+      "referencedBy": [],
+      "references": [],
+      "rhsItems": 1,
+      "rule": "optional",
+      "shortestDerivation": 0
+    }
+  ],
   "precedence": {
     "assocBreakdown": {
       "left": 0,
@@ -96,6 +150,12 @@
   "redundancy": {
     "commonPrefixPairs": 0,
     "duplicateAlternatives": 0,
+    "listRecursion": {
+      "consistency": 1,
+      "left": 1,
+      "mixed": 0,
+      "right": 0
+    },
     "maxCommonPrefixLength": 0,
     "singleReferenceRules": [
       "items"
@@ -149,8 +209,12 @@
     }
   },
   "structure": {
+    "articulationPoints": [],
+    "bridges": [],
     "directLeftRecursiveRules": 1,
     "directRightRecursiveRules": 0,
+    "fanInEntropy": 0,
+    "fanInGini": 0.5,
     "largestRecursiveComponent": {
       "members": [
         "items"
@@ -163,6 +227,7 @@
       "value": 0
     },
     "maxDependencyDepth": 0,
+    "maxExpressionNestingDepth": 1,
     "nullableRules": 2,
     "reachableRules": 1,
     "recursionSccCount": 0,
@@ -170,6 +235,36 @@
       "count": 1,
       "ratio": 1
     },
+    "shortestDerivation": [
+      {
+        "length": 0,
+        "rule": "items"
+      },
+      {
+        "length": 0,
+        "rule": "optional"
+      }
+    ],
+    "shortestDerivationUnknown": [],
+    "startSymbolReachability": {
+      "entries": [
+        {
+          "reachableRules": 1,
+          "symbol": "items"
+        }
+      ],
+      "overlapRatio": 1
+    },
+    "topBetweenness": [
+      {
+        "symbol": "items",
+        "value": 0
+      },
+      {
+        "symbol": "optional",
+        "value": 0
+      }
+    ],
     "topFanIn": [
       {
         "count": 1,
@@ -194,6 +289,15 @@
     "unreachableSymbols": [
       "optional"
     ]
+  },
+  "style": {
+    "namingOutliers": [],
+    "nonterminalConvention": "snake_case",
+    "nonterminalConventionRatio": 1,
+    "notApplicable": {
+      "commentDensity": "Grammar IR does not retain comments"
+    },
+    "terminalUpperCaseRatio": 1
   },
   "sugar": {
     "notApplicable": {

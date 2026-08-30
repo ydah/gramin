@@ -60,12 +60,41 @@ export const lexiconFeatures = (ir: GrammarIR): GrammarFeatures["lexicon"] => {
   let literalOccurrences = 0;
   let charClassCount = 0;
   let anyCharCount = 0;
+  const usage = new Map(
+    ir.terminals.map((terminal) => [
+      terminal.name === undefined ? `literal:${terminal.literal}` : `name:${terminal.name}`,
+      0,
+    ]),
+  );
+  const nameKeys = new Map(
+    ir.terminals.flatMap((terminal) =>
+      terminal.name === undefined ? [] : [[terminal.name, `name:${terminal.name}`] as const],
+    ),
+  );
+  const literalKeys = new Map(
+    ir.terminals.flatMap((terminal) =>
+      terminal.literal === undefined
+        ? []
+        : [
+            [
+              terminal.literal,
+              terminal.name === undefined ? `literal:${terminal.literal}` : `name:${terminal.name}`,
+            ] as const,
+          ],
+    ),
+  );
   ir.rules.forEach((rule) => {
     rule.alternatives.forEach((alternative) => {
       alternative.items.forEach((item) => {
         walkExpression(item, (expression) => {
           if (expression.kind === "terminal" && expression.literal !== undefined) {
             literalOccurrences += 1;
+          }
+          if (expression.kind === "terminal") {
+            const key =
+              (expression.name === undefined ? undefined : nameKeys.get(expression.name)) ??
+              (expression.literal === undefined ? undefined : literalKeys.get(expression.literal));
+            if (key !== undefined) usage.set(key, (usage.get(key) ?? 0) + 1);
           }
           if (expression.kind === "charClass") charClassCount += 1;
           if (expression.kind === "anyChar") anyCharCount += 1;
@@ -80,6 +109,25 @@ export const lexiconFeatures = (ir: GrammarIR): GrammarFeatures["lexicon"] => {
       ),
     ),
   ];
+  const literalPrefixCollisions = literals
+    .flatMap((prefix) =>
+      prefix.length === 0
+        ? []
+        : literals
+            .filter((literal) => literal !== prefix && literal.startsWith(prefix))
+            .map((literal) => ({ prefix, literal })),
+    )
+    .sort(
+      (left, right) =>
+        compareBytes(left.prefix, right.prefix) || compareBytes(left.literal, right.literal),
+    );
+  const hasIdentifierPattern =
+    ir.terminals.some(
+      (terminal) =>
+        terminal.name !== undefined &&
+        /(?:^|_)(?:ID|IDENT|IDENTIFIER|NAME)(?:$|_)/iu.test(terminal.name),
+    ) || ir.rules.some((rule) => /identifier|ident|name/iu.test(rule.name));
+  const usedEntries = [...usage].filter(([, count]) => count > 0);
   return {
     namedTokens: ir.terminals.filter((terminal) => terminal.name !== undefined).length,
     literalTokens: ir.terminals.filter((terminal) => terminal.name === undefined).length,
@@ -90,6 +138,18 @@ export const lexiconFeatures = (ir: GrammarIR): GrammarFeatures["lexicon"] => {
     punctuationLike: literals
       .filter((literal) => literal.length > 0 && /^[^A-Za-z0-9]+$/u.test(literal))
       .sort(compareBytes),
+    literalPrefixCollisions,
+    keywordIdentifierCollisions: hasIdentifierPattern
+      ? literals.filter((literal) => /^[A-Za-z]+$/u.test(literal)).sort(compareBytes)
+      : [],
+    tokenUsage: {
+      used: usedEntries.length,
+      coverage: round4(ir.terminals.length === 0 ? 0 : usedEntries.length / ir.terminals.length),
+      singleUse: usedEntries
+        .filter(([, count]) => count === 1)
+        .map(([key]) => key.slice(key.indexOf(":") + 1))
+        .sort(compareBytes),
+    },
     ...(ir.capabilities.scannerless
       ? {
           notApplicable: {

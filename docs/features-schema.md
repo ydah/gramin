@@ -20,6 +20,10 @@ diagnostics, and the following sections:
 - `actions`: completeness, action counts, coverage, and opaque source-length measures;
 - `parseability`: CFG FIRST/FOLLOW distributions, LL(1) conflicts, and unit-rule cycles;
 - `redundancy`: common prefixes, duplicate alternatives, clones, and unused declarations;
+- `peg`: predicates, shadowed choices, backtracking hotspots, and character-class overlap;
+- `operations`: error-recovery and named-reference adoption;
+- `style`: naming consistency and unavailable documentation context;
+- `perRule`: stable rule-level vectors for downstream review and comparison;
 - `notable`: concrete rules and symbols that help locate high-impact grammar regions.
 
 A capability-dependent section omits an inapplicable optional metric and records the
@@ -29,6 +33,7 @@ Required legacy fields can remain present for minor-version compatibility, but a
 This applies to scannerless declaration counts and to features 0.2 action measurements
 when `actions.completeness` is `partial`.
 
-Features 0.5 adds parseability and refactoring-candidate measurements. CFG-only fields are
-omitted for ordered-choice grammars. Features 0.4 remains packaged for consumers that need
-the previous contract.
+Features 0.5 adds parseability, graph-shape, refactoring-candidate, PEG, operational,
+style, and per-rule measurements. CFG-only fields are omitted for ordered-choice grammars;
+SLR construction is emitted only when requested. Features 0.4 remains packaged for
+consumers that need the previous contract.

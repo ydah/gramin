@@ -1,4 +1,5 @@
 export {
+  type AnalyzeOptions,
   analyzeGrammar,
   UnsupportedIRVersionError,
 } from "./analyze.js";

@@ -18,6 +18,12 @@ npm install --global @gramin/cli
 gramin analyze grammar.y --format json
 ```
 
+Build canonical LR(0) states and report SLR conflicts only when needed:
+
+```sh
+gramin analyze grammar.y --analysis lr
+```
+
 Use `gramin --help` to list commands and options. See the
 [project README](https://github.com/ydah/gramin#readme) for examples, supported syntax,
 exit codes, and the external frontend protocol.

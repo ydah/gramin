@@ -134,6 +134,147 @@ export const rankFan = (
   };
 };
 
+const undirectedGraph = (graph: DependencyGraph): Map<string, Set<string>> => {
+  const undirected = new Map([...graph.keys()].map((node) => [node, new Set<string>()]));
+  graph.forEach((targets, source) => {
+    targets.forEach((target) => {
+      if (source === target) return;
+      undirected.get(source)?.add(target);
+      undirected.get(target)?.add(source);
+    });
+  });
+  return undirected;
+};
+
+export const graphCriticalPoints = (
+  graph: DependencyGraph,
+): {
+  readonly articulationPoints: string[];
+  readonly bridges: { readonly source: string; readonly target: string }[];
+} => {
+  const undirected = undirectedGraph(graph);
+  const discovered = new Map<string, number>();
+  const low = new Map<string, number>();
+  const parent = new Map<string, string>();
+  const childCounts = new Map<string, number>();
+  const articulationPoints = new Set<string>();
+  const bridges: { source: string; target: string }[] = [];
+  let time = 0;
+
+  type Frame = { readonly node: string; readonly neighbors: readonly string[]; next: number };
+  [...undirected.keys()].sort(compareBytes).forEach((root) => {
+    if (discovered.has(root)) return;
+    discovered.set(root, time++);
+    low.set(root, required(discovered, root, "discovery time"));
+    const frames: Frame[] = [
+      { node: root, neighbors: [...(undirected.get(root) ?? [])].sort(compareBytes), next: 0 },
+    ];
+    while (frames.length > 0) {
+      const frame = frames.at(-1);
+      if (!frame) break;
+      const neighbor = frame.neighbors[frame.next];
+      if (neighbor !== undefined) {
+        frame.next += 1;
+        if (!discovered.has(neighbor)) {
+          parent.set(neighbor, frame.node);
+          childCounts.set(frame.node, (childCounts.get(frame.node) ?? 0) + 1);
+          discovered.set(neighbor, time++);
+          low.set(neighbor, required(discovered, neighbor, "discovery time"));
+          frames.push({
+            node: neighbor,
+            neighbors: [...(undirected.get(neighbor) ?? [])].sort(compareBytes),
+            next: 0,
+          });
+          continue;
+        }
+        if (parent.get(frame.node) !== neighbor) {
+          low.set(
+            frame.node,
+            Math.min(
+              required(low, frame.node, "low link"),
+              required(discovered, neighbor, "discovery time"),
+            ),
+          );
+        }
+        continue;
+      }
+
+      frames.pop();
+      const parentNode = parent.get(frame.node);
+      if (parentNode === undefined) {
+        if ((childCounts.get(frame.node) ?? 0) > 1) articulationPoints.add(frame.node);
+        continue;
+      }
+      const nodeLow = required(low, frame.node, "low link");
+      low.set(parentNode, Math.min(required(low, parentNode, "low link"), nodeLow));
+      if (parent.has(parentNode) && nodeLow >= required(discovered, parentNode, "discovery time")) {
+        articulationPoints.add(parentNode);
+      }
+      if (nodeLow > required(discovered, parentNode, "discovery time")) {
+        const [source, target] = [parentNode, frame.node].sort(compareBytes);
+        if (source !== undefined && target !== undefined) bridges.push({ source, target });
+      }
+    }
+  });
+  return {
+    articulationPoints: [...articulationPoints].sort(compareBytes),
+    bridges: bridges.sort(
+      (left, right) =>
+        compareBytes(left.source, right.source) || compareBytes(left.target, right.target),
+    ),
+  };
+};
+
+export const rankBetweenness = (
+  graph: DependencyGraph,
+): { readonly symbol: string; readonly value: number }[] => {
+  const scores = new Map([...graph.keys()].map((node) => [node, 0]));
+  for (const source of [...graph.keys()].sort(compareBytes)) {
+    const stack: string[] = [];
+    const predecessors = new Map<string, string[]>();
+    const paths = new Map<string, number>([[source, 1]]);
+    const distance = new Map<string, number>([[source, 0]]);
+    const queue = [source];
+    for (let index = 0; index < queue.length; index += 1) {
+      const node = queue[index];
+      if (node === undefined) continue;
+      stack.push(node);
+      for (const target of graph.get(node) ?? []) {
+        if (!distance.has(target)) {
+          distance.set(target, required(distance, node, "distance") + 1);
+          queue.push(target);
+        }
+        if (distance.get(target) !== required(distance, node, "distance") + 1) continue;
+        paths.set(target, (paths.get(target) ?? 0) + (paths.get(node) ?? 0));
+        const incoming = predecessors.get(target) ?? [];
+        incoming.push(node);
+        predecessors.set(target, incoming);
+      }
+    }
+    const dependency = new Map<string, number>();
+    while (stack.length > 0) {
+      const target = stack.pop();
+      if (target === undefined) break;
+      for (const predecessor of predecessors.get(target) ?? []) {
+        const targetPaths = paths.get(target) ?? 0;
+        if (targetPaths === 0) continue;
+        dependency.set(
+          predecessor,
+          (dependency.get(predecessor) ?? 0) +
+            ((paths.get(predecessor) ?? 0) / targetPaths) * (1 + (dependency.get(target) ?? 0)),
+        );
+      }
+      if (target !== source) {
+        scores.set(target, (scores.get(target) ?? 0) + (dependency.get(target) ?? 0));
+      }
+    }
+  }
+  return [...scores]
+    .map(([symbol, value]) => ({ symbol, value }))
+    .sort((left, right) => right.value - left.value || compareBytes(left.symbol, right.symbol))
+    .slice(0, 10);
+};
+
 export const maxCondensedDepth = (
   graph: DependencyGraph,
   components: readonly (readonly string[])[],

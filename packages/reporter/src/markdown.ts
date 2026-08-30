@@ -12,11 +12,23 @@ const sectionTitles: Readonly<Record<string, string>> = {
   actions: "Actions",
   parseability: "Parseability",
   redundancy: "Redundancy and refactoring candidates",
+  peg: "PEG and ordered choice",
+  operations: "Error recovery and operational style",
+  style: "Naming and documentation style",
+  perRule: "Per-rule measurements",
   notable: "Notable grammar locations",
   diagnostics: "Diagnostics",
 };
 
-const heuristicMetrics = new Set(["lexicon.keywordLike", "lexicon.punctuationLike"]);
+const heuristicMetrics = new Set([
+  "lexicon.keywordLike",
+  "lexicon.punctuationLike",
+  "lexicon.keywordIdentifierCollisions",
+  "redundancy.listRecursion",
+  "peg.backtrackingHotspots",
+  "style.nonterminalConvention",
+  "style.namingOutliers",
+]);
 
 const renderValue = (value: unknown): string => {
   if (value === null) return tableCodeSpan("null");
