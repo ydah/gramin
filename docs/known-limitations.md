@@ -12,11 +12,14 @@ recovery approximate. An unterminated action emits `YACC001_UNCLOSED_ACTION`. Th
 attempts to resume at a semicolon followed by a rule header and otherwise returns the
 partial final action.
 
-Semantic action source is never parsed, retained in IR, or executed. Only presence,
-position, and character length are recorded.
+Semantic action source is never parsed, retained in IR, or executed. Presence, position,
+character length, and aggregate positional/named `$` reference counts are recorded. The
+reference scan skips ordinary quoted strings and comments but is approximate for C++ raw
+strings.
 
-Grammar IR also does not retain comments, `%destructor`, `%printer`, `%union`, `%code`, or
-whether an empty RHS used `%empty`. Metrics that require these details are explicitly
+The Yacc-family frontend retains aggregate comment statistics, selected declaration
+counts, and whether an empty RHS used `%empty`; it does not retain their source text.
+Other frontends omit those optional source metrics, so dependent features are explicitly
 listed as not applicable.
 
 ## ANTLR4 target code and lexer commands

@@ -40,7 +40,7 @@ const versionDiagnostics = (version: string): Diagnostic[] => {
     ];
   }
   if (major !== 1) throw new UnsupportedIRVersionError(version);
-  if (minor <= 2) return [];
+  if (minor <= 3) return [];
   return [
     {
       severity: "warning",
@@ -75,6 +75,7 @@ const analysisDiagnostics = (
   size: GrammarFeatures["size"],
   structure: GrammarFeatures["structure"],
   parseability: GrammarFeatures["parseability"],
+  peg: GrammarFeatures["peg"],
 ): Diagnostic[] => {
   const diagnostics: Diagnostic[] = [];
   if (size.unresolvedSymbols.count > 0) {
@@ -105,6 +106,13 @@ const analysisDiagnostics = (
       message: `cyclic unit rules: ${parseability.cyclicUnitRules.map((members) => members.join(" -> ")).join("; ")}`,
     });
   }
+  if ((peg.shadowedAlternativePairs ?? 0) > 0) {
+    diagnostics.push({
+      severity: "warning",
+      code: "ANALYZER008_SHADOWED_ALTERNATIVES",
+      message: `ordered alternatives shadow ${peg.shadowedAlternativePairs} later alternative pair(s)`,
+    });
+  }
   const used = usedTerminalKeys(ir);
   const unused = ir.terminals
     .filter((terminal) => !used.has(terminalKey(terminal)))
@@ -129,10 +137,11 @@ export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): Gra
   const size = sizeFeatures(ir);
   const structure = structureFeatures(ir);
   const parseability = parseabilityFeatures(ir, options);
+  const peg = pegFeatures(ir);
   const diagnostics = [
     ...ir.diagnostics,
     ...versionDiagnostics(ir.irVersion),
-    ...analysisDiagnostics(ir, size, structure.features, parseability),
+    ...analysisDiagnostics(ir, size, structure.features, parseability, peg),
   ];
   const incoming = new Map([...structure.graph.keys()].map((name) => [name, new Set<string>()]));
   structure.graph.forEach((targets, source) => {
@@ -170,7 +179,7 @@ export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): Gra
     actions: actionFeatures(ir),
     parseability,
     redundancy: redundancyFeatures(ir),
-    peg: pegFeatures(ir),
+    peg,
     operations: operationsFeatures(ir),
     style: styleFeatures(ir),
     perRule,

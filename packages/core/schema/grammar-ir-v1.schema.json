@@ -651,6 +651,95 @@
       ],
       "type": "object"
     },
+    "sourceMetrics": {
+      "additionalProperties": false,
+      "properties": {
+        "actionReferences": {
+          "additionalProperties": false,
+          "properties": {
+            "named": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "positional": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "positional",
+            "named"
+          ],
+          "type": "object"
+        },
+        "comments": {
+          "additionalProperties": false,
+          "properties": {
+            "characters": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "documentedRules": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "count",
+            "characters",
+            "documentedRules"
+          ],
+          "type": "object"
+        },
+        "declarationDirectives": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "destructor": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "printer": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "union": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "destructor",
+            "printer",
+            "union",
+            "code"
+          ],
+          "type": "object"
+        },
+        "explicitEmptyAlternatives": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sourceCharacters": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sourceCharacters"
+      ],
+      "type": "object"
+    },
     "startSymbols": {
       "items": {
         "minLength": 1,

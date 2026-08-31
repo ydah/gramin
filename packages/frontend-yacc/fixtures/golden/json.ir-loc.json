@@ -10,7 +10,7 @@
   },
   "diagnostics": [],
   "externalSymbols": [],
-  "irVersion": "1.2.0",
+  "irVersion": "1.3.0",
   "precedence": [],
   "rules": [
     {
@@ -387,6 +387,25 @@
       "id": "yacc-family",
       "version": "0.1.0"
     }
+  },
+  "sourceMetrics": {
+    "actionReferences": {
+      "named": 0,
+      "positional": 0
+    },
+    "comments": {
+      "characters": 0,
+      "count": 0,
+      "documentedRules": []
+    },
+    "declarationDirectives": {
+      "code": 0,
+      "destructor": 0,
+      "printer": 0,
+      "union": 0
+    },
+    "explicitEmptyAlternatives": 0,
+    "sourceCharacters": 365
   },
   "startSymbols": [
     "json"

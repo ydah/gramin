@@ -10,6 +10,12 @@ export interface DeclarationResult {
   readonly declaredTypes: ReadonlyMap<string, string>;
   readonly preambleRules: readonly YaccRule[];
   readonly lramaSyntaxSeen: boolean;
+  readonly directiveCounts: {
+    readonly destructor: number;
+    readonly printer: number;
+    readonly union: number;
+    readonly code: number;
+  };
 }
 
 const ignoredDirectives = new Set([
@@ -90,6 +96,7 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
   const declaredTypes = new Map<string, string>();
   const preambleRules: YaccRule[] = [];
   let lramaSyntaxSeen = false;
+  const directiveCounts = { destructor: 0, printer: 0, union: 0, code: 0 };
 
   while (stream.peek().kind !== "section" && stream.peek().kind !== "eof") {
     if (
@@ -133,6 +140,9 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
       continue;
     }
     if (directive.value === "rule" || directive.value === "inline") lramaSyntaxSeen = true;
+    if (Object.hasOwn(directiveCounts, directive.value)) {
+      directiveCounts[directive.value as keyof typeof directiveCounts] += 1;
+    }
     if (ignoredDirectives.has(directive.value)) {
       stream.diagnostics.push({
         severity: "info",
@@ -160,5 +170,6 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
     declaredTypes,
     preambleRules,
     lramaSyntaxSeen,
+    directiveCounts,
   };
 };

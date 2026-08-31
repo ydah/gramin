@@ -41,5 +41,5 @@ export {
   validateIR,
 } from "./validation.js";
 
-export const IR_VERSION = "1.2.0";
-export const FEATURES_VERSION = "0.5.0";
+export const IR_VERSION = "1.3.0";
+export const FEATURES_VERSION = "0.6.0";

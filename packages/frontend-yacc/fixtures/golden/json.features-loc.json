@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.5.0",
+  "featuresVersion": "0.6.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -72,14 +72,27 @@
     }
   },
   "operations": {
+    "actionReferences": {
+      "named": 0,
+      "namedRatio": 0,
+      "positional": 0,
+      "total": 0
+    },
+    "declarationDirectives": {
+      "code": 0,
+      "destructor": 0,
+      "printer": 0,
+      "total": 0,
+      "union": 0
+    },
     "errorTokenUses": 0,
+    "explicitEmptyAlternatives": {
+      "count": 0,
+      "emptyAlternatives": 0,
+      "ratio": 0
+    },
     "namedReferenceRatio": 0,
     "namedReferences": 0,
-    "notApplicable": {
-      "actionReferences": "actions are retained only as opaque lengths",
-      "declarationDirectives": "Grammar IR does not retain %destructor, %printer, %union, or %code",
-      "explicitEmptyAlternatives": "Grammar IR does not distinguish %empty from an implicit empty RHS"
-    },
     "recoveryRuleRatio": 0,
     "rulesWithErrorRecovery": 0,
     "symbolReferences": 12
@@ -378,6 +391,15 @@
       "entries": [
         {
           "reachableRules": 7,
+          "rules": [
+            "array",
+            "elements",
+            "json",
+            "member",
+            "members",
+            "object",
+            "value"
+          ],
           "symbol": "json"
         }
       ],
@@ -477,13 +499,22 @@
     "unreachableSymbols": []
   },
   "style": {
+    "commentDensity": 0,
+    "comments": 0,
+    "documentedRuleRatio": 0,
     "namingOutliers": [],
     "nonterminalConvention": "snake_case",
     "nonterminalConventionRatio": 1,
-    "notApplicable": {
-      "commentDensity": "Grammar IR does not retain comments"
-    },
-    "terminalUpperCaseRatio": 1
+    "terminalUpperCaseRatio": 1,
+    "undocumentedRules": [
+      "array",
+      "elements",
+      "json",
+      "member",
+      "members",
+      "object",
+      "value"
+    ]
   },
   "sugar": {
     "notApplicable": {

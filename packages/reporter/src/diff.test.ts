@@ -36,7 +36,7 @@ describe("feature diffs", () => {
   it("reports structural edit distance and dependency blast radius", () => {
     const features = fixtureFeatures();
     const grammar = (literal: string): GrammarIR => ({
-      irVersion: "1.2.0",
+      irVersion: "1.3.0",
       source: features.source,
       capabilities: features.capabilities,
       startSymbols: ["start"],

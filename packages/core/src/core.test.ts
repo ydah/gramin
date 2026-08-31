@@ -9,7 +9,7 @@ import {
 } from "./index.js";
 
 const baseIR = (): GrammarIR => ({
-  irVersion: "1.2.0",
+  irVersion: "1.3.0",
   source: {
     format: "yacc",
     frontend: { id: "test", version: "0.1.0" },
@@ -179,7 +179,7 @@ describe("Grammar IR schema", () => {
     expect(GrammarFeaturesSchemaDocument.$schema).toBe(
       "https://json-schema.org/draft/2020-12/schema",
     );
-    expect(GrammarFeaturesSchemaDocument.$id).toBe("https://gramin.dev/schema/features-v0.5.json");
+    expect(GrammarFeaturesSchemaDocument.$id).toBe("https://gramin.dev/schema/features-v0.6.json");
   });
 });
 

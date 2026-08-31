@@ -1,6 +1,6 @@
-# Metrics catalog v0.5
+# Metrics catalog v0.6
 
-This file is the normative definition of metrics emitted in features v0.5.
+This file is the normative definition of metrics emitted in features v0.6.
 
 - Classification: **E** is exact and mechanically determined; **H** is heuristic.
 - Comparability: **A** compares across formats; **B** compares only with the stated
@@ -171,8 +171,8 @@ external symbols, and end-of-input.
   incoming dependency counts (**E/A**).
 - `shortestDerivation`: least fixed-point minimum consumed-terminal length per rule;
   `shortestDerivationUnknown` lists rules without a finite result (**E/B**).
-- `startSymbolReachability`: reachable-rule counts for each start symbol and intersection
-  divided by union across start symbols (**E/A**).
+- `startSymbolReachability`: sorted reachable-rule sets and counts for each start symbol,
+  plus intersection divided by union across start symbols (**E/A**).
 - `maxExpressionNestingDepth`: deepest IR expression node below an alternative (**E/B**).
 
 ## PEG and ordered choice
@@ -200,8 +200,16 @@ These fields are omitted unless `orderedChoice` is true.
   `error` token adoption (**E/B**).
 - `operations.namedReferences`, `symbolReferences`, `namedReferenceRatio`: labeled symbol
   reference adoption (**E/C**).
+- `operations.declarationDirectives`: `%destructor`, `%printer`, `%union`, and `%code`
+  declaration counts and total (**E/C**, when retained by the frontend).
+- `operations.explicitEmptyAlternatives`: explicit `%empty` count, empty-alternative count,
+  and their ratio (**E/C**, when retained by the frontend).
+- `operations.actionReferences`: positional and named `$` references scanned outside
+  strings and comments without retaining or parsing action bodies (**H/C**).
 - `style`: uppercase terminal ratio, dominant snake/camel nonterminal convention, and
-  deviations (**H/C**). Comment density is unavailable because Grammar IR omits comments.
+  deviations (**H/C**). When source statistics are retained it also reports comment
+  characters divided by source characters, comment count, rules without an adjacent
+  leading comment, and documented-rule ratio (**H/C**).
 - `perRule`: name, alternative and RHS counts, incoming/outgoing dependencies, and finite
   shortest derivation. Records use symbol byte order and are not collapsed into a score.
 

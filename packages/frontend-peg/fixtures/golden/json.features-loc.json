@@ -53,7 +53,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.5.0",
+  "featuresVersion": "0.6.0",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -123,9 +123,9 @@
     "namedReferenceRatio": 0.0417,
     "namedReferences": 1,
     "notApplicable": {
-      "actionReferences": "actions are retained only as opaque lengths",
-      "declarationDirectives": "Grammar IR does not retain %destructor, %printer, %union, or %code",
-      "explicitEmptyAlternatives": "Grammar IR does not distinguish %empty from an implicit empty RHS"
+      "actionReferences": "source frontend did not retain opaque action reference counts",
+      "declarationDirectives": "source frontend did not retain declaration directives",
+      "explicitEmptyAlternatives": "source frontend did not distinguish explicit empty alternatives"
     },
     "recoveryRuleRatio": 0,
     "rulesWithErrorRecovery": 0,
@@ -442,6 +442,16 @@
       "entries": [
         {
           "reachableRules": 8,
+          "rules": [
+            "_",
+            "array",
+            "member",
+            "number",
+            "object",
+            "start",
+            "string",
+            "value"
+          ],
           "symbol": "start"
         }
       ],
@@ -586,7 +596,10 @@
     "nonterminalConvention": "snake_case",
     "nonterminalConventionRatio": 0.9,
     "notApplicable": {
-      "commentDensity": "Grammar IR does not retain comments"
+      "commentDensity": "source frontend did not retain comment statistics",
+      "comments": "source frontend did not retain comment statistics",
+      "documentedRuleRatio": "source frontend did not retain rule documentation comments",
+      "undocumentedRules": "source frontend did not retain rule documentation comments"
     },
     "terminalUpperCaseRatio": 0
   },

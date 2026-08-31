@@ -95,6 +95,40 @@ describe("yacc-family parser and lowering", () => {
     );
   });
 
+  it("retains source statistics without retaining action bodies", () => {
+    const source = `%token NUMBER
+%destructor { release(value); } NUMBER
+%printer { print(value); } NUMBER
+%union { int value; }
+%code { int helper; }
+%%
+/** entry */
+entry: %empty { $$ = $value + $1; } ;
+%%
+`;
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "metrics.y",
+          content: source,
+        },
+      ],
+      {},
+    );
+
+    expect(result.ir?.sourceMetrics).toEqual({
+      sourceCharacters: source.length,
+      comments: { count: 1, characters: 12, documentedRules: ["entry"] },
+      declarationDirectives: { destructor: 1, printer: 1, union: 1, code: 1 },
+      explicitEmptyAlternatives: 1,
+      actionReferences: { positional: 2, named: 1 },
+    });
+    expect(result.ir?.rules[0]?.alternatives[0]?.action).toEqual({
+      present: true,
+      codeLength: 19,
+    });
+  });
+
   it("merges repeated rule declarations into one canonical rule", () => {
     const result = yaccFrontend.parse(
       [

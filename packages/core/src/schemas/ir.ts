@@ -183,6 +183,45 @@ export const GrammarIRSchema = Type.Object(
     terminals: Type.Array(TerminalDeclSchema),
     externalSymbols: Type.Array(ExternalSymbolSchema),
     precedence: Type.Array(PrecedenceLevelSchema),
+    sourceMetrics: Type.Optional(
+      Type.Object(
+        {
+          sourceCharacters: Type.Integer({ minimum: 0 }),
+          comments: Type.Optional(
+            Type.Object(
+              {
+                count: Type.Integer({ minimum: 0 }),
+                characters: Type.Integer({ minimum: 0 }),
+                documentedRules: Type.Array(Type.String({ minLength: 1 })),
+              },
+              { additionalProperties: false },
+            ),
+          ),
+          declarationDirectives: Type.Optional(
+            Type.Object(
+              {
+                destructor: Type.Integer({ minimum: 0 }),
+                printer: Type.Integer({ minimum: 0 }),
+                union: Type.Integer({ minimum: 0 }),
+                code: Type.Integer({ minimum: 0 }),
+              },
+              { additionalProperties: false },
+            ),
+          ),
+          explicitEmptyAlternatives: Type.Optional(Type.Integer({ minimum: 0 })),
+          actionReferences: Type.Optional(
+            Type.Object(
+              {
+                positional: Type.Integer({ minimum: 0 }),
+                named: Type.Integer({ minimum: 0 }),
+              },
+              { additionalProperties: false },
+            ),
+          ),
+        },
+        { additionalProperties: false },
+      ),
+    ),
     rules: Type.Array(RuleSchema),
     diagnostics: Type.Array(DiagnosticSchema),
   },

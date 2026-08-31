@@ -258,6 +258,20 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
       tokens: level.tokens.map((token) => token.value),
       loc: level.loc,
     })),
+    ...(ast.sourceMetrics === undefined
+      ? {}
+      : {
+          sourceMetrics: {
+            sourceCharacters: ast.sourceMetrics.sourceCharacters,
+            comments: {
+              ...ast.sourceMetrics.comments,
+              documentedRules: [...ast.sourceMetrics.comments.documentedRules],
+            },
+            declarationDirectives: { ...ast.sourceMetrics.declarationDirectives },
+            explicitEmptyAlternatives: ast.sourceMetrics.explicitEmptyAlternatives,
+            actionReferences: { ...ast.sourceMetrics.actionReferences },
+          },
+        }),
     rules,
     diagnostics,
   };

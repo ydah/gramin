@@ -27,6 +27,7 @@ export type YaccItem =
 export interface YaccAlternative {
   readonly items: readonly YaccItem[];
   readonly precedence?: string;
+  readonly explicitEmpty?: boolean;
   readonly loc: SourceSpan;
 }
 
@@ -52,5 +53,24 @@ export interface YaccAst {
     readonly loc: SourceSpan;
   }[];
   readonly rules: readonly YaccRule[];
+  readonly sourceMetrics?: {
+    readonly sourceCharacters: number;
+    readonly comments: {
+      readonly count: number;
+      readonly characters: number;
+      readonly documentedRules: readonly string[];
+    };
+    readonly declarationDirectives: {
+      readonly destructor: number;
+      readonly printer: number;
+      readonly union: number;
+      readonly code: number;
+    };
+    readonly explicitEmptyAlternatives: number;
+    readonly actionReferences: {
+      readonly positional: number;
+      readonly named: number;
+    };
+  };
   readonly diagnostics: readonly Diagnostic[];
 }

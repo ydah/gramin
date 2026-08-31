@@ -278,6 +278,29 @@ export const operationsFeatures = (ir: GrammarIR): GrammarFeatures["operations"]
     });
     if (recovers) rulesWithErrorRecovery += 1;
   });
+  const declarations = ir.sourceMetrics?.declarationDirectives;
+  const explicitEmptyCount = ir.sourceMetrics?.explicitEmptyAlternatives;
+  const emptyAlternatives = ir.rules.reduce(
+    (total, rule) =>
+      total +
+      rule.alternatives.filter((alternative) =>
+        alternative.items.every((item) => item.kind === "midRuleAction"),
+      ).length,
+    0,
+  );
+  const actionReferences = ir.sourceMetrics?.actionReferences;
+  const notApplicable: Record<string, string> = {};
+  if (declarations === undefined) {
+    notApplicable.declarationDirectives = "source frontend did not retain declaration directives";
+  }
+  if (explicitEmptyCount === undefined) {
+    notApplicable.explicitEmptyAlternatives =
+      "source frontend did not distinguish explicit empty alternatives";
+  }
+  if (actionReferences === undefined) {
+    notApplicable.actionReferences =
+      "source frontend did not retain opaque action reference counts";
+  }
   return {
     errorTokenUses,
     rulesWithErrorRecovery,
@@ -285,12 +308,41 @@ export const operationsFeatures = (ir: GrammarIR): GrammarFeatures["operations"]
     namedReferences,
     symbolReferences,
     namedReferenceRatio: round4(symbolReferences === 0 ? 0 : namedReferences / symbolReferences),
-    notApplicable: {
-      declarationDirectives: "Grammar IR does not retain %destructor, %printer, %union, or %code",
-      explicitEmptyAlternatives:
-        "Grammar IR does not distinguish %empty from an implicit empty RHS",
-      actionReferences: "actions are retained only as opaque lengths",
-    },
+    ...(declarations === undefined
+      ? {}
+      : {
+          declarationDirectives: {
+            ...declarations,
+            total:
+              declarations.destructor +
+              declarations.printer +
+              declarations.union +
+              declarations.code,
+          },
+        }),
+    ...(explicitEmptyCount === undefined
+      ? {}
+      : {
+          explicitEmptyAlternatives: {
+            count: explicitEmptyCount,
+            emptyAlternatives,
+            ratio: round4(emptyAlternatives === 0 ? 0 : explicitEmptyCount / emptyAlternatives),
+          },
+        }),
+    ...(actionReferences === undefined
+      ? {}
+      : {
+          actionReferences: {
+            ...actionReferences,
+            total: actionReferences.positional + actionReferences.named,
+            namedRatio: round4(
+              actionReferences.positional + actionReferences.named === 0
+                ? 0
+                : actionReferences.named / (actionReferences.positional + actionReferences.named),
+            ),
+          },
+        }),
+    ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
   };
 };
 
@@ -316,6 +368,9 @@ export const styleFeatures = (ir: GrammarIR): GrammarFeatures["style"] => {
   const matching =
     convention === "snake_case" ? snakeCaseNames : convention === "camelCase" ? camelCaseNames : [];
   const matchingNames = new Set(matching);
+  const comments = ir.sourceMetrics?.comments;
+  const documentedRules = new Set(comments?.documentedRules ?? []);
+  const sourceCharacters = ir.sourceMetrics?.sourceCharacters;
   return {
     terminalUpperCaseRatio: round4(
       terminalNames.length === 0 ? 0 : upperCaseNames.length / terminalNames.length,
@@ -331,6 +386,27 @@ export const styleFeatures = (ir: GrammarIR): GrammarFeatures["style"] => {
             .map((rule) => rule.name)
             .filter((name) => !matchingNames.has(name))
             .sort(compareBytes),
-    notApplicable: { commentDensity: "Grammar IR does not retain comments" },
+    ...(comments === undefined || sourceCharacters === undefined
+      ? {
+          notApplicable: {
+            commentDensity: "source frontend did not retain comment statistics",
+            comments: "source frontend did not retain comment statistics",
+            undocumentedRules: "source frontend did not retain rule documentation comments",
+            documentedRuleRatio: "source frontend did not retain rule documentation comments",
+          },
+        }
+      : {
+          commentDensity: round4(
+            sourceCharacters === 0 ? 0 : comments.characters / sourceCharacters,
+          ),
+          comments: comments.count,
+          undocumentedRules: ir.rules
+            .map((rule) => rule.name)
+            .filter((name) => !documentedRules.has(name))
+            .sort(compareBytes),
+          documentedRuleRatio: round4(
+            ir.rules.length === 0 ? 0 : documentedRules.size / ir.rules.length,
+          ),
+        }),
   };
 };

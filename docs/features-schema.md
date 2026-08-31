@@ -1,7 +1,7 @@
-# Grammar features v0.5
+# Grammar features v0.6
 
 The normative machine-readable contract is
-`packages/core/schema/features-v0.5.schema.json`. `@gramin/core` exports the schema,
+`packages/core/schema/features-v0.6.schema.json`. `@gramin/core` exports the schema,
 the `GrammarFeatures` TypeScript type, and `validateFeatures`.
 The previous feature schemas remain packaged for
 existing consumers.
@@ -21,8 +21,8 @@ diagnostics, and the following sections:
 - `parseability`: CFG FIRST/FOLLOW distributions, LL(1) conflicts, and unit-rule cycles;
 - `redundancy`: common prefixes, duplicate alternatives, clones, and unused declarations;
 - `peg`: predicates, shadowed choices, backtracking hotspots, and character-class overlap;
-- `operations`: error-recovery and named-reference adoption;
-- `style`: naming consistency and unavailable documentation context;
+- `operations`: error recovery, declaration use, explicit-empty style, and named references;
+- `style`: naming consistency, comment density, and rule-documentation coverage;
 - `perRule`: stable rule-level vectors for downstream review and comparison;
 - `notable`: concrete rules and symbols that help locate high-impact grammar regions.
 
@@ -33,7 +33,7 @@ Required legacy fields can remain present for minor-version compatibility, but a
 This applies to scannerless declaration counts and to features 0.2 action measurements
 when `actions.completeness` is `partial`.
 
-Features 0.5 adds parseability, graph-shape, refactoring-candidate, PEG, operational,
-style, and per-rule measurements. CFG-only fields are omitted for ordered-choice grammars;
-SLR construction is emitted only when requested. Features 0.4 remains packaged for
-consumers that need the previous contract.
+Features 0.6 adds source-backed operational and documentation measurements, exact
+per-start reachable rule lists, and a diagnostic for provably shadowed ordered choices.
+CFG-only fields are omitted for ordered-choice grammars; SLR construction is emitted only
+when requested. Features 0.5 remains packaged for consumers that need the previous contract.

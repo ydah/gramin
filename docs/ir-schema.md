@@ -1,6 +1,6 @@
 # Grammar IR v1
 
-The current producer version is 1.2.0.
+The current producer version is 1.3.0.
 
 The normative machine-readable contract is
 `packages/core/schema/grammar-ir-v1.schema.json`. `@gramin/core` exports the same
@@ -16,10 +16,14 @@ A document contains:
 - explicit capability flags;
 - start symbols, terminal and external symbol declarations, precedence levels, rules,
   and diagnostics.
+- optional aggregate `sourceMetrics` produced without retaining comment or action bodies.
 
 Expressions form a discriminated union of `symbol`, `terminal`, `seq`, `choice`, `opt`,
 `star`, `plus`, `predicate`, `charClass`, `anyChar`, `midRuleAction`, and `group`.
 Actions preserve only presence and source length; source code is never retained or run.
+Yacc-family sources additionally retain aggregate comment characters, documentation
+adjacency, selected declaration-directive counts, explicit `%empty` count, and positional
+versus named action-reference counts.
 `Rule.orderedAlternatives` preserves PEG-style first-success semantics after top-level
 choices are flattened; nested ordered choices use `choice(ordered: true)`.
 
@@ -53,3 +57,4 @@ golden-fixture updates. See
 alternative field.
 [`RFC 0003`](./rfcs/0003-top-level-nested-choice-group.md) defines the v1.2 canonical
 relaxation for nested choices.
+[`RFC 0005`](./rfcs/0005-source-metrics.md) defines the additive v1.3 source statistics.

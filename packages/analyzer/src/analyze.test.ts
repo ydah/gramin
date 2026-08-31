@@ -165,7 +165,7 @@ describe("analyzeGrammar", () => {
         { rule: "c", length: 1 },
       ],
       startSymbolReachability: {
-        entries: [{ symbol: "a", reachableRules: 3 }],
+        entries: [{ symbol: "a", reachableRules: 3, rules: ["a", "b", "c"] }],
         overlapRatio: 1,
       },
       maxExpressionNestingDepth: 1,
@@ -254,6 +254,9 @@ describe("analyzeGrammar", () => {
       charClassOverlapPairs: 1,
     });
     expect(features.peg.backtrackingHotspots?.[0]).toMatchObject({ rule: "startRule" });
+    expect(features.diagnostics).toContainEqual(
+      expect.objectContaining({ code: "ANALYZER008_SHADOWED_ALTERNATIVES" }),
+    );
     expect(features.operations).toMatchObject({
       errorTokenUses: 1,
       rulesWithErrorRecovery: 1,
@@ -264,6 +267,42 @@ describe("analyzeGrammar", () => {
       nonterminalConvention: "camelCase",
       nonterminalConventionRatio: 1,
     });
+  });
+
+  it("uses retained source statistics for operational and style metrics", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      sourceMetrics: {
+        sourceCharacters: 100,
+        comments: { count: 2, characters: 20, documentedRules: ["input"] },
+        declarationDirectives: { destructor: 1, printer: 2, union: 1, code: 0 },
+        explicitEmptyAlternatives: 1,
+        actionReferences: { positional: 3, named: 1 },
+      },
+      startSymbols: ["input"],
+      rules: [
+        {
+          name: "input",
+          alternatives: [{ items: [] }, { items: [{ kind: "symbol", name: "tail" }] }],
+        },
+        { name: "tail", alternatives: [{ items: [] }] },
+      ],
+    });
+
+    expect(features.operations).toMatchObject({
+      declarationDirectives: { destructor: 1, printer: 2, union: 1, code: 0, total: 4 },
+      explicitEmptyAlternatives: { count: 1, emptyAlternatives: 2, ratio: 0.5 },
+      actionReferences: { positional: 3, named: 1, total: 4, namedRatio: 0.25 },
+    });
+    expect(features.style).toMatchObject({
+      commentDensity: 0.2,
+      comments: 2,
+      undocumentedRules: ["tail"],
+      documentedRuleRatio: 0.5,
+    });
+    expect(features.operations.notApplicable).toBeUndefined();
+    expect(features.style.notApplicable).toBeUndefined();
   });
 
   it("reports reachable rules that cannot derive a terminal sequence", () => {
@@ -464,7 +503,7 @@ describe("analyzeGrammar", () => {
   });
 
   it("warns when analyzing a future compatible v1 minor", () => {
-    const future = { ...fixtureIR("calc"), irVersion: "1.3.0" };
+    const future = { ...fixtureIR("calc"), irVersion: "1.4.0" };
     expect(analyzeGrammar(future).diagnostics).toContainEqual(
       expect.objectContaining({ code: "ANALYZER004_FUTURE_IR_MINOR" }),
     );

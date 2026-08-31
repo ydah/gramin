@@ -66,6 +66,16 @@ export const parseYaccAst = (
         ? "bison"
         : "yacc";
   const diagnostics = [...lexed.diagnostics, ...stream.diagnostics];
+  const rules = [...declarations.preambleRules, ...parsedRules.rules];
+  const documentedRules = rules
+    .filter((rule) =>
+      lexed.comments.some(
+        (comment) =>
+          comment.loc.endLine >= rule.loc.startLine - 1 &&
+          comment.loc.endLine <= rule.loc.startLine,
+      ),
+    )
+    .map((rule) => rule.name);
 
   return {
     ast: {
@@ -78,7 +88,22 @@ export const parseYaccAst = (
             : [],
       terminals: declarations.terminals,
       precedence: declarations.precedence,
-      rules: [...declarations.preambleRules, ...parsedRules.rules],
+      rules,
+      sourceMetrics: {
+        sourceCharacters: lexed.sourceCharacters,
+        comments: {
+          count: lexed.comments.length,
+          characters: lexed.comments.reduce((total, comment) => total + comment.characters, 0),
+          documentedRules,
+        },
+        declarationDirectives: declarations.directiveCounts,
+        explicitEmptyAlternatives: rules.reduce(
+          (total, rule) =>
+            total + rule.alternatives.filter((alternative) => alternative.explicitEmpty).length,
+          0,
+        ),
+        actionReferences: lexed.actionReferences,
+      },
       diagnostics,
     },
     diagnostics,

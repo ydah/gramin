@@ -128,6 +128,7 @@ const parseAlternative = (stream: TokenStream, fallback: Token): YaccAlternative
   const first = stream.peek();
   const items: YaccItem[] = [];
   let precedence: string | undefined;
+  let explicitEmpty = false;
   let last = fallback;
 
   while (
@@ -143,6 +144,7 @@ const parseAlternative = (stream: TokenStream, fallback: Token): YaccAlternative
 
     const directive = stream.match("directive");
     if (directive?.value === "empty") {
+      explicitEmpty = true;
       last = directive;
       continue;
     }
@@ -177,6 +179,7 @@ const parseAlternative = (stream: TokenStream, fallback: Token): YaccAlternative
   return {
     items,
     ...(precedence === undefined ? {} : { precedence }),
+    ...(explicitEmpty ? { explicitEmpty: true } : {}),
     loc: alternativeSpan(first.kind === "eof" ? fallback : first, last),
   };
 };

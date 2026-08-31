@@ -331,6 +331,7 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
         entries: startReachable.map(({ symbol, rules }) => ({
           symbol,
           reachableRules: rules.size,
+          rules: [...rules].sort(compareBytes),
         })),
         ...(startReachable.length === 0
           ? {}

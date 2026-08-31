@@ -30,4 +30,10 @@ export interface Token {
 export interface LexResult {
   readonly tokens: readonly Token[];
   readonly diagnostics: readonly Diagnostic[];
+  readonly sourceCharacters: number;
+  readonly comments: readonly { readonly loc: SourceSpan; readonly characters: number }[];
+  readonly actionReferences: {
+    readonly positional: number;
+    readonly named: number;
+  };
 }

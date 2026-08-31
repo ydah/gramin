@@ -1,4 +1,4 @@
-import type { Diagnostic } from "@gramin/core";
+import type { Diagnostic, SourceSpan } from "@gramin/core";
 import { SourceCursor } from "./source-cursor.js";
 import type { LexResult, Token, TokenKind } from "./token.js";
 
@@ -30,6 +30,8 @@ export const lexYacc = (source: string): LexResult => {
   const cursor = new SourceCursor(source);
   const tokens: Token[] = [];
   const diagnostics: Diagnostic[] = [];
+  const comments: { loc: SourceSpan; characters: number }[] = [];
+  const actionReferences = { positional: 0, named: 0 };
   let sectionCount = 0;
   let declarationBlockExpected = false;
   let preambleRuleActive = false;
@@ -50,15 +52,21 @@ export const lexYacc = (source: string): LexResult => {
     }
   };
 
-  const skipLineComment = (): void => {
+  const skipLineComment = (record = false): void => {
+    const start = cursor.mark();
     cursor.advanceBy(2);
     while (!cursor.done && cursor.peek() !== "\n") cursor.advance();
+    if (record)
+      comments.push({ loc: cursor.spanFrom(start), characters: cursor.slice(start).length });
   };
 
-  const skipBlockComment = (): void => {
+  const skipBlockComment = (record = false): void => {
+    const start = cursor.mark();
     cursor.advanceBy(2);
     while (!cursor.done && !cursor.startsWith("*/")) cursor.advance();
     if (cursor.startsWith("*/")) cursor.advanceBy(2);
+    if (record)
+      comments.push({ loc: cursor.spanFrom(start), characters: cursor.slice(start).length });
   };
 
   const skipTrivia = (): void => {
@@ -68,11 +76,11 @@ export const lexYacc = (source: string): LexResult => {
         continue;
       }
       if (cursor.startsWith("//")) {
-        skipLineComment();
+        skipLineComment(true);
         continue;
       }
       if (cursor.startsWith("/*")) {
-        skipBlockComment();
+        skipBlockComment(true);
         continue;
       }
       break;
@@ -138,6 +146,16 @@ export const lexYacc = (source: string): LexResult => {
       if (character === '"' || character === "'") {
         skipQuoted(character);
         continue;
+      }
+      if (character === "$") {
+        const reference =
+          /^\$(?:<[^>\n]+>)?(\$|\d+|[A-Za-z_][A-Za-z0-9_]*|\[[A-Za-z_][A-Za-z0-9_]*\])/u.exec(
+            cursor.remaining(),
+          )?.[1];
+        if (reference !== undefined) {
+          if (reference === "$" || /^\d/u.test(reference)) actionReferences.positional += 1;
+          else actionReferences.named += 1;
+        }
       }
       cursor.advance();
       if (character === "{") depth += 1;
@@ -247,5 +265,5 @@ export const lexYacc = (source: string): LexResult => {
 
   const end = cursor.mark();
   pushToken("eof", "", end);
-  return { tokens, diagnostics };
+  return { tokens, diagnostics, sourceCharacters: source.length, comments, actionReferences };
 };

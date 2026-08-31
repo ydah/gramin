@@ -53,7 +53,7 @@
       "severity": "info"
     }
   ],
-  "featuresVersion": "0.5.0",
+  "featuresVersion": "0.6.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -83,14 +83,27 @@
     }
   },
   "operations": {
+    "actionReferences": {
+      "named": 2,
+      "namedRatio": 0.5,
+      "positional": 2,
+      "total": 4
+    },
+    "declarationDirectives": {
+      "code": 0,
+      "destructor": 0,
+      "printer": 0,
+      "total": 0,
+      "union": 0
+    },
     "errorTokenUses": 0,
+    "explicitEmptyAlternatives": {
+      "count": 0,
+      "emptyAlternatives": 0,
+      "ratio": 0
+    },
     "namedReferenceRatio": 1,
     "namedReferences": 1,
-    "notApplicable": {
-      "actionReferences": "actions are retained only as opaque lengths",
-      "declarationDirectives": "Grammar IR does not retain %destructor, %printer, %union, or %code",
-      "explicitEmptyAlternatives": "Grammar IR does not distinguish %empty from an implicit empty RHS"
-    },
     "recoveryRuleRatio": 0,
     "rulesWithErrorRecovery": 0,
     "symbolReferences": 1
@@ -283,6 +296,10 @@
       "entries": [
         {
           "reachableRules": 2,
+          "rules": [
+            "expression",
+            "input"
+          ],
           "symbol": "input"
         }
       ],
@@ -322,13 +339,17 @@
     "unreachableSymbols": []
   },
   "style": {
+    "commentDensity": 0.3661,
+    "comments": 1,
+    "documentedRuleRatio": 0,
     "namingOutliers": [],
     "nonterminalConvention": "snake_case",
     "nonterminalConventionRatio": 1,
-    "notApplicable": {
-      "commentDensity": "Grammar IR does not retain comments"
-    },
-    "terminalUpperCaseRatio": 1
+    "terminalUpperCaseRatio": 1,
+    "undocumentedRules": [
+      "expression",
+      "input"
+    ]
   },
   "sugar": {
     "notApplicable": {

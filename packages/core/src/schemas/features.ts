@@ -130,6 +130,7 @@ const StructureFeaturesSchema = Type.Object(
             {
               symbol: Type.String(),
               reachableRules: Type.Integer({ minimum: 0 }),
+              rules: Type.Array(Type.String()),
             },
             { additionalProperties: false },
           ),
@@ -322,6 +323,39 @@ const OperationsFeaturesSchema = Type.Object(
     namedReferences: Type.Integer({ minimum: 0 }),
     symbolReferences: Type.Integer({ minimum: 0 }),
     namedReferenceRatio: Type.Number({ minimum: 0, maximum: 1 }),
+    declarationDirectives: Type.Optional(
+      Type.Object(
+        {
+          destructor: Type.Integer({ minimum: 0 }),
+          printer: Type.Integer({ minimum: 0 }),
+          union: Type.Integer({ minimum: 0 }),
+          code: Type.Integer({ minimum: 0 }),
+          total: Type.Integer({ minimum: 0 }),
+        },
+        { additionalProperties: false },
+      ),
+    ),
+    explicitEmptyAlternatives: Type.Optional(
+      Type.Object(
+        {
+          count: Type.Integer({ minimum: 0 }),
+          emptyAlternatives: Type.Integer({ minimum: 0 }),
+          ratio: Type.Number({ minimum: 0, maximum: 1 }),
+        },
+        { additionalProperties: false },
+      ),
+    ),
+    actionReferences: Type.Optional(
+      Type.Object(
+        {
+          positional: Type.Integer({ minimum: 0 }),
+          named: Type.Integer({ minimum: 0 }),
+          total: Type.Integer({ minimum: 0 }),
+          namedRatio: Type.Number({ minimum: 0, maximum: 1 }),
+        },
+        { additionalProperties: false },
+      ),
+    ),
     notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
@@ -338,6 +372,10 @@ const StyleFeaturesSchema = Type.Object(
     ]),
     nonterminalConventionRatio: Type.Number({ minimum: 0, maximum: 1 }),
     namingOutliers: Type.Array(Type.String()),
+    commentDensity: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
+    comments: Type.Optional(Type.Integer({ minimum: 0 })),
+    undocumentedRules: Type.Optional(Type.Array(Type.String())),
+    documentedRuleRatio: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
     notApplicable: Type.Optional(NotApplicableSchema),
   },
   { additionalProperties: false },
@@ -408,7 +446,7 @@ export const GrammarFeaturesSchema = Type.Object(
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.5.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.6.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;
