@@ -1,6 +1,7 @@
 import { Ajv2020, type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import { type GrammarFeatures, GrammarFeaturesSchema } from "./schemas/features.js";
 import { type Expr, type GrammarIR, GrammarIRSchema } from "./schemas/ir.js";
+import { MAX_SUPPORTED_NESTING_DEPTH } from "./frontend.js";
 
 export interface ValidationIssue {
   readonly code: string;
@@ -12,15 +13,16 @@ export type ValidationResult<T> =
   | { readonly ok: true; readonly value: T; readonly issues: readonly [] }
   | { readonly ok: false; readonly issues: readonly ValidationIssue[] };
 
-const ajv = new Ajv2020({ allErrors: true, strict: true });
+const irAjv = new Ajv2020({ allErrors: false, strict: true });
+const featuresAjv = new Ajv2020({ allErrors: true, strict: true });
 let validateIRShape: ValidateFunction<GrammarIR> | undefined;
 let validateFeaturesShape: ValidateFunction<GrammarFeatures> | undefined;
 
 const getIRValidator = (): ValidateFunction<GrammarIR> =>
-  (validateIRShape ??= ajv.compile(GrammarIRSchema) as ValidateFunction<GrammarIR>);
+  (validateIRShape ??= irAjv.compile(GrammarIRSchema) as ValidateFunction<GrammarIR>);
 
 const getFeaturesValidator = (): ValidateFunction<GrammarFeatures> =>
-  (validateFeaturesShape ??= ajv.compile(
+  (validateFeaturesShape ??= featuresAjv.compile(
     GrammarFeaturesSchema,
   ) as ValidateFunction<GrammarFeatures>);
 
@@ -30,6 +32,72 @@ const mapSchemaIssues = (errors: ErrorObject[] | null | undefined): ValidationIs
     path: error.instancePath || "/",
     message: error.message ?? "schema validation failed",
   }));
+
+const nestingIssue = (input: unknown): ValidationIssue | undefined => {
+  if (typeof input !== "object" || input === null || !("rules" in input)) return undefined;
+  const rules = Array.isArray(input.rules) ? input.rules : [];
+  const pending: { value: unknown; path: string; depth: number }[] = [];
+  rules.forEach((rule, ruleIndex) => {
+    if (typeof rule !== "object" || rule === null || !("alternatives" in rule)) return;
+    const alternatives = Array.isArray(rule.alternatives) ? rule.alternatives : [];
+    alternatives.forEach((alternative: unknown, alternativeIndex: number) => {
+      if (typeof alternative !== "object" || alternative === null || !("items" in alternative)) {
+        return;
+      }
+      const items = Array.isArray(alternative.items) ? alternative.items : [];
+      items.forEach((value: unknown, itemIndex: number) => {
+        pending.push({
+          value,
+          path: `/rules/${ruleIndex}/alternatives/${alternativeIndex}/items/${itemIndex}`,
+          depth: 1,
+        });
+      });
+    });
+  });
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (!current) break;
+    if (current.depth > MAX_SUPPORTED_NESTING_DEPTH) {
+      return {
+        code: "IR_NESTING_TOO_DEEP",
+        path: current.path,
+        message: `maximum expression nesting depth ${MAX_SUPPORTED_NESTING_DEPTH} exceeded`,
+      };
+    }
+    if (typeof current.value !== "object" || current.value === null || !("kind" in current.value)) {
+      continue;
+    }
+    const node = current.value as Readonly<Record<string, unknown>>;
+    const children: readonly (readonly [unknown, string])[] =
+      node.kind === "symbol"
+        ? Array.isArray(node.args)
+          ? node.args.map((value, index) => [value, `/args/${index}`] as const)
+          : []
+        : node.kind === "seq"
+          ? Array.isArray(node.items)
+            ? node.items.map((value, index) => [value, `/items/${index}`] as const)
+            : []
+          : node.kind === "choice"
+            ? Array.isArray(node.alts)
+              ? node.alts.map((value, index) => [value, `/alts/${index}`] as const)
+              : []
+            : node.kind === "opt" ||
+                node.kind === "star" ||
+                node.kind === "plus" ||
+                node.kind === "predicate" ||
+                node.kind === "group"
+              ? [[node.expr, "/expr"]]
+              : [];
+    children.forEach(([value, suffix]) => {
+      pending.push({
+        value,
+        path: `${current.path}${suffix}`,
+        depth: current.depth + 1,
+      });
+    });
+  }
+  return undefined;
+};
 
 interface CanonicalState {
   hasEbnfSugar: boolean;
@@ -275,6 +343,8 @@ const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
 };
 
 export const validateIR = (input: unknown): ValidationResult<GrammarIR> => {
+  const tooDeep = nestingIssue(input);
+  if (tooDeep) return { ok: false, issues: [tooDeep] };
   const validator = getIRValidator();
   if (!validator(input)) {
     return { ok: false, issues: mapSchemaIssues(validator.errors) };

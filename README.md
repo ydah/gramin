@@ -160,8 +160,8 @@ gramin analyze --ir grammar-ir.json --format json
 ```
 
 Use `--source-name <name>` for a single input or `--source-root <dir>` for byte-stable
-multi-file output. Parser nesting is limited to 500 levels by default and can be adjusted up
-to 1,000 with `--max-nesting-depth`.
+multi-file output. Parser nesting is limited to 256 levels; `--max-nesting-depth` can set a
+lower project-specific limit.
 
 ## GitHub Actions
 

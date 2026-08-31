@@ -79,8 +79,8 @@ const equalValue = (left: unknown, right: unknown): boolean => {
     );
   }
   if (isRecord(left) && isRecord(right)) {
-    const leftKeys = Object.keys(left).sort();
-    const rightKeys = Object.keys(right).sort();
+    const leftKeys = Object.keys(left).sort(compareBytes);
+    const rightKeys = Object.keys(right).sort(compareBytes);
     return (
       leftKeys.length === rightKeys.length &&
       leftKeys.every((key, index) => key === rightKeys[index] && equalValue(left[key], right[key]))
@@ -324,7 +324,7 @@ const collectChanges = (
   if (equalValue(before, after)) return;
   if (isRecord(before) && isRecord(after)) {
     const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
-    [...keys].sort().forEach((key) => {
+    [...keys].sort(compareBytes).forEach((key) => {
       collectChanges(before[key], after[key], `${path}/${key}`, changes);
     });
     return;

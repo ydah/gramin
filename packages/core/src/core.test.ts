@@ -4,6 +4,7 @@ import {
   compareBytes,
   GrammarFeaturesSchemaDocument,
   GrammarIRSchemaDocument,
+  MAX_SUPPORTED_NESTING_DEPTH,
   serializeCanonical,
   validateIR,
 } from "./index.js";
@@ -188,6 +189,47 @@ describe("Grammar IR canonical form", () => {
   const withOnlyItem = (item: Expr): GrammarIR => ({
     ...baseIR(),
     rules: [{ name: "start", alternatives: [{ items: [item] }] }],
+  });
+
+  it("validates deeply nested expression unions without exponential backtracking", () => {
+    let expression: Expr = { kind: "terminal", literal: "x" };
+    for (let depth = 0; depth < 32; depth += 1) {
+      expression =
+        depth % 2 === 0 ? { kind: "group", expr: expression } : { kind: "opt", expr: expression };
+    }
+    const sample: GrammarIR = {
+      ...withOnlyItem({ kind: "opt", expr: expression }),
+      capabilities: { ...baseIR().capabilities, ebnfSugar: true },
+    };
+
+    expect(validateIR(sample).ok).toBe(true);
+  });
+
+  it("rejects expression nesting before recursive schema validation overflows", () => {
+    let expression: Expr = { kind: "terminal", literal: "x" };
+    for (let depth = 1; depth < MAX_SUPPORTED_NESTING_DEPTH; depth += 1) {
+      expression = { kind: "opt", expr: expression };
+    }
+    const atLimit: GrammarIR = {
+      ...withOnlyItem(expression),
+      capabilities: { ...baseIR().capabilities, ebnfSugar: true },
+    };
+
+    expect(validateIR(atLimit).ok).toBe(true);
+
+    const result = validateIR({
+      ...atLimit,
+      rules: [
+        { ...atLimit.rules[0], alternatives: [{ items: [{ kind: "opt", expr: expression }] }] },
+      ],
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.issues).toContainEqual(
+        expect.objectContaining({ code: "IR_NESTING_TOO_DEEP" }),
+      );
+    }
   });
 
   it.each([

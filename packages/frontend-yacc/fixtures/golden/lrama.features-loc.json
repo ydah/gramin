@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.7.1",
+  "featuresVersion": "0.7.2",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,

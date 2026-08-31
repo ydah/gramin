@@ -1,4 +1,5 @@
 import {
+  compareBytes,
   type Diagnostic,
   type Expr,
   type Frontend,
@@ -527,7 +528,7 @@ const parse = (
     });
   });
   const names = new Set(parsedRules.map((rule) => rule.name));
-  const unresolved = [...references].filter((name) => !names.has(name)).sort();
+  const unresolved = [...references].filter((name) => !names.has(name)).sort(compareBytes);
   const diagnostics: Diagnostic[] = [
     ...parser.diagnostics,
     ...unresolved.map(
@@ -565,7 +566,7 @@ const parse = (
       lexerRules: false,
     },
     startSymbols: parsedRules[0] ? [parsedRules[0].name] : [],
-    terminals: [...literals].sort().map((literal) => ({ literal })),
+    terminals: [...literals].sort(compareBytes).map((literal) => ({ literal })),
     externalSymbols: unresolved.map((name) => ({
       name,
       origin: "unresolved",

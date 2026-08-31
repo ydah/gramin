@@ -1,4 +1,5 @@
 import {
+  compareBytes,
   type Alternative,
   type Diagnostic,
   type Expr,
@@ -660,7 +661,7 @@ const parse = (
   });
   const stdlib = [...calls]
     .filter((name) => MENHIR_STDLIB_RULES.has(name) && !ruleNames.has(name))
-    .sort();
+    .sort(compareBytes);
   const builtinError = references.has("error") && !ruleNames.has("error");
   const externalNames = new Set([...stdlib, ...(builtinError ? ["error"] : [])]);
   const parameterNames = new Set(parsedRules.flatMap((rule) => rule.params ?? []));
@@ -672,7 +673,7 @@ const parse = (
         !externalNames.has(name) &&
         !parameterNames.has(name),
     )
-    .sort();
+    .sort(compareBytes);
   diagnostics.push(
     ...unresolved.map(
       (name): Diagnostic => ({

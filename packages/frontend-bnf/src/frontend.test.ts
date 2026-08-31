@@ -48,4 +48,13 @@ describe("BNF frontend", () => {
     );
     expect(result.ir).toBeNull();
   });
+
+  it("orders generated declarations by UTF-8 bytes", () => {
+    const result = bnfFrontend.parse(
+      [{ name: "unicode.bnf", content: 'start = "\u{1D400}x" | "\uFF21x";' }],
+      {},
+    );
+
+    expect(result.ir?.terminals.map(({ literal }) => literal)).toEqual(["\uFF21x", "\u{1D400}x"]);
+  });
 });

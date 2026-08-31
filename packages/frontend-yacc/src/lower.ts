@@ -1,4 +1,5 @@
 import {
+  compareBytes,
   type Alternative,
   type Diagnostic,
   type Expr,
@@ -249,9 +250,11 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
       ast.startSymbols.length > 0 ? [...ast.startSymbols] : rules[0] ? [rules[0].name] : [],
     terminals,
     externalSymbols: [
-      ...[...stdlibNames].sort().map((name) => ({ name, origin: "stdlib", kind: "rule" as const })),
+      ...[...stdlibNames]
+        .sort(compareBytes)
+        .map((name) => ({ name, origin: "stdlib", kind: "rule" as const })),
       ...[...builtinNames]
-        .sort()
+        .sort(compareBytes)
         .map((name) => ({ name, origin: "builtin", kind: "terminal" as const })),
     ],
     precedence: ast.precedence.map((level) => ({

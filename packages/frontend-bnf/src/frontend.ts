@@ -1,4 +1,5 @@
 import {
+  compareBytes,
   type Diagnostic,
   type Expr,
   type Frontend,
@@ -479,7 +480,7 @@ const lower = (
       });
     });
   });
-  const unresolved = [...referenced].filter((name) => !ruleNames.has(name)).sort();
+  const unresolved = [...referenced].filter((name) => !ruleNames.has(name)).sort(compareBytes);
   diagnostics.push(
     ...unresolved.map(
       (name): Diagnostic => ({
@@ -510,7 +511,7 @@ const lower = (
       lexerRules: false,
     },
     startSymbols: rules[0] ? [rules[0].name] : [],
-    terminals: [...literals].sort().map((literal) => ({ literal })),
+    terminals: [...literals].sort(compareBytes).map((literal) => ({ literal })),
     externalSymbols: unresolved.map((name) => ({
       name,
       origin: "unresolved",

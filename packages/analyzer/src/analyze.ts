@@ -119,7 +119,7 @@ const analysisDiagnostics = (
     .filter((terminal) => !used.has(terminalKey(terminal)))
     .map((terminal) => terminal.name ?? terminal.literal ?? "")
     .filter(Boolean)
-    .sort();
+    .sort(compareBytes);
   if (unused.length > 0) {
     diagnostics.push({
       severity: "warning",

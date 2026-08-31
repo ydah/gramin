@@ -1,7 +1,7 @@
 import type { Diagnostic, GrammarIR } from "./schemas/ir.js";
 
-export const DEFAULT_MAX_NESTING_DEPTH = 500;
-export const MAX_SUPPORTED_NESTING_DEPTH = 1_000;
+export const DEFAULT_MAX_NESTING_DEPTH = 256;
+export const MAX_SUPPORTED_NESTING_DEPTH = 256;
 
 export interface SourceFile {
   readonly name: string;

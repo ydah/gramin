@@ -1,6 +1,6 @@
 # Grammar features v0.7
 
-The current producer version is 0.7.1.
+The current producer version is 0.7.2.
 
 The normative machine-readable contract is
 `packages/core/schema/features-v0.7.schema.json`. `@gramin/core` exports the schema,

@@ -42,4 +42,4 @@ export {
 } from "./validation.js";
 
 export const IR_VERSION = "1.3.0";
-export const FEATURES_VERSION = "0.7.1";
+export const FEATURES_VERSION = "0.7.2";

@@ -6,7 +6,7 @@ change the exit status; `--fail-on warning` makes them a CI gate.
 
 | Code family | Meaning | Typical severity |
 |---|---|---|
-| `SCHEMA_INVALID`, `IR_VERSION_UNSUPPORTED` | Input IR is not valid JSON Schema or uses an unsupported major version | error |
+| `SCHEMA_INVALID`, `IR_VERSION_UNSUPPORTED`, `IR_NESTING_TOO_DEEP` | Input IR is invalid, unsupported, or exceeds the safe expression-depth limit | error |
 | `IR_CANON_*` | Input IR violates canonical Grammar IR form, including duplicate rule names | error |
 | `ANALYZER001_UNRESOLVED_SYMBOLS` | A rule reference is not declared or external | warning |
 | `ANALYZER002_UNREACHABLE_RULES` | A rule is not reachable from a start symbol | warning |

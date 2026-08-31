@@ -49,8 +49,8 @@ must be reported rather than executed.
 
 ## Resource limits
 
-Expression parsers enforce a configurable nesting limit of 500 by default (up to 1,000). Inputs that exceed
-the limit return a frontend nesting diagnostic and do not produce an IR. The analyzer, canonical
-IR validation, and dependency graph traversal use explicit work stacks for expression trees and
-large rule chains. Raw SLR conflicts can be computed with `--analysis lr`; precedence
+Expression parsers and canonical IR validation enforce a maximum nesting depth of 256;
+`--max-nesting-depth` can set a lower limit. Inputs that exceed the limit return a diagnostic
+instead of reaching recursive schema validation. Analyzer expression and dependency-graph
+traversals use explicit work stacks. Raw SLR conflicts can be computed with `--analysis lr`; precedence
 resolution and LALR parser-generator behavior remain outside gramin's scope.
