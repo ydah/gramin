@@ -1,7 +1,7 @@
-# Grammar features v0.6
+# Grammar features v0.7
 
 The normative machine-readable contract is
-`packages/core/schema/features-v0.6.schema.json`. `@gramin/core` exports the schema,
+`packages/core/schema/features-v0.7.schema.json`. `@gramin/core` exports the schema,
 the `GrammarFeatures` TypeScript type, and `validateFeatures`.
 The previous feature schemas remain packaged for
 existing consumers.
@@ -33,7 +33,9 @@ Required legacy fields can remain present for minor-version compatibility, but a
 This applies to scannerless declaration counts and to features 0.2 action measurements
 when `actions.completeness` is `partial`.
 
-Features 0.6 adds source-backed operational and documentation measurements, exact
-per-start reachable rule lists, and a diagnostic for provably shadowed ordered choices.
-CFG-only fields are omitted for ordered-choice grammars; SLR construction is emitted only
-when requested. Features 0.5 remains packaged for consumers that need the previous contract.
+Features 0.7 expands each `perRule` vector with local parseability, graph, reachability,
+width, and depth facts; separates symbol-expanded potential PEG shadowing from provable
+shadowing; and narrows list-recursion classification. CFG-only fields are omitted for
+ordered-choice grammars; SLR construction is emitted only when requested. Features 0.6
+remains packaged for consumers that need the previous contract. See
+[`RFC 0006`](./rfcs/0006-rule-vectors-and-peg-shadowing.md).

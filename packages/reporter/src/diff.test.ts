@@ -17,11 +17,18 @@ describe("feature diffs", () => {
     const after = structuredClone(before);
     after.structure.unreachableSymbols = ["orphan"];
     after.structure.unproductiveSymbols = ["loop"];
+    after.redundancy.unusedTerminals = [...before.redundancy.unusedTerminals, "EXTRA"];
+    after.redundancy.unusedPrecedenceTokens = ["STALE"];
 
     const diff = diffFeatures(before, after);
 
     expect(diff.regressions.map((regression) => regression.path).sort()).toEqual(
-      ["/structure/unreachableSymbols", "/structure/unproductiveSymbols"].sort(),
+      [
+        "/redundancy/unusedPrecedenceTokens",
+        "/redundancy/unusedTerminals",
+        "/structure/unreachableSymbols",
+        "/structure/unproductiveSymbols",
+      ].sort(),
     );
   });
 

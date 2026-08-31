@@ -41,7 +41,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.6.0",
+  "featuresVersion": "0.7.0",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -132,12 +132,20 @@
     "backtrackingHotspots": [],
     "charClassOverlapPairs": 0,
     "maxPredicateNestingDepth": 1,
+    "potentialShadowedAlternativePairs": 0,
     "predicates": 2,
     "shadowedAlternativePairs": 0
   },
   "perRule": [
     {
       "alternatives": 1,
+      "fanIn": 4,
+      "fanOut": 0,
+      "maxExpressionNestingDepth": 2,
+      "maxRhsItems": 1,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "array",
         "member",
@@ -147,10 +155,18 @@
       "references": [],
       "rhsItems": 1,
       "rule": "_",
-      "shortestDerivation": 0
+      "shortestDerivation": 0,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 1,
+      "fanOut": 2,
+      "maxExpressionNestingDepth": 7,
+      "maxRhsItems": 5,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "value"
       ],
@@ -160,20 +176,34 @@
       ],
       "rhsItems": 5,
       "rule": "array",
-      "shortestDerivation": 2
+      "shortestDerivation": 2,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 1,
+      "fanOut": 0,
+      "maxExpressionNestingDepth": 4,
+      "maxRhsItems": 2,
+      "reachableFromStarts": [],
       "referencedBy": [
         "other"
       ],
       "references": [],
       "rhsItems": 2,
       "rule": "keyword",
-      "shortestDerivation": 1
+      "shortestDerivation": 1,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 1,
+      "fanOut": 3,
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 5,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "object"
       ],
@@ -184,20 +214,36 @@
       ],
       "rhsItems": 5,
       "rule": "member",
-      "shortestDerivation": 4
+      "shortestDerivation": 4,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 1,
+      "fanOut": 0,
+      "maxExpressionNestingDepth": 5,
+      "maxRhsItems": 3,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "value"
       ],
       "references": [],
       "rhsItems": 3,
       "rule": "number",
-      "shortestDerivation": 1
+      "shortestDerivation": 1,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 1,
+      "fanOut": 2,
+      "maxExpressionNestingDepth": 7,
+      "maxRhsItems": 5,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "value"
       ],
@@ -207,20 +253,34 @@
       ],
       "rhsItems": 5,
       "rule": "object",
-      "shortestDerivation": 2
+      "shortestDerivation": 2,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 0,
+      "fanOut": 1,
+      "maxExpressionNestingDepth": 2,
+      "maxRhsItems": 2,
+      "reachableFromStarts": [],
       "referencedBy": [],
       "references": [
         "keyword"
       ],
       "rhsItems": 2,
       "rule": "other",
-      "shortestDerivation": 1
+      "shortestDerivation": 1,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 0,
+      "fanOut": 2,
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 3,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [],
       "references": [
         "_",
@@ -228,10 +288,18 @@
       ],
       "rhsItems": 3,
       "rule": "start",
-      "shortestDerivation": 1
+      "shortestDerivation": 1,
+      "unitRules": 0
     },
     {
       "alternatives": 1,
+      "fanIn": 2,
+      "fanOut": 0,
+      "maxExpressionNestingDepth": 2,
+      "maxRhsItems": 3,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "member",
         "value"
@@ -239,10 +307,18 @@
       "references": [],
       "rhsItems": 3,
       "rule": "string",
-      "shortestDerivation": 2
+      "shortestDerivation": 2,
+      "unitRules": 0
     },
     {
       "alternatives": 7,
+      "fanIn": 3,
+      "fanOut": 4,
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 1,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "array",
         "member",
@@ -256,7 +332,8 @@
       ],
       "rhsItems": 7,
       "rule": "value",
-      "shortestDerivation": 1
+      "shortestDerivation": 1,
+      "unitRules": 4
     }
   ],
   "precedence": {

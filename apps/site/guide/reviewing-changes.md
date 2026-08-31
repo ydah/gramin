@@ -27,6 +27,8 @@ The result separates three things:
 - unresolved, unreachable, or unproductive symbols;
 - growth in recursive rules or dependency depth;
 - changes to precedence and lexer/parser boundaries;
+- rule-level FIRST/FOLLOW, LL(1), fan-in/out, width, depth, and start reachability changes;
+- provable PEG shadowing separately from symbol-expanded potential shadowing;
 - action presence or locations, without treating action text as executable input.
 
 For cross-format comparisons, start with Class A metrics and keep capability context beside the values. [Metric comparability](/concepts/comparability) explains why.

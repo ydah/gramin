@@ -1,5 +1,9 @@
 import type { GrammarFeatures, GrammarIR } from "@gramin/core";
-import { alternativeEdgeReference, isAlternativeNullable } from "./expressions.js";
+import {
+  alternativeEdgeReference,
+  isAlternativeNullable,
+  maxExpressionNestingDepth,
+} from "./expressions.js";
 import {
   buildDependencyGraph,
   type DependencyGraph,
@@ -160,39 +164,6 @@ const shortestDerivations = (ir: GrammarIR): Map<string, number> => {
   return lengths;
 };
 
-const maxExpressionNestingDepth = (ir: GrammarIR): number => {
-  let maximum = 0;
-  const pending = ir.rules.flatMap((rule) =>
-    rule.alternatives.flatMap((alternative) =>
-      alternative.items.map((expression) => ({ expression, depth: 1 })),
-    ),
-  );
-  while (pending.length > 0) {
-    const item = pending.pop();
-    if (!item) break;
-    maximum = Math.max(maximum, item.depth);
-    const expression = item.expression;
-    const children =
-      expression.kind === "symbol"
-        ? expression.args
-        : expression.kind === "seq"
-          ? expression.items
-          : expression.kind === "choice"
-            ? expression.alts
-            : expression.kind === "opt" ||
-                expression.kind === "star" ||
-                expression.kind === "plus" ||
-                expression.kind === "predicate" ||
-                expression.kind === "group"
-              ? [expression.expr]
-              : undefined;
-    children?.forEach((child) => {
-      pending.push({ expression: child, depth: item.depth + 1 });
-    });
-  }
-  return maximum;
-};
-
 const fanInShape = (graph: ReturnType<typeof buildDependencyGraph>): [number, number] => {
   const counts = new Map([...graph.keys()].map((name) => [name, 0]));
   graph.forEach((targets) => {
@@ -341,7 +312,9 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
               ),
             }),
       },
-      maxExpressionNestingDepth: maxExpressionNestingDepth(ir),
+      maxExpressionNestingDepth: maxExpressionNestingDepth(
+        ir.rules.flatMap((rule) => rule.alternatives.flatMap((alternative) => alternative.items)),
+      ),
       ...(nullable === undefined ? {} : { nullableRules: nullable.size }),
       ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
     },

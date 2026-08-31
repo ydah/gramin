@@ -25,7 +25,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.6.0",
+  "featuresVersion": "0.7.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -116,6 +116,7 @@
       "backtrackingHotspots": "orderedChoice capability is false",
       "charClassOverlapPairs": "orderedChoice capability is false",
       "maxPredicateNestingDepth": "orderedChoice capability is false",
+      "potentialShadowedAlternativePairs": "orderedChoice capability is false",
       "predicates": "orderedChoice capability is false",
       "shadowedAlternativePairs": "orderedChoice capability is false"
     }
@@ -123,6 +124,20 @@
   "perRule": [
     {
       "alternatives": 2,
+      "fanIn": 1,
+      "fanOut": 1,
+      "firstSetSize": 1,
+      "followSetSize": 2,
+      "ll1Conflicts": {
+        "firstFirst": 0,
+        "firstFollow": 1,
+        "total": 1
+      },
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 2,
+      "reachableFromStarts": [
+        "items"
+      ],
       "referencedBy": [
         "items"
       ],
@@ -131,15 +146,29 @@
       ],
       "rhsItems": 2,
       "rule": "items",
-      "shortestDerivation": 0
+      "shortestDerivation": 0,
+      "unitRules": 0
     },
     {
       "alternatives": 2,
+      "fanIn": 0,
+      "fanOut": 0,
+      "firstSetSize": 1,
+      "followSetSize": 0,
+      "ll1Conflicts": {
+        "firstFirst": 0,
+        "firstFollow": 0,
+        "total": 0
+      },
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 1,
+      "reachableFromStarts": [],
       "referencedBy": [],
       "references": [],
       "rhsItems": 1,
       "rule": "optional",
-      "shortestDerivation": 0
+      "shortestDerivation": 0,
+      "unitRules": 0
     }
   ],
   "precedence": {
@@ -163,8 +192,8 @@
     "commonPrefixPairs": 0,
     "duplicateAlternatives": 0,
     "listRecursion": {
-      "consistency": 1,
-      "left": 1,
+      "consistency": 0,
+      "left": 0,
       "mixed": 0,
       "right": 0
     },

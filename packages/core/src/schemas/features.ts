@@ -301,6 +301,7 @@ const PegFeaturesSchema = Type.Object(
     predicates: Type.Optional(Type.Integer({ minimum: 0 })),
     maxPredicateNestingDepth: Type.Optional(Type.Integer({ minimum: 0 })),
     shadowedAlternativePairs: Type.Optional(Type.Integer({ minimum: 0 })),
+    potentialShadowedAlternativePairs: Type.Optional(Type.Integer({ minimum: 0 })),
     backtrackingHotspots: Type.Optional(
       Type.Array(
         Type.Object(
@@ -387,8 +388,26 @@ const PerRuleFeaturesSchema = Type.Array(
       rule: Type.String(),
       alternatives: Type.Integer({ minimum: 0 }),
       rhsItems: Type.Integer({ minimum: 0 }),
+      maxRhsItems: Type.Integer({ minimum: 0 }),
+      maxExpressionNestingDepth: Type.Integer({ minimum: 0 }),
+      fanIn: Type.Integer({ minimum: 0 }),
+      fanOut: Type.Integer({ minimum: 0 }),
       references: Type.Array(Type.String()),
       referencedBy: Type.Array(Type.String()),
+      reachableFromStarts: Type.Array(Type.String()),
+      firstSetSize: Type.Optional(Type.Integer({ minimum: 0 })),
+      followSetSize: Type.Optional(Type.Integer({ minimum: 0 })),
+      ll1Conflicts: Type.Optional(
+        Type.Object(
+          {
+            firstFirst: Type.Integer({ minimum: 0 }),
+            firstFollow: Type.Integer({ minimum: 0 }),
+            total: Type.Integer({ minimum: 0 }),
+          },
+          { additionalProperties: false },
+        ),
+      ),
+      unitRules: Type.Integer({ minimum: 0 }),
       shortestDerivation: Type.Optional(Type.Integer({ minimum: 0 })),
     },
     { additionalProperties: false },
@@ -446,7 +465,7 @@ export const GrammarFeaturesSchema = Type.Object(
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.6.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.7.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;

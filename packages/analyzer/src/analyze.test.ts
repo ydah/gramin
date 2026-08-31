@@ -122,6 +122,56 @@ describe("analyzeGrammar", () => {
       unusedTerminals: ["UNUSED"],
       unusedPrecedenceTokens: ["STALE"],
     });
+    expect(features.perRule.find(({ rule }) => rule === "start")).toMatchObject({
+      firstSetSize: 1,
+      followSetSize: 1,
+      ll1Conflicts: { firstFirst: 1, firstFollow: 0, total: 1 },
+      unitRules: 1,
+    });
+  });
+
+  it("recognizes list recursion without classifying every recursive expression rule", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["items"],
+      rules: [
+        {
+          name: "items",
+          alternatives: [
+            { items: [{ kind: "symbol", name: "item" }] },
+            {
+              items: [
+                { kind: "symbol", name: "items" },
+                { kind: "symbol", name: "item" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "expr",
+          alternatives: [
+            { items: [{ kind: "symbol", name: "term" }] },
+            {
+              items: [
+                { kind: "symbol", name: "expr" },
+                { kind: "terminal", literal: "+" },
+                { kind: "symbol", name: "term" },
+              ],
+            },
+          ],
+        },
+        { name: "item", alternatives: [{ items: [{ kind: "terminal", literal: "i" }] }] },
+        { name: "term", alternatives: [{ items: [{ kind: "terminal", literal: "n" }] }] },
+      ],
+    });
+
+    expect(features.redundancy.listRecursion).toEqual({
+      left: 1,
+      right: 0,
+      mixed: 0,
+      consistency: 1,
+    });
   });
 
   it("diagnoses cycles made only of unit rules", () => {
@@ -172,8 +222,13 @@ describe("analyzeGrammar", () => {
     });
     expect(features.structure.topBetweenness[0]).toEqual({ symbol: "b", value: 1 });
     expect(features.perRule.find(({ rule }) => rule === "b")).toMatchObject({
+      fanIn: 1,
+      fanOut: 1,
+      maxRhsItems: 1,
+      maxExpressionNestingDepth: 1,
       references: ["c"],
       referencedBy: ["a"],
+      reachableFromStarts: ["a"],
       shortestDerivation: 1,
     });
   });
@@ -267,6 +322,43 @@ describe("analyzeGrammar", () => {
       nonterminalConvention: "camelCase",
       nonterminalConventionRatio: 1,
     });
+  });
+
+  it("reports symbol-expanded PEG shadowing separately as a heuristic", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      capabilities: { ...base.capabilities, orderedChoice: true },
+      startSymbols: ["start"],
+      rules: [
+        {
+          name: "start",
+          orderedAlternatives: true,
+          alternatives: [
+            { items: [{ kind: "symbol", name: "short" }] },
+            { items: [{ kind: "symbol", name: "long" }] },
+          ],
+        },
+        {
+          name: "short",
+          orderedAlternatives: true,
+          alternatives: [{ items: [{ kind: "terminal", literal: "a" }] }],
+        },
+        {
+          name: "long",
+          orderedAlternatives: true,
+          alternatives: [{ items: [{ kind: "terminal", literal: "ab" }] }],
+        },
+      ],
+    });
+
+    expect(features.peg).toMatchObject({
+      shadowedAlternativePairs: 0,
+      potentialShadowedAlternativePairs: 1,
+    });
+    expect(features.diagnostics.map(({ code }) => code)).not.toContain(
+      "ANALYZER008_SHADOWED_ALTERNATIVES",
+    );
   });
 
   it("uses retained source statistics for operational and style metrics", () => {

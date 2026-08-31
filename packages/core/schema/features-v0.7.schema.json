@@ -1,0 +1,1623 @@
+{
+  "$id": "https://gramin.dev/schema/features-v0.7.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "additionalProperties": false,
+      "properties": {
+        "altActionCoverage": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "avgActionLength": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "completeness": {
+          "anyOf": [
+            {
+              "const": "complete",
+              "type": "string"
+            },
+            {
+              "const": "partial",
+              "type": "string"
+            }
+          ]
+        },
+        "maxActionLength": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "midRuleActions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rulesWithActions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "totalActions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "trailingActions": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "completeness",
+        "altActionCoverage",
+        "midRuleActions",
+        "avgActionLength",
+        "maxActionLength"
+      ],
+      "type": "object"
+    },
+    "capabilities": {
+      "additionalProperties": false,
+      "properties": {
+        "ebnfSugar": {
+          "type": "boolean"
+        },
+        "lexerRules": {
+          "type": "boolean"
+        },
+        "orderedChoice": {
+          "type": "boolean"
+        },
+        "parameterizedRules": {
+          "type": "boolean"
+        },
+        "precedenceTable": {
+          "type": "boolean"
+        },
+        "predicates": {
+          "type": "boolean"
+        },
+        "scannerless": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "orderedChoice",
+        "ebnfSugar",
+        "predicates",
+        "scannerless",
+        "precedenceTable",
+        "parameterizedRules",
+        "lexerRules"
+      ],
+      "type": "object"
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "loc": {
+            "additionalProperties": false,
+            "properties": {
+              "endCol": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "endLine": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "startCol": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "startLine": {
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "startLine",
+              "startCol",
+              "endLine",
+              "endCol"
+            ],
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "anyOf": [
+              {
+                "const": "error",
+                "type": "string"
+              },
+              {
+                "const": "warning",
+                "type": "string"
+              },
+              {
+                "const": "info",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "severity",
+          "code",
+          "message"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "featuresVersion": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "type": "string"
+    },
+    "lexicon": {
+      "additionalProperties": false,
+      "properties": {
+        "anyCharCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "charClassCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "keywordIdentifierCollisions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "keywordLike": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "literalOccurrences": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "literalPrefixCollisions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "literal": {
+                "type": "string"
+              },
+              "prefix": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "prefix",
+              "literal"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "literalTokens": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "namedTokens": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "punctuationLike": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tokenUsage": {
+          "additionalProperties": false,
+          "properties": {
+            "coverage": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "singleUse": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "used": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "used",
+            "coverage",
+            "singleUse"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "namedTokens",
+        "literalTokens",
+        "literalOccurrences",
+        "charClassCount",
+        "anyCharCount",
+        "keywordLike",
+        "punctuationLike",
+        "literalPrefixCollisions",
+        "keywordIdentifierCollisions",
+        "tokenUsage"
+      ],
+      "type": "object"
+    },
+    "notable": {
+      "additionalProperties": false,
+      "properties": {
+        "coreSymbols": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "deepestRecursionMembers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "largestRule": {
+          "additionalProperties": false,
+          "properties": {
+            "line": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "deepestRecursionMembers",
+        "coreSymbols"
+      ],
+      "type": "object"
+    },
+    "operations": {
+      "additionalProperties": false,
+      "properties": {
+        "actionReferences": {
+          "additionalProperties": false,
+          "properties": {
+            "named": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "namedRatio": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "positional": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "total": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "positional",
+            "named",
+            "total",
+            "namedRatio"
+          ],
+          "type": "object"
+        },
+        "declarationDirectives": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "destructor": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "printer": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "total": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "union": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "destructor",
+            "printer",
+            "union",
+            "code",
+            "total"
+          ],
+          "type": "object"
+        },
+        "errorTokenUses": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "explicitEmptyAlternatives": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "emptyAlternatives": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ratio": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "count",
+            "emptyAlternatives",
+            "ratio"
+          ],
+          "type": "object"
+        },
+        "namedReferenceRatio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "namedReferences": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "recoveryRuleRatio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "rulesWithErrorRecovery": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "symbolReferences": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "errorTokenUses",
+        "rulesWithErrorRecovery",
+        "recoveryRuleRatio",
+        "namedReferences",
+        "symbolReferences",
+        "namedReferenceRatio"
+      ],
+      "type": "object"
+    },
+    "parseability": {
+      "additionalProperties": false,
+      "properties": {
+        "cyclicUnitRules": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "firstSetSize": {
+          "additionalProperties": false,
+          "properties": {
+            "average": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "maximum": {
+              "additionalProperties": false,
+              "properties": {
+                "rule": {
+                  "type": "string"
+                },
+                "value": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "value",
+                "rule"
+              ],
+              "type": "object"
+            },
+            "percentiles": {
+              "additionalProperties": false,
+              "properties": {
+                "p50": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "p95": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p50",
+                "p95"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "average",
+            "maximum"
+          ],
+          "type": "object"
+        },
+        "followSetSize": {
+          "additionalProperties": false,
+          "properties": {
+            "average": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "maximum": {
+              "additionalProperties": false,
+              "properties": {
+                "rule": {
+                  "type": "string"
+                },
+                "value": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "value",
+                "rule"
+              ],
+              "type": "object"
+            },
+            "percentiles": {
+              "additionalProperties": false,
+              "properties": {
+                "p50": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "p95": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p50",
+                "p95"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "average",
+            "maximum"
+          ],
+          "type": "object"
+        },
+        "ll1Conflicts": {
+          "additionalProperties": false,
+          "properties": {
+            "firstFirst": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "firstFollow": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "total": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "firstFirst",
+            "firstFollow",
+            "total"
+          ],
+          "type": "object"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "slr": {
+          "additionalProperties": false,
+          "properties": {
+            "reduceReduceConflicts": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "shiftReduceConflicts": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "states": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "states",
+            "shiftReduceConflicts",
+            "reduceReduceConflicts"
+          ],
+          "type": "object"
+        },
+        "unitRules": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "unitRules",
+        "cyclicUnitRules"
+      ],
+      "type": "object"
+    },
+    "peg": {
+      "additionalProperties": false,
+      "properties": {
+        "backtrackingHotspots": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "rule": {
+                "type": "string"
+              },
+              "score": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "rule",
+              "score"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "charClassOverlapPairs": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "maxPredicateNestingDepth": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "potentialShadowedAlternativePairs": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "predicates": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "shadowedAlternativePairs": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "perRule": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "alternatives": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "fanIn": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "fanOut": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "firstSetSize": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "followSetSize": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "ll1Conflicts": {
+            "additionalProperties": false,
+            "properties": {
+              "firstFirst": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "firstFollow": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "total": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "firstFirst",
+              "firstFollow",
+              "total"
+            ],
+            "type": "object"
+          },
+          "maxExpressionNestingDepth": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxRhsItems": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "reachableFromStarts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "referencedBy": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "references": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "rhsItems": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "rule": {
+            "type": "string"
+          },
+          "shortestDerivation": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "unitRules": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rule",
+          "alternatives",
+          "rhsItems",
+          "maxRhsItems",
+          "maxExpressionNestingDepth",
+          "fanIn",
+          "fanOut",
+          "references",
+          "referencedBy",
+          "reachableFromStarts",
+          "unitRules"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "precedence": {
+      "additionalProperties": false,
+      "properties": {
+        "assocBreakdown": {
+          "additionalProperties": false,
+          "properties": {
+            "left": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "nonassoc": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "precedence": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "right": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "left",
+            "right",
+            "nonassoc",
+            "precedence"
+          ],
+          "type": "object"
+        },
+        "levels": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "maxTokensPerLevel": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "precOverrideAlternativeRatio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "precOverrides": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rulesWithPrecOverrides": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "tokensInPrecedence": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ratio": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "count",
+            "ratio"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "redundancy": {
+      "additionalProperties": false,
+      "properties": {
+        "commonPrefixPairs": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "duplicateAlternatives": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "listRecursion": {
+          "additionalProperties": false,
+          "properties": {
+            "consistency": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "left": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "mixed": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "right": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "left",
+            "right",
+            "mixed",
+            "consistency"
+          ],
+          "type": "object"
+        },
+        "maxCommonPrefixLength": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "singleReferenceRules": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "structuralCloneGroups": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "undefinedPrecedenceOverrides": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "unusedPrecedenceTokens": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "unusedTerminals": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "commonPrefixPairs",
+        "maxCommonPrefixLength",
+        "duplicateAlternatives",
+        "structuralCloneGroups",
+        "singleReferenceRules",
+        "unusedTerminals",
+        "unusedPrecedenceTokens",
+        "undefinedPrecedenceOverrides",
+        "listRecursion"
+      ],
+      "type": "object"
+    },
+    "size": {
+      "additionalProperties": false,
+      "properties": {
+        "altPerRulePercentiles": {
+          "additionalProperties": false,
+          "properties": {
+            "p50": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "p95": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "p50",
+            "p95"
+          ],
+          "type": "object"
+        },
+        "alternatives": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "avgAltPerRule": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "avgRhsLength": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "emptyAlternatives": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "maxAltPerRule": {
+          "additionalProperties": false,
+          "properties": {
+            "line": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "rule": {
+              "type": "string"
+            },
+            "value": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value",
+            "rule"
+          ],
+          "type": "object"
+        },
+        "maxRhsLength": {
+          "additionalProperties": false,
+          "properties": {
+            "line": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "rule": {
+              "type": "string"
+            },
+            "value": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value",
+            "rule"
+          ],
+          "type": "object"
+        },
+        "nestedChoiceCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "nonterminals": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rhsLengthPercentiles": {
+          "additionalProperties": false,
+          "properties": {
+            "p50": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "p95": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "p50",
+            "p95"
+          ],
+          "type": "object"
+        },
+        "rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "terminals": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unresolvedSymbols": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "names": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "count",
+            "names"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "terminals",
+        "nonterminals",
+        "rules",
+        "alternatives",
+        "unresolvedSymbols",
+        "avgAltPerRule",
+        "maxAltPerRule",
+        "avgRhsLength",
+        "maxRhsLength",
+        "nestedChoiceCount",
+        "emptyAlternatives"
+      ],
+      "type": "object"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "dialect": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "fileNames": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "format": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "frontend": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "version": {
+              "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "format",
+        "frontend"
+      ],
+      "type": "object"
+    },
+    "structure": {
+      "additionalProperties": false,
+      "properties": {
+        "articulationPoints": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "bridges": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "source": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "target"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "directLeftRecursiveRules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "directRightRecursiveRules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "fanInEntropy": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "fanInGini": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "largestRecursiveComponent": {
+          "additionalProperties": false,
+          "properties": {
+            "members": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ratio": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "value": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value",
+            "members"
+          ],
+          "type": "object"
+        },
+        "largestSccSize": {
+          "additionalProperties": false,
+          "properties": {
+            "members": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "value": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value",
+            "members"
+          ],
+          "type": "object"
+        },
+        "maxDependencyDepth": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "maxExpressionNestingDepth": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "nullableRules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "reachableRules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recursionSccCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recursiveRules": {
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ratio": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "count"
+          ],
+          "type": "object"
+        },
+        "shortestDerivation": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "length": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "rule": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rule",
+              "length"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "shortestDerivationUnknown": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "startSymbolReachability": {
+          "additionalProperties": false,
+          "properties": {
+            "entries": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "reachableRules": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rules": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "symbol": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "symbol",
+                  "reachableRules",
+                  "rules"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "overlapRatio": {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "entries"
+          ],
+          "type": "object"
+        },
+        "topBetweenness": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "symbol": {
+                "type": "string"
+              },
+              "value": {
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "required": [
+              "symbol",
+              "value"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "topFanIn": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "symbol": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "symbol",
+              "count"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "topFanOut": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "symbol": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "symbol",
+              "count"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "unproductiveSymbols": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "unreachableSymbols": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "directLeftRecursiveRules",
+        "directRightRecursiveRules",
+        "recursionSccCount",
+        "largestSccSize",
+        "maxDependencyDepth",
+        "topFanIn",
+        "topFanOut",
+        "unreachableSymbols",
+        "unproductiveSymbols",
+        "reachableRules",
+        "recursiveRules",
+        "largestRecursiveComponent",
+        "articulationPoints",
+        "bridges",
+        "topBetweenness",
+        "fanInGini",
+        "fanInEntropy",
+        "shortestDerivation",
+        "shortestDerivationUnknown",
+        "startSymbolReachability",
+        "maxExpressionNestingDepth"
+      ],
+      "type": "object"
+    },
+    "style": {
+      "additionalProperties": false,
+      "properties": {
+        "commentDensity": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "comments": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "documentedRuleRatio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "namingOutliers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "nonterminalConvention": {
+          "anyOf": [
+            {
+              "const": "snake_case",
+              "type": "string"
+            },
+            {
+              "const": "camelCase",
+              "type": "string"
+            },
+            {
+              "const": "mixed",
+              "type": "string"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "nonterminalConventionRatio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "terminalUpperCaseRatio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "undocumentedRules": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "terminalUpperCaseRatio",
+        "nonterminalConvention",
+        "nonterminalConventionRatio",
+        "namingOutliers"
+      ],
+      "type": "object"
+    },
+    "sugar": {
+      "additionalProperties": false,
+      "properties": {
+        "inlineRules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notApplicable": {
+          "patternProperties": {
+            "^(.*)$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "opt": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "parameterizedCalls": {
+          "additionalProperties": false,
+          "properties": {
+            "known": {
+              "patternProperties": {
+                "^(.*)$": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "total": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "total",
+            "known"
+          ],
+          "type": "object"
+        },
+        "parameterizedRuleDefs": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "plus": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "star": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "featuresVersion",
+    "source",
+    "capabilities",
+    "size",
+    "structure",
+    "precedence",
+    "lexicon",
+    "sugar",
+    "actions",
+    "parseability",
+    "redundancy",
+    "peg",
+    "operations",
+    "style",
+    "perRule",
+    "notable",
+    "diagnostics"
+  ],
+  "type": "object"
+}

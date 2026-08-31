@@ -15,7 +15,8 @@ Metrics are facts with definitions, not an implied ranking of grammar quality. E
 | Redundancy | common prefixes, duplicates, clones, unused declarations | A or B |
 | Graph shape | articulation points, bridges, betweenness, fan-in distribution | A |
 | PEG | predicates, shadowing, backtracking and character classes | B or C |
-| Operations and style | recovery, named references, naming conventions | B or C |
+| Operations and style | recovery, declarations, explicit empty rules, action references, comments, naming | B or C |
+| Per-rule vectors | FIRST/FOLLOW, LL(1), width/depth, fan-in/out, start reachability | A, B, or C |
 | Representation | ordered choice, EBNF sugar, precedence | B or C |
 | Review signals | unresolved symbols, diagnostics | A for the same policy |
 

@@ -36,6 +36,72 @@ const shadows = (left: readonly Expr[], right: readonly Expr[]): boolean => {
   return shared === left.length || (shared === 0 && isLiteralPrefix(left[0], right[0]));
 };
 
+const leadingExpressionLiterals = (
+  expression: Expr,
+  leadingRules: ReadonlyMap<string, ReadonlySet<string>>,
+): ReadonlySet<string> => {
+  if (expression.kind === "terminal") {
+    return new Set(expression.literal === undefined ? [] : [expression.literal]);
+  }
+  if (expression.kind === "symbol") return leadingRules.get(expression.name) ?? new Set();
+  if (expression.kind === "choice") {
+    return new Set(
+      expression.alts.flatMap((alternative) => [
+        ...leadingExpressionLiterals(alternative, leadingRules),
+      ]),
+    );
+  }
+  if (expression.kind === "seq") return leadingSequenceLiterals(expression.items, leadingRules);
+  if (
+    expression.kind === "opt" ||
+    expression.kind === "star" ||
+    expression.kind === "plus" ||
+    expression.kind === "group"
+  ) {
+    return leadingExpressionLiterals(expression.expr, leadingRules);
+  }
+  return new Set();
+};
+
+const leadingSequenceLiterals = (
+  items: readonly Expr[],
+  leadingRules: ReadonlyMap<string, ReadonlySet<string>>,
+): ReadonlySet<string> => {
+  const first = items.find((item) => item.kind !== "midRuleAction" && item.kind !== "predicate");
+  return first === undefined ? new Set() : leadingExpressionLiterals(first, leadingRules);
+};
+
+const leadingLiteralSets = (ir: GrammarIR): ReadonlyMap<string, ReadonlySet<string>> => {
+  // ponytail: leading literals ignore full PEG path conditions; build prefix tries only if ranking needs them.
+  const rules = mergeRulesByName(ir.rules);
+  const leading = new Map(rules.map((rule) => [rule.name, new Set<string>()]));
+  let changed = true;
+  while (changed) {
+    changed = false;
+    rules.forEach((rule) => {
+      const target = leading.get(rule.name);
+      if (!target) return;
+      rule.alternatives.forEach((alternative) => {
+        leadingSequenceLiterals(alternative.items, leading).forEach((literal) => {
+          if (target.has(literal)) return;
+          target.add(literal);
+          changed = true;
+        });
+      });
+    });
+  }
+  return leading;
+};
+
+const potentiallyShadows = (
+  left: readonly Expr[],
+  right: readonly Expr[],
+  leading: ReadonlyMap<string, ReadonlySet<string>>,
+): boolean =>
+  [...leadingSequenceLiterals(left, leading)].some((prefix) =>
+    [...leadingSequenceLiterals(right, leading)].some((literal) => literal.startsWith(prefix)),
+  );
+
 interface Interval {
   readonly start: number;
   readonly end: number;
@@ -139,6 +205,7 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
         predicates: reason,
         maxPredicateNestingDepth: reason,
         shadowedAlternativePairs: reason,
+        potentialShadowedAlternativePairs: reason,
         backtrackingHotspots: reason,
         charClassOverlapPairs: reason,
       },
@@ -184,6 +251,8 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
   });
 
   let shadowedAlternativePairs = 0;
+  let potentialShadowedAlternativePairs = 0;
+  const leading = leadingLiteralSets(ir);
   const backtrackingHotspots: { rule: string; score: number }[] = [];
   mergeRulesByName(ir.rules).forEach((rule) => {
     let score = 0;
@@ -197,6 +266,9 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
           const rightItems = alternatives[right] ?? [];
           const shared = commonPrefixLength(leftItems, rightItems);
           if (shadows(leftItems, rightItems)) shadowedAlternativePairs += 1;
+          else if (potentiallyShadows(leftItems, rightItems, leading)) {
+            potentialShadowedAlternativePairs += 1;
+          }
           score += shared * (right + 1);
         }
       }
@@ -234,6 +306,7 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
     predicates,
     maxPredicateNestingDepth,
     shadowedAlternativePairs,
+    potentialShadowedAlternativePairs,
     backtrackingHotspots: backtrackingHotspots
       .sort((left, right) => right.score - left.score || compareBytes(left.rule, right.rule))
       .slice(0, 10),

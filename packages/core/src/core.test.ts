@@ -179,7 +179,7 @@ describe("Grammar IR schema", () => {
     expect(GrammarFeaturesSchemaDocument.$schema).toBe(
       "https://json-schema.org/draft/2020-12/schema",
     );
-    expect(GrammarFeaturesSchemaDocument.$id).toBe("https://gramin.dev/schema/features-v0.6.json");
+    expect(GrammarFeaturesSchemaDocument.$id).toBe("https://gramin.dev/schema/features-v0.7.json");
   });
 });
 

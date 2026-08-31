@@ -6,7 +6,12 @@ import {
   type GrammarIR,
   mergeRulesByName,
 } from "@gramin/core";
-import { alternativeEdgeReference, alternativeRhsLength, walkExpression } from "./expressions.js";
+import {
+  alternativeEdgeReference,
+  alternativeRhsLength,
+  collectReferences,
+  walkExpression,
+} from "./expressions.js";
 import { compareBytes, round4 } from "./numbers.js";
 
 const expressionKey = (expression: Expr): string => JSON.stringify(canonicalize(expression));
@@ -31,6 +36,32 @@ const expressionSize = (expression: Expr): number => {
 const terminalName = (terminal: GrammarIR["terminals"][number]): string =>
   terminal.name ?? terminal.literal ?? "";
 
+const listRecursionDirections = (
+  rule: GrammarIR["rules"][number],
+): { readonly left: boolean; readonly right: boolean } => {
+  // ponytail: H/C detection uses conventional names; widen only with corpus evidence.
+  const listLikeName = /list|items?|elements?|members?|arguments?|parameters?|statements?/iu.test(
+    rule.name,
+  );
+  const hasBaseAlternative = rule.alternatives.some(
+    (alternative) =>
+      alternativeRhsLength(alternative) > 0 && !collectReferences(alternative).has(rule.name),
+  );
+  if (!listLikeName || !hasBaseAlternative) return { left: false, right: false };
+  return {
+    left: rule.alternatives.some(
+      (alternative) =>
+        alternativeRhsLength(alternative) > 1 &&
+        alternativeEdgeReference(alternative, "first") === rule.name,
+    ),
+    right: rule.alternatives.some(
+      (alternative) =>
+        alternativeRhsLength(alternative) > 1 &&
+        alternativeEdgeReference(alternative, "last") === rule.name,
+    ),
+  };
+};
+
 export const redundancyFeatures = (ir: GrammarIR): GrammarFeatures["redundancy"] => {
   const rules = mergeRulesByName(ir.rules);
   let commonPrefixPairs = 0;
@@ -45,16 +76,7 @@ export const redundancyFeatures = (ir: GrammarIR): GrammarFeatures["redundancy"]
 
   rules.forEach((rule) => {
     const seenAlternatives = new Set<string>();
-    const leftRecursive = rule.alternatives.some(
-      (alternative) =>
-        alternativeRhsLength(alternative) > 1 &&
-        alternativeEdgeReference(alternative, "first") === rule.name,
-    );
-    const rightRecursive = rule.alternatives.some(
-      (alternative) =>
-        alternativeRhsLength(alternative) > 1 &&
-        alternativeEdgeReference(alternative, "last") === rule.name,
-    );
+    const { left: leftRecursive, right: rightRecursive } = listRecursionDirections(rule);
     if (leftRecursive && rightRecursive) mixedLists += 1;
     else if (leftRecursive) leftLists += 1;
     else if (rightRecursive) rightLists += 1;

@@ -28,6 +28,34 @@ export const walkExpression = (expression: Expr, visit: (node: Expr) => void): v
   }
 };
 
+export const maxExpressionNestingDepth = (expressions: readonly Expr[]): number => {
+  let maximum = 0;
+  const pending = expressions.map((expression) => ({ expression, depth: 1 }));
+  while (pending.length > 0) {
+    const item = pending.pop();
+    if (!item) break;
+    maximum = Math.max(maximum, item.depth);
+    const children =
+      item.expression.kind === "symbol"
+        ? item.expression.args
+        : item.expression.kind === "seq"
+          ? item.expression.items
+          : item.expression.kind === "choice"
+            ? item.expression.alts
+            : item.expression.kind === "opt" ||
+                item.expression.kind === "star" ||
+                item.expression.kind === "plus" ||
+                item.expression.kind === "predicate" ||
+                item.expression.kind === "group"
+              ? [item.expression.expr]
+              : undefined;
+    children?.forEach((expression) => {
+      pending.push({ expression, depth: item.depth + 1 });
+    });
+  }
+  return maximum;
+};
+
 export const expressionRhsLength = (expression: Expr): number => {
   let current = expression;
   while (current.kind === "group") current = current.expr;

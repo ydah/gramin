@@ -25,7 +25,7 @@
       "severity": "error"
     }
   ],
-  "featuresVersion": "0.6.0",
+  "featuresVersion": "0.7.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -127,6 +127,7 @@
       "backtrackingHotspots": "orderedChoice capability is false",
       "charClassOverlapPairs": "orderedChoice capability is false",
       "maxPredicateNestingDepth": "orderedChoice capability is false",
+      "potentialShadowedAlternativePairs": "orderedChoice capability is false",
       "predicates": "orderedChoice capability is false",
       "shadowedAlternativePairs": "orderedChoice capability is false"
     }
@@ -134,6 +135,20 @@
   "perRule": [
     {
       "alternatives": 1,
+      "fanIn": 2,
+      "fanOut": 1,
+      "firstSetSize": 0,
+      "followSetSize": 1,
+      "ll1Conflicts": {
+        "firstFirst": 0,
+        "firstFollow": 0,
+        "total": 0
+      },
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 1,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "second",
         "start"
@@ -143,10 +158,25 @@
       ],
       "rhsItems": 1,
       "rule": "first",
-      "shortestDerivation": 0
+      "shortestDerivation": 0,
+      "unitRules": 1
     },
     {
       "alternatives": 2,
+      "fanIn": 1,
+      "fanOut": 1,
+      "firstSetSize": 0,
+      "followSetSize": 1,
+      "ll1Conflicts": {
+        "firstFirst": 0,
+        "firstFollow": 0,
+        "total": 0
+      },
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 1,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [
         "first"
       ],
@@ -155,17 +185,33 @@
       ],
       "rhsItems": 1,
       "rule": "second",
-      "shortestDerivation": 0
+      "shortestDerivation": 0,
+      "unitRules": 1
     },
     {
       "alternatives": 1,
+      "fanIn": 0,
+      "fanOut": 1,
+      "firstSetSize": 1,
+      "followSetSize": 1,
+      "ll1Conflicts": {
+        "firstFirst": 0,
+        "firstFollow": 0,
+        "total": 0
+      },
+      "maxExpressionNestingDepth": 1,
+      "maxRhsItems": 2,
+      "reachableFromStarts": [
+        "start"
+      ],
       "referencedBy": [],
       "references": [
         "first"
       ],
       "rhsItems": 2,
       "rule": "start",
-      "shortestDerivation": 1
+      "shortestDerivation": 1,
+      "unitRules": 0
     }
   ],
   "precedence": {

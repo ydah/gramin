@@ -63,6 +63,7 @@ const REGRESSION_METRICS = new Set([
   "/redundancy/duplicateAlternatives",
   "/redundancy/structuralCloneGroups",
   "/peg/shadowedAlternativePairs",
+  "/peg/potentialShadowedAlternativePairs",
   "/operations/errorTokenUses",
 ]);
 
@@ -278,6 +279,8 @@ const REGRESSION_LISTS = new Set([
   "/structure/unproductiveSymbols",
   "/parseability/cyclicUnitRules",
   "/redundancy/undefinedPrecedenceOverrides",
+  "/redundancy/unusedTerminals",
+  "/redundancy/unusedPrecedenceTokens",
 ]);
 
 const diagnosticRegressions = (

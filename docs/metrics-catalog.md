@@ -1,6 +1,6 @@
-# Metrics catalog v0.6
+# Metrics catalog v0.7
 
-This file is the normative definition of metrics emitted in features v0.6.
+This file is the normative definition of metrics emitted in features v0.7.
 
 - Classification: **E** is exact and mechanically determined; **H** is heuristic.
 - Comparability: **A** compares across formats; **B** compares only with the stated
@@ -159,8 +159,9 @@ external symbols, and end-of-input.
 - `singleReferenceRules`: rules referenced exactly once in all RHS expressions (**E/A**).
 - `unusedTerminals`, `unusedPrecedenceTokens`, `undefinedPrecedenceOverrides`: sorted
   declaration consistency lists (**E/B**).
-- `listRecursion`: likely list rules grouped by left, right, or mixed recursion, plus the
-  dominant-direction ratio (**H/C**).
+- `listRecursion`: recursively shaped rules with a non-recursive base alternative and a
+  list-like rule name, grouped by left, right, or mixed recursion, plus the dominant-
+  direction ratio (**H/C**).
 
 ## Advanced structure
 
@@ -181,6 +182,9 @@ These fields are omitted unless `orderedChoice` is true.
 
 - `predicates`, `maxPredicateNestingDepth`: syntactic predicate count and nesting (**E/B**).
 - `shadowedAlternativePairs`: structurally provable ordered-choice prefix shadowing (**E/B**).
+- `potentialShadowedAlternativePairs`: additional pairs whose leading literals overlap
+  after rule-reference expansion. This is kept separate from the provable count and does
+  not emit the shadowing diagnostic (**H/C**).
 - `backtrackingHotspots`: top rules ranked by shared direct-prefix length weighted by the
   later alternative position (**H/C**).
 - `charClassOverlapPairs`: intersecting leading character classes between alternatives in
@@ -210,8 +214,10 @@ These fields are omitted unless `orderedChoice` is true.
   deviations (**H/C**). When source statistics are retained it also reports comment
   characters divided by source characters, comment count, rules without an adjacent
   leading comment, and documented-rule ratio (**H/C**).
-- `perRule`: name, alternative and RHS counts, incoming/outgoing dependencies, and finite
-  shortest derivation. Records use symbol byte order and are not collapsed into a score.
+- `perRule`: name, alternative and total/maximum RHS counts, expression depth, fan-in/out,
+  incoming/outgoing dependencies, start-symbol reachability, unit rules, optional CFG
+  FIRST/FOLLOW sizes and LL(1) conflicts, and finite shortest derivation. Records use
+  symbol byte order and are not collapsed into a score.
 
 Source-to-source `gramin diff` additionally emits normalized rule-tree edit distance and
 the union of forward and reverse dependency reachability from changed rules. A features

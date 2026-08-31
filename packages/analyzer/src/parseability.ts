@@ -192,6 +192,22 @@ interface ParseabilityOptions {
   readonly lr?: boolean;
 }
 
+export interface RuleParseabilityMetrics {
+  readonly firstSetSize?: number;
+  readonly followSetSize?: number;
+  readonly ll1Conflicts?: {
+    readonly firstFirst: number;
+    readonly firstFollow: number;
+    readonly total: number;
+  };
+  readonly unitRules: number;
+}
+
+export interface ParseabilityAnalysis {
+  readonly features: GrammarFeatures["parseability"];
+  readonly perRule: ReadonlyMap<string, RuleParseabilityMetrics>;
+}
+
 interface Production {
   readonly lhs: string;
   readonly rhs: readonly string[];
@@ -337,19 +353,21 @@ const slrFeatures = (
   return { states: states.length, shiftReduceConflicts, reduceReduceConflicts };
 };
 
-export const parseabilityFeatures = (
+export const parseabilityAnalysis = (
   ir: GrammarIR,
   options: ParseabilityOptions = {},
-): GrammarFeatures["parseability"] => {
+): ParseabilityAnalysis => {
   const rules = mergeRulesByName(ir.rules);
   const ruleNames = new Set(rules.map((rule) => rule.name));
   const unitGraph = new Map<string, Set<string>>(rules.map((rule) => [rule.name, new Set()]));
+  const unitRulesByRule = new Map(rules.map((rule) => [rule.name, 0]));
   let unitRules = 0;
   rules.forEach((rule) => {
     rule.alternatives.forEach((alternative) => {
       const target = unitTarget(alternative, ruleNames);
       if (target === undefined) return;
       unitRules += 1;
+      unitRulesByRule.set(rule.name, (unitRulesByRule.get(rule.name) ?? 0) + 1);
       unitGraph.get(rule.name)?.add(target);
     });
   });
@@ -363,14 +381,19 @@ export const parseabilityFeatures = (
   if (ir.capabilities.orderedChoice) {
     const reason = "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply";
     return {
-      unitRules,
-      cyclicUnitRules,
-      notApplicable: {
-        firstSetSize: reason,
-        followSetSize: reason,
-        ll1Conflicts: reason,
-        slr: reason,
+      features: {
+        unitRules,
+        cyclicUnitRules,
+        notApplicable: {
+          firstSetSize: reason,
+          followSetSize: reason,
+          ll1Conflicts: reason,
+          slr: reason,
+        },
       },
+      perRule: new Map(
+        rules.map((rule) => [rule.name, { unitRules: unitRulesByRule.get(rule.name) ?? 0 }]),
+      ),
     };
   }
 
@@ -379,26 +402,43 @@ export const parseabilityFeatures = (
   const follow = computeFollowSets({ ...ir, rules }, first, nullable);
   let firstFirst = 0;
   let firstFollow = 0;
+  const perRule = new Map<string, RuleParseabilityMetrics>();
   rules.forEach((rule) => {
     const alternatives = rule.alternatives.map((alternative) => ({
       first: firstAlternative(alternative, first, nullable),
       nullable: alternative.items.every((item) => isExpressionNullable(item, nullable)),
     }));
+    let ruleFirstFirst = 0;
+    let ruleFirstFollow = 0;
     for (let left = 0; left < alternatives.length; left += 1) {
       for (let right = left + 1; right < alternatives.length; right += 1) {
         const leftAlt = alternatives[left];
         const rightAlt = alternatives[right];
         if (!leftAlt || !rightAlt) continue;
-        if (intersects(leftAlt.first, rightAlt.first)) firstFirst += 1;
+        if (intersects(leftAlt.first, rightAlt.first)) {
+          firstFirst += 1;
+          ruleFirstFirst += 1;
+        }
         const ruleFollow = follow.get(rule.name) ?? new Set<string>();
         if (
           (leftAlt.nullable && intersects(rightAlt.first, ruleFollow)) ||
           (rightAlt.nullable && intersects(leftAlt.first, ruleFollow))
         ) {
           firstFollow += 1;
+          ruleFirstFollow += 1;
         }
       }
     }
+    perRule.set(rule.name, {
+      firstSetSize: first.get(rule.name)?.size ?? 0,
+      followSetSize: follow.get(rule.name)?.size ?? 0,
+      ll1Conflicts: {
+        firstFirst: ruleFirstFirst,
+        firstFollow: ruleFirstFollow,
+        total: ruleFirstFirst + ruleFirstFollow,
+      },
+      unitRules: unitRulesByRule.get(rule.name) ?? 0,
+    });
   });
   const firstSetSize = distribution(first);
   const followSetSize = distribution(follow);
@@ -411,12 +451,15 @@ export const parseabilityFeatures = (
     notApplicable.followSetSize = "grammar has no rules";
   }
   return {
-    ...(firstSetSize === undefined ? {} : { firstSetSize }),
-    ...(followSetSize === undefined ? {} : { followSetSize }),
-    ll1Conflicts: { firstFirst, firstFollow, total: firstFirst + firstFollow },
-    unitRules,
-    cyclicUnitRules,
-    ...(slr === undefined ? {} : { slr }),
-    ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
+    features: {
+      ...(firstSetSize === undefined ? {} : { firstSetSize }),
+      ...(followSetSize === undefined ? {} : { followSetSize }),
+      ll1Conflicts: { firstFirst, firstFollow, total: firstFirst + firstFollow },
+      unitRules,
+      cyclicUnitRules,
+      ...(slr === undefined ? {} : { slr }),
+      ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
+    },
+    perRule,
   };
 };

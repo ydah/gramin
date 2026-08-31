@@ -3,11 +3,12 @@ import {
   FEATURES_VERSION,
   type GrammarFeatures,
   type GrammarIR,
+  compareBytes,
   mergeRulesByName,
   validateFeatures,
 } from "@gramin/core";
-import { alternativeRhsLength, walkExpression } from "./expressions.js";
-import { parseabilityFeatures } from "./parseability.js";
+import { alternativeRhsLength, maxExpressionNestingDepth, walkExpression } from "./expressions.js";
+import { parseabilityAnalysis } from "./parseability.js";
 import { redundancyFeatures } from "./redundancy.js";
 import {
   actionFeatures,
@@ -136,7 +137,8 @@ export interface AnalyzeOptions {
 export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): GrammarFeatures => {
   const size = sizeFeatures(ir);
   const structure = structureFeatures(ir);
-  const parseability = parseabilityFeatures(ir, options);
+  const parseabilityResult = parseabilityAnalysis(ir, options);
+  const parseability = parseabilityResult.features;
   const peg = pegFeatures(ir);
   const diagnostics = [
     ...ir.diagnostics,
@@ -152,21 +154,39 @@ export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): Gra
   const perRule = mergeRulesByName(ir.rules)
     .map((rule) => {
       const shortestDerivation = structure.shortestDerivations.get(rule.name);
+      const rhsLengths = rule.alternatives.map(alternativeRhsLength);
+      const ruleParseability = parseabilityResult.perRule.get(rule.name);
       return {
         rule: rule.name,
         alternatives: rule.alternatives.length,
-        rhsItems: rule.alternatives.reduce(
-          (total, alternative) => total + alternativeRhsLength(alternative),
-          0,
+        rhsItems: rhsLengths.reduce((total, length) => total + length, 0),
+        maxRhsItems: rhsLengths.reduce((maximum, length) => Math.max(maximum, length), 0),
+        maxExpressionNestingDepth: maxExpressionNestingDepth(
+          rule.alternatives.flatMap((alternative) => alternative.items),
         ),
-        references: [...(structure.graph.get(rule.name) ?? [])].sort(),
-        referencedBy: [...(incoming.get(rule.name) ?? [])].sort(),
+        fanIn: incoming.get(rule.name)?.size ?? 0,
+        fanOut: structure.graph.get(rule.name)?.size ?? 0,
+        references: [...(structure.graph.get(rule.name) ?? [])].sort(compareBytes),
+        referencedBy: [...(incoming.get(rule.name) ?? [])].sort(compareBytes),
+        reachableFromStarts: structure.features.startSymbolReachability.entries
+          .filter((entry) => entry.rules.includes(rule.name))
+          .map((entry) => entry.symbol),
+        unitRules: ruleParseability?.unitRules ?? 0,
+        ...(ruleParseability?.firstSetSize === undefined
+          ? {}
+          : { firstSetSize: ruleParseability.firstSetSize }),
+        ...(ruleParseability?.followSetSize === undefined
+          ? {}
+          : { followSetSize: ruleParseability.followSetSize }),
+        ...(ruleParseability?.ll1Conflicts === undefined
+          ? {}
+          : { ll1Conflicts: ruleParseability.ll1Conflicts }),
         ...(shortestDerivation === undefined || !Number.isFinite(shortestDerivation)
           ? {}
           : { shortestDerivation }),
       };
     })
-    .sort((left, right) => left.rule.localeCompare(right.rule));
+    .sort((left, right) => compareBytes(left.rule, right.rule));
   const features: GrammarFeatures = {
     featuresVersion: FEATURES_VERSION,
     source: { ...ir.source },
