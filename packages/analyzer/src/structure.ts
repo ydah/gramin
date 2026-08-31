@@ -105,13 +105,10 @@ const expressionDerivationLength = (
   lengths: ReadonlyMap<string, number>,
   externalTerminals: ReadonlySet<string>,
 ): number => {
-  if (
-    expression.kind === "terminal" ||
-    expression.kind === "charClass" ||
-    expression.kind === "anyChar"
-  ) {
+  if (expression.kind === "charClass" || expression.kind === "anyChar") {
     return 1;
   }
+  if (expression.kind === "terminal") return expression.literal === "" ? 0 : 1;
   if (expression.kind === "symbol") {
     return lengths.get(expression.name) ?? (externalTerminals.has(expression.name) ? 1 : Infinity);
   }
@@ -213,7 +210,14 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
   );
   const fan = rankFan(graph);
   const critical = graphCriticalPoints(graph);
-  const derivations = shortestDerivations(ir);
+  const derivationReason = ir.capabilities.orderedChoice
+    ? "orderedChoice grammar: exact productivity and shortest derivation require PEG semantics"
+    : ir.capabilities.parameterizedRules
+      ? "parameterizedRules grammar: expand parameters before productivity or shortest derivation analysis"
+      : ir.capabilities.predicates
+        ? "predicates grammar: exact productivity and shortest derivation require predicate semantics"
+        : undefined;
+  const derivations = derivationReason === undefined ? shortestDerivations(ir) : new Map();
   const [fanInGini, fanInEntropy] = fanInShape(graph);
   const startReachable = [...new Set(ir.startSymbols)].sort(compareBytes).map((symbol) => ({
     symbol,
@@ -237,15 +241,25 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
     ),
   ).length;
   const nullable =
-    ir.capabilities.orderedChoice || ir.capabilities.parameterizedRules
+    ir.capabilities.orderedChoice ||
+    ir.capabilities.parameterizedRules ||
+    ir.capabilities.predicates
       ? undefined
       : computeNullableRules(ir);
-  const productive = computeProductiveRules(ir);
+  const productive =
+    derivationReason === undefined ? computeProductiveRules(ir) : new Set(graph.keys());
   const notApplicable: Record<string, string> = {};
   if (nullable === undefined) {
     notApplicable.nullableRules = ir.capabilities.orderedChoice
       ? "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation"
-      : "parameterizedRules grammar: expand parameters before CFG nullability analysis";
+      : ir.capabilities.parameterizedRules
+        ? "parameterizedRules grammar: expand parameters before CFG nullability analysis"
+        : "predicates grammar: CFG nullability does not apply";
+  }
+  if (derivationReason !== undefined) {
+    notApplicable.unproductiveSymbols = derivationReason;
+    notApplicable.shortestDerivation = derivationReason;
+    notApplicable.shortestDerivationUnknown = derivationReason;
   }
   if (reachable.size === 0) {
     const reason = "grammar has no rule reachable from a start symbol";

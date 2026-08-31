@@ -28,7 +28,9 @@ const firstExpression = (
   firstRules: ReadonlyMap<string, ReadonlySet<string>>,
   nullable: ReadonlySet<string>,
 ): TokenSet => {
-  if (expression.kind === "terminal") return new Set([terminalKey(expression)]);
+  if (expression.kind === "terminal") {
+    return new Set(expression.literal === "" ? [] : [terminalKey(expression)]);
+  }
   if (expression.kind === "charClass") return new Set([`class:${expression.pattern}`]);
   if (expression.kind === "anyChar") return new Set(["any-char"]);
   if (expression.kind === "symbol") {
@@ -227,7 +229,9 @@ const productionItems = (
       ruleNames.has(expression.name) ? `N:${expression.name}` : `T:symbol:${expression.name}`,
     ];
   }
-  if (expression.kind === "terminal") return [`T:${terminalKey(expression)}`];
+  if (expression.kind === "terminal") {
+    return expression.literal === "" ? [] : [`T:${terminalKey(expression)}`];
+  }
   if (expression.kind === "charClass") return [`T:class:${expression.pattern}`];
   if (expression.kind === "anyChar") return ["T:any-char"];
   if (expression.kind === "midRuleAction") return [];
@@ -387,7 +391,9 @@ export const parseabilityAnalysis = (
     ? "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
     : ir.capabilities.parameterizedRules
       ? "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis"
-      : undefined;
+      : ir.capabilities.predicates
+        ? "predicates grammar: CFG FIRST, FOLLOW, LL(1), and SLR analysis does not apply"
+        : undefined;
   if (cfgNotApplicable !== undefined) {
     return {
       features: {
@@ -431,7 +437,8 @@ export const parseabilityAnalysis = (
         const ruleFollow = follow.get(rule.name) ?? new Set<string>();
         if (
           (leftAlt.nullable && intersects(rightAlt.first, ruleFollow)) ||
-          (rightAlt.nullable && intersects(leftAlt.first, ruleFollow))
+          (rightAlt.nullable && intersects(leftAlt.first, ruleFollow)) ||
+          (leftAlt.nullable && rightAlt.nullable && ruleFollow.size > 0)
         ) {
           firstFollow += 1;
           ruleFirstFollow += 1;

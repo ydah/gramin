@@ -59,7 +59,9 @@ export const maxExpressionNestingDepth = (expressions: readonly Expr[]): number 
 export const expressionRhsLength = (expression: Expr): number => {
   let current = expression;
   while (current.kind === "group") current = current.expr;
-  return current.kind === "midRuleAction" ? 0 : 1;
+  return current.kind === "midRuleAction" || (current.kind === "terminal" && current.literal === "")
+    ? 0
+    : 1;
 };
 
 export const alternativeRhsLength = (alternative: Alternative): number =>
@@ -141,11 +143,8 @@ export const isExpressionNullable = (
     const current = item.value;
     let result: boolean;
     if (current.kind === "symbol") result = nullableRules.has(current.name);
-    else if (
-      current.kind === "terminal" ||
-      current.kind === "charClass" ||
-      current.kind === "anyChar"
-    ) {
+    else if (current.kind === "terminal") result = current.literal === "";
+    else if (current.kind === "charClass" || current.kind === "anyChar") {
       result = false;
     } else if (
       current.kind === "midRuleAction" ||

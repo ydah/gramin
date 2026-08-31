@@ -36,7 +36,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.7.0",
+  "featuresVersion": "0.7.1",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,

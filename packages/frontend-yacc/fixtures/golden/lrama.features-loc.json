@@ -18,14 +18,8 @@
     "predicates": false,
     "scannerless": false
   },
-  "diagnostics": [
-    {
-      "code": "ANALYZER006_UNPRODUCTIVE_RULES",
-      "message": "unproductive rules: wrapper",
-      "severity": "warning"
-    }
-  ],
-  "featuresVersion": "0.7.0",
+  "diagnostics": [],
+  "featuresVersion": "0.7.1",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -240,7 +234,10 @@
     "maxDependencyDepth": 1,
     "maxExpressionNestingDepth": 3,
     "notApplicable": {
-      "nullableRules": "parameterizedRules grammar: expand parameters before CFG nullability analysis"
+      "nullableRules": "parameterizedRules grammar: expand parameters before CFG nullability analysis",
+      "shortestDerivation": "parameterizedRules grammar: expand parameters before productivity or shortest derivation analysis",
+      "shortestDerivationUnknown": "parameterizedRules grammar: expand parameters before productivity or shortest derivation analysis",
+      "unproductiveSymbols": "parameterizedRules grammar: expand parameters before productivity or shortest derivation analysis"
     },
     "reachableRules": 2,
     "recursionSccCount": 0,
@@ -249,10 +246,7 @@
       "ratio": 0
     },
     "shortestDerivation": [],
-    "shortestDerivationUnknown": [
-      "start",
-      "wrapper"
-    ],
+    "shortestDerivationUnknown": [],
     "startSymbolReachability": {
       "entries": [
         {
@@ -296,9 +290,7 @@
         "symbol": "wrapper"
       }
     ],
-    "unproductiveSymbols": [
-      "wrapper"
-    ],
+    "unproductiveSymbols": [],
     "unreachableSymbols": []
   },
   "style": {

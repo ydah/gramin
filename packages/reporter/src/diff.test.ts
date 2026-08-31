@@ -66,4 +66,74 @@ describe("feature diffs", () => {
     });
     expect(diff.structural?.editDistance).toBeGreaterThan(0);
   });
+
+  it("tracks parsing metadata but ignores action-only metadata", () => {
+    const features = fixtureFeatures();
+    const grammar = (
+      orderedAlternatives: boolean,
+      codeLength: number,
+      label: string,
+    ): GrammarIR => ({
+      irVersion: "1.3.0",
+      source: features.source,
+      capabilities: { ...features.capabilities, orderedChoice: orderedAlternatives },
+      startSymbols: ["start"],
+      terminals: [],
+      externalSymbols: [],
+      precedence: [],
+      rules: [
+        {
+          name: "start",
+          ...(orderedAlternatives ? { orderedAlternatives: true } : {}),
+          alternatives: [
+            {
+              items: [
+                { kind: "midRuleAction", codeLength },
+                { kind: "symbol", name: "value", label },
+              ],
+            },
+          ],
+        },
+        { name: "value", alternatives: [{ items: [] }] },
+      ],
+      diagnostics: [],
+    });
+    const beforeIR = grammar(false, 1, "before");
+    const actionOnly = diffFeatures(features, structuredClone(features), {
+      beforeIR,
+      afterIR: grammar(false, 99, "after"),
+    });
+    const ordered = diffFeatures(features, structuredClone(features), {
+      beforeIR,
+      afterIR: grammar(true, 1, "before"),
+    });
+
+    expect(actionOnly.structural).toMatchObject({ editDistance: 0, changedRules: [] });
+    expect(ordered.structural?.changedRules).toEqual(["start"]);
+    expect(ordered.structural?.editDistance).toBeGreaterThan(0);
+  });
+
+  it("orders structural rule names by UTF-8 bytes", () => {
+    const features = fixtureFeatures();
+    const grammar = (literal: string): GrammarIR => ({
+      irVersion: "1.3.0",
+      source: features.source,
+      capabilities: features.capabilities,
+      startSymbols: [],
+      terminals: [],
+      externalSymbols: [],
+      precedence: [],
+      rules: [
+        { name: "\u{1D400}x", alternatives: [{ items: [{ kind: "terminal", literal }] }] },
+        { name: "\uFF21x", alternatives: [{ items: [{ kind: "terminal", literal }] }] },
+      ],
+      diagnostics: [],
+    });
+    const diff = diffFeatures(features, structuredClone(features), {
+      beforeIR: grammar("a"),
+      afterIR: grammar("b"),
+    });
+
+    expect(diff.structural?.changedRules).toEqual(["\uFF21x", "\u{1D400}x"]);
+  });
 });

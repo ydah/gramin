@@ -41,7 +41,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.7.0",
+  "featuresVersion": "0.7.1",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -155,7 +155,6 @@
       "references": [],
       "rhsItems": 1,
       "rule": "_",
-      "shortestDerivation": 0,
       "unitRules": 0
     },
     {
@@ -176,7 +175,6 @@
       ],
       "rhsItems": 5,
       "rule": "array",
-      "shortestDerivation": 2,
       "unitRules": 0
     },
     {
@@ -192,7 +190,6 @@
       "references": [],
       "rhsItems": 2,
       "rule": "keyword",
-      "shortestDerivation": 1,
       "unitRules": 0
     },
     {
@@ -214,7 +211,6 @@
       ],
       "rhsItems": 5,
       "rule": "member",
-      "shortestDerivation": 4,
       "unitRules": 0
     },
     {
@@ -232,7 +228,6 @@
       "references": [],
       "rhsItems": 3,
       "rule": "number",
-      "shortestDerivation": 1,
       "unitRules": 0
     },
     {
@@ -253,7 +248,6 @@
       ],
       "rhsItems": 5,
       "rule": "object",
-      "shortestDerivation": 2,
       "unitRules": 0
     },
     {
@@ -269,7 +263,6 @@
       ],
       "rhsItems": 2,
       "rule": "other",
-      "shortestDerivation": 1,
       "unitRules": 0
     },
     {
@@ -288,7 +281,6 @@
       ],
       "rhsItems": 3,
       "rule": "start",
-      "shortestDerivation": 1,
       "unitRules": 0
     },
     {
@@ -307,7 +299,6 @@
       "references": [],
       "rhsItems": 3,
       "rule": "string",
-      "shortestDerivation": 2,
       "unitRules": 0
     },
     {
@@ -332,7 +323,6 @@
       ],
       "rhsItems": 7,
       "rule": "value",
-      "shortestDerivation": 1,
       "unitRules": 4
     }
   ],
@@ -449,7 +439,10 @@
     "maxDependencyDepth": 2,
     "maxExpressionNestingDepth": 7,
     "notApplicable": {
-      "nullableRules": "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation"
+      "nullableRules": "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation",
+      "shortestDerivation": "orderedChoice grammar: exact productivity and shortest derivation require PEG semantics",
+      "shortestDerivationUnknown": "orderedChoice grammar: exact productivity and shortest derivation require PEG semantics",
+      "unproductiveSymbols": "orderedChoice grammar: exact productivity and shortest derivation require PEG semantics"
     },
     "reachableRules": 8,
     "recursionSccCount": 1,
@@ -457,48 +450,7 @@
       "count": 4,
       "ratio": 0.5
     },
-    "shortestDerivation": [
-      {
-        "length": 0,
-        "rule": "_"
-      },
-      {
-        "length": 2,
-        "rule": "array"
-      },
-      {
-        "length": 1,
-        "rule": "keyword"
-      },
-      {
-        "length": 4,
-        "rule": "member"
-      },
-      {
-        "length": 1,
-        "rule": "number"
-      },
-      {
-        "length": 2,
-        "rule": "object"
-      },
-      {
-        "length": 1,
-        "rule": "other"
-      },
-      {
-        "length": 1,
-        "rule": "start"
-      },
-      {
-        "length": 2,
-        "rule": "string"
-      },
-      {
-        "length": 1,
-        "rule": "value"
-      }
-    ],
+    "shortestDerivation": [],
     "shortestDerivationUnknown": [],
     "startSymbolReachability": {
       "entries": [

@@ -25,7 +25,7 @@
       "severity": "error"
     }
   ],
-  "featuresVersion": "0.7.0",
+  "featuresVersion": "0.7.1",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -115,8 +115,8 @@
     },
     "ll1Conflicts": {
       "firstFirst": 0,
-      "firstFollow": 0,
-      "total": 0
+      "firstFollow": 1,
+      "total": 1
     },
     "notApplicable": {
       "slr": "requires --analysis lr"
@@ -170,8 +170,8 @@
       "followSetSize": 1,
       "ll1Conflicts": {
         "firstFirst": 0,
-        "firstFollow": 0,
-        "total": 0
+        "firstFollow": 1,
+        "total": 1
       },
       "maxExpressionNestingDepth": 1,
       "maxRhsItems": 1,

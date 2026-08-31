@@ -289,6 +289,56 @@ describe("analyzeGrammar", () => {
     expect(features.parseability.notApplicable?.slr).toContain("parameterizedRules");
     expect(features.structure.nullableRules).toBeUndefined();
     expect(features.structure.notApplicable?.nullableRules).toContain("parameterizedRules");
+    expect(features.structure.unproductiveSymbols).toEqual([]);
+    expect(features.structure.shortestDerivation).toEqual([]);
+    expect(features.structure.notApplicable?.unproductiveSymbols).toContain("parameterizedRules");
+    expect(features.diagnostics.map(({ code }) => code)).not.toContain(
+      "ANALYZER006_UNPRODUCTIVE_RULES",
+    );
+  });
+
+  it("counts the shared FOLLOW set conflict between two nullable alternatives", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["start"],
+      rules: [{ name: "start", alternatives: [{ items: [] }, { items: [] }] }],
+    });
+
+    expect(features.parseability.ll1Conflicts).toEqual({
+      firstFirst: 0,
+      firstFollow: 1,
+      total: 1,
+    });
+  });
+
+  it("treats an empty literal as an empty derivation", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar(
+      {
+        ...base,
+        startSymbols: ["start"],
+        terminals: [{ literal: "" }, { literal: "a" }],
+        rules: [
+          {
+            name: "start",
+            alternatives: [{ items: [{ kind: "terminal", literal: "" }] }],
+          },
+        ],
+      },
+      { lr: true },
+    );
+
+    expect(features.size).toMatchObject({ emptyAlternatives: 1, maxRhsLength: { value: 0 } });
+    expect(features.structure).toMatchObject({
+      nullableRules: 1,
+      shortestDerivation: [{ rule: "start", length: 0 }],
+    });
+    expect(features.parseability).toMatchObject({
+      firstSetSize: { average: 0, maximum: { rule: "start", value: 0 } },
+      slr: { states: 2, shiftReduceConflicts: 0, reduceReduceConflicts: 0 },
+    });
+    expect(features.lexicon.literalPrefixCollisions).toContainEqual({ prefix: "", literal: "a" });
   });
 
   it("bounds precedence coverage to declared terminals", () => {
@@ -413,6 +463,79 @@ describe("analyzeGrammar", () => {
     expect(features.diagnostics.map(({ code }) => code)).not.toContain(
       "ANALYZER008_SHADOWED_ALTERNATIVES",
     );
+  });
+
+  it("does not apply CFG productivity diagnostics to ordered choice", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      capabilities: {
+        ...base.capabilities,
+        orderedChoice: true,
+        predicates: true,
+      },
+      startSymbols: ["start"],
+      rules: [
+        {
+          name: "start",
+          orderedAlternatives: true,
+          alternatives: [
+            {
+              items: [
+                {
+                  kind: "predicate",
+                  positive: false,
+                  expr: { kind: "symbol", name: "loop" },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "loop",
+          orderedAlternatives: true,
+          alternatives: [{ items: [{ kind: "symbol", name: "loop" }] }],
+        },
+      ],
+    });
+
+    expect(features.structure.unproductiveSymbols).toEqual([]);
+    expect(features.structure.shortestDerivation).toEqual([]);
+    expect(features.structure.notApplicable?.unproductiveSymbols).toContain("orderedChoice");
+    expect(features.diagnostics.map(({ code }) => code)).not.toContain(
+      "ANALYZER006_UNPRODUCTIVE_RULES",
+    );
+  });
+
+  it("does not apply CFG analysis to predicate-bearing grammars", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      capabilities: { ...base.capabilities, predicates: true },
+      startSymbols: ["start"],
+      rules: [
+        {
+          name: "start",
+          alternatives: [
+            {
+              items: [
+                {
+                  kind: "predicate",
+                  positive: true,
+                  expr: { kind: "terminal", literal: "a" },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(features.parseability.firstSetSize).toBeUndefined();
+    expect(features.parseability.notApplicable?.firstSetSize).toContain("predicates");
+    expect(features.structure.nullableRules).toBeUndefined();
+    expect(features.structure.unproductiveSymbols).toEqual([]);
+    expect(features.structure.notApplicable?.shortestDerivation).toContain("predicates");
   });
 
   it("uses retained source statistics for operational and style metrics", () => {

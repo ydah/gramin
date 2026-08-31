@@ -73,7 +73,9 @@ than a complexity measure. CFG nullability is omitted for ordered choice.
 mutual recursion only; the new recursive-component fields also recognize self-loops.
 `unproductiveSymbols` is computed by a least fixed point over productive terminals and
 rules; unresolved symbols are not assumed to be productive. A non-empty list also produces
-`ANALYZER006_UNPRODUCTIVE_RULES`.
+`ANALYZER006_UNPRODUCTIVE_RULES`. Productivity and shortest derivation are omitted for
+ordered-choice, predicate-bearing, and unexpanded parameterized grammars; their required
+compatibility arrays remain empty and are listed in `notApplicable`.
 
 ## Precedence
 
@@ -133,8 +135,8 @@ defined in features 0.3.
 
 ## Parseability
 
-FIRST and FOLLOW measurements are **E/B (CFG)** and are omitted for ordered choice and
-unexpanded parameterized rules.
+FIRST and FOLLOW measurements are **E/B (CFG)** and are omitted for ordered choice,
+semantic predicates, and unexpanded parameterized rules.
 Terminal identities distinguish symbolic names, literals, character classes, any-char,
 external symbols, and end-of-input.
 
@@ -224,6 +226,8 @@ These fields are omitted unless `orderedChoice` is true.
 Source-to-source `gramin diff` additionally emits normalized rule-tree edit distance and
 the union of forward and reverse dependency reachability from changed rules. A features
 baseline cannot provide these structural fields because it does not contain rule trees.
+Normalization retains parsing metadata such as parameters, inline rules, ordered choices,
+and precedence while excluding actions, named-reference labels, and locations.
 
 ## Notable locations
 
@@ -239,9 +243,11 @@ A section omits a metric that does not apply and records a stable explanation in
 - precedence metrics require `precedenceTable`;
 - EBNF counts require `ebnfSugar`;
 - parameterized counts require `parameterizedRules`;
-- CFG nullability is omitted for `orderedChoice` and `parameterizedRules`.
+- CFG nullability is omitted for `orderedChoice`, `predicates`, and `parameterizedRules`.
 - CFG FIRST/FOLLOW and LL(1) conflicts are omitted for `orderedChoice` and
-  `parameterizedRules`.
+  grammars with `predicates` or `parameterizedRules`.
+- productivity and shortest derivation are omitted for `orderedChoice` and
+  grammars with `predicates` or `parameterizedRules`.
 - SLR metrics require `--analysis lr`, plain BNF expressions, and expanded parameters.
 - PEG metrics require `orderedChoice`.
 - empty rule or alternative samples omit their percentile object;

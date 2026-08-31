@@ -32,7 +32,10 @@ const mapSchemaIssues = (errors: ErrorObject[] | null | undefined): ValidationIs
   }));
 
 interface CanonicalState {
+  hasEbnfSugar: boolean;
   hasOrderedChoice: boolean;
+  hasParameterizedRules: boolean;
+  hasPredicates: boolean;
   hasScannerlessNode: boolean;
   issues: ValidationIssue[];
 }
@@ -56,6 +59,10 @@ const walkExpression = (
     const current = pending.pop();
     if (!current) break;
     const { expression: node, path: nodePath, parentKind: nodeParentKind } = current;
+    if (node.kind === "opt" || node.kind === "star" || node.kind === "plus") {
+      state.hasEbnfSugar = true;
+    }
+    if (node.kind === "predicate") state.hasPredicates = true;
     if (nodeParentKind === "alternative" && node.kind === "choice") {
       addIssue(
         state,
@@ -121,6 +128,7 @@ const walkExpression = (
       continue;
     }
     if (node.kind === "symbol" && node.args) {
+      state.hasParameterizedRules = true;
       for (let index = node.args.length - 1; index >= 0; index -= 1) {
         const argument = node.args[index];
         if (argument) {
@@ -139,7 +147,10 @@ const walkExpression = (
 
 const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
   const state: CanonicalState = {
+    hasEbnfSugar: false,
     hasOrderedChoice: ir.rules.some((rule) => rule.orderedAlternatives === true),
+    hasParameterizedRules: ir.rules.some((rule) => rule.params !== undefined),
+    hasPredicates: false,
     hasScannerlessNode: false,
     issues: [],
   };
@@ -155,6 +166,15 @@ const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
       );
     }
     seenRuleNames.add(rule.name);
+  });
+  ir.startSymbols.forEach((startSymbol, index) => {
+    if (seenRuleNames.has(startSymbol)) return;
+    addIssue(
+      state,
+      "IR_CANON_START_SYMBOL",
+      `/startSymbols/${index}`,
+      "start symbols must name a grammar rule",
+    );
   });
 
   const sourceMetrics = ir.sourceMetrics;
@@ -216,6 +236,30 @@ const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
       "IR_CANON_ORDERED_CHOICE_CAPABILITY",
       "/capabilities/orderedChoice",
       "orderedChoice must exactly reflect ordered choice nodes",
+    );
+  }
+  if (state.hasEbnfSugar !== ir.capabilities.ebnfSugar) {
+    addIssue(
+      state,
+      "IR_CANON_EBNF_SUGAR_CAPABILITY",
+      "/capabilities/ebnfSugar",
+      "ebnfSugar must exactly reflect opt, star, or plus nodes",
+    );
+  }
+  if (state.hasPredicates !== ir.capabilities.predicates) {
+    addIssue(
+      state,
+      "IR_CANON_PREDICATES_CAPABILITY",
+      "/capabilities/predicates",
+      "predicates must exactly reflect predicate nodes",
+    );
+  }
+  if (state.hasParameterizedRules !== ir.capabilities.parameterizedRules) {
+    addIssue(
+      state,
+      "IR_CANON_PARAMETERIZED_RULES_CAPABILITY",
+      "/capabilities/parameterizedRules",
+      "parameterizedRules must exactly reflect rule parameters or symbol arguments",
     );
   }
   if (state.hasScannerlessNode !== ir.capabilities.scannerless) {

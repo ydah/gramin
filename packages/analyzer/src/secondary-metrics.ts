@@ -116,11 +116,9 @@ export const lexiconFeatures = (ir: GrammarIR): GrammarFeatures["lexicon"] => {
   ];
   const literalPrefixCollisions = literals
     .flatMap((prefix) =>
-      prefix.length === 0
-        ? []
-        : literals
-            .filter((literal) => literal !== prefix && literal.startsWith(prefix))
-            .map((literal) => ({ prefix, literal })),
+      literals
+        .filter((literal) => literal !== prefix && literal.startsWith(prefix))
+        .map((literal) => ({ prefix, literal })),
     )
     .sort(
       (left, right) =>

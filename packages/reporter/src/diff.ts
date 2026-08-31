@@ -1,5 +1,6 @@
 import {
   canonicalize,
+  compareBytes,
   type Expr,
   type GrammarFeatures,
   type GrammarIR,
@@ -134,13 +135,73 @@ const treeDistance = (left: unknown, right: unknown): number => {
   return Math.max(nodeSize(left), nodeSize(right));
 };
 
+const normalizedExpression = (expression: Expr): unknown | undefined => {
+  if (expression.kind === "midRuleAction") return undefined;
+  if (expression.kind === "symbol") {
+    return {
+      kind: expression.kind,
+      name: expression.name,
+      ...(expression.args === undefined
+        ? {}
+        : {
+            args: expression.args.map(
+              (argument) => normalizedExpression(argument) ?? { kind: "seq", items: [] },
+            ),
+          }),
+    };
+  }
+  if (expression.kind === "seq") {
+    return {
+      kind: expression.kind,
+      items: expression.items.flatMap((item) => {
+        const normalized = normalizedExpression(item);
+        return normalized === undefined ? [] : [normalized];
+      }),
+    };
+  }
+  if (expression.kind === "choice") {
+    return {
+      kind: expression.kind,
+      ordered: expression.ordered,
+      alts: expression.alts.map(
+        (alternative) => normalizedExpression(alternative) ?? { kind: "seq", items: [] },
+      ),
+    };
+  }
+  if (
+    expression.kind === "opt" ||
+    expression.kind === "star" ||
+    expression.kind === "plus" ||
+    expression.kind === "group"
+  ) {
+    return {
+      kind: expression.kind,
+      expr: normalizedExpression(expression.expr) ?? { kind: "seq", items: [] },
+    };
+  }
+  if (expression.kind === "predicate") {
+    return {
+      kind: expression.kind,
+      positive: expression.positive,
+      expr: normalizedExpression(expression.expr) ?? { kind: "seq", items: [] },
+    };
+  }
+  return expression;
+};
+
 const normalizedRules = (ir: GrammarIR): Map<string, unknown> =>
   new Map(
     mergeRulesByName(ir.rules).map((rule) => [
       rule.name,
       canonicalize({
+        ...(rule.params === undefined ? {} : { params: rule.params }),
+        ...(rule.isInline === true ? { isInline: true } : {}),
+        ...(rule.orderedAlternatives === true ? { orderedAlternatives: true } : {}),
         alternatives: rule.alternatives.map((alternative) => ({
-          items: alternative.items,
+          items: alternative.items.flatMap((item) => {
+            const normalized = normalizedExpression(item);
+            return normalized === undefined ? [] : [normalized];
+          }),
           ...(alternative.precedence === undefined ? {} : { precedence: alternative.precedence }),
         })),
       }),
@@ -208,7 +269,7 @@ const reach = (
 const grammarStructureDiff = (before: GrammarIR, after: GrammarIR): GrammarStructureDiff => {
   const beforeRules = normalizedRules(before);
   const afterRules = normalizedRules(after);
-  const names = [...new Set([...beforeRules.keys(), ...afterRules.keys()])].sort();
+  const names = [...new Set([...beforeRules.keys(), ...afterRules.keys()])].sort(compareBytes);
   const changedRules = names.filter(
     (name) => !equalValue(beforeRules.get(name), afterRules.get(name)),
   );
@@ -236,7 +297,7 @@ const grammarStructureDiff = (before: GrammarIR, after: GrammarIR): GrammarStruc
   });
   const forward = reach(graph, changedRules);
   const backward = reach(reverse, changedRules);
-  const affected = [...new Set([...forward, ...backward])].sort();
+  const affected = [...new Set([...forward, ...backward])].sort(compareBytes);
   return {
     editDistance,
     changedRules,
@@ -301,7 +362,7 @@ const diagnosticRegressions = (
   });
   return [...afterCounts]
     .filter(([code, count]) => count > (beforeCounts.get(code) ?? 0))
-    .sort(([left], [right]) => left.localeCompare(right))
+    .sort(([left], [right]) => compareBytes(left, right))
     .map(([code, count]) => ({
       path: `/diagnostics/${code}`,
       before: beforeCounts.get(code) ?? 0,

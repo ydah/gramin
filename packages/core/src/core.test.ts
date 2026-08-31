@@ -115,6 +115,7 @@ const pegIR = (): GrammarIR => ({
   },
   capabilities: {
     ...baseIR().capabilities,
+    ebnfSugar: true,
     orderedChoice: true,
     predicates: true,
     scannerless: true,
@@ -212,6 +213,7 @@ describe("Grammar IR canonical form", () => {
     }),
     { ...baseIR(), capabilities: { ...baseIR().capabilities, orderedChoice: true } },
     { ...baseIR(), capabilities: { ...baseIR().capabilities, scannerless: true } },
+    { ...baseIR(), startSymbols: ["missing"] },
   ])("rejects a canonical-form violation", (sample) => {
     const result = validateIR(sample);
     expect(result.ok).toBe(false);
@@ -239,6 +241,33 @@ describe("Grammar IR canonical form", () => {
         capabilities: { ...orderedRule.capabilities, orderedChoice: false },
       }).ok,
     ).toBe(false);
+  });
+
+  it.each([
+    [
+      "IR_CANON_EBNF_SUGAR_CAPABILITY",
+      withOnlyItem({ kind: "opt", expr: { kind: "terminal", literal: "x" } }),
+    ],
+    [
+      "IR_CANON_PREDICATES_CAPABILITY",
+      withOnlyItem({
+        kind: "predicate",
+        positive: true,
+        expr: { kind: "terminal", literal: "x" },
+      }),
+    ],
+    [
+      "IR_CANON_PARAMETERIZED_RULES_CAPABILITY",
+      withOnlyItem({
+        kind: "symbol",
+        name: "start",
+        args: [{ kind: "terminal", literal: "x" }],
+      }),
+    ],
+  ])("rejects a false node-derived capability: %s", (code, sample) => {
+    const result = validateIR(sample);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.issues.map((issue) => issue.code)).toContain(code);
   });
 
   it("allows a top-level group only to preserve a nested choice", () => {
