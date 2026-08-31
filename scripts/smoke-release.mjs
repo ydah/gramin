@@ -130,7 +130,7 @@ const frontends = [
 if (frontends.some((frontend) => typeof frontend?.parse !== "function")) {
   throw new Error("a public frontend export is missing");
 }
-if (IR_VERSION !== "1.2.0" || CLI_VERSION !== "0.1.0") {
+if (IR_VERSION !== "1.3.0" || CLI_VERSION !== "0.1.0") {
   throw new Error("an installed public version constant is incorrect");
 }
 `;
