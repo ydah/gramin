@@ -280,6 +280,26 @@ describe("Grammar IR canonical form", () => {
       );
     }
   });
+
+  it("rejects source metrics that cannot describe the grammar", () => {
+    const result = validateIR({
+      ...baseIR(),
+      sourceMetrics: {
+        sourceCharacters: 4,
+        comments: { count: 1, characters: 5, documentedRules: ["missing"] },
+        explicitEmptyAlternatives: 2,
+      },
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.issues.map((issue) => issue.code)).toEqual([
+        "IR_CANON_SOURCE_COMMENT_SIZE",
+        "IR_CANON_DOCUMENTED_RULE",
+        "IR_CANON_EXPLICIT_EMPTY_COUNT",
+      ]);
+    }
+  });
 });
 
 describe("canonical serialization", () => {

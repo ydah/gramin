@@ -176,10 +176,20 @@ const parseAlternative = (stream: TokenStream, fallback: Token): YaccAlternative
     last = stream.consume();
   }
 
+  const validExplicitEmpty = explicitEmpty && items.every((item) => item.kind === "action");
+  if (explicitEmpty && !validExplicitEmpty) {
+    stream.diagnostics.push({
+      severity: "error",
+      code: "YACC210_INVALID_EMPTY",
+      message: "%empty cannot be combined with grammar symbols",
+      loc: first.kind === "eof" ? fallback.loc : first.loc,
+    });
+  }
+
   return {
     items,
     ...(precedence === undefined ? {} : { precedence }),
-    ...(explicitEmpty ? { explicitEmpty: true } : {}),
+    ...(validExplicitEmpty ? { explicitEmpty: true } : {}),
     loc: alternativeSpan(first.kind === "eof" ? fallback : first, last),
   };
 };

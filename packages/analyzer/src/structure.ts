@@ -236,12 +236,16 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
       (alternative) => alternativeEdgeReference(alternative, "last") === rule.name,
     ),
   ).length;
-  const nullable = ir.capabilities.orderedChoice ? undefined : computeNullableRules(ir);
+  const nullable =
+    ir.capabilities.orderedChoice || ir.capabilities.parameterizedRules
+      ? undefined
+      : computeNullableRules(ir);
   const productive = computeProductiveRules(ir);
   const notApplicable: Record<string, string> = {};
   if (nullable === undefined) {
-    notApplicable.nullableRules =
-      "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation";
+    notApplicable.nullableRules = ir.capabilities.orderedChoice
+      ? "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation"
+      : "parameterizedRules grammar: expand parameters before CFG nullability analysis";
   }
   if (reachable.size === 0) {
     const reason = "grammar has no rule reachable from a start symbol";

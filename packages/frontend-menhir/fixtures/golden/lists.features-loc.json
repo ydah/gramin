@@ -70,35 +70,11 @@
   },
   "parseability": {
     "cyclicUnitRules": [],
-    "firstSetSize": {
-      "average": 1,
-      "maximum": {
-        "rule": "main",
-        "value": 1
-      },
-      "percentiles": {
-        "p50": 1,
-        "p95": 1
-      }
-    },
-    "followSetSize": {
-      "average": 0.5,
-      "maximum": {
-        "rule": "main",
-        "value": 1
-      },
-      "percentiles": {
-        "p50": 0,
-        "p95": 1
-      }
-    },
-    "ll1Conflicts": {
-      "firstFirst": 0,
-      "firstFollow": 0,
-      "total": 0
-    },
     "notApplicable": {
-      "slr": "requires --analysis lr"
+      "firstSetSize": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
+      "followSetSize": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
+      "ll1Conflicts": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
+      "slr": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis"
     },
     "unitRules": 0
   },
@@ -117,13 +93,6 @@
       "alternatives": 1,
       "fanIn": 0,
       "fanOut": 1,
-      "firstSetSize": 1,
-      "followSetSize": 1,
-      "ll1Conflicts": {
-        "firstFirst": 0,
-        "firstFollow": 0,
-        "total": 0
-      },
       "maxExpressionNestingDepth": 3,
       "maxRhsItems": 3,
       "reachableFromStarts": [
@@ -141,13 +110,6 @@
       "alternatives": 1,
       "fanIn": 1,
       "fanOut": 0,
-      "firstSetSize": 1,
-      "followSetSize": 0,
-      "ll1Conflicts": {
-        "firstFirst": 0,
-        "firstFollow": 0,
-        "total": 0
-      },
       "maxExpressionNestingDepth": 1,
       "maxRhsItems": 1,
       "reachableFromStarts": [
@@ -263,7 +225,9 @@
     },
     "maxDependencyDepth": 1,
     "maxExpressionNestingDepth": 3,
-    "nullableRules": 0,
+    "notApplicable": {
+      "nullableRules": "parameterizedRules grammar: expand parameters before CFG nullability analysis"
+    },
     "reachableRules": 2,
     "recursionSccCount": 0,
     "recursiveRules": {

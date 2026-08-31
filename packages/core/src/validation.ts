@@ -157,6 +157,46 @@ const inspectCanonicalForm = (ir: GrammarIR): ValidationIssue[] => {
     seenRuleNames.add(rule.name);
   });
 
+  const sourceMetrics = ir.sourceMetrics;
+  if (
+    sourceMetrics?.comments !== undefined &&
+    sourceMetrics.comments.characters > sourceMetrics.sourceCharacters
+  ) {
+    addIssue(
+      state,
+      "IR_CANON_SOURCE_COMMENT_SIZE",
+      "/sourceMetrics/comments/characters",
+      "comment characters cannot exceed source characters",
+    );
+  }
+  sourceMetrics?.comments?.documentedRules.forEach((ruleName, index) => {
+    if (seenRuleNames.has(ruleName)) return;
+    addIssue(
+      state,
+      "IR_CANON_DOCUMENTED_RULE",
+      `/sourceMetrics/comments/documentedRules/${index}`,
+      "documentedRules entries must name a grammar rule",
+    );
+  });
+  if (sourceMetrics?.explicitEmptyAlternatives !== undefined) {
+    const emptyAlternatives = ir.rules.reduce(
+      (total, rule) =>
+        total +
+        rule.alternatives.filter((alternative) =>
+          alternative.items.every((item) => item.kind === "midRuleAction"),
+        ).length,
+      0,
+    );
+    if (sourceMetrics.explicitEmptyAlternatives > emptyAlternatives) {
+      addIssue(
+        state,
+        "IR_CANON_EXPLICIT_EMPTY_COUNT",
+        "/sourceMetrics/explicitEmptyAlternatives",
+        "explicit empty alternatives cannot exceed empty alternatives",
+      );
+    }
+  }
+
   ir.rules.forEach((rule, ruleIndex) => {
     rule.alternatives.forEach((alternative, alternativeIndex) => {
       alternative.items.forEach((item, itemIndex) => {

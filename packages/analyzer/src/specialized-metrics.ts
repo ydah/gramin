@@ -433,11 +433,13 @@ export const styleFeatures = (ir: GrammarIR): GrammarFeatures["style"] => {
   const convention =
     ir.rules.length === 0
       ? "none"
-      : snakeCaseNames.length === camelCaseNames.length
-        ? "mixed"
-        : snakeCaseNames.length > camelCaseNames.length
-          ? "snake_case"
-          : "camelCase";
+      : snakeCaseNames.length === 0 && camelCaseNames.length === 0
+        ? "none"
+        : snakeCaseNames.length === camelCaseNames.length
+          ? "mixed"
+          : snakeCaseNames.length > camelCaseNames.length
+            ? "snake_case"
+            : "camelCase";
   const matching =
     convention === "snake_case" ? snakeCaseNames : convention === "camelCase" ? camelCaseNames : [];
   const matchingNames = new Set(matching);
@@ -453,7 +455,7 @@ export const styleFeatures = (ir: GrammarIR): GrammarFeatures["style"] => {
       ir.rules.length === 0 ? 0 : matching.length / ir.rules.length,
     ),
     namingOutliers:
-      convention === "mixed" || convention === "none"
+      convention === "mixed"
         ? []
         : ir.rules
             .map((rule) => rule.name)

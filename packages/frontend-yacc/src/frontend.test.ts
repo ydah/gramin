@@ -129,6 +129,19 @@ entry: %empty { $$ = $value + $1; } ;
     });
   });
 
+  it("rejects %empty combined with grammar symbols", () => {
+    const result = yaccFrontend.parse(
+      [{ name: "invalid-empty.y", content: "%token TOKEN\n%%\nstart: %empty TOKEN ;\n%%\n" }],
+      {},
+    );
+
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({ code: "YACC210_INVALID_EMPTY", severity: "error" }),
+    );
+    expect(result.ir?.sourceMetrics?.explicitEmptyAlternatives).toBe(0);
+    expect(validateIR(result.ir).ok).toBe(true);
+  });
+
   it("merges repeated rule declarations into one canonical rule", () => {
     const result = yaccFrontend.parse(
       [

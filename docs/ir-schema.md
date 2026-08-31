@@ -39,6 +39,8 @@ choices are flattened; nested ordered choices use `choice(ordered: true)`.
 4. `capabilities.orderedChoice` is true exactly when an ordered choice occurs.
 5. `capabilities.scannerless` is true exactly when `charClass` or `anyChar` occurs.
 6. Frontends resolve a declared literal alias to its named terminal before emitting IR.
+7. Source comment characters do not exceed source characters, documented-rule names
+   resolve to rules, and explicit-empty counts do not exceed empty alternatives.
 
 `serializeCanonical` sorts object keys by byte order and can remove all `loc` properties.
 Arrays retain their contract-defined order.

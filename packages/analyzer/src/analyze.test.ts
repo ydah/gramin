@@ -249,6 +249,60 @@ describe("analyzeGrammar", () => {
     });
   });
 
+  it("does not report CFG results before parameterized rules are expanded", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar(
+      {
+        ...base,
+        capabilities: { ...base.capabilities, parameterizedRules: true },
+        startSymbols: ["start"],
+        terminals: [{ name: "A" }],
+        rules: [
+          {
+            name: "start",
+            alternatives: [
+              {
+                items: [
+                  {
+                    kind: "symbol",
+                    name: "wrapper",
+                    args: [{ kind: "terminal", name: "A" }],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "wrapper",
+            params: ["X"],
+            alternatives: [{ items: [{ kind: "symbol", name: "X" }] }],
+          },
+        ],
+      },
+      { lr: true },
+    );
+
+    expect(features.parseability).toMatchObject({ unitRules: 0, cyclicUnitRules: [] });
+    expect(features.parseability.firstSetSize).toBeUndefined();
+    expect(features.parseability.ll1Conflicts).toBeUndefined();
+    expect(features.parseability.slr).toBeUndefined();
+    expect(features.parseability.notApplicable?.slr).toContain("parameterizedRules");
+    expect(features.structure.nullableRules).toBeUndefined();
+    expect(features.structure.notApplicable?.nullableRules).toContain("parameterizedRules");
+  });
+
+  it("bounds precedence coverage to declared terminals", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      capabilities: { ...base.capabilities, precedenceTable: true },
+      terminals: [{ name: "A", literal: "a" }],
+      precedence: [{ assoc: "left", tokens: ["A", "a", "STALE"] }],
+    });
+
+    expect(features.precedence.tokensInPrecedence).toEqual({ count: 1, ratio: 1 });
+  });
+
   it("finds ordered-choice, recovery, and naming signals", () => {
     const base = fixtureIR("empty");
     const features = analyzeGrammar({
@@ -395,6 +449,21 @@ describe("analyzeGrammar", () => {
     });
     expect(features.operations.notApplicable).toBeUndefined();
     expect(features.style.notApplicable).toBeUndefined();
+  });
+
+  it("does not call unsupported rule names a mixed naming convention", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar({
+      ...base,
+      startSymbols: ["Bad-Name"],
+      rules: [{ name: "Bad-Name", alternatives: [{ items: [] }] }],
+    });
+
+    expect(features.style).toMatchObject({
+      nonterminalConvention: "none",
+      nonterminalConventionRatio: 0,
+      namingOutliers: ["Bad-Name"],
+    });
   });
 
   it("reports reachable rules that cannot derive a terminal sequence", () => {

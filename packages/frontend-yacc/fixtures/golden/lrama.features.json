@@ -83,37 +83,13 @@
   },
   "parseability": {
     "cyclicUnitRules": [],
-    "firstSetSize": {
-      "average": 2,
-      "maximum": {
-        "rule": "start",
-        "value": 3
-      },
-      "percentiles": {
-        "p50": 1,
-        "p95": 3
-      }
-    },
-    "followSetSize": {
-      "average": 1,
-      "maximum": {
-        "rule": "start",
-        "value": 1
-      },
-      "percentiles": {
-        "p50": 1,
-        "p95": 1
-      }
-    },
-    "ll1Conflicts": {
-      "firstFirst": 0,
-      "firstFollow": 0,
-      "total": 0
-    },
     "notApplicable": {
-      "slr": "requires --analysis lr"
+      "firstSetSize": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
+      "followSetSize": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
+      "ll1Conflicts": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
+      "slr": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis"
     },
-    "unitRules": 1
+    "unitRules": 0
   },
   "peg": {
     "notApplicable": {
@@ -130,13 +106,6 @@
       "alternatives": 3,
       "fanIn": 0,
       "fanOut": 1,
-      "firstSetSize": 3,
-      "followSetSize": 1,
-      "ll1Conflicts": {
-        "firstFirst": 0,
-        "firstFollow": 0,
-        "total": 0
-      },
       "maxExpressionNestingDepth": 3,
       "maxRhsItems": 1,
       "reachableFromStarts": [
@@ -148,19 +117,12 @@
       ],
       "rhsItems": 3,
       "rule": "start",
-      "unitRules": 1
+      "unitRules": 0
     },
     {
       "alternatives": 1,
       "fanIn": 1,
       "fanOut": 0,
-      "firstSetSize": 1,
-      "followSetSize": 1,
-      "ll1Conflicts": {
-        "firstFirst": 0,
-        "firstFollow": 0,
-        "total": 0
-      },
       "maxExpressionNestingDepth": 1,
       "maxRhsItems": 1,
       "reachableFromStarts": [
@@ -274,7 +236,9 @@
     },
     "maxDependencyDepth": 1,
     "maxExpressionNestingDepth": 3,
-    "nullableRules": 0,
+    "notApplicable": {
+      "nullableRules": "parameterizedRules grammar: expand parameters before CFG nullability analysis"
+    },
     "reachableRules": 2,
     "recursionSccCount": 0,
     "recursiveRules": {

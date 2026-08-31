@@ -183,7 +183,10 @@ const unitTarget = (
   const items = alternative.items.filter((item) => item.kind !== "midRuleAction");
   let item: Expr | undefined = items[0];
   while (item?.kind === "group") item = item.expr;
-  return items.length === 1 && item?.kind === "symbol" && ruleNames.has(item.name)
+  return items.length === 1 &&
+    item?.kind === "symbol" &&
+    item.args === undefined &&
+    ruleNames.has(item.name)
     ? item.name
     : undefined;
 };
@@ -219,6 +222,7 @@ const productionItems = (
   ruleNames: ReadonlySet<string>,
 ): string[] | undefined => {
   if (expression.kind === "symbol") {
+    if (expression.args !== undefined) return undefined;
     return [
       ruleNames.has(expression.name) ? `N:${expression.name}` : `T:symbol:${expression.name}`,
     ];
@@ -245,6 +249,7 @@ const slrFeatures = (
   follow: ReadonlyMap<string, ReadonlySet<string>>,
 ): NonNullable<GrammarFeatures["parseability"]["slr"]> | undefined => {
   const rules = mergeRulesByName(ir.rules);
+  if (rules.some((rule) => rule.params !== undefined)) return undefined;
   const ruleNames = new Set(rules.map((rule) => rule.name));
   const productions: Production[] = ir.startSymbols
     .filter((symbol) => ruleNames.has(symbol))
@@ -378,17 +383,21 @@ export const parseabilityAnalysis = (
         (component[0] !== undefined && unitGraph.get(component[0])?.has(component[0]) === true),
     )
     .sort((left, right) => compareBytes(left.join("\0"), right.join("\0")));
-  if (ir.capabilities.orderedChoice) {
-    const reason = "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply";
+  const cfgNotApplicable = ir.capabilities.orderedChoice
+    ? "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
+    : ir.capabilities.parameterizedRules
+      ? "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis"
+      : undefined;
+  if (cfgNotApplicable !== undefined) {
     return {
       features: {
         unitRules,
         cyclicUnitRules,
         notApplicable: {
-          firstSetSize: reason,
-          followSetSize: reason,
-          ll1Conflicts: reason,
-          slr: reason,
+          firstSetSize: cfgNotApplicable,
+          followSetSize: cfgNotApplicable,
+          ll1Conflicts: cfgNotApplicable,
+          slr: cfgNotApplicable,
         },
       },
       perRule: new Map(

@@ -241,7 +241,8 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
       predicates: false,
       scannerless: false,
       precedenceTable: true,
-      parameterizedRules: ast.dialect === "lrama",
+      parameterizedRules:
+        ast.rules.some((rule) => rule.params !== undefined) || usedParameterizedNames.size > 0,
       lexerRules: false,
     },
     startSymbols:

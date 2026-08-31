@@ -133,7 +133,8 @@ defined in features 0.3.
 
 ## Parseability
 
-FIRST and FOLLOW measurements are **E/B (CFG)** and are omitted for ordered choice.
+FIRST and FOLLOW measurements are **E/B (CFG)** and are omitted for ordered choice and
+unexpanded parameterized rules.
 Terminal identities distinguish symbolic names, literals, character classes, any-char,
 external symbols, and end-of-input.
 
@@ -141,13 +142,14 @@ external symbols, and end-of-input.
 - `ll1Conflicts.firstFirst`: alternative pairs in one rule with intersecting FIRST sets.
 - `ll1Conflicts.firstFollow`: pairs where one nullable alternative conflicts with the
   other alternative through the rule FOLLOW set.
-- `unitRules`: alternatives whose effective RHS is one nonterminal reference (**E/A**).
+- `unitRules`: alternatives whose effective RHS is one non-parameterized nonterminal
+  reference (**E/A**).
 - `cyclicUnitRules`: sorted SCCs made entirely from unit-rule edges (**E/B**). A non-empty
   result produces `ANALYZER007_CYCLIC_UNIT_RULES`.
 - `slr`: canonical LR(0) state count and raw SLR shift/reduce and reduce/reduce
   conflict-cell counts before precedence resolution (**E/B (plain CFG)**). It is opt-in
   through `--analysis lr` and omitted when the IR contains expressions that require EBNF
-  expansion.
+  expansion or parameter substitution.
 
 ## Redundancy and refactoring candidates
 
@@ -237,9 +239,10 @@ A section omits a metric that does not apply and records a stable explanation in
 - precedence metrics require `precedenceTable`;
 - EBNF counts require `ebnfSugar`;
 - parameterized counts require `parameterizedRules`;
-- CFG nullability is omitted for `orderedChoice`.
-- CFG FIRST/FOLLOW and LL(1) conflicts are omitted for `orderedChoice`.
-- SLR metrics require `--analysis lr` and plain BNF expressions.
+- CFG nullability is omitted for `orderedChoice` and `parameterizedRules`.
+- CFG FIRST/FOLLOW and LL(1) conflicts are omitted for `orderedChoice` and
+  `parameterizedRules`.
+- SLR metrics require `--analysis lr`, plain BNF expressions, and expanded parameters.
 - PEG metrics require `orderedChoice`.
 - empty rule or alternative samples omit their percentile object;
 - recursion ratios are omitted when no rule is reachable from a start symbol;

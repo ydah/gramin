@@ -19,6 +19,11 @@ export const precedenceFeatures = (ir: GrammarIR): GrammarFeatures["precedence"]
   }
 
   const tokens = new Set(ir.precedence.flatMap((level) => level.tokens));
+  const coveredTerminals = ir.terminals.filter(
+    (terminal) =>
+      (terminal.name !== undefined && tokens.has(terminal.name)) ||
+      (terminal.literal !== undefined && tokens.has(terminal.literal)),
+  ).length;
   const alternatives = ir.rules.flatMap((rule) => rule.alternatives);
   const assocBreakdown = { left: 0, right: 0, nonassoc: 0, precedence: 0 };
   ir.precedence.forEach((level) => {
@@ -49,8 +54,8 @@ export const precedenceFeatures = (ir: GrammarIR): GrammarFeatures["precedence"]
       ? {}
       : { precOverrideAlternativeRatio: round4(precOverrides / alternatives.length) }),
     tokensInPrecedence: {
-      count: tokens.size,
-      ratio: round4(ir.terminals.length === 0 ? 0 : tokens.size / ir.terminals.length),
+      count: coveredTerminals,
+      ratio: round4(ir.terminals.length === 0 ? 0 : coveredTerminals / ir.terminals.length),
     },
     ...(notApplicable === undefined ? {} : { notApplicable }),
   };
