@@ -56,5 +56,6 @@ jobs:
       - run: pnpm release:check
       - name: Publish unpublished versions
         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_DIST_TAG: ${{ inputs.dist-tag }}
         run: node scripts/publish-release.mjs --tag "$NPM_DIST_TAG"
