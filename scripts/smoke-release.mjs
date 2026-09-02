@@ -106,14 +106,14 @@ try {
   }
 
   const apiSmoke = `
-import { analyzeGrammar } from "@gramin/analyzer";
+import { ANALYZER_VERSION, analyzeGrammar } from "@gramin/analyzer";
 import { IR_VERSION, validateIR } from "@gramin/core";
 import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
 import { menhirFrontend } from "@gramin/frontend-menhir";
 import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
-import { renderJson } from "@gramin/reporter";
+import { renderJson, REPORTER_VERSION } from "@gramin/reporter";
 import { CLI_VERSION } from "@gramin/cli";
 
 const functions = [analyzeGrammar, validateIR, renderJson];
@@ -130,7 +130,11 @@ const frontends = [
 if (frontends.some((frontend) => typeof frontend?.parse !== "function")) {
   throw new Error("a public frontend export is missing");
 }
-if (IR_VERSION !== "1.3.0" || CLI_VERSION !== "0.1.0") {
+if (
+  IR_VERSION !== "1.3.0" ||
+  [ANALYZER_VERSION, CLI_VERSION, REPORTER_VERSION].some((version) => version !== "0.2.0") ||
+  frontends.some((frontend) => frontend.version !== "0.2.0")
+) {
   throw new Error("an installed public version constant is incorrect");
 }
 `;

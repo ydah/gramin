@@ -108,7 +108,7 @@ export const irSample = `{
   "source": {
     "format": "yacc",
     "fileNames": ["input.y"],
-    "frontend": { "id": "yacc-family", "version": "0.1.0" }
+    "frontend": { "id": "yacc-family", "version": "0.2.0" }
   },
   "capabilities": {
     "orderedChoice": false,

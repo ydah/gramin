@@ -54,5 +54,5 @@ runs:
           args+=(--fail-on-regression)
         fi
 
-        npx --yes @gramin/cli@0.1.0 "${args[@]}"
+        npx --yes @gramin/cli@0.2.0 "${args[@]}"
         echo "report=$GRAMIN_OUTPUT" >> "$GITHUB_OUTPUT"

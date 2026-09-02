@@ -1,6 +1,6 @@
 {
   "name": "@gramin/frontend-peg",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Yudai Takada",
   "description": "Peggy and PEG.js frontend for gramin",
   "keywords": [

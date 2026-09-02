@@ -63,7 +63,7 @@ describe("gramin CLI", () => {
 
     const version = harness();
     expect(await runCli(["--version"], version.io)).toBe(EXIT_SUCCESS);
-    expect(version.stdout.join("")).toBe("0.1.0\n");
+    expect(version.stdout.join("")).toBe("0.2.0\n");
 
     const commandHelp = harness();
     expect(await runCli(["analyze", "--help"], commandHelp.io)).toBe(EXIT_SUCCESS);

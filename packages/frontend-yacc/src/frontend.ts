@@ -10,7 +10,7 @@ import {
 import { lowerYaccAst } from "./lower.js";
 import { parseYaccAst } from "./parser.js";
 
-export const FRONTEND_YACC_VERSION = "0.1.0";
+export const FRONTEND_YACC_VERSION = "0.2.0";
 export const FRONTEND_YACC_ID = "yacc-family";
 
 const detect = (fileName: string, head4k: string): number => {
