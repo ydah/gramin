@@ -19,7 +19,7 @@
     "@gramin/frontend-peg": "workspace:*",
     "@gramin/frontend-yacc": "workspace:*",
     "@gramin/reporter": "workspace:*",
-    "vue": "^3.5.0"
+    "vue": "^3.5.42"
   },
   "devDependencies": {
     "@types/node": "26.2.0",
