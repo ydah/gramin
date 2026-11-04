@@ -82,7 +82,7 @@ See the [complete support matrix](https://ydah.github.io/gramin/formats/) and
 
 ### Quick start
 
-Requires Node.js 20 or newer.
+Requires Node.js 22.12 or newer.
 
 Run without installing:
 
@@ -246,7 +246,7 @@ Read the [safety model](https://ydah.github.io/gramin/concepts/safety/),
 
 ## Development
 
-The repository is a pnpm workspace. Development requires pnpm 10 and Node.js 20 or newer:
+The repository is a pnpm workspace. Development requires pnpm 10 and Node.js 22.12 or newer:
 
 ```sh
 pnpm install --frozen-lockfile
