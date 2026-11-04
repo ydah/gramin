@@ -9,7 +9,7 @@ Gramin turns parser grammar source into a common Grammar IR and a deterministic 
 
 ## Analyze a grammar
 
-Requires Node.js 20 or newer:
+Requires Node.js 22.12 or newer:
 
 ```sh
 npx @gramin/cli analyze grammar.y

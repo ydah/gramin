@@ -16,7 +16,7 @@ and packages that can later be published or split into separate repositories.
 
 ## Decision
 
-Use Node.js 20 or newer, TypeScript with strict compiler options, and pnpm workspaces.
+Use Node.js 22.12 or newer, TypeScript with strict compiler options, and pnpm workspaces.
 Keep `@gramin/core` as the only owner of Grammar IR and features contracts. Use TypeBox
 definitions as the shared source for TypeScript types and Draft 2020-12-compatible JSON
 Schemas, Ajv for structural validation, and a separate canonical-form pass for cross-field

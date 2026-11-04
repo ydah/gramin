@@ -58,8 +58,8 @@ const verifyPackedManifest = (manifest, artifact) => {
     throw new Error(`${context} must identify the canonical GitHub repository`);
   }
   const engines = manifest.engines;
-  if (typeof engines !== "object" || engines === null || engines.node !== ">=20") {
-    throw new Error(`${context} must require Node.js 20 or newer`);
+  if (typeof engines !== "object" || engines === null || engines.node !== ">=22.12.0") {
+    throw new Error(`${context} must require Node.js 22.12 or newer`);
   }
   for (const section of ["dependencies", "optionalDependencies", "peerDependencies"]) {
     const dependencies = manifest[section];
