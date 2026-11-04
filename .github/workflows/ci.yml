@@ -30,17 +30,17 @@ jobs:
         with:
           persist-credentials: false
       - name: Audit GitHub Actions workflows
-        uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+        uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b # v0.8.0
         with:
           advanced-security: false
-          version: 1.27.0
+          version: 1.31.1
 
   verify:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node: [20, 22, 24]
+        node: ['22.12.0', 24]
     runs-on: ${{ matrix.os }}
     env:
       GRAMIN_REQUIRE_CORPUS: "1"
