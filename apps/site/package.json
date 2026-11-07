@@ -22,7 +22,7 @@
     "vue": "^3.5.42"
   },
   "devDependencies": {
-    "@types/node": "26.4.0",
+    "@types/node": "26.6.6",
     "vitepress": "^1.6.4"
   }
 }
