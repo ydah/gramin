@@ -1,0 +1,5320 @@
+{
+  "category": "atlas",
+  "features": {
+    "actions": {
+      "altActionCoverage": 0.7701,
+      "avgActionLength": 84.5582,
+      "completeness": "complete",
+      "maxActionLength": 1037,
+      "midRuleActions": 24,
+      "rulesWithActions": 99,
+      "totalActions": 292,
+      "trailingActions": 268
+    },
+    "capabilities": {
+      "ebnfSugar": false,
+      "lexerRules": false,
+      "orderedChoice": false,
+      "parameterizedRules": false,
+      "precedenceTable": true,
+      "predicates": false,
+      "scannerless": false
+    },
+    "diagnostics": [
+      {
+        "code": "YACC100_IGNORED_DIRECTIVE",
+        "loc": {
+          "endCol": 8,
+          "endLine": 34,
+          "startCol": 1,
+          "startLine": 34
+        },
+        "message": "ignored declaration directive %define",
+        "severity": "info"
+      },
+      {
+        "code": "YACC100_IGNORED_DIRECTIVE",
+        "loc": {
+          "endCol": 7,
+          "endLine": 38,
+          "startCol": 1,
+          "startLine": 38
+        },
+        "message": "ignored declaration directive %union",
+        "severity": "info"
+      },
+      {
+        "code": "IR013_LOSSY_ACTION_METADATA",
+        "loc": {
+          "endCol": 4,
+          "endLine": 430,
+          "startCol": 3,
+          "startLine": 427
+        },
+        "message": "mid-rule action label and semantic type are not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR013_LOSSY_ACTION_METADATA",
+        "loc": {
+          "endCol": 26,
+          "endLine": 1335,
+          "startCol": 4,
+          "startLine": 1331
+        },
+        "message": "mid-rule action label and semantic type are not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR014_LOSSY_RULE_LABEL",
+        "loc": {
+          "endCol": 6,
+          "endLine": 1564,
+          "startCol": 5,
+          "startLine": 1564
+        },
+        "message": "rule label product is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 279,
+          "startCol": 3,
+          "startLine": 279
+        },
+        "message": "terminal label version is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 280,
+          "startCol": 3,
+          "startLine": 280
+        },
+        "message": "terminal label package is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 295,
+          "startCol": 3,
+          "startLine": 295
+        },
+        "message": "terminal label version is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 296,
+          "startCol": 3,
+          "startLine": 296
+        },
+        "message": "terminal label package is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 541,
+          "startCol": 3,
+          "startLine": 541
+        },
+        "message": "terminal label version is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 542,
+          "startCol": 3,
+          "startLine": 542
+        },
+        "message": "terminal label package is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 557,
+          "startCol": 3,
+          "startLine": 557
+        },
+        "message": "terminal label version is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 558,
+          "startCol": 3,
+          "startLine": 558
+        },
+        "message": "terminal label package is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 717,
+          "startCol": 3,
+          "startLine": 717
+        },
+        "message": "terminal label version is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 11,
+          "endLine": 718,
+          "startCol": 3,
+          "startLine": 718
+        },
+        "message": "terminal label module is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 39,
+          "endLine": 1256,
+          "startCol": 14,
+          "startLine": 1256
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 18,
+          "endLine": 1258,
+          "startCol": 14,
+          "startLine": 1258
+        },
+        "message": "terminal label operator is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 38,
+          "endLine": 1260,
+          "startCol": 14,
+          "startLine": 1260
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 36,
+          "endLine": 1413,
+          "startCol": 22,
+          "startLine": 1413
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 30,
+          "endLine": 1417,
+          "startCol": 14,
+          "startLine": 1417
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 27,
+          "endLine": 1421,
+          "startCol": 14,
+          "startLine": 1421
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 27,
+          "endLine": 1428,
+          "startCol": 14,
+          "startLine": 1428
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 27,
+          "endLine": 1432,
+          "startCol": 14,
+          "startLine": 1432
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 35,
+          "endLine": 1448,
+          "startCol": 14,
+          "startLine": 1448
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 34,
+          "endLine": 1452,
+          "startCol": 14,
+          "startLine": 1452
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 27,
+          "endLine": 1458,
+          "startCol": 14,
+          "startLine": 1458
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      },
+      {
+        "code": "IR012_LOSSY_TERMINAL_LABEL",
+        "loc": {
+          "endCol": 27,
+          "endLine": 1470,
+          "startCol": 14,
+          "startLine": 1470
+        },
+        "message": "terminal label op is not represented in Grammar IR v0.2",
+        "severity": "info"
+      }
+    ],
+    "featuresVersion": "0.8.0",
+    "lexicon": {
+      "anyCharCount": 0,
+      "charClassCount": 0,
+      "keywordIdentifierCollisions": [],
+      "keywordLike": [],
+      "literalOccurrences": 0,
+      "literalPrefixCollisions": [],
+      "literalTokens": 0,
+      "namedTokens": 131,
+      "punctuationLike": [],
+      "tokenUsage": {
+        "coverage": 0.9847,
+        "singleUse": [
+          "ADDOP",
+          "ANDAND",
+          "ANDOP",
+          "BITANDOP",
+          "BITOROP",
+          "BLKLSTOP",
+          "DORDOR",
+          "DOTDOT",
+          "FORMLBRACK",
+          "FUNC0SUB",
+          "GRAMBARESTMT",
+          "GRAMBLOCK",
+          "GRAMEXPR",
+          "GRAMFULLSTMT",
+          "GRAMPROG",
+          "GRAMSTMTSEQ",
+          "GRAMSUBSIGNATURE",
+          "HASHBRACK",
+          "KW_CATCH",
+          "KW_CONTINUE",
+          "KW_DEFAULT",
+          "KW_DEFER",
+          "KW_ELSE",
+          "KW_ELSIF",
+          "KW_FINALLY",
+          "KW_FORMAT",
+          "KW_GIVEN",
+          "KW_LOCAL",
+          "KW_METHOD_named",
+          "KW_SUB_named",
+          "KW_SUB_named_sig",
+          "KW_TRY",
+          "KW_USE_or_NO",
+          "LSTOPSUB",
+          "MATCHOP",
+          "METHCALL",
+          "MULOP",
+          "NOAMP",
+          "NOTOP",
+          "OROP",
+          "OROR",
+          "PERLY_DOT",
+          "PERLY_EQUAL_SIGN",
+          "PERLY_EXCLAMATION_MARK",
+          "PERLY_MINUS",
+          "PERLY_PLUS",
+          "PERLY_QUESTION_MARK",
+          "PERLY_SLASH",
+          "PERLY_TILDE",
+          "PHASER",
+          "PLUGEXPR",
+          "PLUGIN_ADD_OP",
+          "PLUGIN_ASSIGN_OP",
+          "PLUGIN_HIGH_OP",
+          "PLUGIN_LOGICAL_AND_LOW_OP",
+          "PLUGIN_LOGICAL_AND_OP",
+          "PLUGIN_LOGICAL_OR_LOW_OP",
+          "PLUGIN_LOGICAL_OR_OP",
+          "PLUGIN_LOW_OP",
+          "PLUGIN_MUL_OP",
+          "PLUGIN_POW_OP",
+          "PLUGIN_REL_OP",
+          "PLUGSTMT",
+          "PMFUNC",
+          "POSTDEC",
+          "POSTINC",
+          "POSTJOIN",
+          "POWOP",
+          "PREDEC",
+          "PREINC",
+          "PROTOTYPE",
+          "SHIFTOP",
+          "YADAYADA"
+        ],
+        "used": 129
+      }
+    },
+    "notable": {
+      "coreSymbols": [
+        "term",
+        "empty",
+        "remember",
+        "expr",
+        "scalar",
+        "mblock",
+        "block",
+        "stmtseq",
+        "indirob",
+        "mexpr"
+      ],
+      "deepestRecursionMembers": [
+        "amper",
+        "anonymous",
+        "ary",
+        "arylen",
+        "bare_statement_block",
+        "bare_statement_class_definition",
+        "bare_statement_default",
+        "bare_statement_defer",
+        "bare_statement_expression",
+        "bare_statement_field_declaration",
+        "bare_statement_for",
+        "bare_statement_format",
+        "bare_statement_given",
+        "bare_statement_if",
+        "bare_statement_package_definition",
+        "bare_statement_phaser",
+        "bare_statement_sub_signature",
+        "bare_statement_sub_traditional",
+        "bare_statement_try_catch",
+        "bare_statement_unless",
+        "bare_statement_until",
+        "bare_statement_utilize",
+        "bare_statement_when",
+        "bare_statement_while",
+        "barestmt",
+        "block",
+        "catch_paren",
+        "condition",
+        "cont",
+        "else",
+        "eqopchain",
+        "expr",
+        "fielddecl",
+        "fieldvar",
+        "finally",
+        "formarg",
+        "formblock",
+        "formline",
+        "formstmtseq",
+        "fullstmt",
+        "gelem",
+        "hsh",
+        "iexpr",
+        "indirob",
+        "kvslice",
+        "labfullstmt",
+        "list_of_itervars",
+        "listexpr",
+        "listop",
+        "mblock",
+        "methodname",
+        "mexpr",
+        "mnexpr",
+        "my_list_of_itervars",
+        "my_scalar",
+        "my_var",
+        "myattrterm",
+        "myterm",
+        "nexpr",
+        "optexpr",
+        "optlistexpr",
+        "optrepl",
+        "optsiglist",
+        "optsigscalardefault",
+        "optsigsubbody",
+        "optsubbody",
+        "optsubsignature",
+        "refgen_topic",
+        "relopchain",
+        "scalar",
+        "sideff",
+        "sigelem",
+        "siglist",
+        "sigscalarelem",
+        "sigslurpelem",
+        "sigsubbody",
+        "sliceme",
+        "star",
+        "stmtseq",
+        "subbody",
+        "subscripted",
+        "subsigguts",
+        "subsignature",
+        "term",
+        "termbinop",
+        "termdo",
+        "termeqop",
+        "termrelop",
+        "termunop",
+        "texpr"
+      ],
+      "largestRule": {
+        "line": 1564,
+        "name": "term"
+      }
+    },
+    "operations": {
+      "actionReferences": {
+        "named": 553,
+        "namedRatio": 0.6599,
+        "positional": 285,
+        "total": 838
+      },
+      "declarationDirectives": {
+        "code": 0,
+        "destructor": 0,
+        "printer": 0,
+        "total": 1,
+        "union": 1
+      },
+      "errorTokenUses": 1,
+      "explicitEmptyAlternatives": {
+        "count": 13,
+        "emptyAlternatives": 13,
+        "ratio": 1
+      },
+      "namedReferenceRatio": 0.2479,
+      "namedReferences": 116,
+      "recoveryRuleRatio": 0.0088,
+      "rulesWithErrorRecovery": 1,
+      "symbolReferences": 468
+    },
+    "parseability": {
+      "cyclicUnitRules": [],
+      "firstSetSize": {
+        "average": 12.7368,
+        "maximum": {
+          "rule": "fullstmt",
+          "value": 68
+        },
+        "percentiles": {
+          "p50": 1,
+          "p95": 44
+        }
+      },
+      "followSetSize": {
+        "average": 41.9825,
+        "maximum": {
+          "rule": "block",
+          "value": 113
+        },
+        "percentiles": {
+          "p50": 48,
+          "p95": 93
+        }
+      },
+      "ll1Conflicts": {
+        "firstFirst": 1164,
+        "firstFollow": 2,
+        "total": 1166
+      },
+      "notApplicable": {
+        "declaredConflicts": "no valid global conflict expectation declaration was captured"
+      },
+      "slr": {
+        "conflictInvolvement": {
+          "involvedRules": 42,
+          "percentiles": {
+            "p50": 0,
+            "p95": 240
+          },
+          "ruleRatio": 0.3684,
+          "total": 5818
+        },
+        "reduceReduceConflicts": 366,
+        "shiftReduceConflicts": 2019,
+        "states": 681
+      },
+      "unitRules": 100
+    },
+    "peg": {
+      "notApplicable": {
+        "backtrackingHotspots": "orderedChoice capability is false",
+        "charClassOverlapPairs": "orderedChoice capability is false",
+        "maxPredicateNestingDepth": "orderedChoice capability is false",
+        "potentialShadowedAlternativePairs": "orderedChoice capability is false",
+        "predicates": "orderedChoice capability is false",
+        "shadowedAlternativePairs": "orderedChoice capability is false"
+      }
+    },
+    "perRule": [
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 49,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "refgen_topic",
+          "term"
+        ],
+        "references": [
+          "indirob"
+        ],
+        "rhsItems": 2,
+        "rule": "amper",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 15,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 8,
+        "fanIn": 1,
+        "fanOut": 7,
+        "firstSetSize": 5,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "optexpr",
+          "proto",
+          "sigsubbody",
+          "startanonmethod",
+          "startanonsub",
+          "subattrlist",
+          "subbody"
+        ],
+        "rhsItems": 30,
+        "rule": "anonymous",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 147,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 52,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "fieldvar",
+          "my_var",
+          "myterm",
+          "sliceme",
+          "term"
+        ],
+        "references": [
+          "indirob"
+        ],
+        "rhsItems": 2,
+        "rule": "ary",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 15,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "indirob",
+          "term"
+        ],
+        "rhsItems": 6,
+        "rule": "arylen",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 59,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 49,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "myattrterm",
+          "optattrlist"
+        ],
+        "references": [],
+        "rhsItems": 3,
+        "rule": "attrlist",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "block",
+          "cont"
+        ],
+        "rhsItems": 2,
+        "rule": "bare_statement_block",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "optattrlist"
+        ],
+        "rhsItems": 5,
+        "rule": "bare_statement_class_declaration",
+        "shortestDerivation": 4,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "optattrlist",
+          "remember",
+          "stmtseq"
+        ],
+        "rhsItems": 8,
+        "rule": "bare_statement_class_definition",
+        "shortestDerivation": 5,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "block"
+        ],
+        "rhsItems": 2,
+        "rule": "bare_statement_default",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "mblock"
+        ],
+        "rhsItems": 2,
+        "rule": "bare_statement_defer",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 44,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "sideff"
+        ],
+        "rhsItems": 2,
+        "rule": "bare_statement_expression",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "fielddecl"
+        ],
+        "rhsItems": 2,
+        "rule": "bare_statement_field_declaration",
+        "shortestDerivation": 4,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 7,
+        "fanIn": 1,
+        "fanOut": 13,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 21,
+          "firstFollow": 0,
+          "total": 21
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 11,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "cont",
+          "mblock",
+          "mexpr",
+          "mintro",
+          "mnexpr",
+          "my_list_of_itervars",
+          "my_refgen",
+          "my_scalar",
+          "my_var",
+          "refgen_topic",
+          "remember",
+          "scalar",
+          "texpr"
+        ],
+        "rhsItems": 64,
+        "rule": "bare_statement_for",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "formblock",
+          "formname",
+          "startformsub"
+        ],
+        "rhsItems": 4,
+        "rule": "bare_statement_format",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "mblock",
+          "mexpr",
+          "remember"
+        ],
+        "rhsItems": 6,
+        "rule": "bare_statement_given",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "else",
+          "mblock",
+          "mexpr",
+          "remember"
+        ],
+        "rhsItems": 7,
+        "rule": "bare_statement_if",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [],
+        "rhsItems": 1,
+        "rule": "bare_statement_null",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [],
+        "rhsItems": 4,
+        "rule": "bare_statement_package_declaration",
+        "shortestDerivation": 4,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "remember",
+          "stmtseq"
+        ],
+        "rhsItems": 7,
+        "rule": "bare_statement_package_definition",
+        "shortestDerivation": 5,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "optsubbody",
+          "startsub"
+        ],
+        "rhsItems": 3,
+        "rule": "bare_statement_phaser",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 2,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "optsigsubbody",
+          "sigsub_or_method_named",
+          "startsub",
+          "subattrlist",
+          "subname"
+        ],
+        "rhsItems": 5,
+        "rule": "bare_statement_sub_signature",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "optsubbody",
+          "proto",
+          "startsub",
+          "subattrlist",
+          "subname"
+        ],
+        "rhsItems": 6,
+        "rule": "bare_statement_sub_traditional",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "catch_paren",
+          "finally",
+          "mblock",
+          "remember"
+        ],
+        "rhsItems": 7,
+        "rule": "bare_statement_try_catch",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "else",
+          "mblock",
+          "mexpr",
+          "remember"
+        ],
+        "rhsItems": 7,
+        "rule": "bare_statement_unless",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "cont",
+          "iexpr",
+          "mblock",
+          "mintro",
+          "remember"
+        ],
+        "rhsItems": 8,
+        "rule": "bare_statement_until",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "optlistexpr",
+          "startsub"
+        ],
+        "rhsItems": 6,
+        "rule": "bare_statement_utilize",
+        "shortestDerivation": 4,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "mblock",
+          "mexpr",
+          "remember"
+        ],
+        "rhsItems": 6,
+        "rule": "bare_statement_when",
+        "shortestDerivation": 6,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [
+          "cont",
+          "mblock",
+          "mintro",
+          "remember",
+          "texpr"
+        ],
+        "rhsItems": 8,
+        "rule": "bare_statement_while",
+        "shortestDerivation": 5,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "barestmt"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "bare_statement_yadayada",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 25,
+        "fanIn": 3,
+        "fanOut": 24,
+        "firstSetSize": 67,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 2,
+          "firstFollow": 0,
+          "total": 2
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "fullstmt",
+          "grammar",
+          "labfullstmt"
+        ],
+        "references": [
+          "bare_statement_block",
+          "bare_statement_class_declaration",
+          "bare_statement_class_definition",
+          "bare_statement_default",
+          "bare_statement_defer",
+          "bare_statement_expression",
+          "bare_statement_field_declaration",
+          "bare_statement_for",
+          "bare_statement_format",
+          "bare_statement_given",
+          "bare_statement_if",
+          "bare_statement_null",
+          "bare_statement_package_declaration",
+          "bare_statement_package_definition",
+          "bare_statement_phaser",
+          "bare_statement_sub_signature",
+          "bare_statement_sub_traditional",
+          "bare_statement_try_catch",
+          "bare_statement_unless",
+          "bare_statement_until",
+          "bare_statement_utilize",
+          "bare_statement_when",
+          "bare_statement_while",
+          "bare_statement_yadayada"
+        ],
+        "rhsItems": 25,
+        "rule": "barestmt",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 24
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 9,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 113,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_block",
+          "bare_statement_default",
+          "cont",
+          "finally",
+          "grammar",
+          "indirob",
+          "listop",
+          "term",
+          "termdo"
+        ],
+        "references": [
+          "remember",
+          "stmtseq"
+        ],
+        "rhsItems": 4,
+        "rule": "block",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_try_catch"
+        ],
+        "references": [
+          "empty",
+          "scalar"
+        ],
+        "rhsItems": 4,
+        "rule": "catch_paren",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 43,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sideff"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 1,
+        "rule": "condition",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 4,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_block",
+          "bare_statement_for",
+          "bare_statement_until",
+          "bare_statement_while"
+        ],
+        "references": [
+          "block",
+          "empty"
+        ],
+        "rhsItems": 3,
+        "rule": "cont",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 3,
+        "fanOut": 4,
+        "firstSetSize": 2,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_if",
+          "bare_statement_unless",
+          "else"
+        ],
+        "references": [
+          "else",
+          "empty",
+          "mblock",
+          "mexpr"
+        ],
+        "rhsItems": 9,
+        "rule": "else",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 16,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 113,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "catch_paren",
+          "cont",
+          "else",
+          "formarg",
+          "formname",
+          "formstmtseq",
+          "nexpr",
+          "optattrlist",
+          "optexpr",
+          "optlistexpr",
+          "optrepl",
+          "optsiglist",
+          "optsubsignature",
+          "proto",
+          "stmtseq",
+          "subattrlist"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "empty",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 669,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "eqopchain",
+          "termeqop"
+        ],
+        "references": [
+          "eqopchain",
+          "term"
+        ],
+        "rhsItems": 6,
+        "rule": "eqopchain",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 105,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 5,
+        "fanIn": 12,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 10,
+          "firstFollow": 0,
+          "total": 10
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "condition",
+          "expr",
+          "iexpr",
+          "listop",
+          "mexpr",
+          "myterm",
+          "optexpr",
+          "optrepl",
+          "sideff",
+          "subscripted",
+          "term",
+          "texpr"
+        ],
+        "references": [
+          "expr",
+          "listexpr"
+        ],
+        "rhsItems": 13,
+        "rule": "expr",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 32,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_field_declaration"
+        ],
+        "references": [
+          "fieldvar",
+          "optattrlist",
+          "term"
+        ],
+        "rhsItems": 8,
+        "rule": "fielddecl",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 3,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "fielddecl"
+        ],
+        "references": [
+          "ary",
+          "hsh",
+          "scalar"
+        ],
+        "rhsItems": 3,
+        "rule": "fieldvar",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 3
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_try_catch"
+        ],
+        "references": [
+          "block"
+        ],
+        "rhsItems": 2,
+        "rule": "finally",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "formline"
+        ],
+        "references": [
+          "empty",
+          "stmtseq"
+        ],
+        "rhsItems": 4,
+        "rule": "formarg",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_format"
+        ],
+        "references": [
+          "formstmtseq",
+          "remember"
+        ],
+        "rhsItems": 7,
+        "rule": "formblock",
+        "shortestDerivation": 5,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "formstmtseq"
+        ],
+        "references": [
+          "formarg"
+        ],
+        "rhsItems": 2,
+        "rule": "formline",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_format"
+        ],
+        "references": [
+          "empty"
+        ],
+        "rhsItems": 2,
+        "rule": "formname",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 1,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "formblock",
+          "formstmtseq"
+        ],
+        "references": [
+          "empty",
+          "formline",
+          "formstmtseq"
+        ],
+        "rhsItems": 3,
+        "rule": "formstmtseq",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 68,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "grammar",
+          "stmtseq"
+        ],
+        "references": [
+          "barestmt",
+          "labfullstmt"
+        ],
+        "rhsItems": 2,
+        "rule": "fullstmt",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "subscripted"
+        ],
+        "references": [
+          "star",
+          "term"
+        ],
+        "rhsItems": 4,
+        "rule": "gelem",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 44,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 7,
+        "fanIn": 0,
+        "fanOut": 7,
+        "firstSetSize": 7,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [],
+        "references": [
+          "barestmt",
+          "block",
+          "fullstmt",
+          "optexpr",
+          "remember",
+          "stmtseq",
+          "subsigguts"
+        ],
+        "rhsItems": 15,
+        "rule": "grammar",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 52,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "fieldvar",
+          "kvslice",
+          "my_var",
+          "myterm",
+          "term"
+        ],
+        "references": [
+          "indirob"
+        ],
+        "rhsItems": 2,
+        "rule": "hsh",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 15,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 43,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_until",
+          "sideff"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 1,
+        "rule": "iexpr",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 7,
+        "fanOut": 2,
+        "firstSetSize": 4,
+        "followSetSize": 93,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "amper",
+          "ary",
+          "arylen",
+          "hsh",
+          "listop",
+          "scalar",
+          "star"
+        ],
+        "references": [
+          "block",
+          "scalar"
+        ],
+        "rhsItems": 4,
+        "rule": "indirob",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 100,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "hsh",
+          "term"
+        ],
+        "rhsItems": 4,
+        "rule": "kvslice",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 44,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "fullstmt",
+          "labfullstmt"
+        ],
+        "references": [
+          "barestmt",
+          "labfullstmt"
+        ],
+        "rhsItems": 4,
+        "rule": "labfullstmt",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 5,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 2,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 9,
+          "firstFollow": 0,
+          "total": 9
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "list_of_itervars",
+          "my_list_of_itervars"
+        ],
+        "references": [
+          "list_of_itervars",
+          "my_var",
+          "scalar"
+        ],
+        "rhsItems": 12,
+        "rule": "list_of_itervars",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 5,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "expr",
+          "listexpr",
+          "listop",
+          "optlistexpr",
+          "term"
+        ],
+        "references": [
+          "listexpr",
+          "term"
+        ],
+        "rhsItems": 6,
+        "rule": "listexpr",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 70,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 13,
+        "fanIn": 1,
+        "fanOut": 10,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 46,
+          "firstFollow": 0,
+          "total": 46
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "block",
+          "expr",
+          "indirob",
+          "listexpr",
+          "methodname",
+          "optexpr",
+          "optlistexpr",
+          "startanonsub",
+          "subname",
+          "term"
+        ],
+        "rhsItems": 53,
+        "rule": "listop",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 313,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 10,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 76,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_defer",
+          "bare_statement_for",
+          "bare_statement_given",
+          "bare_statement_if",
+          "bare_statement_try_catch",
+          "bare_statement_unless",
+          "bare_statement_until",
+          "bare_statement_when",
+          "bare_statement_while",
+          "else"
+        ],
+        "references": [
+          "mremember",
+          "stmtseq"
+        ],
+        "rhsItems": 4,
+        "rule": "mblock",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 2,
+        "followSetSize": 49,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "listop"
+        ],
+        "references": [
+          "scalar"
+        ],
+        "rhsItems": 2,
+        "rule": "methodname",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 6,
+        "fanOut": 1,
+        "firstSetSize": 43,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for",
+          "bare_statement_given",
+          "bare_statement_if",
+          "bare_statement_unless",
+          "bare_statement_when",
+          "else"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 1,
+        "rule": "mexpr",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for",
+          "bare_statement_until",
+          "bare_statement_while"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "mintro",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 44,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for"
+        ],
+        "references": [
+          "nexpr"
+        ],
+        "rhsItems": 1,
+        "rule": "mnexpr",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 69,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "mblock"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "mremember",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 2,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for"
+        ],
+        "references": [
+          "list_of_itervars"
+        ],
+        "rhsItems": 1,
+        "rule": "my_list_of_itervars",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for"
+        ],
+        "references": [],
+        "rhsItems": 4,
+        "rule": "my_refgen",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for"
+        ],
+        "references": [
+          "scalar"
+        ],
+        "rhsItems": 1,
+        "rule": "my_scalar",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 3,
+        "fanOut": 3,
+        "firstSetSize": 3,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for",
+          "list_of_itervars",
+          "refgen_topic"
+        ],
+        "references": [
+          "ary",
+          "hsh",
+          "scalar"
+        ],
+        "rhsItems": 3,
+        "rule": "my_var",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 3
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 6,
+          "firstFollow": 0,
+          "total": 6
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "attrlist",
+          "myterm",
+          "term"
+        ],
+        "rhsItems": 12,
+        "rule": "myattrterm",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 90,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 5,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 4,
+        "followSetSize": 49,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "myattrterm"
+        ],
+        "references": [
+          "ary",
+          "expr",
+          "hsh",
+          "scalar"
+        ],
+        "rhsItems": 8,
+        "rule": "myterm",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 240,
+        "unitRules": 3
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 44,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "mnexpr"
+        ],
+        "references": [
+          "empty",
+          "sideff"
+        ],
+        "rhsItems": 2,
+        "rule": "nexpr",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_class_declaration",
+          "bare_statement_class_definition",
+          "fielddecl"
+        ],
+        "references": [
+          "attrlist",
+          "empty"
+        ],
+        "rhsItems": 2,
+        "rule": "optattrlist",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigscalarelem"
+        ],
+        "references": [],
+        "rhsItems": 1,
+        "rule": "optcolon",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 5,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous",
+          "grammar",
+          "listop"
+        ],
+        "references": [
+          "empty",
+          "expr"
+        ],
+        "rhsItems": 2,
+        "rule": "optexpr",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_utilize",
+          "listop",
+          "term"
+        ],
+        "references": [
+          "empty",
+          "listexpr"
+        ],
+        "rhsItems": 2,
+        "rule": "optlistexpr",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "empty",
+          "expr"
+        ],
+        "rhsItems": 3,
+        "rule": "optrepl",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 4,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "subsigguts"
+        ],
+        "references": [
+          "empty",
+          "siglist"
+        ],
+        "rhsItems": 2,
+        "rule": "optsiglist",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 43,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigscalarelem"
+        ],
+        "references": [
+          "term"
+        ],
+        "rhsItems": 1,
+        "rule": "optsigscalardefault",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 3,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_sub_signature"
+        ],
+        "references": [
+          "sigsubbody"
+        ],
+        "rhsItems": 2,
+        "rule": "optsigsubbody",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 2,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_phaser",
+          "bare_statement_sub_traditional"
+        ],
+        "references": [
+          "subbody"
+        ],
+        "rhsItems": 2,
+        "rule": "optsubbody",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigsubbody"
+        ],
+        "references": [
+          "empty",
+          "subsignature"
+        ],
+        "rhsItems": 2,
+        "rule": "optsubsignature",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 50,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous",
+          "bare_statement_sub_traditional"
+        ],
+        "references": [
+          "empty"
+        ],
+        "rhsItems": 2,
+        "rule": "proto",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 4,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for"
+        ],
+        "references": [
+          "amper",
+          "my_var"
+        ],
+        "rhsItems": 2,
+        "rule": "refgen_topic",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "relopchain",
+          "termrelop"
+        ],
+        "references": [
+          "relopchain",
+          "term"
+        ],
+        "rhsItems": 6,
+        "rule": "relopchain",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 105,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 15,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_class_definition",
+          "bare_statement_for",
+          "bare_statement_given",
+          "bare_statement_if",
+          "bare_statement_package_definition",
+          "bare_statement_try_catch",
+          "bare_statement_unless",
+          "bare_statement_until",
+          "bare_statement_when",
+          "bare_statement_while",
+          "block",
+          "formblock",
+          "grammar",
+          "sigsubbody",
+          "subbody"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "remember",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 31,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 11,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 93,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for",
+          "catch_paren",
+          "fieldvar",
+          "indirob",
+          "list_of_itervars",
+          "methodname",
+          "my_scalar",
+          "my_var",
+          "myterm",
+          "subscripted",
+          "term"
+        ],
+        "references": [
+          "indirob"
+        ],
+        "rhsItems": 2,
+        "rule": "scalar",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 15,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 8,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 44,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 21,
+          "firstFollow": 0,
+          "total": 21
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_expression",
+          "nexpr"
+        ],
+        "references": [
+          "condition",
+          "expr",
+          "iexpr"
+        ],
+        "rhsItems": 20,
+        "rule": "sideff",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 3,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 4,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "siglist"
+        ],
+        "references": [
+          "sigscalarelem",
+          "sigslurpelem"
+        ],
+        "rhsItems": 2,
+        "rule": "sigelem",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 4,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "optsiglist",
+          "siglist"
+        ],
+        "references": [
+          "sigelem",
+          "siglist"
+        ],
+        "rhsItems": 6,
+        "rule": "siglist",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 2,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigelem"
+        ],
+        "references": [
+          "optcolon",
+          "optsigscalardefault",
+          "sigvar"
+        ],
+        "rhsItems": 8,
+        "rule": "sigscalarelem",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 2,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigelem"
+        ],
+        "references": [
+          "sigslurpsigil",
+          "sigvar",
+          "term"
+        ],
+        "rhsItems": 9,
+        "rule": "sigslurpelem",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 5,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigslurpelem"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "sigslurpsigil",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_sub_signature"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "sigsub_or_method_named",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 2,
+        "followSetSize": 111,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous",
+          "optsigsubbody"
+        ],
+        "references": [
+          "optsubsignature",
+          "remember",
+          "stmtseq"
+        ],
+        "rhsItems": 5,
+        "rule": "sigsubbody",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "sigscalarelem",
+          "sigslurpelem"
+        ],
+        "references": [],
+        "rhsItems": 1,
+        "rule": "sigvar",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 43,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "ary",
+          "term"
+        ],
+        "rhsItems": 4,
+        "rule": "sliceme",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 44,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 49,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "gelem",
+          "term"
+        ],
+        "references": [
+          "indirob"
+        ],
+        "rhsItems": 2,
+        "rule": "star",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 15,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 51,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "startanonmethod",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 52,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous",
+          "listop"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "startanonsub",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_format"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "startformsub",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 0,
+        "firstSetSize": 0,
+        "followSetSize": 6,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 0,
+        "maxRhsItems": 0,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_phaser",
+          "bare_statement_sub_signature",
+          "bare_statement_sub_traditional",
+          "bare_statement_utilize"
+        ],
+        "references": [],
+        "rhsItems": 0,
+        "rule": "startsub",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 9,
+        "fanOut": 3,
+        "firstSetSize": 68,
+        "followSetSize": 71,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 1,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_class_definition",
+          "bare_statement_package_definition",
+          "block",
+          "formarg",
+          "grammar",
+          "mblock",
+          "sigsubbody",
+          "stmtseq",
+          "subbody"
+        ],
+        "references": [
+          "empty",
+          "fullstmt",
+          "stmtseq"
+        ],
+        "rhsItems": 3,
+        "rule": "stmtseq",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 50,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous",
+          "bare_statement_sub_signature",
+          "bare_statement_sub_traditional"
+        ],
+        "references": [
+          "empty"
+        ],
+        "rhsItems": 4,
+        "rule": "subattrlist",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 10,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 111,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "anonymous",
+          "optsubbody"
+        ],
+        "references": [
+          "remember",
+          "stmtseq"
+        ],
+        "rhsItems": 4,
+        "rule": "subbody",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 4,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 94,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_sub_signature",
+          "bare_statement_sub_traditional",
+          "listop",
+          "term"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "subname",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 14,
+        "fanIn": 2,
+        "fanOut": 5,
+        "firstSetSize": 43,
+        "followSetSize": 51,
+        "ll1Conflicts": {
+          "firstFirst": 83,
+          "firstFollow": 0,
+          "total": 83
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "subscripted",
+          "term"
+        ],
+        "references": [
+          "expr",
+          "gelem",
+          "scalar",
+          "subscripted",
+          "term"
+        ],
+        "rhsItems": 65,
+        "rule": "subscripted",
+        "shortestDerivation": 4,
+        "slrConflictInvolvement": 223,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 4,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "grammar",
+          "subsignature"
+        ],
+        "references": [
+          "optsiglist"
+        ],
+        "rhsItems": 1,
+        "rule": "subsigguts",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "optsubsignature"
+        ],
+        "references": [
+          "subsigguts"
+        ],
+        "rhsItems": 3,
+        "rule": "subsignature",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 52,
+        "fanIn": 19,
+        "fanOut": 22,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 673,
+          "firstFollow": 0,
+          "total": 673
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "arylen",
+          "eqopchain",
+          "fielddecl",
+          "gelem",
+          "kvslice",
+          "listexpr",
+          "listop",
+          "myattrterm",
+          "optsigscalardefault",
+          "relopchain",
+          "sigslurpelem",
+          "sliceme",
+          "subscripted",
+          "term",
+          "termbinop",
+          "termdo",
+          "termeqop",
+          "termrelop",
+          "termunop"
+        ],
+        "references": [
+          "amper",
+          "anonymous",
+          "ary",
+          "arylen",
+          "block",
+          "expr",
+          "hsh",
+          "kvslice",
+          "listexpr",
+          "listop",
+          "myattrterm",
+          "optlistexpr",
+          "optrepl",
+          "scalar",
+          "sliceme",
+          "star",
+          "subname",
+          "subscripted",
+          "term",
+          "termbinop",
+          "termdo",
+          "termunop"
+        ],
+        "rhsItems": 116,
+        "rule": "term",
+        "shortestDerivation": 1,
+        "slrConflictInvolvement": 1216,
+        "unitRules": 13
+      },
+      {
+        "alternatives": 22,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 231,
+          "firstFollow": 0,
+          "total": 231
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "term",
+          "termeqop",
+          "termrelop"
+        ],
+        "rhsItems": 62,
+        "rule": "termbinop",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 1484,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "block",
+          "term"
+        ],
+        "rhsItems": 4,
+        "rule": "termdo",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 60,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 6,
+          "firstFollow": 0,
+          "total": 6
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "termbinop",
+          "termeqop"
+        ],
+        "references": [
+          "eqopchain",
+          "term",
+          "termeqop"
+        ],
+        "rhsItems": 8,
+        "rule": "termeqop",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 77,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 5,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 10,
+          "firstFollow": 0,
+          "total": 10
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "termbinop",
+          "termrelop"
+        ],
+        "references": [
+          "relopchain",
+          "term",
+          "termrelop"
+        ],
+        "rhsItems": 11,
+        "rule": "termrelop",
+        "shortestDerivation": 3,
+        "slrConflictInvolvement": 151,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 9,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 43,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 21,
+          "firstFollow": 0,
+          "total": 21
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "term"
+        ],
+        "references": [
+          "term"
+        ],
+        "rhsItems": 18,
+        "rule": "termunop",
+        "shortestDerivation": 2,
+        "slrConflictInvolvement": 402,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 43,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "grammar"
+        ],
+        "referencedBy": [
+          "bare_statement_for",
+          "bare_statement_while"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 1,
+        "rule": "texpr",
+        "shortestDerivation": 0,
+        "slrConflictInvolvement": 0,
+        "unitRules": 1
+      }
+    ],
+    "precedence": {
+      "assocBreakdown": {
+        "left": 16,
+        "nonassoc": 11,
+        "precedence": 0,
+        "right": 5
+      },
+      "levels": 32,
+      "maxTokensPerLevel": 5,
+      "precOverrideAlternativeRatio": 0.1121,
+      "precOverrides": 39,
+      "rulesWithPrecOverrides": 16,
+      "tokensInPrecedence": {
+        "count": 55,
+        "ratio": 0.4198
+      }
+    },
+    "redundancy": {
+      "commonPrefixPairs": 306,
+      "duplicateAlternatives": 0,
+      "listRecursion": {
+        "consistency": 1,
+        "left": 3,
+        "mixed": 0,
+        "right": 0
+      },
+      "maxCommonPrefixLength": 4,
+      "singleReferenceRules": [
+        "anonymous",
+        "arylen",
+        "bare_statement_block",
+        "bare_statement_class_declaration",
+        "bare_statement_class_definition",
+        "bare_statement_default",
+        "bare_statement_defer",
+        "bare_statement_expression",
+        "bare_statement_field_declaration",
+        "bare_statement_for",
+        "bare_statement_format",
+        "bare_statement_given",
+        "bare_statement_if",
+        "bare_statement_null",
+        "bare_statement_package_declaration",
+        "bare_statement_package_definition",
+        "bare_statement_phaser",
+        "bare_statement_sub_signature",
+        "bare_statement_sub_traditional",
+        "bare_statement_try_catch",
+        "bare_statement_unless",
+        "bare_statement_until",
+        "bare_statement_utilize",
+        "bare_statement_when",
+        "bare_statement_while",
+        "bare_statement_yadayada",
+        "catch_paren",
+        "fielddecl",
+        "finally",
+        "formarg",
+        "formblock",
+        "formline",
+        "formname",
+        "gelem",
+        "listop",
+        "mremember",
+        "my_list_of_itervars",
+        "my_refgen",
+        "my_scalar",
+        "myattrterm",
+        "nexpr",
+        "optrepl",
+        "optsiglist",
+        "optsigscalardefault",
+        "optsigsubbody",
+        "optsubsignature",
+        "refgen_topic",
+        "sigscalarelem",
+        "sigslurpelem",
+        "sigsub_or_method_named",
+        "startformsub",
+        "subsignature",
+        "termbinop",
+        "termdo",
+        "termunop"
+      ],
+      "structuralCloneGroups": 0,
+      "undefinedPrecedenceOverrides": [],
+      "unusedPrecedenceTokens": [],
+      "unusedTerminals": [
+        "PREC_LOW",
+        "UMINUS"
+      ]
+    },
+    "size": {
+      "altPerRulePercentiles": {
+        "p50": 2,
+        "p95": 9
+      },
+      "alternatives": 348,
+      "avgAltPerRule": 3.0526,
+      "avgRhsLength": 2.4511,
+      "emptyAlternatives": 13,
+      "maxAltPerRule": {
+        "line": 1564,
+        "rule": "term",
+        "value": 52
+      },
+      "maxRhsLength": {
+        "line": 347,
+        "rule": "bare_statement_for",
+        "value": 11
+      },
+      "nestedChoiceCount": 0,
+      "nonterminals": 114,
+      "rhsLengthPercentiles": {
+        "p50": 2,
+        "p95": 6
+      },
+      "rules": 114,
+      "terminals": 131,
+      "unresolvedSymbols": {
+        "count": 0,
+        "names": []
+      }
+    },
+    "source": {
+      "dialect": "bison",
+      "fileNames": [
+        "perly.y"
+      ],
+      "format": "bison",
+      "frontend": {
+        "id": "yacc-family",
+        "version": "0.4.0"
+      }
+    },
+    "structure": {
+      "articulationPoints": [
+        "anonymous",
+        "bare_statement_for",
+        "bare_statement_format",
+        "bare_statement_sub_signature",
+        "barestmt",
+        "mblock",
+        "sigscalarelem",
+        "sigslurpelem",
+        "term"
+      ],
+      "bridges": [
+        {
+          "source": "anonymous",
+          "target": "startanonmethod"
+        },
+        {
+          "source": "bare_statement_for",
+          "target": "my_refgen"
+        },
+        {
+          "source": "bare_statement_format",
+          "target": "startformsub"
+        },
+        {
+          "source": "bare_statement_null",
+          "target": "barestmt"
+        },
+        {
+          "source": "bare_statement_package_declaration",
+          "target": "barestmt"
+        },
+        {
+          "source": "bare_statement_sub_signature",
+          "target": "sigsub_or_method_named"
+        },
+        {
+          "source": "bare_statement_yadayada",
+          "target": "barestmt"
+        },
+        {
+          "source": "mblock",
+          "target": "mremember"
+        },
+        {
+          "source": "optcolon",
+          "target": "sigscalarelem"
+        },
+        {
+          "source": "sigslurpelem",
+          "target": "sigslurpsigil"
+        },
+        {
+          "source": "term",
+          "target": "termunop"
+        }
+      ],
+      "directLeftRecursiveRules": 12,
+      "directRightRecursiveRules": 4,
+      "fanInEntropy": 6.1185,
+      "fanInGini": 0.4807,
+      "indirectLeftRecursiveRules": 13,
+      "largestRecursiveComponent": {
+        "members": [
+          "amper",
+          "anonymous",
+          "ary",
+          "arylen",
+          "bare_statement_block",
+          "bare_statement_class_definition",
+          "bare_statement_default",
+          "bare_statement_defer",
+          "bare_statement_expression",
+          "bare_statement_field_declaration",
+          "bare_statement_for",
+          "bare_statement_format",
+          "bare_statement_given",
+          "bare_statement_if",
+          "bare_statement_package_definition",
+          "bare_statement_phaser",
+          "bare_statement_sub_signature",
+          "bare_statement_sub_traditional",
+          "bare_statement_try_catch",
+          "bare_statement_unless",
+          "bare_statement_until",
+          "bare_statement_utilize",
+          "bare_statement_when",
+          "bare_statement_while",
+          "barestmt",
+          "block",
+          "catch_paren",
+          "condition",
+          "cont",
+          "else",
+          "eqopchain",
+          "expr",
+          "fielddecl",
+          "fieldvar",
+          "finally",
+          "formarg",
+          "formblock",
+          "formline",
+          "formstmtseq",
+          "fullstmt",
+          "gelem",
+          "hsh",
+          "iexpr",
+          "indirob",
+          "kvslice",
+          "labfullstmt",
+          "list_of_itervars",
+          "listexpr",
+          "listop",
+          "mblock",
+          "methodname",
+          "mexpr",
+          "mnexpr",
+          "my_list_of_itervars",
+          "my_scalar",
+          "my_var",
+          "myattrterm",
+          "myterm",
+          "nexpr",
+          "optexpr",
+          "optlistexpr",
+          "optrepl",
+          "optsiglist",
+          "optsigscalardefault",
+          "optsigsubbody",
+          "optsubbody",
+          "optsubsignature",
+          "refgen_topic",
+          "relopchain",
+          "scalar",
+          "sideff",
+          "sigelem",
+          "siglist",
+          "sigscalarelem",
+          "sigslurpelem",
+          "sigsubbody",
+          "sliceme",
+          "star",
+          "stmtseq",
+          "subbody",
+          "subscripted",
+          "subsigguts",
+          "subsignature",
+          "term",
+          "termbinop",
+          "termdo",
+          "termeqop",
+          "termrelop",
+          "termunop",
+          "texpr"
+        ],
+        "ratio": 0.7895,
+        "value": 90
+      },
+      "largestSccSize": {
+        "members": [
+          "amper",
+          "anonymous",
+          "ary",
+          "arylen",
+          "bare_statement_block",
+          "bare_statement_class_definition",
+          "bare_statement_default",
+          "bare_statement_defer",
+          "bare_statement_expression",
+          "bare_statement_field_declaration",
+          "bare_statement_for",
+          "bare_statement_format",
+          "bare_statement_given",
+          "bare_statement_if",
+          "bare_statement_package_definition",
+          "bare_statement_phaser",
+          "bare_statement_sub_signature",
+          "bare_statement_sub_traditional",
+          "bare_statement_try_catch",
+          "bare_statement_unless",
+          "bare_statement_until",
+          "bare_statement_utilize",
+          "bare_statement_when",
+          "bare_statement_while",
+          "barestmt",
+          "block",
+          "catch_paren",
+          "condition",
+          "cont",
+          "else",
+          "eqopchain",
+          "expr",
+          "fielddecl",
+          "fieldvar",
+          "finally",
+          "formarg",
+          "formblock",
+          "formline",
+          "formstmtseq",
+          "fullstmt",
+          "gelem",
+          "hsh",
+          "iexpr",
+          "indirob",
+          "kvslice",
+          "labfullstmt",
+          "list_of_itervars",
+          "listexpr",
+          "listop",
+          "mblock",
+          "methodname",
+          "mexpr",
+          "mnexpr",
+          "my_list_of_itervars",
+          "my_scalar",
+          "my_var",
+          "myattrterm",
+          "myterm",
+          "nexpr",
+          "optexpr",
+          "optlistexpr",
+          "optrepl",
+          "optsiglist",
+          "optsigscalardefault",
+          "optsigsubbody",
+          "optsubbody",
+          "optsubsignature",
+          "refgen_topic",
+          "relopchain",
+          "scalar",
+          "sideff",
+          "sigelem",
+          "siglist",
+          "sigscalarelem",
+          "sigslurpelem",
+          "sigsubbody",
+          "sliceme",
+          "star",
+          "stmtseq",
+          "subbody",
+          "subscripted",
+          "subsigguts",
+          "subsignature",
+          "term",
+          "termbinop",
+          "termdo",
+          "termeqop",
+          "termrelop",
+          "termunop",
+          "texpr"
+        ],
+        "value": 90
+      },
+      "maxDependencyDepth": 4,
+      "maxExpressionNestingDepth": 1,
+      "nullableRules": 31,
+      "reachableRules": 114,
+      "recursionSccCount": 1,
+      "recursiveRules": {
+        "count": 90,
+        "ratio": 0.7895
+      },
+      "shortestDerivation": [
+        {
+          "length": 2,
+          "rule": "amper"
+        },
+        {
+          "length": 1,
+          "rule": "anonymous"
+        },
+        {
+          "length": 2,
+          "rule": "ary"
+        },
+        {
+          "length": 2,
+          "rule": "arylen"
+        },
+        {
+          "length": 1,
+          "rule": "attrlist"
+        },
+        {
+          "length": 2,
+          "rule": "bare_statement_block"
+        },
+        {
+          "length": 4,
+          "rule": "bare_statement_class_declaration"
+        },
+        {
+          "length": 5,
+          "rule": "bare_statement_class_definition"
+        },
+        {
+          "length": 3,
+          "rule": "bare_statement_default"
+        },
+        {
+          "length": 3,
+          "rule": "bare_statement_defer"
+        },
+        {
+          "length": 2,
+          "rule": "bare_statement_expression"
+        },
+        {
+          "length": 4,
+          "rule": "bare_statement_field_declaration"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_for"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_format"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_given"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_if"
+        },
+        {
+          "length": 1,
+          "rule": "bare_statement_null"
+        },
+        {
+          "length": 4,
+          "rule": "bare_statement_package_declaration"
+        },
+        {
+          "length": 5,
+          "rule": "bare_statement_package_definition"
+        },
+        {
+          "length": 2,
+          "rule": "bare_statement_phaser"
+        },
+        {
+          "length": 3,
+          "rule": "bare_statement_sub_signature"
+        },
+        {
+          "length": 3,
+          "rule": "bare_statement_sub_traditional"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_try_catch"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_unless"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_until"
+        },
+        {
+          "length": 4,
+          "rule": "bare_statement_utilize"
+        },
+        {
+          "length": 6,
+          "rule": "bare_statement_when"
+        },
+        {
+          "length": 5,
+          "rule": "bare_statement_while"
+        },
+        {
+          "length": 2,
+          "rule": "bare_statement_yadayada"
+        },
+        {
+          "length": 1,
+          "rule": "barestmt"
+        },
+        {
+          "length": 2,
+          "rule": "block"
+        },
+        {
+          "length": 0,
+          "rule": "catch_paren"
+        },
+        {
+          "length": 1,
+          "rule": "condition"
+        },
+        {
+          "length": 0,
+          "rule": "cont"
+        },
+        {
+          "length": 0,
+          "rule": "else"
+        },
+        {
+          "length": 0,
+          "rule": "empty"
+        },
+        {
+          "length": 3,
+          "rule": "eqopchain"
+        },
+        {
+          "length": 1,
+          "rule": "expr"
+        },
+        {
+          "length": 3,
+          "rule": "fielddecl"
+        },
+        {
+          "length": 2,
+          "rule": "fieldvar"
+        },
+        {
+          "length": 0,
+          "rule": "finally"
+        },
+        {
+          "length": 0,
+          "rule": "formarg"
+        },
+        {
+          "length": 5,
+          "rule": "formblock"
+        },
+        {
+          "length": 1,
+          "rule": "formline"
+        },
+        {
+          "length": 0,
+          "rule": "formname"
+        },
+        {
+          "length": 0,
+          "rule": "formstmtseq"
+        },
+        {
+          "length": 1,
+          "rule": "fullstmt"
+        },
+        {
+          "length": 2,
+          "rule": "gelem"
+        },
+        {
+          "length": 1,
+          "rule": "grammar"
+        },
+        {
+          "length": 2,
+          "rule": "hsh"
+        },
+        {
+          "length": 1,
+          "rule": "iexpr"
+        },
+        {
+          "length": 1,
+          "rule": "indirob"
+        },
+        {
+          "length": 2,
+          "rule": "kvslice"
+        },
+        {
+          "length": 2,
+          "rule": "labfullstmt"
+        },
+        {
+          "length": 2,
+          "rule": "list_of_itervars"
+        },
+        {
+          "length": 1,
+          "rule": "listexpr"
+        },
+        {
+          "length": 1,
+          "rule": "listop"
+        },
+        {
+          "length": 2,
+          "rule": "mblock"
+        },
+        {
+          "length": 1,
+          "rule": "methodname"
+        },
+        {
+          "length": 1,
+          "rule": "mexpr"
+        },
+        {
+          "length": 0,
+          "rule": "mintro"
+        },
+        {
+          "length": 0,
+          "rule": "mnexpr"
+        },
+        {
+          "length": 0,
+          "rule": "mremember"
+        },
+        {
+          "length": 2,
+          "rule": "my_list_of_itervars"
+        },
+        {
+          "length": 2,
+          "rule": "my_refgen"
+        },
+        {
+          "length": 2,
+          "rule": "my_scalar"
+        },
+        {
+          "length": 2,
+          "rule": "my_var"
+        },
+        {
+          "length": 3,
+          "rule": "myattrterm"
+        },
+        {
+          "length": 2,
+          "rule": "myterm"
+        },
+        {
+          "length": 0,
+          "rule": "nexpr"
+        },
+        {
+          "length": 0,
+          "rule": "optattrlist"
+        },
+        {
+          "length": 0,
+          "rule": "optcolon"
+        },
+        {
+          "length": 0,
+          "rule": "optexpr"
+        },
+        {
+          "length": 0,
+          "rule": "optlistexpr"
+        },
+        {
+          "length": 0,
+          "rule": "optrepl"
+        },
+        {
+          "length": 0,
+          "rule": "optsiglist"
+        },
+        {
+          "length": 0,
+          "rule": "optsigscalardefault"
+        },
+        {
+          "length": 1,
+          "rule": "optsigsubbody"
+        },
+        {
+          "length": 1,
+          "rule": "optsubbody"
+        },
+        {
+          "length": 0,
+          "rule": "optsubsignature"
+        },
+        {
+          "length": 0,
+          "rule": "proto"
+        },
+        {
+          "length": 2,
+          "rule": "refgen_topic"
+        },
+        {
+          "length": 3,
+          "rule": "relopchain"
+        },
+        {
+          "length": 0,
+          "rule": "remember"
+        },
+        {
+          "length": 2,
+          "rule": "scalar"
+        },
+        {
+          "length": 1,
+          "rule": "sideff"
+        },
+        {
+          "length": 1,
+          "rule": "sigelem"
+        },
+        {
+          "length": 1,
+          "rule": "siglist"
+        },
+        {
+          "length": 1,
+          "rule": "sigscalarelem"
+        },
+        {
+          "length": 1,
+          "rule": "sigslurpelem"
+        },
+        {
+          "length": 1,
+          "rule": "sigslurpsigil"
+        },
+        {
+          "length": 1,
+          "rule": "sigsub_or_method_named"
+        },
+        {
+          "length": 2,
+          "rule": "sigsubbody"
+        },
+        {
+          "length": 0,
+          "rule": "sigvar"
+        },
+        {
+          "length": 2,
+          "rule": "sliceme"
+        },
+        {
+          "length": 2,
+          "rule": "star"
+        },
+        {
+          "length": 0,
+          "rule": "startanonmethod"
+        },
+        {
+          "length": 0,
+          "rule": "startanonsub"
+        },
+        {
+          "length": 0,
+          "rule": "startformsub"
+        },
+        {
+          "length": 0,
+          "rule": "startsub"
+        },
+        {
+          "length": 0,
+          "rule": "stmtseq"
+        },
+        {
+          "length": 0,
+          "rule": "subattrlist"
+        },
+        {
+          "length": 2,
+          "rule": "subbody"
+        },
+        {
+          "length": 1,
+          "rule": "subname"
+        },
+        {
+          "length": 4,
+          "rule": "subscripted"
+        },
+        {
+          "length": 0,
+          "rule": "subsigguts"
+        },
+        {
+          "length": 2,
+          "rule": "subsignature"
+        },
+        {
+          "length": 1,
+          "rule": "term"
+        },
+        {
+          "length": 3,
+          "rule": "termbinop"
+        },
+        {
+          "length": 2,
+          "rule": "termdo"
+        },
+        {
+          "length": 3,
+          "rule": "termeqop"
+        },
+        {
+          "length": 3,
+          "rule": "termrelop"
+        },
+        {
+          "length": 2,
+          "rule": "termunop"
+        },
+        {
+          "length": 0,
+          "rule": "texpr"
+        }
+      ],
+      "shortestDerivationUnknown": [],
+      "startSymbolReachability": {
+        "entries": [
+          {
+            "reachableRules": 114,
+            "rules": [
+              "amper",
+              "anonymous",
+              "ary",
+              "arylen",
+              "attrlist",
+              "bare_statement_block",
+              "bare_statement_class_declaration",
+              "bare_statement_class_definition",
+              "bare_statement_default",
+              "bare_statement_defer",
+              "bare_statement_expression",
+              "bare_statement_field_declaration",
+              "bare_statement_for",
+              "bare_statement_format",
+              "bare_statement_given",
+              "bare_statement_if",
+              "bare_statement_null",
+              "bare_statement_package_declaration",
+              "bare_statement_package_definition",
+              "bare_statement_phaser",
+              "bare_statement_sub_signature",
+              "bare_statement_sub_traditional",
+              "bare_statement_try_catch",
+              "bare_statement_unless",
+              "bare_statement_until",
+              "bare_statement_utilize",
+              "bare_statement_when",
+              "bare_statement_while",
+              "bare_statement_yadayada",
+              "barestmt",
+              "block",
+              "catch_paren",
+              "condition",
+              "cont",
+              "else",
+              "empty",
+              "eqopchain",
+              "expr",
+              "fielddecl",
+              "fieldvar",
+              "finally",
+              "formarg",
+              "formblock",
+              "formline",
+              "formname",
+              "formstmtseq",
+              "fullstmt",
+              "gelem",
+              "grammar",
+              "hsh",
+              "iexpr",
+              "indirob",
+              "kvslice",
+              "labfullstmt",
+              "list_of_itervars",
+              "listexpr",
+              "listop",
+              "mblock",
+              "methodname",
+              "mexpr",
+              "mintro",
+              "mnexpr",
+              "mremember",
+              "my_list_of_itervars",
+              "my_refgen",
+              "my_scalar",
+              "my_var",
+              "myattrterm",
+              "myterm",
+              "nexpr",
+              "optattrlist",
+              "optcolon",
+              "optexpr",
+              "optlistexpr",
+              "optrepl",
+              "optsiglist",
+              "optsigscalardefault",
+              "optsigsubbody",
+              "optsubbody",
+              "optsubsignature",
+              "proto",
+              "refgen_topic",
+              "relopchain",
+              "remember",
+              "scalar",
+              "sideff",
+              "sigelem",
+              "siglist",
+              "sigscalarelem",
+              "sigslurpelem",
+              "sigslurpsigil",
+              "sigsub_or_method_named",
+              "sigsubbody",
+              "sigvar",
+              "sliceme",
+              "star",
+              "startanonmethod",
+              "startanonsub",
+              "startformsub",
+              "startsub",
+              "stmtseq",
+              "subattrlist",
+              "subbody",
+              "subname",
+              "subscripted",
+              "subsigguts",
+              "subsignature",
+              "term",
+              "termbinop",
+              "termdo",
+              "termeqop",
+              "termrelop",
+              "termunop",
+              "texpr"
+            ],
+            "symbol": "grammar"
+          }
+        ],
+        "overlapRatio": 1
+      },
+      "topBetweenness": [
+        {
+          "symbol": "barestmt",
+          "value": 6873.9091
+        },
+        {
+          "symbol": "stmtseq",
+          "value": 6751.2174
+        },
+        {
+          "symbol": "fullstmt",
+          "value": 6746.9091
+        },
+        {
+          "symbol": "term",
+          "value": 5349.5909
+        },
+        {
+          "symbol": "block",
+          "value": 4467.0242
+        },
+        {
+          "symbol": "listexpr",
+          "value": 1861.4909
+        },
+        {
+          "symbol": "expr",
+          "value": 1553.9909
+        },
+        {
+          "symbol": "indirob",
+          "value": 1514.9333
+        },
+        {
+          "symbol": "sigsubbody",
+          "value": 1228
+        },
+        {
+          "symbol": "fielddecl",
+          "value": 1128
+        }
+      ],
+      "topFanIn": [
+        {
+          "count": 19,
+          "symbol": "term"
+        },
+        {
+          "count": 16,
+          "symbol": "empty"
+        },
+        {
+          "count": 15,
+          "symbol": "remember"
+        },
+        {
+          "count": 12,
+          "symbol": "expr"
+        },
+        {
+          "count": 11,
+          "symbol": "scalar"
+        },
+        {
+          "count": 10,
+          "symbol": "mblock"
+        },
+        {
+          "count": 9,
+          "symbol": "block"
+        },
+        {
+          "count": 9,
+          "symbol": "stmtseq"
+        },
+        {
+          "count": 7,
+          "symbol": "indirob"
+        },
+        {
+          "count": 6,
+          "symbol": "mexpr"
+        }
+      ],
+      "topFanOut": [
+        {
+          "count": 24,
+          "symbol": "barestmt"
+        },
+        {
+          "count": 22,
+          "symbol": "term"
+        },
+        {
+          "count": 13,
+          "symbol": "bare_statement_for"
+        },
+        {
+          "count": 10,
+          "symbol": "listop"
+        },
+        {
+          "count": 7,
+          "symbol": "anonymous"
+        },
+        {
+          "count": 7,
+          "symbol": "grammar"
+        },
+        {
+          "count": 5,
+          "symbol": "bare_statement_sub_signature"
+        },
+        {
+          "count": 5,
+          "symbol": "bare_statement_sub_traditional"
+        },
+        {
+          "count": 5,
+          "symbol": "bare_statement_until"
+        },
+        {
+          "count": 5,
+          "symbol": "bare_statement_while"
+        }
+      ],
+      "unproductiveSymbols": [],
+      "unreachableSymbols": []
+    },
+    "style": {
+      "commentDensity": 0.1254,
+      "comments": 155,
+      "documentedRuleRatio": 0.5,
+      "namingOutliers": [],
+      "nonterminalConvention": "snake_case",
+      "nonterminalConventionRatio": 1,
+      "terminalUpperCaseRatio": 0.9466,
+      "undocumentedRules": [
+        "amper",
+        "ary",
+        "arylen",
+        "bare_statement_block",
+        "bare_statement_class_declaration",
+        "bare_statement_class_definition",
+        "bare_statement_default",
+        "bare_statement_defer",
+        "bare_statement_expression",
+        "bare_statement_field_declaration",
+        "bare_statement_for",
+        "bare_statement_format",
+        "bare_statement_given",
+        "bare_statement_if",
+        "bare_statement_null",
+        "bare_statement_package_declaration",
+        "bare_statement_package_definition",
+        "bare_statement_phaser",
+        "bare_statement_sub_signature",
+        "bare_statement_sub_traditional",
+        "bare_statement_try_catch",
+        "bare_statement_unless",
+        "bare_statement_until",
+        "bare_statement_utilize",
+        "bare_statement_when",
+        "bare_statement_while",
+        "bare_statement_yadayada",
+        "condition",
+        "empty",
+        "eqopchain",
+        "fielddecl",
+        "formarg",
+        "formname",
+        "gelem",
+        "hsh",
+        "kvslice",
+        "labfullstmt",
+        "mblock",
+        "mnexpr",
+        "my_list_of_itervars",
+        "my_refgen",
+        "my_var",
+        "optattrlist",
+        "optcolon",
+        "optexpr",
+        "optrepl",
+        "optsigscalardefault",
+        "refgen_topic",
+        "relopchain",
+        "scalar",
+        "sigslurpsigil",
+        "sliceme",
+        "star",
+        "subsigguts",
+        "term",
+        "termeqop",
+        "termrelop"
+      ]
+    },
+    "sugar": {
+      "notApplicable": {
+        "inlineRules": "parameterizedRules capability is false",
+        "opt": "ebnfSugar capability is false",
+        "parameterizedCalls": "parameterizedRules capability is false",
+        "parameterizedRuleDefs": "parameterizedRules capability is false",
+        "plus": "ebnfSugar capability is false",
+        "star": "ebnfSugar capability is false"
+      },
+      "nullableRepetitions": 0
+    }
+  },
+  "id": "perl",
+  "measurement": {
+    "analysis": "lr",
+    "dialect": "bison",
+    "frontend": "yacc-family"
+  },
+  "provenance": {
+    "files": [
+      {
+        "bytes": 53716,
+        "path": "perly.y",
+        "sha256": "783af8ff7ff42fd7313d85df8bbde58d7480e4964bb41ce7b92a5039a7286074",
+        "url": "https://raw.githubusercontent.com/Perl/perl5/44f4945c88a0598be10ee67b689de6ff4bf84bc1/perly.y"
+      }
+    ],
+    "license": "Artistic License or GNU General Public License; see README",
+    "licenseUrl": "https://github.com/Perl/perl5/blob/44f4945c88a0598be10ee67b689de6ff4bf84bc1/README",
+    "repository": "Perl/perl5",
+    "revision": "44f4945c88a0598be10ee67b689de6ff4bf84bc1"
+  },
+  "title": "Perl parser"
+}

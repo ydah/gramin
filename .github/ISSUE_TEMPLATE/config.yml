@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/ydah/gramin/security/advisories/new
+    about: Do not post exploit details in a public issue.

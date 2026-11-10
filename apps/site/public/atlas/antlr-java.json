@@ -1,0 +1,5833 @@
+{
+  "category": "atlas",
+  "features": {
+    "actions": {
+      "altActionCoverage": 0,
+      "avgActionLength": 0,
+      "completeness": "partial",
+      "maxActionLength": 0,
+      "midRuleActions": 0,
+      "notApplicable": {
+        "altActionCoverage": "source action metadata was omitted by the frontend",
+        "avgActionLength": "source action metadata was omitted by the frontend",
+        "maxActionLength": "source action metadata was omitted by the frontend",
+        "midRuleActions": "source action metadata was omitted by the frontend",
+        "rulesWithActions": "source action metadata was omitted by the frontend",
+        "totalActions": "source action metadata was omitted by the frontend",
+        "trailingActions": "source action metadata was omitted by the frontend"
+      }
+    },
+    "capabilities": {
+      "ebnfSugar": true,
+      "lexerRules": true,
+      "orderedChoice": false,
+      "parameterizedRules": false,
+      "precedenceTable": false,
+      "predicates": false,
+      "scannerless": false
+    },
+    "diagnostics": [
+      {
+        "code": "IR010_LOSSY_ACTION",
+        "message": "grammar-level action code in java/java/JavaParser.g4 was omitted",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 22,
+          "endLine": 204,
+          "startCol": 10,
+          "startLine": 204
+        },
+        "message": "fragment ExponentPart was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 24,
+          "endLine": 206,
+          "startCol": 10,
+          "startLine": 206
+        },
+        "message": "fragment EscapeSequence was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 19,
+          "endLine": 212,
+          "startCol": 10,
+          "startLine": 212
+        },
+        "message": "fragment HexDigits was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 18,
+          "endLine": 214,
+          "startCol": 10,
+          "startLine": 214
+        },
+        "message": "fragment HexDigit was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 16,
+          "endLine": 216,
+          "startCol": 10,
+          "startLine": 216
+        },
+        "message": "fragment Digits was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 23,
+          "endLine": 218,
+          "startCol": 10,
+          "startLine": 218
+        },
+        "message": "fragment LetterOrDigit was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 16,
+          "endLine": 220,
+          "startCol": 10,
+          "startLine": 220
+        },
+        "message": "fragment Letter was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR011_LOSSY_SEMANTIC_PREDICATE",
+        "loc": {
+          "endCol": 34,
+          "endLine": 362,
+          "startCol": 2,
+          "startLine": 362
+        },
+        "message": "ANTLR semantic predicate code was omitted",
+        "severity": "info"
+      },
+      {
+        "code": "IR011_LOSSY_SEMANTIC_PREDICATE",
+        "loc": {
+          "endCol": 78,
+          "endLine": 455,
+          "startCol": 46,
+          "startLine": 455
+        },
+        "message": "ANTLR semantic predicate code was omitted",
+        "severity": "info"
+      },
+      {
+        "code": "ANALYZER002_UNREACHABLE_RULES",
+        "message": "unreachable rules: altAnnotationQualifiedName",
+        "severity": "warning"
+      },
+      {
+        "code": "ANALYZER003_UNUSED_TERMINALS",
+        "message": "unused terminals: COMMENT, CONST, GOTO, LINE_COMMENT, WS",
+        "severity": "warning"
+      }
+    ],
+    "featuresVersion": "0.8.0",
+    "lexicon": {
+      "anyCharCount": 0,
+      "charClassCount": 0,
+      "keywordIdentifierCollisions": [
+        "abstract",
+        "assert",
+        "boolean",
+        "break",
+        "byte",
+        "case",
+        "catch",
+        "char",
+        "class",
+        "const",
+        "continue",
+        "default",
+        "do",
+        "double",
+        "else",
+        "enum",
+        "exports",
+        "extends",
+        "final",
+        "finally",
+        "float",
+        "for",
+        "goto",
+        "if",
+        "implements",
+        "import",
+        "instanceof",
+        "int",
+        "interface",
+        "long",
+        "module",
+        "native",
+        "new",
+        "null",
+        "open",
+        "opens",
+        "package",
+        "permits",
+        "private",
+        "protected",
+        "provides",
+        "public",
+        "record",
+        "requires",
+        "return",
+        "sealed",
+        "short",
+        "static",
+        "strictfp",
+        "super",
+        "switch",
+        "synchronized",
+        "this",
+        "throw",
+        "throws",
+        "to",
+        "transient",
+        "transitive",
+        "try",
+        "uses",
+        "var",
+        "void",
+        "volatile",
+        "when",
+        "while",
+        "with",
+        "yield"
+      ],
+      "keywordLike": [
+        "abstract",
+        "assert",
+        "boolean",
+        "break",
+        "byte",
+        "case",
+        "catch",
+        "char",
+        "class",
+        "const",
+        "continue",
+        "default",
+        "do",
+        "double",
+        "else",
+        "enum",
+        "exports",
+        "extends",
+        "final",
+        "finally",
+        "float",
+        "for",
+        "goto",
+        "if",
+        "implements",
+        "import",
+        "instanceof",
+        "int",
+        "interface",
+        "long",
+        "module",
+        "native",
+        "new",
+        "null",
+        "open",
+        "opens",
+        "package",
+        "permits",
+        "private",
+        "protected",
+        "provides",
+        "public",
+        "record",
+        "requires",
+        "return",
+        "sealed",
+        "short",
+        "static",
+        "strictfp",
+        "super",
+        "switch",
+        "synchronized",
+        "this",
+        "throw",
+        "throws",
+        "to",
+        "transient",
+        "transitive",
+        "try",
+        "uses",
+        "var",
+        "void",
+        "volatile",
+        "when",
+        "while",
+        "with",
+        "yield"
+      ],
+      "literalOccurrences": 233,
+      "literalPrefixCollisions": [
+        {
+          "literal": "!=",
+          "prefix": "!"
+        },
+        {
+          "literal": "%=",
+          "prefix": "%"
+        },
+        {
+          "literal": "&&",
+          "prefix": "&"
+        },
+        {
+          "literal": "&=",
+          "prefix": "&"
+        },
+        {
+          "literal": "*=",
+          "prefix": "*"
+        },
+        {
+          "literal": "++",
+          "prefix": "+"
+        },
+        {
+          "literal": "+=",
+          "prefix": "+"
+        },
+        {
+          "literal": "--",
+          "prefix": "-"
+        },
+        {
+          "literal": "-=",
+          "prefix": "-"
+        },
+        {
+          "literal": "->",
+          "prefix": "-"
+        },
+        {
+          "literal": "...",
+          "prefix": "."
+        },
+        {
+          "literal": "/=",
+          "prefix": "/"
+        },
+        {
+          "literal": "::",
+          "prefix": ":"
+        },
+        {
+          "literal": "<<=",
+          "prefix": "<"
+        },
+        {
+          "literal": "<=",
+          "prefix": "<"
+        },
+        {
+          "literal": "==",
+          "prefix": "="
+        },
+        {
+          "literal": ">=",
+          "prefix": ">"
+        },
+        {
+          "literal": ">>=",
+          "prefix": ">"
+        },
+        {
+          "literal": ">>>=",
+          "prefix": ">"
+        },
+        {
+          "literal": "^=",
+          "prefix": "^"
+        },
+        {
+          "literal": "double",
+          "prefix": "do"
+        },
+        {
+          "literal": "finally",
+          "prefix": "final"
+        },
+        {
+          "literal": "interface",
+          "prefix": "int"
+        },
+        {
+          "literal": "opens",
+          "prefix": "open"
+        },
+        {
+          "literal": "throws",
+          "prefix": "throw"
+        },
+        {
+          "literal": "|=",
+          "prefix": "|"
+        },
+        {
+          "literal": "||",
+          "prefix": "|"
+        }
+      ],
+      "literalTokens": 0,
+      "namedTokens": 130,
+      "punctuationLike": [
+        "!",
+        "!=",
+        "%",
+        "%=",
+        "&",
+        "&&",
+        "&=",
+        "(",
+        ")",
+        "*",
+        "*=",
+        "+",
+        "++",
+        "+=",
+        ",",
+        "-",
+        "--",
+        "-=",
+        "->",
+        ".",
+        "...",
+        "/",
+        "/=",
+        ":",
+        "::",
+        ";",
+        "<",
+        "<<=",
+        "<=",
+        "=",
+        "==",
+        ">",
+        ">=",
+        ">>=",
+        ">>>=",
+        "?",
+        "@",
+        "[",
+        "]",
+        "^",
+        "^=",
+        "{",
+        "|",
+        "|=",
+        "||",
+        "}",
+        "~"
+      ],
+      "tokenUsage": {
+        "coverage": 0.9615,
+        "singleUse": [
+          "ADD_ASSIGN",
+          "AND",
+          "AND_ASSIGN",
+          "ASSERT",
+          "BANG",
+          "BINARY_LITERAL",
+          "BOOLEAN",
+          "BOOL_LITERAL",
+          "BREAK",
+          "BYTE",
+          "CARET",
+          "CATCH",
+          "CHAR",
+          "CHAR_LITERAL",
+          "CONTINUE",
+          "DECIMAL_LITERAL",
+          "DIV",
+          "DIV_ASSIGN",
+          "DO",
+          "DOUBLE",
+          "ELSE",
+          "ENUM",
+          "EQUAL",
+          "FINALLY",
+          "FLOAT",
+          "FLOAT_LITERAL",
+          "FOR",
+          "GE",
+          "HEX_FLOAT_LITERAL",
+          "HEX_LITERAL",
+          "IF",
+          "IMPORT",
+          "INSTANCEOF",
+          "INT",
+          "LE",
+          "LONG",
+          "LSHIFT_ASSIGN",
+          "MOD",
+          "MOD_ASSIGN",
+          "MUL_ASSIGN",
+          "NATIVE",
+          "NON_SEALED",
+          "NOTEQUAL",
+          "OCT_LITERAL",
+          "OR",
+          "OR_ASSIGN",
+          "PACKAGE",
+          "PRIVATE",
+          "PROTECTED",
+          "RETURN",
+          "RSHIFT_ASSIGN",
+          "SHORT",
+          "STRING_LITERAL",
+          "SUB_ASSIGN",
+          "TEXT_BLOCK",
+          "THROW",
+          "TILDE",
+          "TRANSIENT",
+          "URSHIFT_ASSIGN",
+          "VOID",
+          "VOLATILE",
+          "XOR_ASSIGN"
+        ],
+        "used": 125
+      }
+    },
+    "notable": {
+      "coreSymbols": [
+        "identifier",
+        "annotation",
+        "expression",
+        "typeType",
+        "block",
+        "qualifiedName",
+        "variableModifier",
+        "arguments",
+        "typeParameters",
+        "classDeclaration"
+      ],
+      "deepestRecursionMembers": [
+        "annotation",
+        "annotationConstantRest",
+        "annotationFieldValue",
+        "annotationFieldValues",
+        "annotationMethodOrConstantRest",
+        "annotationMethodRest",
+        "annotationTypeBody",
+        "annotationTypeDeclaration",
+        "annotationTypeElementDeclaration",
+        "annotationTypeElementRest",
+        "annotationValue",
+        "arguments",
+        "arrayCreatorRest",
+        "arrayInitializer",
+        "block",
+        "blockStatement",
+        "casePattern",
+        "catchClause",
+        "classBody",
+        "classBodyDeclaration",
+        "classCreatorRest",
+        "classDeclaration",
+        "classOrInterfaceModifier",
+        "classOrInterfaceType",
+        "classType",
+        "compactConstructorDeclaration",
+        "componentPattern",
+        "componentPatternList",
+        "constDeclaration",
+        "constantDeclarator",
+        "constructorDeclaration",
+        "createdName",
+        "creator",
+        "defaultValue",
+        "elementValue",
+        "elementValueArrayInitializer",
+        "enhancedForControl",
+        "enumBodyDeclarations",
+        "enumConstant",
+        "enumConstants",
+        "enumDeclaration",
+        "explicitGenericInvocation",
+        "explicitGenericInvocationSuffix",
+        "expression",
+        "expressionList",
+        "fieldDeclaration",
+        "finallyBlock",
+        "forControl",
+        "forInit",
+        "formalParameter",
+        "formalParameterList",
+        "formalParameters",
+        "genericConstructorDeclaration",
+        "genericInterfaceMethodDeclaration",
+        "genericMethodDeclaration",
+        "guard",
+        "innerCreator",
+        "interfaceBody",
+        "interfaceBodyDeclaration",
+        "interfaceCommonBodyDeclaration",
+        "interfaceDeclaration",
+        "interfaceMemberDeclaration",
+        "interfaceMethodDeclaration",
+        "interfaceMethodModifier",
+        "lambdaBody",
+        "lambdaExpression",
+        "lambdaLVTIList",
+        "lambdaLVTIParameter",
+        "lambdaParameters",
+        "localTypeDeclaration",
+        "localVariableDeclaration",
+        "memberDeclaration",
+        "methodBody",
+        "methodCall",
+        "methodDeclaration",
+        "modifier",
+        "nonWildcardTypeArguments",
+        "nonWildcardTypeArgumentsOrDiamond",
+        "pattern",
+        "primary",
+        "receiverParameter",
+        "recordBody",
+        "recordComponent",
+        "recordComponentList",
+        "recordDeclaration",
+        "recordHeader",
+        "resource",
+        "resourceSpecification",
+        "resources",
+        "statement",
+        "superSuffix",
+        "switchBlockStatementGroup",
+        "switchExpression",
+        "switchLabel",
+        "switchLabeledRule",
+        "switchRuleOutcome",
+        "typeArgument",
+        "typeArguments",
+        "typeArgumentsOrDiamond",
+        "typeBound",
+        "typeList",
+        "typeParameter",
+        "typeParameters",
+        "typeType",
+        "typeTypeOrVoid",
+        "variableDeclarator",
+        "variableDeclarators",
+        "variableInitializer",
+        "variableModifier"
+      ],
+      "largestRule": {
+        "line": 608,
+        "name": "expression"
+      }
+    },
+    "operations": {
+      "errorTokenUses": 0,
+      "namedReferenceRatio": 0.023,
+      "namedReferences": 10,
+      "notApplicable": {
+        "actionReferences": "source frontend did not retain opaque action reference counts",
+        "declarationDirectives": "source frontend did not retain declaration directives",
+        "explicitEmptyAlternatives": "source frontend did not distinguish explicit empty alternatives"
+      },
+      "recoveryRuleRatio": 0,
+      "rulesWithErrorRecovery": 0,
+      "symbolReferences": 434
+    },
+    "parseability": {
+      "cyclicUnitRules": [],
+      "firstSetSize": {
+        "average": 17.3798,
+        "maximum": {
+          "rule": "blockStatement",
+          "value": 75
+        },
+        "percentiles": {
+          "p50": 17,
+          "p95": 52
+        }
+      },
+      "followSetSize": {
+        "average": 32.3488,
+        "maximum": {
+          "rule": "block",
+          "value": 119
+        },
+        "percentiles": {
+          "p50": 44,
+          "p95": 82
+        }
+      },
+      "ll1Conflicts": {
+        "firstFirst": 332,
+        "firstFollow": 0,
+        "total": 332
+      },
+      "notApplicable": {
+        "declaredConflicts": "no valid global conflict expectation declaration was captured",
+        "slr": "SLR analysis requires plain BNF expressions"
+      },
+      "unitRules": 62
+    },
+    "peg": {
+      "notApplicable": {
+        "backtrackingHotspots": "orderedChoice capability is false",
+        "charClassOverlapPairs": "orderedChoice capability is false",
+        "maxPredicateNestingDepth": "orderedChoice capability is false",
+        "potentialShadowedAlternativePairs": "orderedChoice capability is false",
+        "predicates": "orderedChoice capability is false",
+        "shadowedAlternativePairs": "orderedChoice capability is false"
+      }
+    },
+    "perRule": [
+      {
+        "alternatives": 1,
+        "fanIn": 0,
+        "fanOut": 1,
+        "firstSetSize": 18,
+        "followSetSize": 0,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [],
+        "referencedBy": [],
+        "references": [
+          "identifier"
+        ],
+        "rhsItems": 3,
+        "rule": "altAnnotationQualifiedName",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 17,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 52,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationValue",
+          "classOrInterfaceModifier",
+          "classType",
+          "elementValue",
+          "enumConstant",
+          "expression",
+          "formalParameter",
+          "interfaceCommonBodyDeclaration",
+          "interfaceMethodModifier",
+          "moduleDeclaration",
+          "packageDeclaration",
+          "pattern",
+          "recordComponent",
+          "typeArgument",
+          "typeParameter",
+          "typeType",
+          "variableModifier"
+        ],
+        "references": [
+          "annotationFieldValues",
+          "qualifiedName"
+        ],
+        "rhsItems": 3,
+        "rule": "annotation",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationMethodOrConstantRest"
+        ],
+        "references": [
+          "variableDeclarators"
+        ],
+        "rhsItems": 1,
+        "rule": "annotationConstantRest",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 52,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationFieldValues"
+        ],
+        "references": [
+          "annotationValue",
+          "identifier"
+        ],
+        "rhsItems": 4,
+        "rule": "annotationFieldValue",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 52,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotation"
+        ],
+        "references": [
+          "annotationFieldValue"
+        ],
+        "rhsItems": 3,
+        "rule": "annotationFieldValues",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 17,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest"
+        ],
+        "references": [
+          "annotationConstantRest",
+          "annotationMethodRest"
+        ],
+        "rhsItems": 2,
+        "rule": "annotationMethodOrConstantRest",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 17,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationMethodOrConstantRest"
+        ],
+        "references": [
+          "defaultValue",
+          "identifier"
+        ],
+        "rhsItems": 4,
+        "rule": "annotationMethodRest",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeDeclaration"
+        ],
+        "references": [
+          "annotationTypeElementDeclaration"
+        ],
+        "rhsItems": 3,
+        "rule": "annotationTypeBody",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 48,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest",
+          "interfaceMemberDeclaration",
+          "memberDeclaration",
+          "typeDeclaration"
+        ],
+        "references": [
+          "annotationTypeBody",
+          "identifier"
+        ],
+        "rhsItems": 4,
+        "rule": "annotationTypeDeclaration",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 42,
+        "followSetSize": 43,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeBody"
+        ],
+        "references": [
+          "annotationTypeElementRest",
+          "modifier"
+        ],
+        "rhsItems": 3,
+        "rule": "annotationTypeElementDeclaration",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 6,
+        "fanIn": 1,
+        "fanOut": 7,
+        "firstSetSize": 29,
+        "followSetSize": 43,
+        "ll1Conflicts": {
+          "firstFirst": 2,
+          "firstFollow": 0,
+          "total": 2
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementDeclaration"
+        ],
+        "references": [
+          "annotationMethodOrConstantRest",
+          "annotationTypeDeclaration",
+          "classDeclaration",
+          "enumDeclaration",
+          "interfaceDeclaration",
+          "recordDeclaration",
+          "typeType"
+        ],
+        "rhsItems": 13,
+        "rule": "annotationTypeElementRest",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 52,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationFieldValue",
+          "annotationValue"
+        ],
+        "references": [
+          "annotation",
+          "annotationValue",
+          "expression"
+        ],
+        "rhsItems": 6,
+        "rule": "annotationValue",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 6,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classCreatorRest",
+          "enumConstant",
+          "explicitGenericInvocationSuffix",
+          "methodCall",
+          "primary",
+          "superSuffix"
+        ],
+        "references": [
+          "expressionList"
+        ],
+        "rhsItems": 3,
+        "rule": "arguments",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "creator"
+        ],
+        "references": [
+          "arrayInitializer",
+          "expression"
+        ],
+        "rhsItems": 4,
+        "rule": "arrayCreatorRest",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "arrayCreatorRest",
+          "variableInitializer"
+        ],
+        "references": [
+          "variableInitializer"
+        ],
+        "rhsItems": 3,
+        "rule": "arrayInitializer",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 9,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 119,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "catchClause",
+          "classBodyDeclaration",
+          "compactConstructorDeclaration",
+          "constructorDeclaration",
+          "finallyBlock",
+          "lambdaBody",
+          "methodBody",
+          "statement",
+          "switchRuleOutcome"
+        ],
+        "references": [
+          "blockStatement"
+        ],
+        "rhsItems": 3,
+        "rule": "block",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 3,
+        "fanOut": 3,
+        "firstSetSize": 75,
+        "followSetSize": 78,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "block",
+          "switchBlockStatementGroup",
+          "switchRuleOutcome"
+        ],
+        "references": [
+          "localTypeDeclaration",
+          "localVariableDeclaration",
+          "statement"
+        ],
+        "rhsItems": 4,
+        "rule": "blockStatement",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 27,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "switchLabeledRule"
+        ],
+        "references": [
+          "pattern"
+        ],
+        "rhsItems": 1,
+        "rule": "casePattern",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 81,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "statement"
+        ],
+        "references": [
+          "block",
+          "catchType",
+          "identifier",
+          "variableModifier"
+        ],
+        "rhsItems": 7,
+        "rule": "catchClause",
+        "shortestDerivation": 7,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 17,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "catchClause"
+        ],
+        "references": [
+          "qualifiedName"
+        ],
+        "rhsItems": 2,
+        "rule": "catchType",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 117,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classCreatorRest",
+          "classDeclaration",
+          "enumConstant"
+        ],
+        "references": [
+          "classBodyDeclaration"
+        ],
+        "rhsItems": 3,
+        "rule": "classBody",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 3,
+        "fanOut": 3,
+        "firstSetSize": 45,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classBody",
+          "enumBodyDeclarations",
+          "recordBody"
+        ],
+        "references": [
+          "block",
+          "memberDeclaration",
+          "modifier"
+        ],
+        "rhsItems": 5,
+        "rule": "classBodyDeclaration",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "creator",
+          "innerCreator"
+        ],
+        "references": [
+          "arguments",
+          "classBody"
+        ],
+        "rhsItems": 2,
+        "rule": "classCreatorRest",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 82,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest",
+          "interfaceMemberDeclaration",
+          "localTypeDeclaration",
+          "memberDeclaration",
+          "typeDeclaration"
+        ],
+        "references": [
+          "classBody",
+          "identifier",
+          "typeList",
+          "typeParameters",
+          "typeType"
+        ],
+        "rhsItems": 7,
+        "rule": "classDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 10,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 10,
+        "followSetSize": 44,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "localTypeDeclaration",
+          "modifier",
+          "typeDeclaration"
+        ],
+        "references": [
+          "annotation"
+        ],
+        "rhsItems": 10,
+        "rule": "classOrInterfaceModifier",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 67,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "resource",
+          "typeType"
+        ],
+        "references": [
+          "classType"
+        ],
+        "rhsItems": 1,
+        "rule": "classOrInterfaceType",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 4,
+        "firstSetSize": 17,
+        "followSetSize": 67,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 8,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classOrInterfaceType",
+          "expression"
+        ],
+        "references": [
+          "annotation",
+          "packageName",
+          "typeArguments",
+          "typeIdentifier"
+        ],
+        "rhsItems": 2,
+        "rule": "classType",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 30,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "recordBody"
+        ],
+        "references": [
+          "block",
+          "identifier",
+          "modifier"
+        ],
+        "rhsItems": 3,
+        "rule": "compactConstructorDeclaration",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 0,
+        "fanOut": 4,
+        "firstSetSize": 20,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [],
+        "references": [
+          "importDeclaration",
+          "modularCompulationUnit",
+          "packageDeclaration",
+          "typeDeclaration"
+        ],
+        "rhsItems": 6,
+        "rule": "compilationUnit",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 27,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "componentPatternList"
+        ],
+        "references": [
+          "pattern"
+        ],
+        "rhsItems": 1,
+        "rule": "componentPattern",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 27,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "pattern"
+        ],
+        "references": [
+          "componentPattern"
+        ],
+        "rhsItems": 2,
+        "rule": "componentPatternList",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 26,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceMemberDeclaration"
+        ],
+        "references": [
+          "constantDeclarator",
+          "typeType"
+        ],
+        "rhsItems": 4,
+        "rule": "constDeclaration",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 17,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "constDeclaration"
+        ],
+        "references": [
+          "identifier",
+          "variableInitializer"
+        ],
+        "rhsItems": 4,
+        "rule": "constantDeclarator",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 4,
+        "firstSetSize": 17,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "genericConstructorDeclaration",
+          "memberDeclaration"
+        ],
+        "references": [
+          "block",
+          "formalParameters",
+          "identifier",
+          "qualifiedNameList"
+        ],
+        "rhsItems": 4,
+        "rule": "constructorDeclaration",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 25,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "creator"
+        ],
+        "references": [
+          "identifier",
+          "primitiveType",
+          "typeArgumentsOrDiamond"
+        ],
+        "rhsItems": 4,
+        "rule": "createdName",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 26,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression"
+        ],
+        "references": [
+          "arrayCreatorRest",
+          "classCreatorRest",
+          "createdName",
+          "nonWildcardTypeArguments"
+        ],
+        "rhsItems": 5,
+        "rule": "creator",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationMethodRest"
+        ],
+        "references": [
+          "elementValue"
+        ],
+        "rhsItems": 2,
+        "rule": "defaultValue",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 52,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "defaultValue",
+          "elementValueArrayInitializer"
+        ],
+        "references": [
+          "annotation",
+          "elementValueArrayInitializer",
+          "expression"
+        ],
+        "rhsItems": 3,
+        "rule": "elementValue",
+        "shortestDerivation": 1,
+        "unitRules": 3
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "elementValue"
+        ],
+        "references": [
+          "elementValue"
+        ],
+        "rhsItems": 4,
+        "rule": "elementValueArrayInitializer",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 27,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "forControl"
+        ],
+        "references": [
+          "expression",
+          "typeType",
+          "variableDeclaratorId",
+          "variableModifier"
+        ],
+        "rhsItems": 5,
+        "rule": "enhancedForControl",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "enumDeclaration"
+        ],
+        "references": [
+          "classBodyDeclaration"
+        ],
+        "rhsItems": 2,
+        "rule": "enumBodyDeclarations",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 18,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "enumConstants"
+        ],
+        "references": [
+          "annotation",
+          "arguments",
+          "classBody",
+          "identifier"
+        ],
+        "rhsItems": 4,
+        "rule": "enumConstant",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 18,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "enumDeclaration"
+        ],
+        "references": [
+          "enumConstant"
+        ],
+        "rhsItems": 2,
+        "rule": "enumConstants",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 82,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest",
+          "interfaceMemberDeclaration",
+          "localTypeDeclaration",
+          "memberDeclaration",
+          "typeDeclaration"
+        ],
+        "references": [
+          "enumBodyDeclarations",
+          "enumConstants",
+          "identifier",
+          "typeList"
+        ],
+        "rhsItems": 8,
+        "rule": "enumDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression"
+        ],
+        "references": [
+          "explicitGenericInvocationSuffix",
+          "nonWildcardTypeArguments"
+        ],
+        "rhsItems": 2,
+        "rule": "explicitGenericInvocation",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 18,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "explicitGenericInvocation",
+          "primary"
+        ],
+        "references": [
+          "arguments",
+          "identifier",
+          "superSuffix"
+        ],
+        "rhsItems": 4,
+        "rule": "explicitGenericInvocationSuffix",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 26,
+        "fanIn": 16,
+        "fanOut": 16,
+        "firstSetSize": 51,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 283,
+          "firstFollow": 0,
+          "total": 283
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationValue",
+          "arrayCreatorRest",
+          "elementValue",
+          "enhancedForControl",
+          "expression",
+          "expressionList",
+          "forControl",
+          "guard",
+          "lambdaBody",
+          "localVariableDeclaration",
+          "primary",
+          "resource",
+          "statement",
+          "switchExpression",
+          "switchLabel",
+          "variableInitializer"
+        ],
+        "references": [
+          "annotation",
+          "classType",
+          "creator",
+          "explicitGenericInvocation",
+          "expression",
+          "identifier",
+          "innerCreator",
+          "lambdaExpression",
+          "methodCall",
+          "nonWildcardTypeArguments",
+          "pattern",
+          "primary",
+          "superSuffix",
+          "switchExpression",
+          "typeArguments",
+          "typeType"
+        ],
+        "rhsItems": 77,
+        "rule": "expression",
+        "shortestDerivation": 1,
+        "unitRules": 4
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 51,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "arguments",
+          "forControl",
+          "forInit",
+          "switchLabeledRule"
+        ],
+        "references": [
+          "expression"
+        ],
+        "rhsItems": 2,
+        "rule": "expressionList",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 26,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "memberDeclaration"
+        ],
+        "references": [
+          "typeType",
+          "variableDeclarators"
+        ],
+        "rhsItems": 3,
+        "rule": "fieldDeclaration",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 79,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "statement"
+        ],
+        "references": [
+          "block"
+        ],
+        "rhsItems": 2,
+        "rule": "finallyBlock",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "literal"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "floatLiteral",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 53,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "statement"
+        ],
+        "references": [
+          "enhancedForControl",
+          "expression",
+          "expressionList",
+          "forInit"
+        ],
+        "rhsItems": 6,
+        "rule": "forControl",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 52,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "forControl"
+        ],
+        "references": [
+          "expressionList",
+          "localVariableDeclaration"
+        ],
+        "rhsItems": 2,
+        "rule": "forInit",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 4,
+        "firstSetSize": 27,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "formalParameterList",
+          "formalParameters"
+        ],
+        "references": [
+          "annotation",
+          "typeType",
+          "variableDeclaratorId",
+          "variableModifier"
+        ],
+        "rhsItems": 4,
+        "rule": "formalParameter",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 27,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "formalParameters",
+          "lambdaParameters"
+        ],
+        "references": [
+          "formalParameter"
+        ],
+        "rhsItems": 2,
+        "rule": "formalParameterList",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "constructorDeclaration",
+          "interfaceCommonBodyDeclaration",
+          "methodDeclaration"
+        ],
+        "references": [
+          "formalParameter",
+          "formalParameterList",
+          "receiverParameter"
+        ],
+        "rhsItems": 3,
+        "rule": "formalParameters",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "memberDeclaration"
+        ],
+        "references": [
+          "constructorDeclaration",
+          "typeParameters"
+        ],
+        "rhsItems": 2,
+        "rule": "genericConstructorDeclaration",
+        "shortestDerivation": 8,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 7,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceMemberDeclaration"
+        ],
+        "references": [
+          "interfaceCommonBodyDeclaration",
+          "interfaceMethodModifier",
+          "typeParameters"
+        ],
+        "rhsItems": 3,
+        "rule": "genericInterfaceMethodDeclaration",
+        "shortestDerivation": 8,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "memberDeclaration"
+        ],
+        "references": [
+          "methodDeclaration",
+          "typeParameters"
+        ],
+        "rhsItems": 2,
+        "rule": "genericMethodDeclaration",
+        "shortestDerivation": 8,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "switchLabeledRule"
+        ],
+        "references": [
+          "expression"
+        ],
+        "rhsItems": 2,
+        "rule": "guard",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 17,
+        "fanIn": 34,
+        "fanOut": 0,
+        "firstSetSize": 17,
+        "followSetSize": 92,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "altAnnotationQualifiedName",
+          "annotationFieldValue",
+          "annotationMethodRest",
+          "annotationTypeDeclaration",
+          "catchClause",
+          "classDeclaration",
+          "compactConstructorDeclaration",
+          "constantDeclarator",
+          "constructorDeclaration",
+          "createdName",
+          "enumConstant",
+          "enumDeclaration",
+          "explicitGenericInvocationSuffix",
+          "expression",
+          "innerCreator",
+          "interfaceCommonBodyDeclaration",
+          "interfaceDeclaration",
+          "lambdaLVTIParameter",
+          "lambdaParameters",
+          "localVariableDeclaration",
+          "methodCall",
+          "methodDeclaration",
+          "packageName",
+          "primary",
+          "qualifiedName",
+          "receiverParameter",
+          "recordComponent",
+          "recordDeclaration",
+          "resource",
+          "statement",
+          "superSuffix",
+          "switchLabel",
+          "typeParameter",
+          "variableDeclaratorId"
+        ],
+        "references": [],
+        "rhsItems": 17,
+        "rule": "identifier",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 19,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "compilationUnit",
+          "modularCompulationUnit"
+        ],
+        "references": [
+          "qualifiedName"
+        ],
+        "rhsItems": 5,
+        "rule": "importDeclaration",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 17,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression"
+        ],
+        "references": [
+          "classCreatorRest",
+          "identifier",
+          "nonWildcardTypeArgumentsOrDiamond"
+        ],
+        "rhsItems": 3,
+        "rule": "innerCreator",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 4,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "literal"
+        ],
+        "references": [],
+        "rhsItems": 4,
+        "rule": "integerLiteral",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 82,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceDeclaration"
+        ],
+        "references": [
+          "interfaceBodyDeclaration"
+        ],
+        "rhsItems": 3,
+        "rule": "interfaceBody",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 45,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceBody"
+        ],
+        "references": [
+          "interfaceMemberDeclaration",
+          "modifier"
+        ],
+        "rhsItems": 3,
+        "rule": "interfaceBodyDeclaration",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 6,
+        "firstSetSize": 27,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "genericInterfaceMethodDeclaration",
+          "interfaceMethodDeclaration"
+        ],
+        "references": [
+          "annotation",
+          "formalParameters",
+          "identifier",
+          "methodBody",
+          "qualifiedNameList",
+          "typeTypeOrVoid"
+        ],
+        "rhsItems": 7,
+        "rule": "interfaceCommonBodyDeclaration",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 82,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest",
+          "interfaceMemberDeclaration",
+          "localTypeDeclaration",
+          "memberDeclaration",
+          "typeDeclaration"
+        ],
+        "references": [
+          "identifier",
+          "interfaceBody",
+          "typeList",
+          "typeParameters"
+        ],
+        "rhsItems": 6,
+        "rule": "interfaceDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 8,
+        "fanIn": 1,
+        "fanOut": 8,
+        "firstSetSize": 36,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 8,
+          "firstFollow": 0,
+          "total": 8
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceBodyDeclaration"
+        ],
+        "references": [
+          "annotationTypeDeclaration",
+          "classDeclaration",
+          "constDeclaration",
+          "enumDeclaration",
+          "genericInterfaceMethodDeclaration",
+          "interfaceDeclaration",
+          "interfaceMethodDeclaration",
+          "recordDeclaration"
+        ],
+        "rhsItems": 8,
+        "rule": "interfaceMemberDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 8
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 32,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceMemberDeclaration"
+        ],
+        "references": [
+          "interfaceCommonBodyDeclaration",
+          "interfaceMethodModifier"
+        ],
+        "rhsItems": 2,
+        "rule": "interfaceMethodDeclaration",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 6,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 6,
+        "followSetSize": 33,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "genericInterfaceMethodDeclaration",
+          "interfaceMethodDeclaration"
+        ],
+        "references": [
+          "annotation"
+        ],
+        "rhsItems": 6,
+        "rule": "interfaceMethodModifier",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 52,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "lambdaExpression"
+        ],
+        "references": [
+          "block",
+          "expression"
+        ],
+        "rhsItems": 2,
+        "rule": "lambdaBody",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 18,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression"
+        ],
+        "references": [
+          "lambdaBody",
+          "lambdaParameters"
+        ],
+        "rhsItems": 3,
+        "rule": "lambdaExpression",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 3,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "lambdaParameters"
+        ],
+        "references": [
+          "lambdaLVTIParameter"
+        ],
+        "rhsItems": 2,
+        "rule": "lambdaLVTIList",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 3,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "lambdaLVTIList"
+        ],
+        "references": [
+          "identifier",
+          "variableModifier"
+        ],
+        "rhsItems": 3,
+        "rule": "lambdaLVTIParameter",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 18,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "lambdaExpression"
+        ],
+        "references": [
+          "formalParameterList",
+          "identifier",
+          "lambdaLVTIList"
+        ],
+        "rhsItems": 11,
+        "rule": "lambdaParameters",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 7,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 11,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "primary"
+        ],
+        "references": [
+          "floatLiteral",
+          "integerLiteral"
+        ],
+        "rhsItems": 7,
+        "rule": "literal",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 14,
+        "followSetSize": 78,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "blockStatement"
+        ],
+        "references": [
+          "classDeclaration",
+          "classOrInterfaceModifier",
+          "enumDeclaration",
+          "interfaceDeclaration",
+          "recordDeclaration"
+        ],
+        "rhsItems": 2,
+        "rule": "localTypeDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 5,
+        "firstSetSize": 27,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "blockStatement",
+          "forInit"
+        ],
+        "references": [
+          "expression",
+          "identifier",
+          "typeType",
+          "variableDeclarators",
+          "variableModifier"
+        ],
+        "rhsItems": 2,
+        "rule": "localVariableDeclaration",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 10,
+        "fanIn": 1,
+        "fanOut": 10,
+        "firstSetSize": 31,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 9,
+          "firstFollow": 0,
+          "total": 9
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classBodyDeclaration"
+        ],
+        "references": [
+          "annotationTypeDeclaration",
+          "classDeclaration",
+          "constructorDeclaration",
+          "enumDeclaration",
+          "fieldDeclaration",
+          "genericConstructorDeclaration",
+          "genericMethodDeclaration",
+          "interfaceDeclaration",
+          "methodDeclaration",
+          "recordDeclaration"
+        ],
+        "rhsItems": 10,
+        "rule": "memberDeclaration",
+        "shortestDerivation": 3,
+        "unitRules": 10
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 2,
+        "followSetSize": 47,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceCommonBodyDeclaration",
+          "methodDeclaration"
+        ],
+        "references": [
+          "block"
+        ],
+        "rhsItems": 2,
+        "rule": "methodBody",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 19,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression"
+        ],
+        "references": [
+          "arguments",
+          "identifier"
+        ],
+        "rhsItems": 2,
+        "rule": "methodCall",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 5,
+        "firstSetSize": 27,
+        "followSetSize": 46,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "genericMethodDeclaration",
+          "memberDeclaration"
+        ],
+        "references": [
+          "formalParameters",
+          "identifier",
+          "methodBody",
+          "qualifiedNameList",
+          "typeTypeOrVoid"
+        ],
+        "rhsItems": 6,
+        "rule": "methodDeclaration",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 5,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 14,
+        "followSetSize": 44,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementDeclaration",
+          "classBodyDeclaration",
+          "compactConstructorDeclaration",
+          "interfaceBodyDeclaration"
+        ],
+        "references": [
+          "classOrInterfaceModifier"
+        ],
+        "rhsItems": 5,
+        "rule": "modifier",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 4,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "compilationUnit"
+        ],
+        "references": [
+          "importDeclaration",
+          "moduleDeclaration"
+        ],
+        "rhsItems": 2,
+        "rule": "modularCompulationUnit",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 3,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "modularCompulationUnit"
+        ],
+        "references": [
+          "annotation",
+          "moduleDirective",
+          "qualifiedName"
+        ],
+        "rhsItems": 7,
+        "rule": "moduleDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 5,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 5,
+        "followSetSize": 6,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "moduleDeclaration"
+        ],
+        "references": [
+          "qualifiedName",
+          "requiresModifier"
+        ],
+        "rhsItems": 21,
+        "rule": "moduleDirective",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 28,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "creator",
+          "explicitGenericInvocation",
+          "expression",
+          "nonWildcardTypeArgumentsOrDiamond",
+          "primary"
+        ],
+        "references": [
+          "typeList"
+        ],
+        "rhsItems": 3,
+        "rule": "nonWildcardTypeArguments",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "innerCreator"
+        ],
+        "references": [
+          "nonWildcardTypeArguments"
+        ],
+        "rhsItems": 3,
+        "rule": "nonWildcardTypeArgumentsOrDiamond",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 2,
+        "followSetSize": 17,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "compilationUnit"
+        ],
+        "references": [
+          "annotation",
+          "qualifiedName"
+        ],
+        "rhsItems": 4,
+        "rule": "packageDeclaration",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classType"
+        ],
+        "references": [
+          "identifier"
+        ],
+        "rhsItems": 2,
+        "rule": "packageName",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 5,
+        "firstSetSize": 27,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "casePattern",
+          "componentPattern",
+          "expression"
+        ],
+        "references": [
+          "annotation",
+          "componentPatternList",
+          "typeType",
+          "variableDeclarators",
+          "variableModifier"
+        ],
+        "rhsItems": 8,
+        "rule": "pattern",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 7,
+        "fanIn": 1,
+        "fanOut": 7,
+        "firstSetSize": 42,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression"
+        ],
+        "references": [
+          "arguments",
+          "explicitGenericInvocationSuffix",
+          "expression",
+          "identifier",
+          "literal",
+          "nonWildcardTypeArguments",
+          "typeTypeOrVoid"
+        ],
+        "rhsItems": 12,
+        "rule": "primary",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 8,
+        "fanIn": 2,
+        "fanOut": 0,
+        "firstSetSize": 8,
+        "followSetSize": 67,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "createdName",
+          "typeType"
+        ],
+        "references": [],
+        "rhsItems": 8,
+        "rule": "primitiveType",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 8,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 56,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotation",
+          "catchType",
+          "importDeclaration",
+          "moduleDeclaration",
+          "moduleDirective",
+          "packageDeclaration",
+          "qualifiedNameList",
+          "resource"
+        ],
+        "references": [
+          "identifier"
+        ],
+        "rhsItems": 2,
+        "rule": "qualifiedName",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "constructorDeclaration",
+          "interfaceCommonBodyDeclaration",
+          "methodDeclaration"
+        ],
+        "references": [
+          "qualifiedName"
+        ],
+        "rhsItems": 2,
+        "rule": "qualifiedNameList",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 26,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "formalParameters"
+        ],
+        "references": [
+          "identifier",
+          "typeType"
+        ],
+        "rhsItems": 3,
+        "rule": "receiverParameter",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 82,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "recordDeclaration"
+        ],
+        "references": [
+          "classBodyDeclaration",
+          "compactConstructorDeclaration"
+        ],
+        "rhsItems": 3,
+        "rule": "recordBody",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 26,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "recordComponentList"
+        ],
+        "references": [
+          "annotation",
+          "identifier",
+          "typeType"
+        ],
+        "rhsItems": 4,
+        "rule": "recordComponent",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 26,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "recordHeader"
+        ],
+        "references": [
+          "recordComponent"
+        ],
+        "rhsItems": 2,
+        "rule": "recordComponentList",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 82,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest",
+          "interfaceMemberDeclaration",
+          "localTypeDeclaration",
+          "memberDeclaration",
+          "typeDeclaration"
+        ],
+        "references": [
+          "identifier",
+          "recordBody",
+          "recordHeader",
+          "typeList",
+          "typeParameters"
+        ],
+        "rhsItems": 6,
+        "rule": "recordDeclaration",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "recordDeclaration"
+        ],
+        "references": [
+          "recordComponentList"
+        ],
+        "rhsItems": 3,
+        "rule": "recordHeader",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 18,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "moduleDirective"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "requiresModifier",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 6,
+        "firstSetSize": 19,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "resources"
+        ],
+        "references": [
+          "classOrInterfaceType",
+          "expression",
+          "identifier",
+          "qualifiedName",
+          "variableDeclaratorId",
+          "variableModifier"
+        ],
+        "rhsItems": 5,
+        "rule": "resource",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "statement"
+        ],
+        "references": [
+          "resources"
+        ],
+        "rhsItems": 4,
+        "rule": "resourceSpecification",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 19,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "resourceSpecification"
+        ],
+        "references": [
+          "resource"
+        ],
+        "rhsItems": 2,
+        "rule": "resources",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 19,
+        "fanIn": 2,
+        "fanOut": 11,
+        "firstSetSize": 64,
+        "followSetSize": 79,
+        "ll1Conflicts": {
+          "firstFirst": 7,
+          "firstFollow": 0,
+          "total": 7
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "blockStatement",
+          "statement"
+        ],
+        "references": [
+          "block",
+          "catchClause",
+          "expression",
+          "finallyBlock",
+          "forControl",
+          "identifier",
+          "resourceSpecification",
+          "statement",
+          "switchBlockStatementGroup",
+          "switchExpression",
+          "switchLabel"
+        ],
+        "rhsItems": 72,
+        "rule": "statement",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 2,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "explicitGenericInvocationSuffix",
+          "expression"
+        ],
+        "references": [
+          "arguments",
+          "identifier",
+          "typeArguments"
+        ],
+        "rhsItems": 5,
+        "rule": "superSuffix",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 2,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "statement"
+        ],
+        "references": [
+          "blockStatement",
+          "switchLabel"
+        ],
+        "rhsItems": 2,
+        "rule": "switchBlockStatementGroup",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 114,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "expression",
+          "statement"
+        ],
+        "references": [
+          "expression",
+          "switchLabeledRule"
+        ],
+        "rhsItems": 7,
+        "rule": "switchExpression",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 2,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "statement",
+          "switchBlockStatementGroup"
+        ],
+        "references": [
+          "expression",
+          "identifier",
+          "typeType"
+        ],
+        "rhsItems": 3,
+        "rule": "switchLabel",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 2,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "switchExpression"
+        ],
+        "references": [
+          "casePattern",
+          "expressionList",
+          "guard",
+          "switchRuleOutcome"
+        ],
+        "rhsItems": 7,
+        "rule": "switchLabeledRule",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 75,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "switchLabeledRule"
+        ],
+        "references": [
+          "block",
+          "blockStatement"
+        ],
+        "rhsItems": 2,
+        "rule": "switchRuleOutcome",
+        "shortestDerivation": 0,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 27,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "typeArguments"
+        ],
+        "references": [
+          "annotation",
+          "typeType"
+        ],
+        "rhsItems": 4,
+        "rule": "typeArgument",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 68,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classType",
+          "expression",
+          "superSuffix",
+          "typeArgumentsOrDiamond"
+        ],
+        "references": [
+          "typeArgument"
+        ],
+        "rhsItems": 4,
+        "rule": "typeArguments",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "createdName"
+        ],
+        "references": [
+          "typeArguments"
+        ],
+        "rhsItems": 3,
+        "rule": "typeArgumentsOrDiamond",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 26,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "typeParameter"
+        ],
+        "references": [
+          "typeType"
+        ],
+        "rhsItems": 2,
+        "rule": "typeBound",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 6,
+        "firstSetSize": 14,
+        "followSetSize": 16,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "compilationUnit"
+        ],
+        "references": [
+          "annotationTypeDeclaration",
+          "classDeclaration",
+          "classOrInterfaceModifier",
+          "enumDeclaration",
+          "interfaceDeclaration",
+          "recordDeclaration"
+        ],
+        "rhsItems": 2,
+        "rule": "typeDeclaration",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 12,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 12,
+        "followSetSize": 67,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classType"
+        ],
+        "references": [],
+        "rhsItems": 12,
+        "rule": "typeIdentifier",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 1,
+        "firstSetSize": 26,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classDeclaration",
+          "enumDeclaration",
+          "interfaceDeclaration",
+          "nonWildcardTypeArguments",
+          "recordDeclaration"
+        ],
+        "references": [
+          "typeType"
+        ],
+        "rhsItems": 2,
+        "rule": "typeList",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 18,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "typeParameters"
+        ],
+        "references": [
+          "annotation",
+          "identifier",
+          "typeBound"
+        ],
+        "rhsItems": 3,
+        "rule": "typeParameter",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 6,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 31,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "classDeclaration",
+          "genericConstructorDeclaration",
+          "genericInterfaceMethodDeclaration",
+          "genericMethodDeclaration",
+          "interfaceDeclaration",
+          "recordDeclaration"
+        ],
+        "references": [
+          "typeParameter"
+        ],
+        "rhsItems": 4,
+        "rule": "typeParameters",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 16,
+        "fanOut": 3,
+        "firstSetSize": 26,
+        "followSetSize": 67,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationTypeElementRest",
+          "classDeclaration",
+          "constDeclaration",
+          "enhancedForControl",
+          "expression",
+          "fieldDeclaration",
+          "formalParameter",
+          "localVariableDeclaration",
+          "pattern",
+          "receiverParameter",
+          "recordComponent",
+          "switchLabel",
+          "typeArgument",
+          "typeBound",
+          "typeList",
+          "typeTypeOrVoid"
+        ],
+        "references": [
+          "annotation",
+          "classOrInterfaceType",
+          "primitiveType"
+        ],
+        "rhsItems": 3,
+        "rule": "typeType",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 27,
+        "followSetSize": 18,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "interfaceCommonBodyDeclaration",
+          "methodDeclaration",
+          "primary"
+        ],
+        "references": [
+          "typeType"
+        ],
+        "rhsItems": 2,
+        "rule": "typeTypeOrVoid",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 17,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "variableDeclarators"
+        ],
+        "references": [
+          "variableDeclaratorId",
+          "variableInitializer"
+        ],
+        "rhsItems": 2,
+        "rule": "variableDeclarator",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "enhancedForControl",
+          "formalParameter",
+          "resource",
+          "variableDeclarator"
+        ],
+        "references": [
+          "identifier"
+        ],
+        "rhsItems": 2,
+        "rule": "variableDeclaratorId",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 17,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "annotationConstantRest",
+          "fieldDeclaration",
+          "localVariableDeclaration",
+          "pattern"
+        ],
+        "references": [
+          "variableDeclarator"
+        ],
+        "rhsItems": 2,
+        "rule": "variableDeclarators",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 2,
+        "firstSetSize": 52,
+        "followSetSize": 45,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "arrayInitializer",
+          "constantDeclarator",
+          "variableDeclarator"
+        ],
+        "references": [
+          "arrayInitializer",
+          "expression"
+        ],
+        "rhsItems": 2,
+        "rule": "variableInitializer",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 7,
+        "fanOut": 1,
+        "firstSetSize": 2,
+        "followSetSize": 27,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "compilationUnit"
+        ],
+        "referencedBy": [
+          "catchClause",
+          "enhancedForControl",
+          "formalParameter",
+          "lambdaLVTIParameter",
+          "localVariableDeclaration",
+          "pattern",
+          "resource"
+        ],
+        "references": [
+          "annotation"
+        ],
+        "rhsItems": 2,
+        "rule": "variableModifier",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      }
+    ],
+    "precedence": {
+      "notApplicable": {
+        "assocBreakdown": "precedenceTable capability is false",
+        "levels": "precedenceTable capability is false",
+        "maxTokensPerLevel": "precedenceTable capability is false",
+        "precOverrideAlternativeRatio": "precedenceTable capability is false",
+        "precOverrides": "precedenceTable capability is false",
+        "rulesWithPrecOverrides": "precedenceTable capability is false",
+        "tokensInPrecedence": "precedenceTable capability is false"
+      }
+    },
+    "redundancy": {
+      "commonPrefixPairs": 110,
+      "duplicateAlternatives": 0,
+      "listRecursion": {
+        "consistency": 1,
+        "left": 0,
+        "mixed": 0,
+        "right": 1
+      },
+      "maxCommonPrefixLength": 2,
+      "singleReferenceRules": [
+        "annotationConstantRest",
+        "annotationFieldValues",
+        "annotationMethodOrConstantRest",
+        "annotationMethodRest",
+        "annotationTypeBody",
+        "annotationTypeElementDeclaration",
+        "annotationTypeElementRest",
+        "arrayCreatorRest",
+        "catchType",
+        "compactConstructorDeclaration",
+        "componentPatternList",
+        "constDeclaration",
+        "creator",
+        "defaultValue",
+        "elementValueArrayInitializer",
+        "enhancedForControl",
+        "enumBodyDeclarations",
+        "enumConstants",
+        "explicitGenericInvocation",
+        "fieldDeclaration",
+        "floatLiteral",
+        "forControl",
+        "forInit",
+        "genericConstructorDeclaration",
+        "genericInterfaceMethodDeclaration",
+        "genericMethodDeclaration",
+        "guard",
+        "innerCreator",
+        "integerLiteral",
+        "interfaceBody",
+        "interfaceBodyDeclaration",
+        "interfaceMemberDeclaration",
+        "interfaceMethodDeclaration",
+        "lambdaBody",
+        "lambdaExpression",
+        "lambdaLVTIList",
+        "lambdaParameters",
+        "literal",
+        "localTypeDeclaration",
+        "memberDeclaration",
+        "modularCompulationUnit",
+        "moduleDeclaration",
+        "moduleDirective",
+        "nonWildcardTypeArgumentsOrDiamond",
+        "packageDeclaration",
+        "packageName",
+        "primary",
+        "receiverParameter",
+        "recordBody",
+        "recordComponentList",
+        "recordHeader",
+        "requiresModifier",
+        "resourceSpecification",
+        "resources",
+        "switchBlockStatementGroup",
+        "switchLabeledRule",
+        "typeBound",
+        "typeDeclaration"
+      ],
+      "structuralCloneGroups": 26,
+      "undefinedPrecedenceOverrides": [],
+      "unusedPrecedenceTokens": [],
+      "unusedTerminals": [
+        "COMMENT",
+        "CONST",
+        "GOTO",
+        "LINE_COMMENT",
+        "WS"
+      ]
+    },
+    "size": {
+      "altPerRulePercentiles": {
+        "p50": 1,
+        "p95": 8
+      },
+      "alternatives": 302,
+      "avgAltPerRule": 2.3411,
+      "avgRhsLength": 2.202,
+      "emptyAlternatives": 0,
+      "maxAltPerRule": {
+        "line": 608,
+        "rule": "expression",
+        "value": 26
+      },
+      "maxRhsLength": {
+        "line": 116,
+        "rule": "enumDeclaration",
+        "value": 8
+      },
+      "nestedChoiceCount": 29,
+      "nonterminals": 129,
+      "rhsLengthPercentiles": {
+        "p50": 2,
+        "p95": 5
+      },
+      "rules": 129,
+      "terminals": 130,
+      "unresolvedSymbols": {
+        "count": 0,
+        "names": []
+      }
+    },
+    "source": {
+      "dialect": "antlr4",
+      "fileNames": [
+        "java/java/JavaParser.g4",
+        "java/java/JavaLexer.g4"
+      ],
+      "format": "antlr4",
+      "frontend": {
+        "id": "antlr4",
+        "version": "0.4.0"
+      }
+    },
+    "structure": {
+      "articulationPoints": [
+        "classType",
+        "elementValue",
+        "identifier",
+        "literal",
+        "moduleDirective",
+        "pattern",
+        "primary"
+      ],
+      "bridges": [
+        {
+          "source": "altAnnotationQualifiedName",
+          "target": "identifier"
+        },
+        {
+          "source": "classType",
+          "target": "typeIdentifier"
+        },
+        {
+          "source": "elementValue",
+          "target": "elementValueArrayInitializer"
+        },
+        {
+          "source": "floatLiteral",
+          "target": "literal"
+        },
+        {
+          "source": "integerLiteral",
+          "target": "literal"
+        },
+        {
+          "source": "literal",
+          "target": "primary"
+        },
+        {
+          "source": "moduleDirective",
+          "target": "requiresModifier"
+        }
+      ],
+      "directLeftRecursiveRules": 1,
+      "directRightRecursiveRules": 2,
+      "fanInEntropy": 6.1867,
+      "fanInGini": 0.4973,
+      "largestRecursiveComponent": {
+        "members": [
+          "annotation",
+          "annotationConstantRest",
+          "annotationFieldValue",
+          "annotationFieldValues",
+          "annotationMethodOrConstantRest",
+          "annotationMethodRest",
+          "annotationTypeBody",
+          "annotationTypeDeclaration",
+          "annotationTypeElementDeclaration",
+          "annotationTypeElementRest",
+          "annotationValue",
+          "arguments",
+          "arrayCreatorRest",
+          "arrayInitializer",
+          "block",
+          "blockStatement",
+          "casePattern",
+          "catchClause",
+          "classBody",
+          "classBodyDeclaration",
+          "classCreatorRest",
+          "classDeclaration",
+          "classOrInterfaceModifier",
+          "classOrInterfaceType",
+          "classType",
+          "compactConstructorDeclaration",
+          "componentPattern",
+          "componentPatternList",
+          "constDeclaration",
+          "constantDeclarator",
+          "constructorDeclaration",
+          "createdName",
+          "creator",
+          "defaultValue",
+          "elementValue",
+          "elementValueArrayInitializer",
+          "enhancedForControl",
+          "enumBodyDeclarations",
+          "enumConstant",
+          "enumConstants",
+          "enumDeclaration",
+          "explicitGenericInvocation",
+          "explicitGenericInvocationSuffix",
+          "expression",
+          "expressionList",
+          "fieldDeclaration",
+          "finallyBlock",
+          "forControl",
+          "forInit",
+          "formalParameter",
+          "formalParameterList",
+          "formalParameters",
+          "genericConstructorDeclaration",
+          "genericInterfaceMethodDeclaration",
+          "genericMethodDeclaration",
+          "guard",
+          "innerCreator",
+          "interfaceBody",
+          "interfaceBodyDeclaration",
+          "interfaceCommonBodyDeclaration",
+          "interfaceDeclaration",
+          "interfaceMemberDeclaration",
+          "interfaceMethodDeclaration",
+          "interfaceMethodModifier",
+          "lambdaBody",
+          "lambdaExpression",
+          "lambdaLVTIList",
+          "lambdaLVTIParameter",
+          "lambdaParameters",
+          "localTypeDeclaration",
+          "localVariableDeclaration",
+          "memberDeclaration",
+          "methodBody",
+          "methodCall",
+          "methodDeclaration",
+          "modifier",
+          "nonWildcardTypeArguments",
+          "nonWildcardTypeArgumentsOrDiamond",
+          "pattern",
+          "primary",
+          "receiverParameter",
+          "recordBody",
+          "recordComponent",
+          "recordComponentList",
+          "recordDeclaration",
+          "recordHeader",
+          "resource",
+          "resourceSpecification",
+          "resources",
+          "statement",
+          "superSuffix",
+          "switchBlockStatementGroup",
+          "switchExpression",
+          "switchLabel",
+          "switchLabeledRule",
+          "switchRuleOutcome",
+          "typeArgument",
+          "typeArguments",
+          "typeArgumentsOrDiamond",
+          "typeBound",
+          "typeList",
+          "typeParameter",
+          "typeParameters",
+          "typeType",
+          "typeTypeOrVoid",
+          "variableDeclarator",
+          "variableDeclarators",
+          "variableInitializer",
+          "variableModifier"
+        ],
+        "ratio": 0.8516,
+        "value": 109
+      },
+      "largestSccSize": {
+        "members": [
+          "annotation",
+          "annotationConstantRest",
+          "annotationFieldValue",
+          "annotationFieldValues",
+          "annotationMethodOrConstantRest",
+          "annotationMethodRest",
+          "annotationTypeBody",
+          "annotationTypeDeclaration",
+          "annotationTypeElementDeclaration",
+          "annotationTypeElementRest",
+          "annotationValue",
+          "arguments",
+          "arrayCreatorRest",
+          "arrayInitializer",
+          "block",
+          "blockStatement",
+          "casePattern",
+          "catchClause",
+          "classBody",
+          "classBodyDeclaration",
+          "classCreatorRest",
+          "classDeclaration",
+          "classOrInterfaceModifier",
+          "classOrInterfaceType",
+          "classType",
+          "compactConstructorDeclaration",
+          "componentPattern",
+          "componentPatternList",
+          "constDeclaration",
+          "constantDeclarator",
+          "constructorDeclaration",
+          "createdName",
+          "creator",
+          "defaultValue",
+          "elementValue",
+          "elementValueArrayInitializer",
+          "enhancedForControl",
+          "enumBodyDeclarations",
+          "enumConstant",
+          "enumConstants",
+          "enumDeclaration",
+          "explicitGenericInvocation",
+          "explicitGenericInvocationSuffix",
+          "expression",
+          "expressionList",
+          "fieldDeclaration",
+          "finallyBlock",
+          "forControl",
+          "forInit",
+          "formalParameter",
+          "formalParameterList",
+          "formalParameters",
+          "genericConstructorDeclaration",
+          "genericInterfaceMethodDeclaration",
+          "genericMethodDeclaration",
+          "guard",
+          "innerCreator",
+          "interfaceBody",
+          "interfaceBodyDeclaration",
+          "interfaceCommonBodyDeclaration",
+          "interfaceDeclaration",
+          "interfaceMemberDeclaration",
+          "interfaceMethodDeclaration",
+          "interfaceMethodModifier",
+          "lambdaBody",
+          "lambdaExpression",
+          "lambdaLVTIList",
+          "lambdaLVTIParameter",
+          "lambdaParameters",
+          "localTypeDeclaration",
+          "localVariableDeclaration",
+          "memberDeclaration",
+          "methodBody",
+          "methodCall",
+          "methodDeclaration",
+          "modifier",
+          "nonWildcardTypeArguments",
+          "nonWildcardTypeArgumentsOrDiamond",
+          "pattern",
+          "primary",
+          "receiverParameter",
+          "recordBody",
+          "recordComponent",
+          "recordComponentList",
+          "recordDeclaration",
+          "recordHeader",
+          "resource",
+          "resourceSpecification",
+          "resources",
+          "statement",
+          "superSuffix",
+          "switchBlockStatementGroup",
+          "switchExpression",
+          "switchLabel",
+          "switchLabeledRule",
+          "switchRuleOutcome",
+          "typeArgument",
+          "typeArguments",
+          "typeArgumentsOrDiamond",
+          "typeBound",
+          "typeList",
+          "typeParameter",
+          "typeParameters",
+          "typeType",
+          "typeTypeOrVoid",
+          "variableDeclarator",
+          "variableDeclarators",
+          "variableInitializer",
+          "variableModifier"
+        ],
+        "value": 109
+      },
+      "maxDependencyDepth": 6,
+      "maxExpressionNestingDepth": 8,
+      "notApplicable": {
+        "indirectLeftRecursiveRules": "undefined rule reference: external or unresolved rule nullability and left corners are unknown"
+      },
+      "nullableRules": 1,
+      "reachableRules": 128,
+      "recursionSccCount": 1,
+      "recursiveRules": {
+        "count": 109,
+        "ratio": 0.8516
+      },
+      "shortestDerivation": [
+        {
+          "length": 2,
+          "rule": "altAnnotationQualifiedName"
+        },
+        {
+          "length": 2,
+          "rule": "annotation"
+        },
+        {
+          "length": 1,
+          "rule": "annotationConstantRest"
+        },
+        {
+          "length": 1,
+          "rule": "annotationFieldValue"
+        },
+        {
+          "length": 2,
+          "rule": "annotationFieldValues"
+        },
+        {
+          "length": 1,
+          "rule": "annotationMethodOrConstantRest"
+        },
+        {
+          "length": 3,
+          "rule": "annotationMethodRest"
+        },
+        {
+          "length": 2,
+          "rule": "annotationTypeBody"
+        },
+        {
+          "length": 5,
+          "rule": "annotationTypeDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "annotationTypeElementDeclaration"
+        },
+        {
+          "length": 3,
+          "rule": "annotationTypeElementRest"
+        },
+        {
+          "length": 1,
+          "rule": "annotationValue"
+        },
+        {
+          "length": 2,
+          "rule": "arguments"
+        },
+        {
+          "length": 3,
+          "rule": "arrayCreatorRest"
+        },
+        {
+          "length": 2,
+          "rule": "arrayInitializer"
+        },
+        {
+          "length": 2,
+          "rule": "block"
+        },
+        {
+          "length": 1,
+          "rule": "blockStatement"
+        },
+        {
+          "length": 2,
+          "rule": "casePattern"
+        },
+        {
+          "length": 7,
+          "rule": "catchClause"
+        },
+        {
+          "length": 1,
+          "rule": "catchType"
+        },
+        {
+          "length": 2,
+          "rule": "classBody"
+        },
+        {
+          "length": 1,
+          "rule": "classBodyDeclaration"
+        },
+        {
+          "length": 2,
+          "rule": "classCreatorRest"
+        },
+        {
+          "length": 4,
+          "rule": "classDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "classOrInterfaceModifier"
+        },
+        {
+          "length": 1,
+          "rule": "classOrInterfaceType"
+        },
+        {
+          "length": 1,
+          "rule": "classType"
+        },
+        {
+          "length": 3,
+          "rule": "compactConstructorDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "compilationUnit"
+        },
+        {
+          "length": 2,
+          "rule": "componentPattern"
+        },
+        {
+          "length": 2,
+          "rule": "componentPatternList"
+        },
+        {
+          "length": 5,
+          "rule": "constDeclaration"
+        },
+        {
+          "length": 3,
+          "rule": "constantDeclarator"
+        },
+        {
+          "length": 5,
+          "rule": "constructorDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "createdName"
+        },
+        {
+          "length": 3,
+          "rule": "creator"
+        },
+        {
+          "length": 2,
+          "rule": "defaultValue"
+        },
+        {
+          "length": 1,
+          "rule": "elementValue"
+        },
+        {
+          "length": 2,
+          "rule": "elementValueArrayInitializer"
+        },
+        {
+          "length": 4,
+          "rule": "enhancedForControl"
+        },
+        {
+          "length": 1,
+          "rule": "enumBodyDeclarations"
+        },
+        {
+          "length": 1,
+          "rule": "enumConstant"
+        },
+        {
+          "length": 1,
+          "rule": "enumConstants"
+        },
+        {
+          "length": 4,
+          "rule": "enumDeclaration"
+        },
+        {
+          "length": 6,
+          "rule": "explicitGenericInvocation"
+        },
+        {
+          "length": 3,
+          "rule": "explicitGenericInvocationSuffix"
+        },
+        {
+          "length": 1,
+          "rule": "expression"
+        },
+        {
+          "length": 1,
+          "rule": "expressionList"
+        },
+        {
+          "length": 3,
+          "rule": "fieldDeclaration"
+        },
+        {
+          "length": 3,
+          "rule": "finallyBlock"
+        },
+        {
+          "length": 1,
+          "rule": "floatLiteral"
+        },
+        {
+          "length": 2,
+          "rule": "forControl"
+        },
+        {
+          "length": 1,
+          "rule": "forInit"
+        },
+        {
+          "length": 2,
+          "rule": "formalParameter"
+        },
+        {
+          "length": 2,
+          "rule": "formalParameterList"
+        },
+        {
+          "length": 2,
+          "rule": "formalParameters"
+        },
+        {
+          "length": 8,
+          "rule": "genericConstructorDeclaration"
+        },
+        {
+          "length": 8,
+          "rule": "genericInterfaceMethodDeclaration"
+        },
+        {
+          "length": 8,
+          "rule": "genericMethodDeclaration"
+        },
+        {
+          "length": 2,
+          "rule": "guard"
+        },
+        {
+          "length": 1,
+          "rule": "identifier"
+        },
+        {
+          "length": 3,
+          "rule": "importDeclaration"
+        },
+        {
+          "length": 3,
+          "rule": "innerCreator"
+        },
+        {
+          "length": 1,
+          "rule": "integerLiteral"
+        },
+        {
+          "length": 2,
+          "rule": "interfaceBody"
+        },
+        {
+          "length": 1,
+          "rule": "interfaceBodyDeclaration"
+        },
+        {
+          "length": 5,
+          "rule": "interfaceCommonBodyDeclaration"
+        },
+        {
+          "length": 4,
+          "rule": "interfaceDeclaration"
+        },
+        {
+          "length": 4,
+          "rule": "interfaceMemberDeclaration"
+        },
+        {
+          "length": 5,
+          "rule": "interfaceMethodDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "interfaceMethodModifier"
+        },
+        {
+          "length": 1,
+          "rule": "lambdaBody"
+        },
+        {
+          "length": 3,
+          "rule": "lambdaExpression"
+        },
+        {
+          "length": 2,
+          "rule": "lambdaLVTIList"
+        },
+        {
+          "length": 2,
+          "rule": "lambdaLVTIParameter"
+        },
+        {
+          "length": 1,
+          "rule": "lambdaParameters"
+        },
+        {
+          "length": 1,
+          "rule": "literal"
+        },
+        {
+          "length": 4,
+          "rule": "localTypeDeclaration"
+        },
+        {
+          "length": 2,
+          "rule": "localVariableDeclaration"
+        },
+        {
+          "length": 3,
+          "rule": "memberDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "methodBody"
+        },
+        {
+          "length": 3,
+          "rule": "methodCall"
+        },
+        {
+          "length": 5,
+          "rule": "methodDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "modifier"
+        },
+        {
+          "length": 4,
+          "rule": "modularCompulationUnit"
+        },
+        {
+          "length": 4,
+          "rule": "moduleDeclaration"
+        },
+        {
+          "length": 3,
+          "rule": "moduleDirective"
+        },
+        {
+          "length": 3,
+          "rule": "nonWildcardTypeArguments"
+        },
+        {
+          "length": 2,
+          "rule": "nonWildcardTypeArgumentsOrDiamond"
+        },
+        {
+          "length": 3,
+          "rule": "packageDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "packageName"
+        },
+        {
+          "length": 2,
+          "rule": "pattern"
+        },
+        {
+          "length": 1,
+          "rule": "primary"
+        },
+        {
+          "length": 1,
+          "rule": "primitiveType"
+        },
+        {
+          "length": 1,
+          "rule": "qualifiedName"
+        },
+        {
+          "length": 1,
+          "rule": "qualifiedNameList"
+        },
+        {
+          "length": 2,
+          "rule": "receiverParameter"
+        },
+        {
+          "length": 2,
+          "rule": "recordBody"
+        },
+        {
+          "length": 2,
+          "rule": "recordComponent"
+        },
+        {
+          "length": 2,
+          "rule": "recordComponentList"
+        },
+        {
+          "length": 6,
+          "rule": "recordDeclaration"
+        },
+        {
+          "length": 2,
+          "rule": "recordHeader"
+        },
+        {
+          "length": 1,
+          "rule": "requiresModifier"
+        },
+        {
+          "length": 1,
+          "rule": "resource"
+        },
+        {
+          "length": 3,
+          "rule": "resourceSpecification"
+        },
+        {
+          "length": 1,
+          "rule": "resources"
+        },
+        {
+          "length": 1,
+          "rule": "statement"
+        },
+        {
+          "length": 2,
+          "rule": "superSuffix"
+        },
+        {
+          "length": 3,
+          "rule": "switchBlockStatementGroup"
+        },
+        {
+          "length": 6,
+          "rule": "switchExpression"
+        },
+        {
+          "length": 1,
+          "rule": "switchLabel"
+        },
+        {
+          "length": 2,
+          "rule": "switchLabeledRule"
+        },
+        {
+          "length": 0,
+          "rule": "switchRuleOutcome"
+        },
+        {
+          "length": 1,
+          "rule": "typeArgument"
+        },
+        {
+          "length": 3,
+          "rule": "typeArguments"
+        },
+        {
+          "length": 2,
+          "rule": "typeArgumentsOrDiamond"
+        },
+        {
+          "length": 1,
+          "rule": "typeBound"
+        },
+        {
+          "length": 4,
+          "rule": "typeDeclaration"
+        },
+        {
+          "length": 1,
+          "rule": "typeIdentifier"
+        },
+        {
+          "length": 1,
+          "rule": "typeList"
+        },
+        {
+          "length": 1,
+          "rule": "typeParameter"
+        },
+        {
+          "length": 3,
+          "rule": "typeParameters"
+        },
+        {
+          "length": 1,
+          "rule": "typeType"
+        },
+        {
+          "length": 1,
+          "rule": "typeTypeOrVoid"
+        },
+        {
+          "length": 1,
+          "rule": "variableDeclarator"
+        },
+        {
+          "length": 1,
+          "rule": "variableDeclaratorId"
+        },
+        {
+          "length": 1,
+          "rule": "variableDeclarators"
+        },
+        {
+          "length": 1,
+          "rule": "variableInitializer"
+        },
+        {
+          "length": 1,
+          "rule": "variableModifier"
+        }
+      ],
+      "shortestDerivationUnknown": [],
+      "startSymbolReachability": {
+        "entries": [
+          {
+            "reachableRules": 128,
+            "rules": [
+              "annotation",
+              "annotationConstantRest",
+              "annotationFieldValue",
+              "annotationFieldValues",
+              "annotationMethodOrConstantRest",
+              "annotationMethodRest",
+              "annotationTypeBody",
+              "annotationTypeDeclaration",
+              "annotationTypeElementDeclaration",
+              "annotationTypeElementRest",
+              "annotationValue",
+              "arguments",
+              "arrayCreatorRest",
+              "arrayInitializer",
+              "block",
+              "blockStatement",
+              "casePattern",
+              "catchClause",
+              "catchType",
+              "classBody",
+              "classBodyDeclaration",
+              "classCreatorRest",
+              "classDeclaration",
+              "classOrInterfaceModifier",
+              "classOrInterfaceType",
+              "classType",
+              "compactConstructorDeclaration",
+              "compilationUnit",
+              "componentPattern",
+              "componentPatternList",
+              "constDeclaration",
+              "constantDeclarator",
+              "constructorDeclaration",
+              "createdName",
+              "creator",
+              "defaultValue",
+              "elementValue",
+              "elementValueArrayInitializer",
+              "enhancedForControl",
+              "enumBodyDeclarations",
+              "enumConstant",
+              "enumConstants",
+              "enumDeclaration",
+              "explicitGenericInvocation",
+              "explicitGenericInvocationSuffix",
+              "expression",
+              "expressionList",
+              "fieldDeclaration",
+              "finallyBlock",
+              "floatLiteral",
+              "forControl",
+              "forInit",
+              "formalParameter",
+              "formalParameterList",
+              "formalParameters",
+              "genericConstructorDeclaration",
+              "genericInterfaceMethodDeclaration",
+              "genericMethodDeclaration",
+              "guard",
+              "identifier",
+              "importDeclaration",
+              "innerCreator",
+              "integerLiteral",
+              "interfaceBody",
+              "interfaceBodyDeclaration",
+              "interfaceCommonBodyDeclaration",
+              "interfaceDeclaration",
+              "interfaceMemberDeclaration",
+              "interfaceMethodDeclaration",
+              "interfaceMethodModifier",
+              "lambdaBody",
+              "lambdaExpression",
+              "lambdaLVTIList",
+              "lambdaLVTIParameter",
+              "lambdaParameters",
+              "literal",
+              "localTypeDeclaration",
+              "localVariableDeclaration",
+              "memberDeclaration",
+              "methodBody",
+              "methodCall",
+              "methodDeclaration",
+              "modifier",
+              "modularCompulationUnit",
+              "moduleDeclaration",
+              "moduleDirective",
+              "nonWildcardTypeArguments",
+              "nonWildcardTypeArgumentsOrDiamond",
+              "packageDeclaration",
+              "packageName",
+              "pattern",
+              "primary",
+              "primitiveType",
+              "qualifiedName",
+              "qualifiedNameList",
+              "receiverParameter",
+              "recordBody",
+              "recordComponent",
+              "recordComponentList",
+              "recordDeclaration",
+              "recordHeader",
+              "requiresModifier",
+              "resource",
+              "resourceSpecification",
+              "resources",
+              "statement",
+              "superSuffix",
+              "switchBlockStatementGroup",
+              "switchExpression",
+              "switchLabel",
+              "switchLabeledRule",
+              "switchRuleOutcome",
+              "typeArgument",
+              "typeArguments",
+              "typeArgumentsOrDiamond",
+              "typeBound",
+              "typeDeclaration",
+              "typeIdentifier",
+              "typeList",
+              "typeParameter",
+              "typeParameters",
+              "typeType",
+              "typeTypeOrVoid",
+              "variableDeclarator",
+              "variableDeclaratorId",
+              "variableDeclarators",
+              "variableInitializer",
+              "variableModifier"
+            ],
+            "symbol": "compilationUnit"
+          }
+        ],
+        "overlapRatio": 1
+      },
+      "topBetweenness": [
+        {
+          "symbol": "expression",
+          "value": 8957.5468
+        },
+        {
+          "symbol": "blockStatement",
+          "value": 3945.0627
+        },
+        {
+          "symbol": "annotation",
+          "value": 3872.3333
+        },
+        {
+          "symbol": "classBodyDeclaration",
+          "value": 3825.023
+        },
+        {
+          "symbol": "annotationValue",
+          "value": 3774.0833
+        },
+        {
+          "symbol": "annotationFieldValue",
+          "value": 3770.0833
+        },
+        {
+          "symbol": "annotationFieldValues",
+          "value": 3764.0833
+        },
+        {
+          "symbol": "memberDeclaration",
+          "value": 3204.65
+        },
+        {
+          "symbol": "classBody",
+          "value": 3111.2889
+        },
+        {
+          "symbol": "classCreatorRest",
+          "value": 2757.5302
+        }
+      ],
+      "topFanIn": [
+        {
+          "count": 34,
+          "symbol": "identifier"
+        },
+        {
+          "count": 17,
+          "symbol": "annotation"
+        },
+        {
+          "count": 16,
+          "symbol": "expression"
+        },
+        {
+          "count": 16,
+          "symbol": "typeType"
+        },
+        {
+          "count": 9,
+          "symbol": "block"
+        },
+        {
+          "count": 8,
+          "symbol": "qualifiedName"
+        },
+        {
+          "count": 7,
+          "symbol": "variableModifier"
+        },
+        {
+          "count": 6,
+          "symbol": "arguments"
+        },
+        {
+          "count": 6,
+          "symbol": "typeParameters"
+        },
+        {
+          "count": 5,
+          "symbol": "classDeclaration"
+        }
+      ],
+      "topFanOut": [
+        {
+          "count": 16,
+          "symbol": "expression"
+        },
+        {
+          "count": 11,
+          "symbol": "statement"
+        },
+        {
+          "count": 10,
+          "symbol": "memberDeclaration"
+        },
+        {
+          "count": 8,
+          "symbol": "interfaceMemberDeclaration"
+        },
+        {
+          "count": 7,
+          "symbol": "annotationTypeElementRest"
+        },
+        {
+          "count": 7,
+          "symbol": "primary"
+        },
+        {
+          "count": 6,
+          "symbol": "interfaceCommonBodyDeclaration"
+        },
+        {
+          "count": 6,
+          "symbol": "resource"
+        },
+        {
+          "count": 6,
+          "symbol": "typeDeclaration"
+        },
+        {
+          "count": 5,
+          "symbol": "classDeclaration"
+        }
+      ],
+      "unproductiveSymbols": [],
+      "unreachableSymbols": [
+        "altAnnotationQualifiedName"
+      ]
+    },
+    "style": {
+      "namingOutliers": [
+        "annotation",
+        "arguments",
+        "block",
+        "creator",
+        "expression",
+        "guard",
+        "identifier",
+        "literal",
+        "modifier",
+        "pattern",
+        "primary",
+        "resource",
+        "resources",
+        "statement"
+      ],
+      "nonterminalConvention": "camelCase",
+      "nonterminalConventionRatio": 0.8915,
+      "notApplicable": {
+        "commentDensity": "source frontend did not retain comment statistics",
+        "comments": "source frontend did not retain comment statistics",
+        "documentedRuleRatio": "source frontend did not retain rule documentation comments",
+        "undocumentedRules": "source frontend did not retain rule documentation comments"
+      },
+      "terminalUpperCaseRatio": 1
+    },
+    "sugar": {
+      "notApplicable": {
+        "inlineRules": "parameterizedRules capability is false",
+        "nullableRepetitions": "undefined rule reference: external or unresolved rule nullability and left corners are unknown",
+        "parameterizedCalls": "parameterizedRules capability is false",
+        "parameterizedRuleDefs": "parameterizedRules capability is false"
+      },
+      "opt": 78,
+      "plus": 6,
+      "star": 85
+    }
+  },
+  "id": "antlr-java",
+  "measurement": {
+    "analysis": "lr",
+    "frontend": "antlr4"
+  },
+  "provenance": {
+    "files": [
+      {
+        "bytes": 19951,
+        "path": "java/java/JavaParser.g4",
+        "sha256": "2a40776fbb3d6d30a90989e794bea5fa7488ecbe515253334847a62046fe9a09",
+        "url": "https://raw.githubusercontent.com/antlr/grammars-v4/e756f2a2ee5565a9300666f100ba6acd874664f7/java/java/JavaParser.g4"
+      },
+      {
+        "bytes": 6305,
+        "path": "java/java/JavaLexer.g4",
+        "sha256": "b8d9b65d796197d234a1adaddd152afe491e9e411e6a6aad5300fe62df158ea6",
+        "url": "https://raw.githubusercontent.com/antlr/grammars-v4/e756f2a2ee5565a9300666f100ba6acd874664f7/java/java/JavaLexer.g4"
+      }
+    ],
+    "license": "Per-grammar source notices; see upstream repository",
+    "licenseUrl": "https://github.com/antlr/grammars-v4/blob/e756f2a2ee5565a9300666f100ba6acd874664f7/README.md",
+    "repository": "antlr/grammars-v4",
+    "revision": "e756f2a2ee5565a9300666f100ba6acd874664f7"
+  },
+  "title": "ANTLR Java"
+}

@@ -1,6 +1,6 @@
 # RFC 0009: SLR involvement distribution
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-10
 
 ## Summary

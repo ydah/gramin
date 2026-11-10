@@ -1,5 +1,5 @@
-import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
@@ -9,6 +9,7 @@ import {
   repositoryRoot,
   spawnSpecForPlatform,
 } from "./release-packages.mjs";
+import { assertPublishedArtifact, waitForPublishedArtifact } from "./verify-published.mjs";
 
 const run = (command, args) => {
   const spawnSpec = spawnSpecForPlatform(command, args);
@@ -79,14 +80,25 @@ for (const [index, expected] of releasePackages.entries()) {
     continue;
   }
 
-  const existing = run("npm", ["view", `${artifact.name}@${artifact.version}`, "version"]);
+  const query = () =>
+    run("npm", [
+      "view",
+      `${artifact.name}@${artifact.version}`,
+      "--json",
+      "--prefer-online",
+      "--registry=https://registry.npmjs.org",
+      "--fetch-retries=0",
+      "--fetch-timeout=10000",
+    ]);
+  const existing = query();
   if (existing.status === 0) {
+    assertPublishedArtifact(artifact, existing.stdout);
     console.log(`skipping existing ${artifact.name}@${artifact.version}`);
     continue;
   }
-  if (!(existing.stderr ?? "").includes("E404")) {
+  if (existing.status === null || !/\bE404\b/u.test(existing.stderr ?? "")) {
     throw new Error(
-      `could not query ${artifact.name}@${artifact.version}\n${existing.stderr ?? ""}`,
+      `could not query ${artifact.name}@${artifact.version} in the public npm registry`,
     );
   }
   const published = run("npm", [
@@ -97,6 +109,7 @@ for (const [index, expected] of releasePackages.entries()) {
     "--tag",
     tag,
     "--provenance",
+    "--registry=https://registry.npmjs.org",
   ]);
   if (published.status !== 0) {
     throw new Error(
@@ -105,5 +118,6 @@ for (const [index, expected] of releasePackages.entries()) {
       }`,
     );
   }
+  await waitForPublishedArtifact(artifact, query);
   console.log(`published ${artifact.name}@${artifact.version} with tag ${tag}`);
 }

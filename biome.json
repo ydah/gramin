@@ -7,7 +7,9 @@
       "!**/dist",
       "!**/coverage",
       "!**/fixtures/golden",
-      "!packages/core/schema"
+      "!packages/core/schema",
+      "!apps/site/public/atlas",
+      "!apps/site/.vitepress/cache"
     ]
   },
   "formatter": {

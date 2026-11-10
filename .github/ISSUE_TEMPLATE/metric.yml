@@ -1,0 +1,17 @@
+name: Propose a measurement
+description: Define a feature or change to a counting rule
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Definition and motivating example
+      description: Describe the counting unit, population, E/H classification, A/B/C comparison class, and notApplicable conditions. Link an RFC when available.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Verification and compatibility
+      description: Give a hand-calculated example, an invariant, and the impact on existing baselines.
+    validations:
+      required: true

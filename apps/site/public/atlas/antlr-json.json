@@ -1,0 +1,619 @@
+{
+  "category": "atlas",
+  "features": {
+    "actions": {
+      "altActionCoverage": 0,
+      "avgActionLength": 0,
+      "completeness": "complete",
+      "maxActionLength": 0,
+      "midRuleActions": 0,
+      "rulesWithActions": 0,
+      "totalActions": 0,
+      "trailingActions": 0
+    },
+    "capabilities": {
+      "ebnfSugar": true,
+      "lexerRules": true,
+      "orderedChoice": false,
+      "parameterizedRules": false,
+      "precedenceTable": false,
+      "predicates": false,
+      "scannerless": false
+    },
+    "diagnostics": [
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 13,
+          "endLine": 42,
+          "startCol": 10,
+          "startLine": 42
+        },
+        "message": "fragment ESC was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 17,
+          "endLine": 46,
+          "startCol": 10,
+          "startLine": 46
+        },
+        "message": "fragment UNICODE was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 13,
+          "endLine": 50,
+          "startCol": 10,
+          "startLine": 50
+        },
+        "message": "fragment HEX was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 23,
+          "endLine": 54,
+          "startCol": 10,
+          "startLine": 54
+        },
+        "message": "fragment SAFECODEPOINT was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 13,
+          "endLine": 62,
+          "startCol": 10,
+          "startLine": 62
+        },
+        "message": "fragment INT was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 13,
+          "endLine": 70,
+          "startCol": 10,
+          "startLine": 70
+        },
+        "message": "fragment EXP was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "ANALYZER003_UNUSED_TERMINALS",
+        "message": "unused terminals: WS",
+        "severity": "warning"
+      }
+    ],
+    "featuresVersion": "0.8.0",
+    "lexicon": {
+      "anyCharCount": 0,
+      "charClassCount": 0,
+      "keywordIdentifierCollisions": [],
+      "keywordLike": [
+        "false",
+        "null",
+        "true"
+      ],
+      "literalOccurrences": 14,
+      "literalPrefixCollisions": [],
+      "literalTokens": 9,
+      "namedTokens": 4,
+      "punctuationLike": [
+        ",",
+        ":",
+        "[",
+        "]",
+        "{",
+        "}"
+      ],
+      "tokenUsage": {
+        "coverage": 0.9231,
+        "singleUse": [
+          ":",
+          "EOF",
+          "NUMBER",
+          "false",
+          "null",
+          "true"
+        ],
+        "used": 12
+      }
+    },
+    "notable": {
+      "coreSymbols": [
+        "value",
+        "arr",
+        "obj",
+        "pair"
+      ],
+      "deepestRecursionMembers": [
+        "arr",
+        "obj",
+        "pair",
+        "value"
+      ],
+      "largestRule": {
+        "line": 28,
+        "name": "value"
+      }
+    },
+    "operations": {
+      "errorTokenUses": 0,
+      "namedReferenceRatio": 0,
+      "namedReferences": 0,
+      "notApplicable": {
+        "actionReferences": "source frontend did not retain opaque action reference counts",
+        "declarationDirectives": "source frontend did not retain declaration directives",
+        "explicitEmptyAlternatives": "source frontend did not distinguish explicit empty alternatives"
+      },
+      "recoveryRuleRatio": 0,
+      "rulesWithErrorRecovery": 0,
+      "symbolReferences": 8
+    },
+    "parseability": {
+      "cyclicUnitRules": [],
+      "firstSetSize": {
+        "average": 3.4,
+        "maximum": {
+          "rule": "json",
+          "value": 7
+        },
+        "percentiles": {
+          "p50": 1,
+          "p95": 7
+        }
+      },
+      "followSetSize": {
+        "average": 3,
+        "maximum": {
+          "rule": "arr",
+          "value": 4
+        },
+        "percentiles": {
+          "p50": 4,
+          "p95": 4
+        }
+      },
+      "ll1Conflicts": {
+        "firstFirst": 2,
+        "firstFollow": 0,
+        "total": 2
+      },
+      "notApplicable": {
+        "declaredConflicts": "no valid global conflict expectation declaration was captured",
+        "slr": "SLR analysis requires plain BNF expressions"
+      },
+      "unitRules": 2
+    },
+    "peg": {
+      "notApplicable": {
+        "backtrackingHotspots": "orderedChoice capability is false",
+        "charClassOverlapPairs": "orderedChoice capability is false",
+        "maxPredicateNestingDepth": "orderedChoice capability is false",
+        "potentialShadowedAlternativePairs": "orderedChoice capability is false",
+        "predicates": "orderedChoice capability is false",
+        "shadowedAlternativePairs": "orderedChoice capability is false"
+      }
+    },
+    "perRule": [
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "json"
+        ],
+        "referencedBy": [
+          "value"
+        ],
+        "references": [
+          "value"
+        ],
+        "rhsItems": 6,
+        "rule": "arr",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 0,
+        "fanOut": 1,
+        "firstSetSize": 7,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "json"
+        ],
+        "referencedBy": [],
+        "references": [
+          "value"
+        ],
+        "rhsItems": 2,
+        "rule": "json",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "json"
+        ],
+        "referencedBy": [
+          "value"
+        ],
+        "references": [
+          "pair"
+        ],
+        "rhsItems": 6,
+        "rule": "obj",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "json"
+        ],
+        "referencedBy": [
+          "obj"
+        ],
+        "references": [
+          "value"
+        ],
+        "rhsItems": 3,
+        "rule": "pair",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 7,
+        "fanIn": 3,
+        "fanOut": 2,
+        "firstSetSize": 7,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "json"
+        ],
+        "referencedBy": [
+          "arr",
+          "json",
+          "pair"
+        ],
+        "references": [
+          "arr",
+          "obj"
+        ],
+        "rhsItems": 7,
+        "rule": "value",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      }
+    ],
+    "precedence": {
+      "notApplicable": {
+        "assocBreakdown": "precedenceTable capability is false",
+        "levels": "precedenceTable capability is false",
+        "maxTokensPerLevel": "precedenceTable capability is false",
+        "precOverrideAlternativeRatio": "precedenceTable capability is false",
+        "precOverrides": "precedenceTable capability is false",
+        "rulesWithPrecOverrides": "precedenceTable capability is false",
+        "tokensInPrecedence": "precedenceTable capability is false"
+      }
+    },
+    "redundancy": {
+      "commonPrefixPairs": 2,
+      "duplicateAlternatives": 0,
+      "listRecursion": {
+        "consistency": 0,
+        "left": 0,
+        "mixed": 0,
+        "right": 0
+      },
+      "maxCommonPrefixLength": 1,
+      "singleReferenceRules": [
+        "arr",
+        "obj"
+      ],
+      "structuralCloneGroups": 0,
+      "undefinedPrecedenceOverrides": [],
+      "unusedPrecedenceTokens": [],
+      "unusedTerminals": [
+        "WS"
+      ]
+    },
+    "size": {
+      "altPerRulePercentiles": {
+        "p50": 2,
+        "p95": 7
+      },
+      "alternatives": 13,
+      "avgAltPerRule": 2.6,
+      "avgRhsLength": 1.8462,
+      "emptyAlternatives": 0,
+      "maxAltPerRule": {
+        "line": 28,
+        "rule": "value",
+        "value": 7
+      },
+      "maxRhsLength": {
+        "line": 23,
+        "rule": "arr",
+        "value": 4
+      },
+      "nestedChoiceCount": 0,
+      "nonterminals": 5,
+      "rhsLengthPercentiles": {
+        "p50": 1,
+        "p95": 4
+      },
+      "rules": 5,
+      "terminals": 13,
+      "unresolvedSymbols": {
+        "count": 0,
+        "names": []
+      }
+    },
+    "source": {
+      "dialect": "antlr4",
+      "fileNames": [
+        "json/JSON.g4"
+      ],
+      "format": "antlr4",
+      "frontend": {
+        "id": "antlr4",
+        "version": "0.4.0"
+      }
+    },
+    "structure": {
+      "articulationPoints": [
+        "value"
+      ],
+      "bridges": [
+        {
+          "source": "arr",
+          "target": "value"
+        },
+        {
+          "source": "json",
+          "target": "value"
+        }
+      ],
+      "directLeftRecursiveRules": 0,
+      "directRightRecursiveRules": 0,
+      "fanInEntropy": 1.7925,
+      "fanInGini": 0.4,
+      "indirectLeftRecursiveRules": 0,
+      "largestRecursiveComponent": {
+        "members": [
+          "arr",
+          "obj",
+          "pair",
+          "value"
+        ],
+        "ratio": 0.8,
+        "value": 4
+      },
+      "largestSccSize": {
+        "members": [
+          "arr",
+          "obj",
+          "pair",
+          "value"
+        ],
+        "value": 4
+      },
+      "maxDependencyDepth": 1,
+      "maxExpressionNestingDepth": 4,
+      "nullableRules": 0,
+      "reachableRules": 5,
+      "recursionSccCount": 1,
+      "recursiveRules": {
+        "count": 4,
+        "ratio": 0.8
+      },
+      "shortestDerivation": [
+        {
+          "length": 2,
+          "rule": "arr"
+        },
+        {
+          "length": 2,
+          "rule": "json"
+        },
+        {
+          "length": 2,
+          "rule": "obj"
+        },
+        {
+          "length": 3,
+          "rule": "pair"
+        },
+        {
+          "length": 1,
+          "rule": "value"
+        }
+      ],
+      "shortestDerivationUnknown": [],
+      "startSymbolReachability": {
+        "entries": [
+          {
+            "reachableRules": 5,
+            "rules": [
+              "arr",
+              "json",
+              "obj",
+              "pair",
+              "value"
+            ],
+            "symbol": "json"
+          }
+        ],
+        "overlapRatio": 1
+      },
+      "topBetweenness": [
+        {
+          "symbol": "value",
+          "value": 8
+        },
+        {
+          "symbol": "obj",
+          "value": 3
+        },
+        {
+          "symbol": "pair",
+          "value": 2
+        },
+        {
+          "symbol": "arr",
+          "value": 0
+        },
+        {
+          "symbol": "json",
+          "value": 0
+        }
+      ],
+      "topFanIn": [
+        {
+          "count": 3,
+          "symbol": "value"
+        },
+        {
+          "count": 1,
+          "symbol": "arr"
+        },
+        {
+          "count": 1,
+          "symbol": "obj"
+        },
+        {
+          "count": 1,
+          "symbol": "pair"
+        },
+        {
+          "count": 0,
+          "symbol": "json"
+        }
+      ],
+      "topFanOut": [
+        {
+          "count": 2,
+          "symbol": "value"
+        },
+        {
+          "count": 1,
+          "symbol": "arr"
+        },
+        {
+          "count": 1,
+          "symbol": "json"
+        },
+        {
+          "count": 1,
+          "symbol": "obj"
+        },
+        {
+          "count": 1,
+          "symbol": "pair"
+        }
+      ],
+      "unproductiveSymbols": [],
+      "unreachableSymbols": []
+    },
+    "style": {
+      "namingOutliers": [],
+      "nonterminalConvention": "snake_case",
+      "nonterminalConventionRatio": 1,
+      "notApplicable": {
+        "commentDensity": "source frontend did not retain comment statistics",
+        "comments": "source frontend did not retain comment statistics",
+        "documentedRuleRatio": "source frontend did not retain rule documentation comments",
+        "undocumentedRules": "source frontend did not retain rule documentation comments"
+      },
+      "terminalUpperCaseRatio": 1
+    },
+    "sugar": {
+      "notApplicable": {
+        "inlineRules": "parameterizedRules capability is false",
+        "parameterizedCalls": "parameterizedRules capability is false",
+        "parameterizedRuleDefs": "parameterizedRules capability is false"
+      },
+      "nullableRepetitions": 0,
+      "opt": 0,
+      "plus": 0,
+      "star": 2
+    }
+  },
+  "id": "antlr-json",
+  "measurement": {
+    "analysis": "lr",
+    "frontend": "antlr4"
+  },
+  "provenance": {
+    "files": [
+      {
+        "bytes": 1221,
+        "path": "json/JSON.g4",
+        "sha256": "1ec0e422caf2855be3497efaeb5e23f91adc6a65068757e2dcf83467119986f4",
+        "url": "https://raw.githubusercontent.com/antlr/grammars-v4/e756f2a2ee5565a9300666f100ba6acd874664f7/json/JSON.g4"
+      }
+    ],
+    "license": "Per-grammar source notices; see upstream repository",
+    "licenseUrl": "https://github.com/antlr/grammars-v4/blob/e756f2a2ee5565a9300666f100ba6acd874664f7/README.md",
+    "repository": "antlr/grammars-v4",
+    "revision": "e756f2a2ee5565a9300666f100ba6acd874664f7"
+  },
+  "title": "ANTLR JSON"
+}

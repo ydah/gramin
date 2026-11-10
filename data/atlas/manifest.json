@@ -1,0 +1,237 @@
+[
+  {
+    "category": "atlas",
+    "repository": "antlr/grammars-v4",
+    "revision": "e756f2a2ee5565a9300666f100ba6acd874664f7",
+    "frontend": "antlr4",
+    "analysis": "lr",
+    "license": "Per-grammar source notices; see upstream repository",
+    "licensePath": "README.md",
+    "id": "antlr-json",
+    "title": "ANTLR JSON",
+    "files": [
+      {
+        "path": "json/JSON.g4",
+        "cachePath": "antlr/json/JSON.g4",
+        "sha256": "1ec0e422caf2855be3497efaeb5e23f91adc6a65068757e2dcf83467119986f4"
+      }
+    ]
+  },
+  {
+    "category": "atlas",
+    "repository": "antlr/grammars-v4",
+    "revision": "e756f2a2ee5565a9300666f100ba6acd874664f7",
+    "frontend": "antlr4",
+    "analysis": "lr",
+    "license": "Per-grammar source notices; see upstream repository",
+    "licensePath": "README.md",
+    "id": "antlr-sqlite",
+    "title": "ANTLR SQLite",
+    "files": [
+      {
+        "path": "sql/sqlite/SQLiteParser.g4",
+        "cachePath": "antlr/sqlite/SQLiteParser.g4",
+        "sha256": "0b2e81506c7794a065d7b542f48f232fd0d89682123106818b4bb0b635aa1186"
+      },
+      {
+        "path": "sql/sqlite/SQLiteLexer.g4",
+        "cachePath": "antlr/sqlite/SQLiteLexer.g4",
+        "sha256": "19fa347a41eddc482d818549c5b06c047f52393320b8e9bdf6f783450f8d0e50"
+      }
+    ]
+  },
+  {
+    "category": "atlas",
+    "repository": "antlr/grammars-v4",
+    "revision": "e756f2a2ee5565a9300666f100ba6acd874664f7",
+    "frontend": "antlr4",
+    "analysis": "lr",
+    "license": "Per-grammar source notices; see upstream repository",
+    "licensePath": "README.md",
+    "id": "antlr-java",
+    "title": "ANTLR Java",
+    "files": [
+      {
+        "path": "java/java/JavaParser.g4",
+        "cachePath": "antlr/java/JavaParser.g4",
+        "sha256": "2a40776fbb3d6d30a90989e794bea5fa7488ecbe515253334847a62046fe9a09"
+      },
+      {
+        "path": "java/java/JavaLexer.g4",
+        "cachePath": "antlr/java/JavaLexer.g4",
+        "sha256": "b8d9b65d796197d234a1adaddd152afe491e9e411e6a6aad5300fe62df158ea6"
+      }
+    ]
+  },
+  {
+    "id": "php",
+    "title": "PHP Zend parser",
+    "category": "atlas",
+    "repository": "php/php-src",
+    "revision": "f77523b538bd39c94144c5b8edb85e5230369d45",
+    "frontend": "yacc-family",
+    "dialect": "bison",
+    "analysis": "lr",
+    "license": "PHP License 3.01; see LICENSE",
+    "licensePath": "LICENSE",
+    "files": [
+      {
+        "path": "Zend/zend_language_parser.y",
+        "cachePath": "php/zend_language_parser.y",
+        "sha256": "afb7ad325d4bd7ca4bb037c96dd31e8afdd0652469f0248cc4139a475f0d5e98"
+      }
+    ]
+  },
+  {
+    "id": "perl",
+    "title": "Perl parser",
+    "category": "atlas",
+    "repository": "Perl/perl5",
+    "revision": "44f4945c88a0598be10ee67b689de6ff4bf84bc1",
+    "frontend": "yacc-family",
+    "dialect": "bison",
+    "analysis": "lr",
+    "license": "Artistic License or GNU General Public License; see README",
+    "licensePath": "README",
+    "files": [
+      {
+        "path": "perly.y",
+        "cachePath": "perl/perly.y",
+        "sha256": "783af8ff7ff42fd7313d85df8bbde58d7480e4964bb41ce7b92a5039a7286074"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "lrama",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby",
+    "title": "Ruby development parser",
+    "category": "atlas",
+    "revision": "33db313e855dfa83d7c66c2de6d63b9b401c32a0",
+    "files": [
+      {
+        "path": "parse.y",
+        "cachePath": "ruby/parse.y",
+        "sha256": "90ff67d6f610bacc24439dfac6c1c30ed9eb08aa8b80225c0f074947f1894bb5"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "bison",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby-2.7.0",
+    "title": "Ruby 2.7.0",
+    "category": "ruby-history",
+    "release": "v2_7_0",
+    "revision": "647ee6f091eafcce70ffb75ddf7e121e192ab217",
+    "files": [
+      {
+        "path": "parse.y",
+        "sha256": "008fb5b108a58a44fa7401d3e7838a7c213d8a206871e794eb030d775a38ca86"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "bison",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby-3.0.0",
+    "title": "Ruby 3.0.0",
+    "category": "ruby-history",
+    "release": "v3_0_0",
+    "revision": "95aff214687a5e12c3eb57d056665741e734c188",
+    "files": [
+      {
+        "path": "parse.y",
+        "sha256": "9fe9dfb180778fa448f79c4451cc77d5c993adcb51c447e615f07e584f7a4e43"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "bison",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby-3.2.0",
+    "title": "Ruby 3.2.0",
+    "category": "ruby-history",
+    "release": "v3_2_0",
+    "revision": "a528908271c678360d2d8ca232c178e7cdd340b4",
+    "files": [
+      {
+        "path": "parse.y",
+        "sha256": "cd9d083728abb271d24241347623c91d7e2bac2d063331938afc8fcad312b555"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "lrama",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby-3.3.0",
+    "title": "Ruby 3.3.0",
+    "category": "ruby-history",
+    "release": "v3_3_0",
+    "revision": "5124f9ac7513eb590c37717337c430cb93caa151",
+    "files": [
+      {
+        "path": "parse.y",
+        "sha256": "0bb05211ebee043fd7a44b08581fa44b2736a9c1c449192695c952746d6bad07"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "lrama",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby-3.4.0",
+    "title": "Ruby 3.4.0",
+    "category": "ruby-history",
+    "release": "v3_4_0",
+    "revision": "f45010833071b953744658842369e3496dfacb48",
+    "files": [
+      {
+        "path": "parse.y",
+        "sha256": "e61980759d6aafe014cbd1eae5e423938874487c28e90cb7a72dab2653a0dd5f"
+      }
+    ]
+  },
+  {
+    "repository": "ruby/ruby",
+    "frontend": "yacc-family",
+    "dialect": "lrama",
+    "analysis": "lr",
+    "license": "Ruby License or BSD 2-Clause; see COPYING",
+    "licensePath": "COPYING",
+    "id": "ruby-4.0.0",
+    "title": "Ruby 4.0.0",
+    "category": "ruby-history",
+    "release": "v4.0.0",
+    "revision": "553f1675f3a9cece340b90f374a4245dccac2272",
+    "files": [
+      {
+        "path": "parse.y",
+        "sha256": "c279ac5b08b17abdf02ce28ccdc7e2c9ae80f16346deb1214c998d0ebf9d6a73"
+      }
+    ]
+  }
+]

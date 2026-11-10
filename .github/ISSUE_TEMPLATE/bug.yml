@@ -1,0 +1,17 @@
+name: Incorrect measurement or parsing
+description: Report a reproducible behavior defect
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal grammar and command
+      description: Include gramin and Node.js versions. Report security vulnerabilities privately.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and observed result
+      description: For a metric, link its catalog definition and include the relevant output.
+    validations:
+      required: true

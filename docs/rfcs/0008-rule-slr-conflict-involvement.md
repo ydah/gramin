@@ -1,6 +1,6 @@
 # RFC 0008: Rule SLR conflict involvement
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-10
 
 ## Summary

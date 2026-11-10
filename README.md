@@ -17,10 +17,24 @@ executing semantic actions.
 
 gramin normalizes Yacc, BNF, ANTLR4, Menhir, and PEG grammars into a common, versioned
 Grammar IR. A deterministic analyzer then derives structural features and renders them as
-JSON, Markdown, bounded LLM digests, or SARIF.
+JSON, CSV, Markdown, bounded LLM digests, or SARIF.
 
 It is a grammar analysis toolkit — not a parser generator and not a language-correctness
 proof. Its job is to make grammar structure visible before you change it.
+
+[![Explore measured grammar distributions and rule vectors](docs/assets/sandbox-demo.gif)](https://ydah.github.io/gramin/sandbox)
+
+## Try in 30 seconds
+
+Open the [sandbox with runnable samples](https://ydah.github.io/gramin/sandbox), or
+measure your own grammar with Node.js 22.12.0 or newer:
+
+```sh
+npx --yes @gramin/cli analyze grammar.y --format md
+```
+
+Explore the [Grammar Atlas](https://ydah.github.io/gramin/atlas/) for downloadable
+JSON/CSV and the [Ruby parse.y chronicle](https://ydah.github.io/gramin/atlas/ruby-history).
 
 ## Why gramin?
 
@@ -176,25 +190,27 @@ on:
 permissions:
   contents: read
   security-events: write
+  pull-requests: write
 
 jobs:
   gramin:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ydah/gramin@v0.2.1
+      - uses: ydah/gramin@v0.4.0
         id: gramin
         with:
           files: grammar.y
-          baseline: base.features.json
-          fail-on-regression: true
+          frontend: yacc-family
+          analysis: lr
       - uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.gramin.outputs.report }}
 ```
 
-The action supports the same diagnostic threshold and regression concepts as the CLI. Set
-`fail-on` to `error`, `warning`, or `none` to make the failure policy explicit.
+The Action measures a merge-base baseline automatically, adds a job summary, and
+updates one PR comment when `pull-requests: write` is available. Set `baseline` for
+an explicit features JSON override. See [Action inputs and failure policies](docs/github-action.md).
 
 ## Custom frontends
 
@@ -210,16 +226,32 @@ The frontend receives read-only file paths and emits one validated Grammar IR do
 stdout. See the [frontend protocol](docs/frontend-protocol.md) and the
 [Python reference implementation](examples/external-frontend-py/README.md).
 
+Use `gramin frontend-test grammar.bnf --frontend-cmd ./my-frontend` to check the
+protocol, canonical IR, capability declarations, and repeatability on supplied
+fixtures. Start with the [frontend template](examples/frontend-template/README.md)
+or browse the [frontend directory](docs/frontend-directory.md).
+
 ## CLI commands
 
 | Command | Purpose |
 | --- | --- |
 | `gramin analyze <file...>` | Parse, analyze, and render a feature report |
+| `gramin analyze-many <file...>` | Measure independent grammars as JSON or CSV |
 | `gramin ir <file...>` | Emit the versioned Grammar IR |
 | `gramin detect <file>` | Show frontend candidates and detection confidence |
 | `gramin diff <old> <new>` | Compare feature documents derived from two grammars |
+| `gramin diff <old.json> <new.json> --features` | Compare saved features with applicability and context gates |
+| `gramin frontend-test <file...> --frontend-cmd <program>` | Check an external frontend on supplied fixtures |
 | `gramin validate-ir <file>` | Validate an IR document against the published contract |
 | `gramin --help` | Show the complete option reference |
+
+Use `--format csv` for aggregate and rule-vector tables; unavailable values retain
+their reasons. See [data output](docs/data-output.md) and [diff semantics](docs/diff.md).
+The [`@gramin/mcp` server](docs/mcp.md) exposes `analyze`, `diff`, `ir`, and `digest`
+with bundled frontends and worker resource guards.
+
+Read the [changelog](CHANGELOG.md), [compatibility policy](docs/versioning.md),
+[contributing guide](CONTRIBUTING.md), and [security policy](SECURITY.md).
 
 Exit codes are:
 

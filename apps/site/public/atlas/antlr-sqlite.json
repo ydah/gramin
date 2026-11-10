@@ -1,0 +1,5160 @@
+{
+  "category": "atlas",
+  "features": {
+    "actions": {
+      "altActionCoverage": 0,
+      "avgActionLength": 0,
+      "completeness": "complete",
+      "maxActionLength": 0,
+      "midRuleActions": 0,
+      "rulesWithActions": 0,
+      "totalActions": 0,
+      "trailingActions": 0
+    },
+    "capabilities": {
+      "ebnfSugar": true,
+      "lexerRules": true,
+      "orderedChoice": false,
+      "parameterizedRules": false,
+      "precedenceTable": false,
+      "predicates": false,
+      "scannerless": false
+    },
+    "diagnostics": [
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 19,
+          "endLine": 244,
+          "startCol": 10,
+          "startLine": 244
+        },
+        "message": "fragment HEX_DIGIT was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR016_LOSSY_ANTLR_FRAGMENT",
+        "loc": {
+          "endCol": 15,
+          "endLine": 245,
+          "startCol": 10,
+          "startLine": 245
+        },
+        "message": "fragment DIGIT was excluded from terminals",
+        "severity": "info"
+      },
+      {
+        "code": "IR015_LOSSY_ANTLR_NEGATION",
+        "loc": {
+          "endCol": 8,
+          "endLine": 596,
+          "startCol": 7,
+          "startLine": 596
+        },
+        "message": "ANTLR token or character-set negation was approximated",
+        "severity": "info"
+      },
+      {
+        "code": "IR015_LOSSY_ANTLR_NEGATION",
+        "loc": {
+          "endCol": 8,
+          "endLine": 601,
+          "startCol": 7,
+          "startLine": 601
+        },
+        "message": "ANTLR token or character-set negation was approximated",
+        "severity": "info"
+      },
+      {
+        "code": "ANALYZER003_UNUSED_TERMINALS",
+        "message": "unused terminals: MULTILINE_COMMENT, SINGLE_LINE_COMMENT, SPACES",
+        "severity": "warning"
+      }
+    ],
+    "featuresVersion": "0.8.0",
+    "lexicon": {
+      "anyCharCount": 0,
+      "charClassCount": 0,
+      "keywordIdentifierCollisions": [
+        "ABORT",
+        "ACTION",
+        "ADD",
+        "AFTER",
+        "ALL",
+        "ALTER",
+        "ALWAYS",
+        "ANALYZE",
+        "AND",
+        "AS",
+        "ASC",
+        "ATTACH",
+        "AUTOINCREMENT",
+        "BEFORE",
+        "BEGIN",
+        "BETWEEN",
+        "BY",
+        "CASCADE",
+        "CASE",
+        "CAST",
+        "CHECK",
+        "COLLATE",
+        "COLUMN",
+        "COMMIT",
+        "CONFLICT",
+        "CONSTRAINT",
+        "CREATE",
+        "CROSS",
+        "CURRENT",
+        "DATABASE",
+        "DEFAULT",
+        "DEFERRABLE",
+        "DEFERRED",
+        "DELETE",
+        "DESC",
+        "DETACH",
+        "DISTINCT",
+        "DO",
+        "DROP",
+        "EACH",
+        "ELSE",
+        "END",
+        "ESCAPE",
+        "EXCEPT",
+        "EXCLUDE",
+        "EXCLUSIVE",
+        "EXISTS",
+        "EXPLAIN",
+        "FAIL",
+        "FALSE",
+        "FILTER",
+        "FIRST",
+        "FOLLOWING",
+        "FOR",
+        "FOREIGN",
+        "FROM",
+        "FULL",
+        "GENERATED",
+        "GLOB",
+        "GROUP",
+        "GROUPS",
+        "HAVING",
+        "IF",
+        "IGNORE",
+        "IMMEDIATE",
+        "IN",
+        "INDEX",
+        "INDEXED",
+        "INITIALLY",
+        "INNER",
+        "INSERT",
+        "INSTEAD",
+        "INTERSECT",
+        "INTO",
+        "IS",
+        "ISNULL",
+        "JOIN",
+        "KEY",
+        "LAST",
+        "LEFT",
+        "LIKE",
+        "LIMIT",
+        "MATCH",
+        "MATERIALIZED",
+        "NATURAL",
+        "NO",
+        "NOT",
+        "NOTHING",
+        "NOTNULL",
+        "NULL",
+        "NULLS",
+        "OF",
+        "OFFSET",
+        "ON",
+        "OR",
+        "ORDER",
+        "OTHERS",
+        "OUTER",
+        "OVER",
+        "PARTITION",
+        "PLAN",
+        "PRAGMA",
+        "PRECEDING",
+        "PRIMARY",
+        "QUERY",
+        "RAISE",
+        "RANGE",
+        "RECURSIVE",
+        "REFERENCES",
+        "REGEXP",
+        "REINDEX",
+        "RELEASE",
+        "RENAME",
+        "REPLACE",
+        "RESTRICT",
+        "RETURNING",
+        "RIGHT",
+        "ROLLBACK",
+        "ROW",
+        "ROWID",
+        "ROWS",
+        "SAVEPOINT",
+        "SELECT",
+        "SET",
+        "STORED",
+        "STRICT",
+        "TABLE",
+        "TEMP",
+        "TEMPORARY",
+        "THEN",
+        "TIES",
+        "TO",
+        "TRANSACTION",
+        "TRIGGER",
+        "TRUE",
+        "UNBOUNDED",
+        "UNION",
+        "UNIQUE",
+        "UPDATE",
+        "USING",
+        "VACUUM",
+        "VALUES",
+        "VIEW",
+        "VIRTUAL",
+        "WHEN",
+        "WHERE",
+        "WINDOW",
+        "WITH",
+        "WITHIN",
+        "WITHOUT"
+      ],
+      "keywordLike": [
+        "ABORT",
+        "ACTION",
+        "ADD",
+        "AFTER",
+        "ALL",
+        "ALTER",
+        "ALWAYS",
+        "ANALYZE",
+        "AND",
+        "AS",
+        "ASC",
+        "ATTACH",
+        "AUTOINCREMENT",
+        "BEFORE",
+        "BEGIN",
+        "BETWEEN",
+        "BY",
+        "CASCADE",
+        "CASE",
+        "CAST",
+        "CHECK",
+        "COLLATE",
+        "COLUMN",
+        "COMMIT",
+        "CONFLICT",
+        "CONSTRAINT",
+        "CREATE",
+        "CROSS",
+        "CURRENT",
+        "DATABASE",
+        "DEFAULT",
+        "DEFERRABLE",
+        "DEFERRED",
+        "DELETE",
+        "DESC",
+        "DETACH",
+        "DISTINCT",
+        "DO",
+        "DROP",
+        "EACH",
+        "ELSE",
+        "END",
+        "ESCAPE",
+        "EXCEPT",
+        "EXCLUDE",
+        "EXCLUSIVE",
+        "EXISTS",
+        "EXPLAIN",
+        "FAIL",
+        "FALSE",
+        "FILTER",
+        "FIRST",
+        "FOLLOWING",
+        "FOR",
+        "FOREIGN",
+        "FROM",
+        "FULL",
+        "GENERATED",
+        "GLOB",
+        "GROUP",
+        "GROUPS",
+        "HAVING",
+        "IF",
+        "IGNORE",
+        "IMMEDIATE",
+        "IN",
+        "INDEX",
+        "INDEXED",
+        "INITIALLY",
+        "INNER",
+        "INSERT",
+        "INSTEAD",
+        "INTERSECT",
+        "INTO",
+        "IS",
+        "ISNULL",
+        "JOIN",
+        "KEY",
+        "LAST",
+        "LEFT",
+        "LIKE",
+        "LIMIT",
+        "MATCH",
+        "MATERIALIZED",
+        "NATURAL",
+        "NO",
+        "NOT",
+        "NOTHING",
+        "NOTNULL",
+        "NULL",
+        "NULLS",
+        "OF",
+        "OFFSET",
+        "ON",
+        "OR",
+        "ORDER",
+        "OTHERS",
+        "OUTER",
+        "OVER",
+        "PARTITION",
+        "PLAN",
+        "PRAGMA",
+        "PRECEDING",
+        "PRIMARY",
+        "QUERY",
+        "RAISE",
+        "RANGE",
+        "RECURSIVE",
+        "REFERENCES",
+        "REGEXP",
+        "REINDEX",
+        "RELEASE",
+        "RENAME",
+        "REPLACE",
+        "RESTRICT",
+        "RETURNING",
+        "RIGHT",
+        "ROLLBACK",
+        "ROW",
+        "ROWID",
+        "ROWS",
+        "SAVEPOINT",
+        "SELECT",
+        "SET",
+        "STORED",
+        "STRICT",
+        "TABLE",
+        "TEMP",
+        "TEMPORARY",
+        "THEN",
+        "TIES",
+        "TO",
+        "TRANSACTION",
+        "TRIGGER",
+        "TRUE",
+        "UNBOUNDED",
+        "UNION",
+        "UNIQUE",
+        "UPDATE",
+        "USING",
+        "VACUUM",
+        "VALUES",
+        "VIEW",
+        "VIRTUAL",
+        "WHEN",
+        "WHERE",
+        "WINDOW",
+        "WITH",
+        "WITHIN",
+        "WITHOUT"
+      ],
+      "literalOccurrences": 0,
+      "literalPrefixCollisions": [
+        {
+          "literal": "->",
+          "prefix": "-"
+        },
+        {
+          "literal": "->>",
+          "prefix": "-"
+        },
+        {
+          "literal": "->>",
+          "prefix": "->"
+        },
+        {
+          "literal": "<<",
+          "prefix": "<"
+        },
+        {
+          "literal": "<=",
+          "prefix": "<"
+        },
+        {
+          "literal": "<>",
+          "prefix": "<"
+        },
+        {
+          "literal": "==",
+          "prefix": "="
+        },
+        {
+          "literal": ">=",
+          "prefix": ">"
+        },
+        {
+          "literal": ">>",
+          "prefix": ">"
+        },
+        {
+          "literal": "ASC",
+          "prefix": "AS"
+        },
+        {
+          "literal": "CURRENT_DATE",
+          "prefix": "CURRENT"
+        },
+        {
+          "literal": "CURRENT_TIME",
+          "prefix": "CURRENT"
+        },
+        {
+          "literal": "CURRENT_TIMESTAMP",
+          "prefix": "CURRENT"
+        },
+        {
+          "literal": "CURRENT_TIMESTAMP",
+          "prefix": "CURRENT_TIME"
+        },
+        {
+          "literal": "FOREIGN",
+          "prefix": "FOR"
+        },
+        {
+          "literal": "GROUPS",
+          "prefix": "GROUP"
+        },
+        {
+          "literal": "INDEX",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INDEXED",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INITIALLY",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INNER",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INSERT",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INSTEAD",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INTERSECT",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INTO",
+          "prefix": "IN"
+        },
+        {
+          "literal": "INDEXED",
+          "prefix": "INDEX"
+        },
+        {
+          "literal": "ISNULL",
+          "prefix": "IS"
+        },
+        {
+          "literal": "NOT",
+          "prefix": "NO"
+        },
+        {
+          "literal": "NOTHING",
+          "prefix": "NO"
+        },
+        {
+          "literal": "NOTNULL",
+          "prefix": "NO"
+        },
+        {
+          "literal": "NOTHING",
+          "prefix": "NOT"
+        },
+        {
+          "literal": "NOTNULL",
+          "prefix": "NOT"
+        },
+        {
+          "literal": "NULLS",
+          "prefix": "NULL"
+        },
+        {
+          "literal": "OFFSET",
+          "prefix": "OF"
+        },
+        {
+          "literal": "ORDER",
+          "prefix": "OR"
+        },
+        {
+          "literal": "ROWID",
+          "prefix": "ROW"
+        },
+        {
+          "literal": "ROWS",
+          "prefix": "ROW"
+        },
+        {
+          "literal": "TEMPORARY",
+          "prefix": "TEMP"
+        },
+        {
+          "literal": "WITHIN",
+          "prefix": "WITH"
+        },
+        {
+          "literal": "WITHOUT",
+          "prefix": "WITH"
+        },
+        {
+          "literal": "||",
+          "prefix": "|"
+        }
+      ],
+      "literalTokens": 0,
+      "namedTokens": 189,
+      "punctuationLike": [
+        "!=",
+        "%",
+        "&",
+        "(",
+        ")",
+        "*",
+        "+",
+        ",",
+        "-",
+        "->",
+        "->>",
+        ".",
+        "/",
+        ";",
+        "<",
+        "<<",
+        "<=",
+        "<>",
+        "=",
+        "==",
+        ">",
+        ">=",
+        ">>",
+        "|",
+        "||",
+        "~"
+      ],
+      "tokenUsage": {
+        "coverage": 0.9841,
+        "singleUse": [
+          "ADD_",
+          "AMP",
+          "AUTOINCREMENT_",
+          "BIND_PARAMETER",
+          "BLOB_LITERAL",
+          "CASE_",
+          "COMMIT_",
+          "DEFERRABLE_",
+          "DIV",
+          "ELSE_",
+          "EOF",
+          "EQ",
+          "ESCAPE_",
+          "FILTER_",
+          "FOREIGN_",
+          "GT",
+          "GT2",
+          "GT_EQ",
+          "HAVING_",
+          "IN_",
+          "ISNULL_",
+          "IS_",
+          "JOIN_",
+          "JPTR",
+          "JPTR2",
+          "LIMIT_",
+          "LT",
+          "LT2",
+          "LT_EQ",
+          "MOD",
+          "NOTHING_",
+          "NOTNULL_",
+          "NOT_EQ1",
+          "NOT_EQ2",
+          "OVER_",
+          "PIPE",
+          "PIPE2",
+          "REFERENCES_",
+          "RETURNING_",
+          "SELECT_",
+          "THEN_",
+          "TILDE",
+          "UNBOUNDED_",
+          "WINDOW_"
+        ],
+        "used": 186
+      }
+    },
+    "notable": {
+      "coreSymbols": [
+        "expr",
+        "any_name",
+        "schema_name",
+        "column_name",
+        "table_name",
+        "select_stmt",
+        "name",
+        "order_clause",
+        "collation_name",
+        "index_name"
+      ],
+      "deepestRecursionMembers": [
+        "common_table_expression",
+        "error_message",
+        "expr",
+        "expr_addition",
+        "expr_and",
+        "expr_base",
+        "expr_binary",
+        "expr_bitwise",
+        "expr_collate",
+        "expr_comparison",
+        "expr_multiplication",
+        "expr_not",
+        "expr_or",
+        "expr_recursive",
+        "expr_string",
+        "expr_unary",
+        "filter_clause",
+        "frame_clause",
+        "frame_left",
+        "frame_right",
+        "frame_single",
+        "frame_spec",
+        "join_clause",
+        "join_constraint",
+        "limit_clause",
+        "order_clause",
+        "ordering_term",
+        "over_clause",
+        "percentile_clause",
+        "raise_function",
+        "result_column",
+        "select_core",
+        "select_stmt",
+        "table_or_subquery",
+        "value_row",
+        "values_clause",
+        "window_defn",
+        "with_clause"
+      ],
+      "largestRule": {
+        "line": 606,
+        "name": "fallback_excluding_conflicts"
+      }
+    },
+    "operations": {
+      "errorTokenUses": 0,
+      "namedReferenceRatio": 0.02,
+      "namedReferences": 7,
+      "notApplicable": {
+        "actionReferences": "source frontend did not retain opaque action reference counts",
+        "declarationDirectives": "source frontend did not retain declaration directives",
+        "explicitEmptyAlternatives": "source frontend did not distinguish explicit empty alternatives"
+      },
+      "recoveryRuleRatio": 0,
+      "rulesWithErrorRecovery": 0,
+      "symbolReferences": 350
+    },
+    "parseability": {
+      "cyclicUnitRules": [],
+      "firstSetSize": {
+        "average": 52.7719,
+        "maximum": {
+          "rule": "result_column",
+          "value": 109
+        },
+        "percentiles": {
+          "p50": 86,
+          "p95": 108
+        }
+      },
+      "followSetSize": {
+        "average": 42.7368,
+        "maximum": {
+          "rule": "any_name",
+          "value": 168
+        },
+        "percentiles": {
+          "p50": 6,
+          "p95": 152
+        }
+      },
+      "ll1Conflicts": {
+        "firstFirst": 23,
+        "firstFollow": 0,
+        "total": 23
+      },
+      "notApplicable": {
+        "declaredConflicts": "no valid global conflict expectation declaration was captured",
+        "slr": "SLR analysis requires plain BNF expressions"
+      },
+      "unitRules": 39
+    },
+    "peg": {
+      "notApplicable": {
+        "backtrackingHotspots": "orderedChoice capability is false",
+        "charClassOverlapPairs": "orderedChoice capability is false",
+        "maxPredicateNestingDepth": "orderedChoice capability is false",
+        "potentialShadowedAlternativePairs": "orderedChoice capability is false",
+        "predicates": "orderedChoice capability is false",
+        "shadowedAlternativePairs": "orderedChoice capability is false"
+      }
+    },
+    "perRule": [
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 9,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "qualified_table_name"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "alias",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 7,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 10,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "column_def",
+          "column_name",
+          "conflict_clause",
+          "expr",
+          "name",
+          "schema_name",
+          "table_name"
+        ],
+        "rhsItems": 5,
+        "rule": "alter_table_stmt",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 8,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "schema_name",
+          "table_or_index_name"
+        ],
+        "rhsItems": 2,
+        "rule": "analyze_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 20,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 168,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alias",
+          "base_window_name",
+          "collation_name",
+          "column_alias",
+          "column_name",
+          "drop_stmt",
+          "foreign_table",
+          "index_name",
+          "module_name",
+          "name",
+          "pragma_name",
+          "savepoint_name",
+          "schema_name",
+          "table_alias",
+          "table_function_name",
+          "table_name",
+          "table_or_index_name",
+          "trigger_name",
+          "view_name",
+          "window_name"
+        ],
+        "references": [
+          "fallback"
+        ],
+        "rhsItems": 3,
+        "rule": "any_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 89,
+        "followSetSize": 24,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "table_alias_excluding_joins"
+        ],
+        "references": [
+          "fallback_excluding_conflicts"
+        ],
+        "rhsItems": 4,
+        "rule": "any_name_excluding_joins",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 96,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "function_name"
+        ],
+        "references": [
+          "fallback_excluding_conflicts",
+          "join_keyword"
+        ],
+        "rhsItems": 4,
+        "rule": "any_name_excluding_raise",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 96,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_name_excluding_string"
+        ],
+        "references": [
+          "fallback"
+        ],
+        "rhsItems": 2,
+        "rule": "any_name_excluding_string",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 3,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 23,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_constraint",
+          "indexed_column",
+          "ordering_term"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "asc_desc",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "expr",
+          "schema_name"
+        ],
+        "rhsItems": 5,
+        "rule": "attach_stmt",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 6,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "over_clause",
+          "window_defn"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "base_window_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [],
+        "rhsItems": 3,
+        "rule": "begin_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 5,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 152,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_constraint",
+          "expr_collate",
+          "indexed_column",
+          "ordering_term",
+          "reindex_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "collation_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "result_column",
+          "returning_clause"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "column_alias",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 8,
+        "firstSetSize": 11,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 8,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_def"
+        ],
+        "references": [
+          "asc_desc",
+          "collation_name",
+          "conflict_clause",
+          "expr",
+          "foreign_key_clause",
+          "literal_value",
+          "name",
+          "signed_number"
+        ],
+        "rhsItems": 2,
+        "rule": "column_constraint",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 97,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "create_table_stmt"
+        ],
+        "references": [
+          "column_constraint",
+          "column_name",
+          "type_name"
+        ],
+        "rhsItems": 3,
+        "rule": "column_def",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 13,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 155,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "column_def",
+          "column_name_list",
+          "create_trigger_stmt",
+          "create_view_stmt",
+          "cte_table_name",
+          "expr_base",
+          "foreign_key_clause",
+          "insert_stmt",
+          "join_constraint",
+          "table_constraint",
+          "update_stmt",
+          "upsert_clause"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "column_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 96,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_base"
+        ],
+        "references": [
+          "any_name_excluding_string"
+        ],
+        "rhsItems": 1,
+        "rule": "column_name_excluding_string",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "update_stmt",
+          "upsert_clause"
+        ],
+        "references": [
+          "column_name"
+        ],
+        "rhsItems": 4,
+        "rule": "column_name_list",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "commit_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 97,
+        "followSetSize": 7,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "with_clause"
+        ],
+        "references": [
+          "cte_table_name",
+          "select_stmt"
+        ],
+        "rhsItems": 6,
+        "rule": "common_table_expression",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 3,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "select_stmt"
+        ],
+        "references": [],
+        "rhsItems": 4,
+        "rule": "compound_operator",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 0,
+        "firstSetSize": 1,
+        "followSetSize": 16,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "column_constraint",
+          "table_constraint"
+        ],
+        "references": [],
+        "rhsItems": 3,
+        "rule": "conflict_clause",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 13,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "expr",
+          "index_name",
+          "indexed_column",
+          "schema_name",
+          "table_name"
+        ],
+        "rhsItems": 13,
+        "rule": "create_index_stmt",
+        "shortestDerivation": 8,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 6,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "column_def",
+          "schema_name",
+          "select_stmt",
+          "table_constraint",
+          "table_name",
+          "table_options"
+        ],
+        "rhsItems": 7,
+        "rule": "create_table_stmt",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 9,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 10,
+        "maxRhsItems": 15,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "column_name",
+          "delete_stmt",
+          "expr",
+          "insert_stmt",
+          "schema_name",
+          "select_stmt",
+          "table_name",
+          "trigger_name",
+          "update_stmt"
+        ],
+        "rhsItems": 15,
+        "rule": "create_trigger_stmt",
+        "shortestDerivation": 11,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 9,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "column_name",
+          "schema_name",
+          "select_stmt",
+          "view_name"
+        ],
+        "rhsItems": 9,
+        "rule": "create_view_stmt",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 9,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "module_argument",
+          "module_name",
+          "schema_name",
+          "table_name"
+        ],
+        "rhsItems": 9,
+        "rule": "create_virtual_table_stmt",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 97,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "common_table_expression"
+        ],
+        "references": [
+          "column_name",
+          "table_name"
+        ],
+        "rhsItems": 2,
+        "rule": "cte_table_name",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 6,
+        "firstSetSize": 2,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_trigger_stmt",
+          "sql_stmt"
+        ],
+        "references": [
+          "expr",
+          "limit_clause",
+          "order_clause",
+          "qualified_table_name",
+          "returning_clause",
+          "with_clause"
+        ],
+        "rhsItems": 8,
+        "rule": "delete_stmt",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "schema_name"
+        ],
+        "rhsItems": 3,
+        "rule": "detach_stmt",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "any_name",
+          "schema_name"
+        ],
+        "rhsItems": 5,
+        "rule": "drop_stmt",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "raise_function"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 1,
+        "rule": "error_message",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 28,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 116,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "attach_stmt",
+          "column_constraint",
+          "create_index_stmt",
+          "create_trigger_stmt",
+          "delete_stmt",
+          "error_message",
+          "expr_recursive",
+          "filename",
+          "filter_clause",
+          "frame_left",
+          "frame_right",
+          "frame_single",
+          "indexed_column",
+          "join_constraint",
+          "limit_clause",
+          "ordering_term",
+          "over_clause",
+          "percentile_clause",
+          "result_column",
+          "returning_clause",
+          "select_core",
+          "table_constraint",
+          "table_or_subquery",
+          "update_stmt",
+          "upsert_clause",
+          "value_row",
+          "window_defn"
+        ],
+        "references": [
+          "expr_or"
+        ],
+        "rhsItems": 1,
+        "rule": "expr",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 137,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_bitwise"
+        ],
+        "references": [
+          "expr_multiplication"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_addition",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 117,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_or"
+        ],
+        "references": [
+          "expr_not"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_and",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 7,
+        "fanIn": 1,
+        "fanOut": 8,
+        "firstSetSize": 105,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 9,
+          "firstFollow": 0,
+          "total": 9
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_unary"
+        ],
+        "references": [
+          "column_name",
+          "column_name_excluding_string",
+          "expr_recursive",
+          "literal_value",
+          "raise_function",
+          "schema_name",
+          "select_stmt",
+          "table_name"
+        ],
+        "rhsItems": 13,
+        "rule": "expr_base",
+        "shortestDerivation": 1,
+        "unitRules": 4
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 108,
+        "followSetSize": 118,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 15,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_not"
+        ],
+        "references": [
+          "expr_comparison",
+          "schema_name",
+          "select_stmt",
+          "table_function_name",
+          "table_name"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_binary",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 133,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_comparison"
+        ],
+        "references": [
+          "expr_addition"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_bitwise",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 108,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_string"
+        ],
+        "references": [
+          "collation_name",
+          "expr_unary"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_collate",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 129,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_binary"
+        ],
+        "references": [
+          "expr_bitwise"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_comparison",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 139,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_addition"
+        ],
+        "references": [
+          "expr_string"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_multiplication",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 118,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_and"
+        ],
+        "references": [
+          "expr_binary"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_not",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 116,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr"
+        ],
+        "references": [
+          "expr_and"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_or",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 7,
+        "firstSetSize": 98,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 8,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_base"
+        ],
+        "references": [
+          "expr",
+          "filter_clause",
+          "function_name",
+          "order_clause",
+          "over_clause",
+          "percentile_clause",
+          "type_name"
+        ],
+        "rhsItems": 22,
+        "rule": "expr_recursive",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 142,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_multiplication"
+        ],
+        "references": [
+          "expr_collate"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_string",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_collate"
+        ],
+        "references": [
+          "expr_base"
+        ],
+        "rhsItems": 2,
+        "rule": "expr_unary",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 95,
+        "followSetSize": 168,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "any_name",
+          "any_name_excluding_string"
+        ],
+        "references": [
+          "fallback_excluding_conflicts",
+          "join_keyword"
+        ],
+        "rhsItems": 3,
+        "rule": "fallback",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 86,
+        "fanIn": 3,
+        "fanOut": 0,
+        "firstSetSize": 86,
+        "followSetSize": 168,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "any_name_excluding_joins",
+          "any_name_excluding_raise",
+          "fallback"
+        ],
+        "references": [],
+        "rhsItems": 86,
+        "rule": "fallback_excluding_conflicts",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "vacuum_stmt"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 1,
+        "rule": "filename",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 146,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_recursive"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 5,
+        "rule": "filter_clause",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 10,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_constraint",
+          "table_constraint"
+        ],
+        "references": [
+          "column_name",
+          "foreign_table",
+          "name"
+        ],
+        "rhsItems": 5,
+        "rule": "foreign_key_clause",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 19,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "foreign_key_clause"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "foreign_table",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 3,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "frame_spec"
+        ],
+        "references": [
+          "frame_left",
+          "frame_right",
+          "frame_single"
+        ],
+        "rhsItems": 2,
+        "rule": "frame_clause",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "frame_clause"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 6,
+        "rule": "frame_left",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 3,
+          "firstFollow": 0,
+          "total": 3
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "frame_clause"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 6,
+        "rule": "frame_right",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 108,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "frame_clause"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 4,
+        "rule": "frame_single",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 3,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "over_clause",
+          "window_defn"
+        ],
+        "references": [
+          "frame_clause"
+        ],
+        "rhsItems": 2,
+        "rule": "frame_spec",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 96,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_recursive"
+        ],
+        "references": [
+          "any_name_excluding_raise"
+        ],
+        "rhsItems": 1,
+        "rule": "function_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 23,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_index_stmt",
+          "qualified_table_name",
+          "reindex_stmt",
+          "table_or_subquery"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "index_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 3,
+        "firstSetSize": 108,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_index_stmt",
+          "table_constraint",
+          "upsert_clause"
+        ],
+        "references": [
+          "asc_desc",
+          "collation_name",
+          "expr"
+        ],
+        "rhsItems": 3,
+        "rule": "indexed_column",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 8,
+        "firstSetSize": 3,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 9,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_trigger_stmt",
+          "sql_stmt"
+        ],
+        "references": [
+          "column_name",
+          "returning_clause",
+          "schema_name",
+          "select_stmt",
+          "table_alias",
+          "table_name",
+          "upsert_clause",
+          "with_clause"
+        ],
+        "rhsItems": 9,
+        "rule": "insert_stmt",
+        "shortestDerivation": 5,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 3,
+        "firstSetSize": 98,
+        "followSetSize": 13,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "select_core",
+          "table_or_subquery",
+          "update_stmt"
+        ],
+        "references": [
+          "join_constraint",
+          "join_operator",
+          "table_or_subquery"
+        ],
+        "rhsItems": 2,
+        "rule": "join_clause",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 2,
+        "followSetSize": 21,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "join_clause"
+        ],
+        "references": [
+          "column_name",
+          "expr"
+        ],
+        "rhsItems": 7,
+        "rule": "join_constraint",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 8,
+        "fanIn": 2,
+        "fanOut": 0,
+        "firstSetSize": 8,
+        "followSetSize": 168,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "any_name_excluding_raise",
+          "fallback"
+        ],
+        "references": [],
+        "rhsItems": 8,
+        "rule": "join_keyword",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 8,
+        "followSetSize": 98,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "join_clause"
+        ],
+        "references": [],
+        "rhsItems": 4,
+        "rule": "join_operator",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 5,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "delete_stmt",
+          "select_stmt",
+          "update_stmt"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 3,
+        "rule": "limit_clause",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 9,
+        "fanIn": 2,
+        "fanOut": 0,
+        "firstSetSize": 9,
+        "followSetSize": 152,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_constraint",
+          "expr_base"
+        ],
+        "references": [],
+        "rhsItems": 9,
+        "rule": "literal_value",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 4,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_virtual_table_stmt"
+        ],
+        "references": [
+          "module_argument_outer"
+        ],
+        "rhsItems": 1,
+        "rule": "module_argument",
+        "shortestDerivation": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 3,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "module_argument_inner",
+          "module_argument_outer"
+        ],
+        "references": [
+          "module_argument_inner"
+        ],
+        "rhsItems": 4,
+        "rule": "module_argument_inner",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 4,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 3,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "module_argument"
+        ],
+        "references": [
+          "module_argument_inner"
+        ],
+        "rhsItems": 4,
+        "rule": "module_argument_outer",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_virtual_table_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "module_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 6,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 115,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "column_constraint",
+          "foreign_key_clause",
+          "pragma_value",
+          "table_constraint",
+          "type_name"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 6,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 9,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "delete_stmt",
+          "expr_recursive",
+          "over_clause",
+          "select_stmt",
+          "update_stmt",
+          "window_defn"
+        ],
+        "references": [
+          "ordering_term"
+        ],
+        "rhsItems": 4,
+        "rule": "order_clause",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 108,
+        "followSetSize": 10,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "order_clause"
+        ],
+        "references": [
+          "asc_desc",
+          "collation_name",
+          "expr"
+        ],
+        "rhsItems": 4,
+        "rule": "ordering_term",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 5,
+        "firstSetSize": 1,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 10,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_recursive"
+        ],
+        "references": [
+          "base_window_name",
+          "expr",
+          "frame_spec",
+          "order_clause",
+          "window_name"
+        ],
+        "rhsItems": 2,
+        "rule": "over_clause",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 0,
+        "fanOut": 1,
+        "firstSetSize": 25,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [],
+        "references": [
+          "sql_stmt_list"
+        ],
+        "rhsItems": 2,
+        "rule": "parse",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 147,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_recursive"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 7,
+        "rule": "percentile_clause",
+        "shortestDerivation": 7,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "pragma_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "pragma_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "pragma_name",
+          "pragma_value",
+          "schema_name"
+        ],
+        "rhsItems": 4,
+        "rule": "pragma_stmt",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 100,
+        "followSetSize": 3,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "pragma_stmt"
+        ],
+        "references": [
+          "name",
+          "signed_number"
+        ],
+        "rhsItems": 3,
+        "rule": "pragma_value",
+        "shortestDerivation": 1,
+        "unitRules": 2
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 4,
+        "firstSetSize": 97,
+        "followSetSize": 7,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "delete_stmt",
+          "update_stmt"
+        ],
+        "references": [
+          "alias",
+          "index_name",
+          "schema_name",
+          "table_name"
+        ],
+        "rhsItems": 4,
+        "rule": "qualified_table_name",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_base"
+        ],
+        "references": [
+          "error_message"
+        ],
+        "rhsItems": 4,
+        "rule": "raise_function",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 8,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "collation_name",
+          "index_name",
+          "schema_name",
+          "table_name"
+        ],
+        "rhsItems": 2,
+        "rule": "reindex_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 2,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "savepoint_name"
+        ],
+        "rhsItems": 3,
+        "rule": "release_stmt",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 3,
+        "fanIn": 1,
+        "fanOut": 3,
+        "firstSetSize": 109,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 1,
+          "firstFollow": 0,
+          "total": 1
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "select_core"
+        ],
+        "references": [
+          "column_alias",
+          "expr",
+          "table_name"
+        ],
+        "rhsItems": 6,
+        "rule": "result_column",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 11,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "delete_stmt",
+          "insert_stmt",
+          "update_stmt"
+        ],
+        "references": [
+          "column_alias",
+          "expr"
+        ],
+        "rhsItems": 3,
+        "rule": "returning_clause",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "savepoint_name"
+        ],
+        "rhsItems": 3,
+        "rule": "rollback_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "release_stmt",
+          "rollback_stmt",
+          "savepoint_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "savepoint_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "savepoint_name"
+        ],
+        "rhsItems": 2,
+        "rule": "savepoint_stmt",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 18,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "analyze_stmt",
+          "attach_stmt",
+          "create_index_stmt",
+          "create_table_stmt",
+          "create_trigger_stmt",
+          "create_view_stmt",
+          "create_virtual_table_stmt",
+          "detach_stmt",
+          "drop_stmt",
+          "expr_base",
+          "expr_binary",
+          "insert_stmt",
+          "pragma_stmt",
+          "qualified_table_name",
+          "reindex_stmt",
+          "table_or_subquery",
+          "vacuum_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "schema_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 2,
+        "fanIn": 1,
+        "fanOut": 6,
+        "firstSetSize": 2,
+        "followSetSize": 10,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 8,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "select_stmt"
+        ],
+        "references": [
+          "expr",
+          "join_clause",
+          "result_column",
+          "values_clause",
+          "window_defn",
+          "window_name"
+        ],
+        "rhsItems": 9,
+        "rule": "select_core",
+        "shortestDerivation": 2,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 9,
+        "fanOut": 5,
+        "firstSetSize": 3,
+        "followSetSize": 5,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "common_table_expression",
+          "create_table_stmt",
+          "create_trigger_stmt",
+          "create_view_stmt",
+          "expr_base",
+          "expr_binary",
+          "insert_stmt",
+          "sql_stmt",
+          "table_or_subquery"
+        ],
+        "references": [
+          "compound_operator",
+          "limit_clause",
+          "order_clause",
+          "select_core",
+          "with_clause"
+        ],
+        "rhsItems": 5,
+        "rule": "select_stmt",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 3,
+        "fanOut": 0,
+        "firstSetSize": 3,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_constraint",
+          "pragma_value",
+          "type_name"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "signed_number",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 22,
+        "firstSetSize": 23,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt_list"
+        ],
+        "references": [
+          "alter_table_stmt",
+          "analyze_stmt",
+          "attach_stmt",
+          "begin_stmt",
+          "commit_stmt",
+          "create_index_stmt",
+          "create_table_stmt",
+          "create_trigger_stmt",
+          "create_view_stmt",
+          "create_virtual_table_stmt",
+          "delete_stmt",
+          "detach_stmt",
+          "drop_stmt",
+          "insert_stmt",
+          "pragma_stmt",
+          "reindex_stmt",
+          "release_stmt",
+          "rollback_stmt",
+          "savepoint_stmt",
+          "select_stmt",
+          "update_stmt",
+          "vacuum_stmt"
+        ],
+        "rhsItems": 2,
+        "rule": "sql_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 24,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "parse"
+        ],
+        "references": [
+          "sql_stmt"
+        ],
+        "rhsItems": 2,
+        "rule": "sql_stmt_list",
+        "shortestDerivation": 0,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 29,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "insert_stmt",
+          "table_or_subquery"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "table_alias",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 89,
+        "followSetSize": 24,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "table_or_subquery"
+        ],
+        "references": [
+          "any_name_excluding_joins"
+        ],
+        "rhsItems": 1,
+        "rule": "table_alias_excluding_joins",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 6,
+        "firstSetSize": 5,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_table_stmt"
+        ],
+        "references": [
+          "column_name",
+          "conflict_clause",
+          "expr",
+          "foreign_key_clause",
+          "indexed_column",
+          "name"
+        ],
+        "rhsItems": 2,
+        "rule": "table_constraint",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 1,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "expr_binary",
+          "table_or_subquery"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "table_function_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 13,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 138,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "alter_table_stmt",
+          "create_index_stmt",
+          "create_table_stmt",
+          "create_trigger_stmt",
+          "create_virtual_table_stmt",
+          "cte_table_name",
+          "expr_base",
+          "expr_binary",
+          "insert_stmt",
+          "qualified_table_name",
+          "reindex_stmt",
+          "result_column",
+          "table_or_subquery"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "table_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 0,
+        "firstSetSize": 2,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_table_stmt"
+        ],
+        "references": [],
+        "rhsItems": 2,
+        "rule": "table_options",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "analyze_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "table_or_index_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 4,
+        "fanIn": 1,
+        "fanOut": 9,
+        "firstSetSize": 98,
+        "followSetSize": 22,
+        "ll1Conflicts": {
+          "firstFirst": 2,
+          "firstFollow": 0,
+          "total": 2
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 7,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "join_clause"
+        ],
+        "references": [
+          "expr",
+          "index_name",
+          "join_clause",
+          "schema_name",
+          "select_stmt",
+          "table_alias",
+          "table_alias_excluding_joins",
+          "table_function_name",
+          "table_name"
+        ],
+        "rhsItems": 18,
+        "rule": "table_or_subquery",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 6,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_trigger_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "trigger_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 2,
+        "firstSetSize": 97,
+        "followSetSize": 15,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 5,
+        "maxRhsItems": 2,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "column_def",
+          "expr_recursive"
+        ],
+        "references": [
+          "name",
+          "signed_number"
+        ],
+        "rhsItems": 2,
+        "rule": "type_name",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 9,
+        "firstSetSize": 2,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 6,
+        "maxRhsItems": 14,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_trigger_stmt",
+          "sql_stmt"
+        ],
+        "references": [
+          "column_name",
+          "column_name_list",
+          "expr",
+          "join_clause",
+          "limit_clause",
+          "order_clause",
+          "qualified_table_name",
+          "returning_clause",
+          "with_clause"
+        ],
+        "rhsItems": 14,
+        "rule": "update_stmt",
+        "shortestDerivation": 6,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 4,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 9,
+        "maxRhsItems": 5,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "insert_stmt"
+        ],
+        "references": [
+          "column_name",
+          "column_name_list",
+          "expr",
+          "indexed_column"
+        ],
+        "rhsItems": 5,
+        "rule": "upsert_clause",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 2,
+        "firstSetSize": 1,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "sql_stmt"
+        ],
+        "references": [
+          "filename",
+          "schema_name"
+        ],
+        "rhsItems": 3,
+        "rule": "vacuum_stmt",
+        "shortestDerivation": 1,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 11,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "values_clause"
+        ],
+        "references": [
+          "expr"
+        ],
+        "rhsItems": 4,
+        "rule": "value_row",
+        "shortestDerivation": 3,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 10,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 3,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "select_core"
+        ],
+        "references": [
+          "value_row"
+        ],
+        "rhsItems": 3,
+        "rule": "values_clause",
+        "shortestDerivation": 4,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 2,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "create_view_stmt"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "view_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 1,
+        "fanOut": 4,
+        "firstSetSize": 1,
+        "followSetSize": 11,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 7,
+        "maxRhsItems": 6,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "select_core"
+        ],
+        "references": [
+          "base_window_name",
+          "expr",
+          "frame_spec",
+          "order_clause"
+        ],
+        "rhsItems": 6,
+        "rule": "window_defn",
+        "shortestDerivation": 2,
+        "unitRules": 0
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 2,
+        "fanOut": 1,
+        "firstSetSize": 97,
+        "followSetSize": 145,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 1,
+        "maxRhsItems": 1,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "over_clause",
+          "select_core"
+        ],
+        "references": [
+          "any_name"
+        ],
+        "rhsItems": 1,
+        "rule": "window_name",
+        "shortestDerivation": 1,
+        "unitRules": 1
+      },
+      {
+        "alternatives": 1,
+        "fanIn": 4,
+        "fanOut": 1,
+        "firstSetSize": 1,
+        "followSetSize": 6,
+        "ll1Conflicts": {
+          "firstFirst": 0,
+          "firstFollow": 0,
+          "total": 0
+        },
+        "maxExpressionNestingDepth": 4,
+        "maxRhsItems": 4,
+        "reachableFromStarts": [
+          "parse"
+        ],
+        "referencedBy": [
+          "delete_stmt",
+          "insert_stmt",
+          "select_stmt",
+          "update_stmt"
+        ],
+        "references": [
+          "common_table_expression"
+        ],
+        "rhsItems": 4,
+        "rule": "with_clause",
+        "shortestDerivation": 7,
+        "unitRules": 0
+      }
+    ],
+    "precedence": {
+      "notApplicable": {
+        "assocBreakdown": "precedenceTable capability is false",
+        "levels": "precedenceTable capability is false",
+        "maxTokensPerLevel": "precedenceTable capability is false",
+        "precOverrideAlternativeRatio": "precedenceTable capability is false",
+        "precOverrides": "precedenceTable capability is false",
+        "rulesWithPrecOverrides": "precedenceTable capability is false",
+        "tokensInPrecedence": "precedenceTable capability is false"
+      }
+    },
+    "redundancy": {
+      "commonPrefixPairs": 4,
+      "duplicateAlternatives": 0,
+      "listRecursion": {
+        "consistency": 0,
+        "left": 0,
+        "mixed": 0,
+        "right": 0
+      },
+      "maxCommonPrefixLength": 1,
+      "singleReferenceRules": [
+        "alias",
+        "alter_table_stmt",
+        "analyze_stmt",
+        "any_name_excluding_joins",
+        "any_name_excluding_raise",
+        "any_name_excluding_string",
+        "attach_stmt",
+        "begin_stmt",
+        "column_constraint",
+        "column_name_excluding_string",
+        "commit_stmt",
+        "compound_operator",
+        "create_index_stmt",
+        "create_table_stmt",
+        "create_trigger_stmt",
+        "create_view_stmt",
+        "create_virtual_table_stmt",
+        "cte_table_name",
+        "detach_stmt",
+        "drop_stmt",
+        "error_message",
+        "expr_base",
+        "expr_binary",
+        "expr_or",
+        "expr_recursive",
+        "expr_unary",
+        "filename",
+        "filter_clause",
+        "foreign_table",
+        "frame_clause",
+        "frame_left",
+        "frame_right",
+        "frame_single",
+        "function_name",
+        "join_constraint",
+        "join_operator",
+        "module_argument_outer",
+        "module_name",
+        "over_clause",
+        "percentile_clause",
+        "pragma_name",
+        "pragma_stmt",
+        "raise_function",
+        "reindex_stmt",
+        "release_stmt",
+        "rollback_stmt",
+        "savepoint_stmt",
+        "sql_stmt_list",
+        "table_alias_excluding_joins",
+        "table_constraint",
+        "table_options",
+        "table_or_index_name",
+        "trigger_name",
+        "upsert_clause",
+        "vacuum_stmt",
+        "values_clause",
+        "view_name"
+      ],
+      "structuralCloneGroups": 56,
+      "undefinedPrecedenceOverrides": [],
+      "unusedPrecedenceTokens": [],
+      "unusedTerminals": [
+        "MULTILINE_COMMENT",
+        "SINGLE_LINE_COMMENT",
+        "SPACES"
+      ]
+    },
+    "size": {
+      "altPerRulePercentiles": {
+        "p50": 1,
+        "p95": 4
+      },
+      "alternatives": 254,
+      "avgAltPerRule": 2.2281,
+      "avgRhsLength": 2.0315,
+      "emptyAlternatives": 0,
+      "maxAltPerRule": {
+        "line": 606,
+        "rule": "fallback_excluding_conflicts",
+        "value": 86
+      },
+      "maxRhsLength": {
+        "line": 195,
+        "rule": "create_trigger_stmt",
+        "value": 15
+      },
+      "nestedChoiceCount": 76,
+      "nonterminals": 114,
+      "rhsLengthPercentiles": {
+        "p50": 1,
+        "p95": 6
+      },
+      "rules": 114,
+      "terminals": 189,
+      "unresolvedSymbols": {
+        "count": 0,
+        "names": []
+      }
+    },
+    "source": {
+      "dialect": "antlr4",
+      "fileNames": [
+        "sql/sqlite/SQLiteParser.g4",
+        "sql/sqlite/SQLiteLexer.g4"
+      ],
+      "format": "antlr4",
+      "frontend": {
+        "id": "antlr4",
+        "version": "0.4.0"
+      }
+    },
+    "structure": {
+      "articulationPoints": [
+        "create_table_stmt",
+        "create_virtual_table_stmt",
+        "join_clause",
+        "module_argument",
+        "module_argument_outer",
+        "select_stmt",
+        "sql_stmt",
+        "sql_stmt_list"
+      ],
+      "bridges": [
+        {
+          "source": "begin_stmt",
+          "target": "sql_stmt"
+        },
+        {
+          "source": "commit_stmt",
+          "target": "sql_stmt"
+        },
+        {
+          "source": "compound_operator",
+          "target": "select_stmt"
+        },
+        {
+          "source": "create_table_stmt",
+          "target": "table_options"
+        },
+        {
+          "source": "create_virtual_table_stmt",
+          "target": "module_argument"
+        },
+        {
+          "source": "join_clause",
+          "target": "join_operator"
+        },
+        {
+          "source": "module_argument",
+          "target": "module_argument_outer"
+        },
+        {
+          "source": "module_argument_inner",
+          "target": "module_argument_outer"
+        },
+        {
+          "source": "parse",
+          "target": "sql_stmt_list"
+        },
+        {
+          "source": "sql_stmt",
+          "target": "sql_stmt_list"
+        }
+      ],
+      "directLeftRecursiveRules": 0,
+      "directRightRecursiveRules": 0,
+      "fanInEntropy": 5.9297,
+      "fanInGini": 0.4967,
+      "indirectLeftRecursiveRules": 0,
+      "largestRecursiveComponent": {
+        "members": [
+          "common_table_expression",
+          "error_message",
+          "expr",
+          "expr_addition",
+          "expr_and",
+          "expr_base",
+          "expr_binary",
+          "expr_bitwise",
+          "expr_collate",
+          "expr_comparison",
+          "expr_multiplication",
+          "expr_not",
+          "expr_or",
+          "expr_recursive",
+          "expr_string",
+          "expr_unary",
+          "filter_clause",
+          "frame_clause",
+          "frame_left",
+          "frame_right",
+          "frame_single",
+          "frame_spec",
+          "join_clause",
+          "join_constraint",
+          "limit_clause",
+          "order_clause",
+          "ordering_term",
+          "over_clause",
+          "percentile_clause",
+          "raise_function",
+          "result_column",
+          "select_core",
+          "select_stmt",
+          "table_or_subquery",
+          "value_row",
+          "values_clause",
+          "window_defn",
+          "with_clause"
+        ],
+        "ratio": 0.3333,
+        "value": 38
+      },
+      "largestSccSize": {
+        "members": [
+          "common_table_expression",
+          "error_message",
+          "expr",
+          "expr_addition",
+          "expr_and",
+          "expr_base",
+          "expr_binary",
+          "expr_bitwise",
+          "expr_collate",
+          "expr_comparison",
+          "expr_multiplication",
+          "expr_not",
+          "expr_or",
+          "expr_recursive",
+          "expr_string",
+          "expr_unary",
+          "filter_clause",
+          "frame_clause",
+          "frame_left",
+          "frame_right",
+          "frame_single",
+          "frame_spec",
+          "join_clause",
+          "join_constraint",
+          "limit_clause",
+          "order_clause",
+          "ordering_term",
+          "over_clause",
+          "percentile_clause",
+          "raise_function",
+          "result_column",
+          "select_core",
+          "select_stmt",
+          "table_or_subquery",
+          "value_row",
+          "values_clause",
+          "window_defn",
+          "with_clause"
+        ],
+        "value": 38
+      },
+      "maxDependencyDepth": 12,
+      "maxExpressionNestingDepth": 15,
+      "nullableRules": 2,
+      "reachableRules": 114,
+      "recursionSccCount": 1,
+      "recursiveRules": {
+        "count": 39,
+        "ratio": 0.3421
+      },
+      "shortestDerivation": [
+        {
+          "length": 1,
+          "rule": "alias"
+        },
+        {
+          "length": 5,
+          "rule": "alter_table_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "analyze_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "any_name"
+        },
+        {
+          "length": 1,
+          "rule": "any_name_excluding_joins"
+        },
+        {
+          "length": 1,
+          "rule": "any_name_excluding_raise"
+        },
+        {
+          "length": 1,
+          "rule": "any_name_excluding_string"
+        },
+        {
+          "length": 1,
+          "rule": "asc_desc"
+        },
+        {
+          "length": 4,
+          "rule": "attach_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "base_window_name"
+        },
+        {
+          "length": 1,
+          "rule": "begin_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "collation_name"
+        },
+        {
+          "length": 1,
+          "rule": "column_alias"
+        },
+        {
+          "length": 1,
+          "rule": "column_constraint"
+        },
+        {
+          "length": 1,
+          "rule": "column_def"
+        },
+        {
+          "length": 1,
+          "rule": "column_name"
+        },
+        {
+          "length": 1,
+          "rule": "column_name_excluding_string"
+        },
+        {
+          "length": 3,
+          "rule": "column_name_list"
+        },
+        {
+          "length": 1,
+          "rule": "commit_stmt"
+        },
+        {
+          "length": 6,
+          "rule": "common_table_expression"
+        },
+        {
+          "length": 1,
+          "rule": "compound_operator"
+        },
+        {
+          "length": 3,
+          "rule": "conflict_clause"
+        },
+        {
+          "length": 8,
+          "rule": "create_index_stmt"
+        },
+        {
+          "length": 6,
+          "rule": "create_table_stmt"
+        },
+        {
+          "length": 11,
+          "rule": "create_trigger_stmt"
+        },
+        {
+          "length": 6,
+          "rule": "create_view_stmt"
+        },
+        {
+          "length": 6,
+          "rule": "create_virtual_table_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "cte_table_name"
+        },
+        {
+          "length": 3,
+          "rule": "delete_stmt"
+        },
+        {
+          "length": 2,
+          "rule": "detach_stmt"
+        },
+        {
+          "length": 3,
+          "rule": "drop_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "error_message"
+        },
+        {
+          "length": 1,
+          "rule": "expr"
+        },
+        {
+          "length": 1,
+          "rule": "expr_addition"
+        },
+        {
+          "length": 1,
+          "rule": "expr_and"
+        },
+        {
+          "length": 1,
+          "rule": "expr_base"
+        },
+        {
+          "length": 1,
+          "rule": "expr_binary"
+        },
+        {
+          "length": 1,
+          "rule": "expr_bitwise"
+        },
+        {
+          "length": 1,
+          "rule": "expr_collate"
+        },
+        {
+          "length": 1,
+          "rule": "expr_comparison"
+        },
+        {
+          "length": 1,
+          "rule": "expr_multiplication"
+        },
+        {
+          "length": 1,
+          "rule": "expr_not"
+        },
+        {
+          "length": 1,
+          "rule": "expr_or"
+        },
+        {
+          "length": 3,
+          "rule": "expr_recursive"
+        },
+        {
+          "length": 1,
+          "rule": "expr_string"
+        },
+        {
+          "length": 1,
+          "rule": "expr_unary"
+        },
+        {
+          "length": 1,
+          "rule": "fallback"
+        },
+        {
+          "length": 1,
+          "rule": "fallback_excluding_conflicts"
+        },
+        {
+          "length": 1,
+          "rule": "filename"
+        },
+        {
+          "length": 5,
+          "rule": "filter_clause"
+        },
+        {
+          "length": 2,
+          "rule": "foreign_key_clause"
+        },
+        {
+          "length": 1,
+          "rule": "foreign_table"
+        },
+        {
+          "length": 3,
+          "rule": "frame_clause"
+        },
+        {
+          "length": 2,
+          "rule": "frame_left"
+        },
+        {
+          "length": 2,
+          "rule": "frame_right"
+        },
+        {
+          "length": 2,
+          "rule": "frame_single"
+        },
+        {
+          "length": 3,
+          "rule": "frame_spec"
+        },
+        {
+          "length": 1,
+          "rule": "function_name"
+        },
+        {
+          "length": 1,
+          "rule": "index_name"
+        },
+        {
+          "length": 1,
+          "rule": "indexed_column"
+        },
+        {
+          "length": 5,
+          "rule": "insert_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "join_clause"
+        },
+        {
+          "length": 2,
+          "rule": "join_constraint"
+        },
+        {
+          "length": 1,
+          "rule": "join_keyword"
+        },
+        {
+          "length": 1,
+          "rule": "join_operator"
+        },
+        {
+          "length": 2,
+          "rule": "limit_clause"
+        },
+        {
+          "length": 1,
+          "rule": "literal_value"
+        },
+        {
+          "length": 0,
+          "rule": "module_argument"
+        },
+        {
+          "length": 1,
+          "rule": "module_argument_inner"
+        },
+        {
+          "length": 1,
+          "rule": "module_argument_outer"
+        },
+        {
+          "length": 1,
+          "rule": "module_name"
+        },
+        {
+          "length": 1,
+          "rule": "name"
+        },
+        {
+          "length": 3,
+          "rule": "order_clause"
+        },
+        {
+          "length": 1,
+          "rule": "ordering_term"
+        },
+        {
+          "length": 2,
+          "rule": "over_clause"
+        },
+        {
+          "length": 1,
+          "rule": "parse"
+        },
+        {
+          "length": 7,
+          "rule": "percentile_clause"
+        },
+        {
+          "length": 1,
+          "rule": "pragma_name"
+        },
+        {
+          "length": 2,
+          "rule": "pragma_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "pragma_value"
+        },
+        {
+          "length": 1,
+          "rule": "qualified_table_name"
+        },
+        {
+          "length": 4,
+          "rule": "raise_function"
+        },
+        {
+          "length": 1,
+          "rule": "reindex_stmt"
+        },
+        {
+          "length": 2,
+          "rule": "release_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "result_column"
+        },
+        {
+          "length": 2,
+          "rule": "returning_clause"
+        },
+        {
+          "length": 1,
+          "rule": "rollback_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "savepoint_name"
+        },
+        {
+          "length": 2,
+          "rule": "savepoint_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "schema_name"
+        },
+        {
+          "length": 2,
+          "rule": "select_core"
+        },
+        {
+          "length": 2,
+          "rule": "select_stmt"
+        },
+        {
+          "length": 1,
+          "rule": "signed_number"
+        },
+        {
+          "length": 1,
+          "rule": "sql_stmt"
+        },
+        {
+          "length": 0,
+          "rule": "sql_stmt_list"
+        },
+        {
+          "length": 1,
+          "rule": "table_alias"
+        },
+        {
+          "length": 1,
+          "rule": "table_alias_excluding_joins"
+        },
+        {
+          "length": 4,
+          "rule": "table_constraint"
+        },
+        {
+          "length": 1,
+          "rule": "table_function_name"
+        },
+        {
+          "length": 1,
+          "rule": "table_name"
+        },
+        {
+          "length": 1,
+          "rule": "table_options"
+        },
+        {
+          "length": 1,
+          "rule": "table_or_index_name"
+        },
+        {
+          "length": 1,
+          "rule": "table_or_subquery"
+        },
+        {
+          "length": 1,
+          "rule": "trigger_name"
+        },
+        {
+          "length": 1,
+          "rule": "type_name"
+        },
+        {
+          "length": 6,
+          "rule": "update_stmt"
+        },
+        {
+          "length": 4,
+          "rule": "upsert_clause"
+        },
+        {
+          "length": 1,
+          "rule": "vacuum_stmt"
+        },
+        {
+          "length": 3,
+          "rule": "value_row"
+        },
+        {
+          "length": 4,
+          "rule": "values_clause"
+        },
+        {
+          "length": 1,
+          "rule": "view_name"
+        },
+        {
+          "length": 2,
+          "rule": "window_defn"
+        },
+        {
+          "length": 1,
+          "rule": "window_name"
+        },
+        {
+          "length": 7,
+          "rule": "with_clause"
+        }
+      ],
+      "shortestDerivationUnknown": [],
+      "startSymbolReachability": {
+        "entries": [
+          {
+            "reachableRules": 114,
+            "rules": [
+              "alias",
+              "alter_table_stmt",
+              "analyze_stmt",
+              "any_name",
+              "any_name_excluding_joins",
+              "any_name_excluding_raise",
+              "any_name_excluding_string",
+              "asc_desc",
+              "attach_stmt",
+              "base_window_name",
+              "begin_stmt",
+              "collation_name",
+              "column_alias",
+              "column_constraint",
+              "column_def",
+              "column_name",
+              "column_name_excluding_string",
+              "column_name_list",
+              "commit_stmt",
+              "common_table_expression",
+              "compound_operator",
+              "conflict_clause",
+              "create_index_stmt",
+              "create_table_stmt",
+              "create_trigger_stmt",
+              "create_view_stmt",
+              "create_virtual_table_stmt",
+              "cte_table_name",
+              "delete_stmt",
+              "detach_stmt",
+              "drop_stmt",
+              "error_message",
+              "expr",
+              "expr_addition",
+              "expr_and",
+              "expr_base",
+              "expr_binary",
+              "expr_bitwise",
+              "expr_collate",
+              "expr_comparison",
+              "expr_multiplication",
+              "expr_not",
+              "expr_or",
+              "expr_recursive",
+              "expr_string",
+              "expr_unary",
+              "fallback",
+              "fallback_excluding_conflicts",
+              "filename",
+              "filter_clause",
+              "foreign_key_clause",
+              "foreign_table",
+              "frame_clause",
+              "frame_left",
+              "frame_right",
+              "frame_single",
+              "frame_spec",
+              "function_name",
+              "index_name",
+              "indexed_column",
+              "insert_stmt",
+              "join_clause",
+              "join_constraint",
+              "join_keyword",
+              "join_operator",
+              "limit_clause",
+              "literal_value",
+              "module_argument",
+              "module_argument_inner",
+              "module_argument_outer",
+              "module_name",
+              "name",
+              "order_clause",
+              "ordering_term",
+              "over_clause",
+              "parse",
+              "percentile_clause",
+              "pragma_name",
+              "pragma_stmt",
+              "pragma_value",
+              "qualified_table_name",
+              "raise_function",
+              "reindex_stmt",
+              "release_stmt",
+              "result_column",
+              "returning_clause",
+              "rollback_stmt",
+              "savepoint_name",
+              "savepoint_stmt",
+              "schema_name",
+              "select_core",
+              "select_stmt",
+              "signed_number",
+              "sql_stmt",
+              "sql_stmt_list",
+              "table_alias",
+              "table_alias_excluding_joins",
+              "table_constraint",
+              "table_function_name",
+              "table_name",
+              "table_options",
+              "table_or_index_name",
+              "table_or_subquery",
+              "trigger_name",
+              "type_name",
+              "update_stmt",
+              "upsert_clause",
+              "vacuum_stmt",
+              "value_row",
+              "values_clause",
+              "view_name",
+              "window_defn",
+              "window_name",
+              "with_clause"
+            ],
+            "symbol": "parse"
+          }
+        ],
+        "overlapRatio": 1
+      },
+      "topBetweenness": [
+        {
+          "symbol": "expr_binary",
+          "value": 2240
+        },
+        {
+          "symbol": "expr_not",
+          "value": 2232
+        },
+        {
+          "symbol": "expr_and",
+          "value": 2224
+        },
+        {
+          "symbol": "expr_or",
+          "value": 2216
+        },
+        {
+          "symbol": "expr",
+          "value": 2208
+        },
+        {
+          "symbol": "select_stmt",
+          "value": 1557.5
+        },
+        {
+          "symbol": "select_core",
+          "value": 1079
+        },
+        {
+          "symbol": "expr_collate",
+          "value": 1068
+        },
+        {
+          "symbol": "expr_string",
+          "value": 1060
+        },
+        {
+          "symbol": "expr_base",
+          "value": 1054
+        }
+      ],
+      "topFanIn": [
+        {
+          "count": 28,
+          "symbol": "expr"
+        },
+        {
+          "count": 20,
+          "symbol": "any_name"
+        },
+        {
+          "count": 18,
+          "symbol": "schema_name"
+        },
+        {
+          "count": 13,
+          "symbol": "column_name"
+        },
+        {
+          "count": 13,
+          "symbol": "table_name"
+        },
+        {
+          "count": 9,
+          "symbol": "select_stmt"
+        },
+        {
+          "count": 6,
+          "symbol": "name"
+        },
+        {
+          "count": 6,
+          "symbol": "order_clause"
+        },
+        {
+          "count": 5,
+          "symbol": "collation_name"
+        },
+        {
+          "count": 4,
+          "symbol": "index_name"
+        }
+      ],
+      "topFanOut": [
+        {
+          "count": 22,
+          "symbol": "sql_stmt"
+        },
+        {
+          "count": 9,
+          "symbol": "create_trigger_stmt"
+        },
+        {
+          "count": 9,
+          "symbol": "table_or_subquery"
+        },
+        {
+          "count": 9,
+          "symbol": "update_stmt"
+        },
+        {
+          "count": 8,
+          "symbol": "column_constraint"
+        },
+        {
+          "count": 8,
+          "symbol": "expr_base"
+        },
+        {
+          "count": 8,
+          "symbol": "insert_stmt"
+        },
+        {
+          "count": 7,
+          "symbol": "alter_table_stmt"
+        },
+        {
+          "count": 7,
+          "symbol": "expr_recursive"
+        },
+        {
+          "count": 6,
+          "symbol": "create_table_stmt"
+        }
+      ],
+      "unproductiveSymbols": [],
+      "unreachableSymbols": []
+    },
+    "style": {
+      "namingOutliers": [],
+      "nonterminalConvention": "snake_case",
+      "nonterminalConventionRatio": 1,
+      "notApplicable": {
+        "commentDensity": "source frontend did not retain comment statistics",
+        "comments": "source frontend did not retain comment statistics",
+        "documentedRuleRatio": "source frontend did not retain rule documentation comments",
+        "undocumentedRules": "source frontend did not retain rule documentation comments"
+      },
+      "terminalUpperCaseRatio": 1
+    },
+    "sugar": {
+      "notApplicable": {
+        "inlineRules": "parameterizedRules capability is false",
+        "parameterizedCalls": "parameterizedRules capability is false",
+        "parameterizedRuleDefs": "parameterizedRules capability is false"
+      },
+      "nullableRepetitions": 0,
+      "opt": 161,
+      "plus": 3,
+      "star": 52
+    }
+  },
+  "id": "antlr-sqlite",
+  "measurement": {
+    "analysis": "lr",
+    "frontend": "antlr4"
+  },
+  "provenance": {
+    "files": [
+      {
+        "bytes": 20974,
+        "path": "sql/sqlite/SQLiteParser.g4",
+        "sha256": "0b2e81506c7794a065d7b542f48f232fd0d89682123106818b4bb0b635aa1186",
+        "url": "https://raw.githubusercontent.com/antlr/grammars-v4/e756f2a2ee5565a9300666f100ba6acd874664f7/sql/sqlite/SQLiteParser.g4"
+      },
+      {
+        "bytes": 7500,
+        "path": "sql/sqlite/SQLiteLexer.g4",
+        "sha256": "19fa347a41eddc482d818549c5b06c047f52393320b8e9bdf6f783450f8d0e50",
+        "url": "https://raw.githubusercontent.com/antlr/grammars-v4/e756f2a2ee5565a9300666f100ba6acd874664f7/sql/sqlite/SQLiteLexer.g4"
+      }
+    ],
+    "license": "Per-grammar source notices; see upstream repository",
+    "licenseUrl": "https://github.com/antlr/grammars-v4/blob/e756f2a2ee5565a9300666f100ba6acd874664f7/README.md",
+    "repository": "antlr/grammars-v4",
+    "revision": "e756f2a2ee5565a9300666f100ba6acd874664f7"
+  },
+  "title": "ANTLR SQLite"
+}

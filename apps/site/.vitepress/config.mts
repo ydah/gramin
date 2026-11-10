@@ -28,6 +28,8 @@ export default defineConfig({
     nav: [
       { text: "Overview", link: "/" },
       { text: "Sandbox", link: "/sandbox" },
+      { text: "Atlas", link: "/atlas/" },
+      { text: "Blog", link: "/blog/measure-grammar-changes" },
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Reference", link: "/reference/" },
       { text: "GitHub", link: "https://github.com/ydah/gramin" },
@@ -41,6 +43,8 @@ export default defineConfig({
             { text: "How it works", link: "/guide/how-it-works" },
             { text: "Reviewing grammar changes", link: "/guide/reviewing-changes" },
             { text: "GitHub Actions and SARIF", link: "/guide/github-actions" },
+            { text: "CSV and batch analysis", link: "/guide/data-output" },
+            { text: "MCP server", link: "/guide/mcp" },
           ],
         },
         {
@@ -54,7 +58,10 @@ export default defineConfig({
       "/formats/": [
         {
           text: "Formats",
-          items: [{ text: "Support matrix", link: "/formats/" }],
+          items: [
+            { text: "Support matrix", link: "/formats/" },
+            { text: "External frontends", link: "/formats/frontends" },
+          ],
         },
       ],
       "/reference/": [
