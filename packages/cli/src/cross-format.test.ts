@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { analyzeGrammar } from "@gramin/analyzer";
 import {
   type Expr,
@@ -38,8 +38,10 @@ const tokens = [
   "COMMA",
 ];
 
-const parseFixture = (name: string, frontend: Frontend): GrammarIR => {
-  const content = readFileSync(new URL(name, corpus), "utf8");
+const parseFixture = (name: string, frontend: Frontend, directory: URL): GrammarIR => {
+  const path = new URL(name, directory);
+  expect(existsSync(path), `missing corpus fixture ${path.pathname}`).toBe(true);
+  const content = readFileSync(path, "utf8");
   const result = frontend.parse([{ name, content }], {});
   expect(result.diagnostics.filter(({ severity }) => severity === "error")).toEqual([]);
   const validated = validateIR(result.ir);
@@ -47,7 +49,11 @@ const parseFixture = (name: string, frontend: Frontend): GrammarIR => {
   return validated.value;
 };
 
-const parserScope = (ir: GrammarIR): GrammarIR => {
+const parserScope = (
+  ir: GrammarIR,
+  parserRules: readonly string[],
+  tokens: readonly string[],
+): GrammarIR => {
   const rules = ir.rules.filter(({ name }) => parserRules.includes(name));
   expect(rules.map(({ name }) => name)).toEqual(parserRules);
   const terminalNames = new Set<string>();
@@ -115,12 +121,53 @@ const classAMetrics = (features: GrammarFeatures) => ({
   tokenUsage: features.lexicon.tokenUsage,
 });
 
-describe("aligned JSON corpus", () => {
+const arithmeticCases: readonly [string, Frontend][] = [
+  ["arithmetic.y", yaccFrontend],
+  ["arithmetic.bnf", bnfFrontend],
+  ["Arithmetic.g4", antlrFrontend],
+  ["arithmetic.mly", menhirFrontend],
+  ["arithmetic.peggy", pegFrontend],
+];
+
+describe.each([
+  {
+    label: "JSON",
+    directory: corpus,
+    cases,
+    parserRules,
+    tokens,
+    expectedCounts: {
+      terminals: 11,
+      rules: 7,
+      alternatives: 17,
+      unitRules: 5,
+      reachableRules: 7,
+      unreachableSymbols: [],
+      commonPrefixPairs: 4,
+    },
+  },
+  {
+    label: "arithmetic",
+    directory: new URL("../../../fixtures/cross-format/arithmetic/", import.meta.url),
+    cases: arithmeticCases,
+    parserRules: ["arithmetic", "expression", "term", "factor"],
+    tokens: ["NUMBER", "PLUS", "MINUS", "STAR", "SLASH", "LPAREN", "RPAREN"],
+    expectedCounts: {
+      terminals: 7,
+      rules: 4,
+      alternatives: 9,
+      unitRules: 3,
+      reachableRules: 4,
+      unreachableSymbols: [],
+      commonPrefixPairs: 6,
+    },
+  },
+])("aligned $label corpus", ({ directory, cases, parserRules, tokens, expectedCounts }) => {
   it.each(cases)(
     "validates and deterministically analyzes %s without unresolved references",
     (name, frontend) => {
-      const first = parseFixture(name, frontend);
-      const second = parseFixture(name, frontend);
+      const first = parseFixture(name, frontend, directory);
+      const second = parseFixture(name, frontend, directory);
       expect(first.externalSymbols).toEqual([]);
       expect(serializeCanonical(first)).toBe(serializeCanonical(second));
       const features = analyzeGrammar(first, { lr: true });
@@ -132,20 +179,18 @@ describe("aligned JSON corpus", () => {
   );
 
   it("matches every applicable catalog class-A metric in the documented parser scope", () => {
-    const baseline = analyzeGrammar(parserScope(parseFixture("json.y", yaccFrontend)), {
-      lr: true,
-    });
-    expect(classAMetrics(baseline)).toMatchObject({
-      terminals: 11,
-      rules: 7,
-      alternatives: 17,
-      unitRules: 5,
-      reachableRules: 7,
-      unreachableSymbols: [],
-      commonPrefixPairs: 4,
-    });
+    const firstCase = cases[0];
+    if (!firstCase) throw new Error("corpus is empty");
+    const baseline = analyzeGrammar(
+      parserScope(parseFixture(...firstCase, directory), parserRules, tokens),
+      { lr: true },
+    );
+    expect(classAMetrics(baseline)).toMatchObject(expectedCounts);
     for (const [name, frontend] of cases) {
-      const features = analyzeGrammar(parserScope(parseFixture(name, frontend)), { lr: true });
+      const features = analyzeGrammar(
+        parserScope(parseFixture(name, frontend, directory), parserRules, tokens),
+        { lr: true },
+      );
       expect(classAMetrics(features), name).toEqual(classAMetrics(baseline));
       if (features.capabilities.orderedChoice) {
         expect(features.structure.notApplicable?.unproductiveSymbols).toContain("orderedChoice");
@@ -165,9 +210,9 @@ describe("aligned JSON corpus", () => {
   it.each(cases)(
     "explains class-B applicability through the capabilities of %s",
     (name, frontend) => {
-      const ir = parseFixture(name, frontend);
+      const ir = parseFixture(name, frontend, directory);
       const original = analyzeGrammar(ir, { lr: true });
-      const scoped = analyzeGrammar(parserScope(ir), { lr: true });
+      const scoped = analyzeGrammar(parserScope(ir, parserRules, tokens), { lr: true });
       expect(scoped.size.nestedChoiceCount).toBe(0);
       expect(scoped.structure.directLeftRecursiveRules).toBe(0);
       expect(scoped.structure.directRightRecursiveRules).toBe(2);
