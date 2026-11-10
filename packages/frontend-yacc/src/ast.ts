@@ -36,6 +36,7 @@ export interface YaccRule {
   readonly params?: readonly string[];
   readonly isInline?: boolean;
   readonly declaredType?: string;
+  readonly documented?: boolean;
   readonly alternatives: readonly YaccAlternative[];
   readonly loc: SourceSpan;
 }

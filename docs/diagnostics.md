@@ -30,6 +30,8 @@ change the exit status; `--fail-on warning` makes them a CI gate.
 | `YACC001`–`YACC003` | Yacc literal/action lexical problem | error or warning |
 | `YACC004`–`YACC005`, `YACC100`–`YACC102`, `YACC200`–`YACC210` | Yacc declaration, nesting-limit, or rule parse problem | error or warning |
 | `YACC300_UNRESOLVED_SYMBOL` | Yacc reference is not declared | warning |
+| `YACC301_AMBIGUOUS_START_SYMBOL` | A start name denotes several parameterized arities without an ordinary entry rule | error |
+| `YACC302_AMBIGUOUS_RULE_DOCUMENTATION` | Legacy AST comment metadata cannot identify an overloaded declaration; dependent comment measurements are omitted | warning |
 | `YACC400`–`YACC402` | Yacc input or file handling problem | error or warning |
 | `IR010`–`IR016` | Frontend omitted or approximated source constructs | info |
 | `REGRESSION_METRIC_INCREASE` | A tracked feature increased relative to `--baseline` | warning |

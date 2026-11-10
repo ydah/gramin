@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { serializeCanonical, validateIR } from "@gramin/core";
 import { describe, expect, it } from "vitest";
-import { lexYacc, yaccFrontend } from "./index.js";
+import { lexYacc, lowerYaccAst, parseYaccAst, yaccFrontend } from "./index.js";
 
 const fixture = (name: string): string =>
   readFileSync(new URL(`../fixtures/${name}`, import.meta.url), "utf8");
@@ -207,5 +207,319 @@ entry: %empty { $$ = $value + $1; } ;
       { name: "option", origin: "stdlib", kind: "rule" },
       { name: "separated_list", origin: "stdlib", kind: "rule" },
     ]);
+  });
+
+  it("keeps ordinary rules separate from same-name parameterized templates", () => {
+    const files = [
+      {
+        name: "overloaded.y",
+        content: `%token A B
+%rule words(X): X ;
+%%
+entry: words words(A) ;
+words: B ;
+`,
+      },
+    ];
+    const result = yaccFrontend.parse(files, {});
+    const templateName = "@yacc/parameterized/words/1";
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.rules.map((rule) => rule.name)).toEqual([templateName, "entry", "words"]);
+    expect(result.ir?.rules[0]).toMatchObject({
+      params: ["X"],
+      alternatives: [{ items: [{ kind: "symbol", name: "X" }] }],
+    });
+    expect(result.ir?.rules[1]?.alternatives[0]?.items).toEqual([
+      { kind: "symbol", name: "words" },
+      { kind: "symbol", name: templateName, args: [{ kind: "terminal", name: "A" }] },
+    ]);
+    expect(result.ir?.rules[2]?.alternatives[0]?.items).toEqual([{ kind: "terminal", name: "B" }]);
+    expect(serializeCanonical(result.ir)).toBe(
+      serializeCanonical(yaccFrontend.parse(files, {}).ir),
+    );
+  });
+
+  it("separates template arities, merges matching signatures, and preserves formal calls", () => {
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "arities.y",
+          content: `%token A B
+/* template documentation */
+%rule words(X): X ;
+%rule words(X, Y): X Y ;
+%rule words(X): X X ;
+%rule local(words): words(A) ;
+%rule untouched(X): X ;
+%%
+entry: words(A)? words(A, B) local(untouched) ;
+`,
+        },
+      ],
+      {},
+    );
+    const unaryName = "@yacc/parameterized/words/1";
+    const binaryName = "@yacc/parameterized/words/2";
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.rules.map((rule) => [rule.name, rule.alternatives.length])).toEqual([
+      [unaryName, 2],
+      [binaryName, 1],
+      ["local", 1],
+      ["untouched", 1],
+      ["entry", 1],
+    ]);
+    expect(result.ir?.rules[2]?.alternatives[0]?.items).toEqual([
+      { kind: "symbol", name: "words", args: [{ kind: "terminal", name: "A" }] },
+    ]);
+    expect(result.ir?.rules[4]?.alternatives[0]?.items).toEqual([
+      {
+        kind: "opt",
+        expr: { kind: "symbol", name: unaryName, args: [{ kind: "terminal", name: "A" }] },
+      },
+      {
+        kind: "symbol",
+        name: binaryName,
+        args: [
+          { kind: "terminal", name: "A" },
+          { kind: "terminal", name: "B" },
+        ],
+      },
+      { kind: "symbol", name: "local", args: [{ kind: "symbol", name: "untouched" }] },
+    ]);
+  });
+
+  it("avoids existing rule identities in the reserved template namespace", () => {
+    const { ast } = parseYaccAst("%rule words(X): X ;\n%%\nwords: 'a' ;\n");
+    const original = ast.rules[1];
+    if (!original) throw new Error("missing ordinary test rule");
+    const reservedName = "@yacc/parameterized/words/1";
+    const ir = lowerYaccAst(
+      { ...ast, rules: [...ast.rules, { ...original, name: reservedName }] },
+      { fileNames: ["identities.y"], frontendId: "yacc-family", frontendVersion: "0.2.1" },
+    );
+
+    expect(validateIR(ir).ok).toBe(true);
+    expect(ir.rules.map((rule) => rule.name)).toEqual([`${reservedName}~1`, "words", reservedName]);
+  });
+
+  it("lets formal parameters shadow declared terminals", () => {
+    const result = yaccFrontend.parse(
+      [{ name: "shadow.y", content: "%token X A\n%rule p(X): X ;\n%%\nentry: p(A) ;\n" }],
+      {},
+    );
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.rules[0]?.alternatives[0]?.items).toEqual([{ kind: "symbol", name: "X" }]);
+    expect(result.ir?.rules[1]?.alternatives[0]?.items).toEqual([
+      { kind: "symbol", name: "p", args: [{ kind: "terminal", name: "A" }] },
+    ]);
+  });
+
+  it("normalizes repeated template binders without capturing global references", () => {
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "binders.y",
+          content: `%token A B X X_1
+%rule pair(X, Y): X(Y) ;
+%rule pair(Y, X): Y(X) ;
+%rule pair(Z, W): X X_1 Z(W)? ;
+%rule simple(P): P ;
+%rule simple(Q): Q ;
+%%
+entry: pair(A, B) simple(A) ;
+`,
+        },
+      ],
+      {},
+    );
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.rules[0]).toMatchObject({
+      name: "pair",
+      params: ["X_2", "Y"],
+      alternatives: [
+        { items: [{ kind: "symbol", name: "X_2", args: [{ kind: "symbol", name: "Y" }] }] },
+        { items: [{ kind: "symbol", name: "X_2", args: [{ kind: "symbol", name: "Y" }] }] },
+        {
+          items: [
+            { kind: "terminal", name: "X" },
+            { kind: "terminal", name: "X_1" },
+            {
+              kind: "opt",
+              expr: { kind: "symbol", name: "X_2", args: [{ kind: "symbol", name: "Y" }] },
+            },
+          ],
+        },
+      ],
+    });
+    expect(result.ir?.rules[1]).toMatchObject({
+      name: "simple",
+      params: ["P"],
+      alternatives: [
+        { items: [{ kind: "symbol", name: "P" }] },
+        { items: [{ kind: "symbol", name: "P" }] },
+      ],
+    });
+  });
+
+  it.each(["", "%start words\n"])(
+    "diagnoses ambiguous overloaded template starts while keeping IR canonical (%s)",
+    (startDeclaration) => {
+      const result = yaccFrontend.parse(
+        [
+          {
+            name: "template-start.y",
+            content: `${startDeclaration}%%\nwords(X): X ;\nwords(X, Y): X Y ;\n`,
+          },
+        ],
+        {},
+      );
+
+      expect(validateIR(result.ir).ok).toBe(true);
+      expect(result.ir?.startSymbols).toEqual([]);
+      expect(result.diagnostics).toEqual([
+        expect.objectContaining({ code: "YACC301_AMBIGUOUS_START_SYMBOL", severity: "error" }),
+      ]);
+    },
+  );
+
+  it("resolves an overloaded start to its zero-argument template", () => {
+    const result = yaccFrontend.parse(
+      [{ name: "empty-parameters.y", content: "%%\nwords(): 'a' ;\nwords(X): X ;\n" }],
+      {},
+    );
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.startSymbols).toEqual(["@yacc/parameterized/words/0"]);
+  });
+
+  it.each(["template", "ordinary"])(
+    "attributes documentation only to the %s declaration",
+    (kind) => {
+      const result = yaccFrontend.parse(
+        [
+          {
+            name: "documented-collision.y",
+            content: `%token A B
+${kind === "template" ? "/* docs */\n" : ""}%rule words(X): X ;
+%%
+entry: words(A) words ;
+${kind === "ordinary" ? "/* docs */\n" : ""}words: B ;
+`,
+          },
+        ],
+        {},
+      );
+
+      expect(validateIR(result.ir).ok).toBe(true);
+      expect(result.diagnostics).toEqual([]);
+      expect(result.ir?.sourceMetrics?.comments?.documentedRules).toEqual([
+        kind === "template" ? "@yacc/parameterized/words/1" : "words",
+      ]);
+    },
+  );
+
+  it("attributes documentation only to the documented template arity", () => {
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "documented-arity.y",
+          content: `%token A B
+%rule words(X): X ;
+/* docs */
+%rule words(X, Y): X Y ;
+%%
+entry: words(A) words(A, B) ;
+`,
+        },
+      ],
+      {},
+    );
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.sourceMetrics?.comments?.documentedRules).toEqual([
+      "@yacc/parameterized/words/2",
+    ]);
+  });
+
+  it("marks a merged template documented when any matching declaration has documentation", () => {
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "documented-merge.y",
+          content: `%token A B
+%rule words(X): X ;
+/* docs */
+%rule words(Y): Y Y ;
+/* more docs */
+%rule words(Z): Z Z Z ;
+%%
+entry: words(A) words ;
+words: B ;
+`,
+        },
+      ],
+      {},
+    );
+
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.ir?.sourceMetrics?.comments?.documentedRules).toEqual([
+      "@yacc/parameterized/words/1",
+    ]);
+  });
+
+  it.each([
+    "%rule words(X): X ;\n%%\nwords: 'a' ;\n",
+    "%rule words(X): X ;\n%rule words(X, Y): X Y ;\n%%\nentry: words('a') ;\n",
+  ])("does not invent declaration coverage from ambiguous legacy AST documentation", (content) => {
+    const { ast } = parseYaccAst(`/* docs */\n${content}`);
+    const ir = lowerYaccAst(
+      {
+        ...ast,
+        rules: ast.rules.map(({ documented: _documented, ...rule }) => rule),
+      },
+      { fileNames: ["legacy-docs.y"], frontendId: "yacc-family", frontendVersion: "0.2.1" },
+    );
+
+    expect(validateIR(ir).ok).toBe(true);
+    expect(ir.sourceMetrics?.comments).toBeUndefined();
+    expect(ir.sourceMetrics?.sourceCharacters).toBe(ast.sourceMetrics?.sourceCharacters);
+    expect(ir.sourceMetrics?.declarationDirectives).toEqual(
+      ast.sourceMetrics?.declarationDirectives,
+    );
+    expect(ir.diagnostics).toEqual([
+      expect.objectContaining({
+        code: "YACC302_AMBIGUOUS_RULE_DOCUMENTATION",
+        severity: "warning",
+      }),
+    ]);
+  });
+
+  it("retains unambiguous legacy AST documentation for merged signatures", () => {
+    const { ast } = parseYaccAst(`/* docs */
+%rule words(X): X ;
+/* more docs */
+%rule words(Y): Y Y ;
+%%
+entry: words('a') ;
+`);
+    const ir = lowerYaccAst(
+      { ...ast, rules: ast.rules.map(({ documented: _documented, ...rule }) => rule) },
+      { fileNames: ["legacy-docs.y"], frontendId: "yacc-family", frontendVersion: "0.2.1" },
+    );
+
+    expect(validateIR(ir).ok).toBe(true);
+    expect(ir.sourceMetrics?.comments?.documentedRules).toEqual(["words"]);
+    expect(ir.diagnostics).toEqual([]);
   });
 });

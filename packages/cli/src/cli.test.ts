@@ -575,7 +575,8 @@ describe("gramin CLI", () => {
     expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
     expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
     expect(features.size.rhsLengthPercentiles).toEqual({ p50: 1, p95: 5 });
-    expect(features.structure.recursiveRules).toEqual({ count: 143, ratio: 0.572 });
+    expect(features.size.rules).toBe(251);
+    expect(features.structure.recursiveRules).toEqual({ count: 144, ratio: 0.5737 });
     expect(features.precedence).toMatchObject({
       maxTokensPerLevel: 6,
       rulesWithPrecOverrides: 8,

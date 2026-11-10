@@ -1,7 +1,7 @@
 import {
   DEFAULT_MAX_NESTING_DEPTH,
-  MAX_SUPPORTED_NESTING_DEPTH,
   type Diagnostic,
+  MAX_SUPPORTED_NESTING_DEPTH,
   type SourceSpan,
 } from "@gramin/core";
 import type { YaccAst } from "./ast.js";
@@ -66,16 +66,14 @@ export const parseYaccAst = (
         ? "bison"
         : "yacc";
   const diagnostics = [...lexed.diagnostics, ...stream.diagnostics];
-  const rules = [...declarations.preambleRules, ...parsedRules.rules];
-  const documentedRules = rules
-    .filter((rule) =>
-      lexed.comments.some(
-        (comment) =>
-          comment.loc.endLine >= rule.loc.startLine - 1 &&
-          comment.loc.endLine <= rule.loc.startLine,
-      ),
-    )
-    .map((rule) => rule.name);
+  const rules = [...declarations.preambleRules, ...parsedRules.rules].map((rule) => ({
+    ...rule,
+    documented: lexed.comments.some(
+      (comment) =>
+        comment.loc.endLine >= rule.loc.startLine - 1 && comment.loc.endLine <= rule.loc.startLine,
+    ),
+  }));
+  const documentedRules = rules.filter((rule) => rule.documented).map((rule) => rule.name);
 
   return {
     ast: {
