@@ -11,7 +11,7 @@ These are measurements of pinned source representations, not a complexity rankin
 | [ANTLR SQLite](./antlr-sqlite) | 114 | 254 | 39 | unavailable | unavailable |
 | [Perl parser](./perl) | 114 | 348 | 90 | unavailable | 681 |
 | [PHP Zend parser](./php) | 177 | 624 | 119 | unavailable | 1192 |
-| [Ruby development parser](./ruby) | 251 | 712 | 144 | 18 | 1440 |
+| [Ruby development parser](./ruby) | 251 | 712 | 140 | 18 | 1440 |
 
 [Explore the Ruby parse.y chronicle](./ruby-history).
 
@@ -23,4 +23,4 @@ Measurements are regenerated weekly from the pinned manifest and the current gra
 
 Class A refers to representation-level counts. Class B requires matching capability/representation context; class C also depends on source conventions. Use the [sandbox](../sandbox) or `gramin diff --features` to apply the comparison gates. Missing values remain unavailable.
 
-Dataset contract 1.0.0; analyzer 1.0.0, Grammar IR 1.4.0, features 1.0.0.
+Dataset contract 1.0.0; analyzer 1.0.1, Grammar IR 1.4.0, features 1.0.0.

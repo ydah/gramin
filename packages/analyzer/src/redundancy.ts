@@ -38,6 +38,7 @@ const terminalName = (terminal: GrammarIR["terminals"][number]): string =>
 
 const listRecursionDirections = (
   rule: GrammarIR["rules"][number],
+  parameters: ReadonlySet<string>,
 ): { readonly left: boolean; readonly right: boolean } => {
   // ponytail: H/C detection uses conventional names; widen only with corpus evidence.
   const listLikeName = /list|items?|elements?|members?|arguments?|parameters?|statements?/iu.test(
@@ -45,19 +46,20 @@ const listRecursionDirections = (
   );
   const hasBaseAlternative = rule.alternatives.some(
     (alternative) =>
-      alternativeRhsLength(alternative) > 0 && !collectReferences(alternative).has(rule.name),
+      alternativeRhsLength(alternative) > 0 &&
+      !collectReferences(alternative, parameters).has(rule.name),
   );
   if (!listLikeName || !hasBaseAlternative) return { left: false, right: false };
   return {
     left: rule.alternatives.some(
       (alternative) =>
         alternativeRhsLength(alternative) > 1 &&
-        alternativeEdgeReference(alternative, "first") === rule.name,
+        alternativeEdgeReference(alternative, "first", parameters) === rule.name,
     ),
     right: rule.alternatives.some(
       (alternative) =>
         alternativeRhsLength(alternative) > 1 &&
-        alternativeEdgeReference(alternative, "last") === rule.name,
+        alternativeEdgeReference(alternative, "last", parameters) === rule.name,
     ),
   };
 };
@@ -75,8 +77,12 @@ export const redundancyFeatures = (ir: GrammarIR): GrammarFeatures["redundancy"]
   let mixedLists = 0;
 
   rules.forEach((rule) => {
+    const parameters = new Set(rule.params);
     const seenAlternatives = new Set<string>();
-    const { left: leftRecursive, right: rightRecursive } = listRecursionDirections(rule);
+    const { left: leftRecursive, right: rightRecursive } = listRecursionDirections(
+      rule,
+      parameters,
+    );
     if (leftRecursive && rightRecursive) mixedLists += 1;
     else if (leftRecursive) leftLists += 1;
     else if (rightRecursive) rightLists += 1;
@@ -86,7 +92,11 @@ export const redundancyFeatures = (ir: GrammarIR): GrammarFeatures["redundancy"]
       seenAlternatives.add(key);
       alternative.items.forEach((item) => {
         walkExpression(item, (expression) => {
-          if (expression.kind === "symbol" && referenceCounts.has(expression.name)) {
+          if (
+            expression.kind === "symbol" &&
+            !parameters.has(expression.name) &&
+            referenceCounts.has(expression.name)
+          ) {
             referenceCounts.set(expression.name, (referenceCounts.get(expression.name) ?? 0) + 1);
           }
           if (expression.kind === "terminal") {

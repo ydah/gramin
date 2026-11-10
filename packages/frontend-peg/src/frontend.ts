@@ -14,7 +14,7 @@ import {
 } from "@gramin/core";
 
 export const FRONTEND_PEG_ID = "peggy";
-export const FRONTEND_PEG_VERSION = "1.0.0";
+export const FRONTEND_PEG_VERSION = "1.0.1";
 
 type TokenKind =
   | "identifier"

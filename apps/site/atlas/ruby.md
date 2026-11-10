@@ -6,7 +6,7 @@ These are measurements of pinned source representations, not a complexity rankin
 
 | Grammar | Source rules | Alternatives | Recursive rules | Parameter definitions | Raw LR(0) states |
 |---|---:|---:|---:|---:|---:|
-| [Ruby development parser](./ruby) | 251 | 712 | 144 | 18 | 1440 |
+| [Ruby development parser](./ruby) | 251 | 712 | 140 | 18 | 1440 |
 
 ## Source and provenance
 

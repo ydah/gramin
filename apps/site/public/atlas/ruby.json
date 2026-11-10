@@ -1131,8 +1131,8 @@
     "notable": {
       "coreSymbols": [
         "none",
-        "stmts",
         "compstmt",
+        "stmts",
         "arg_value",
         "rparen",
         "primary_value",
@@ -1142,7 +1142,6 @@
         "allow_exits"
       ],
       "deepestRecursionMembers": [
-        "@yacc/parameterized/words/2",
         "aref_args",
         "arg",
         "arg_rhs",
@@ -1175,7 +1174,6 @@
         "command_call",
         "command_call_value",
         "command_rhs",
-        "compstmt",
         "cpath",
         "def_endless_method",
         "defs_head",
@@ -1247,8 +1245,6 @@
         "paren_args",
         "primary",
         "primary_value",
-        "qsymbols",
-        "qwords",
         "regexp",
         "regexp_contents",
         "rel_expr",
@@ -1411,7 +1407,7 @@
       {
         "alternatives": 1,
         "fanIn": 4,
-        "fanOut": 1,
+        "fanOut": 0,
         "maxExpressionNestingDepth": 2,
         "maxRhsItems": 4,
         "reachableFromStarts": [
@@ -1423,9 +1419,7 @@
           "symbols",
           "words"
         ],
-        "references": [
-          "word_list"
-        ],
+        "references": [],
         "rhsItems": 4,
         "rule": "@yacc/parameterized/words/2",
         "unitRules": 0
@@ -2233,7 +2227,7 @@
       },
       {
         "alternatives": 2,
-        "fanIn": 4,
+        "fanIn": 3,
         "fanOut": 6,
         "firstSetSize": 71,
         "followSetSize": 2,
@@ -2248,7 +2242,6 @@
           "program"
         ],
         "referencedBy": [
-          "def_endless_method",
           "do_body",
           "lambda_body",
           "primary"
@@ -2818,7 +2811,7 @@
       {
         "alternatives": 1,
         "fanIn": 13,
-        "fanOut": 2,
+        "fanOut": 1,
         "maxExpressionNestingDepth": 2,
         "maxRhsItems": 2,
         "reachableFromStarts": [
@@ -2840,7 +2833,6 @@
           "string_content"
         ],
         "references": [
-          "stmts",
           "terms"
         ],
         "rhsItems": 2,
@@ -2878,7 +2870,7 @@
       {
         "alternatives": 2,
         "fanIn": 3,
-        "fanOut": 4,
+        "fanOut": 3,
         "maxExpressionNestingDepth": 1,
         "maxRhsItems": 4,
         "reachableFromStarts": [
@@ -2890,7 +2882,6 @@
           "command_asgn"
         ],
         "references": [
-          "bodystmt",
           "defn_head",
           "defs_head",
           "f_opt_paren_args"
@@ -7741,7 +7732,7 @@
       },
       {
         "alternatives": 3,
-        "fanIn": 14,
+        "fanIn": 13,
         "fanOut": 4,
         "firstSetSize": 68,
         "followSetSize": 14,
@@ -7759,7 +7750,6 @@
           "bodystmt",
           "brace_body",
           "case_body",
-          "compstmt",
           "if_tail",
           "lambda_body",
           "opt_else",
@@ -8549,7 +8539,7 @@
       },
       {
         "alternatives": 2,
-        "fanIn": 3,
+        "fanIn": 2,
         "fanOut": 2,
         "firstSetSize": 3,
         "followSetSize": 4,
@@ -8564,7 +8554,6 @@
           "program"
         ],
         "referencedBy": [
-          "@yacc/parameterized/words/2",
           "word_list",
           "words"
         ],
@@ -8867,7 +8856,7 @@
       "format": "lrama",
       "frontend": {
         "id": "yacc-family",
-        "version": "1.0.0"
+        "version": "1.0.1"
       }
     },
     "structure": {
@@ -9016,11 +9005,10 @@
       ],
       "directLeftRecursiveRules": 34,
       "directRightRecursiveRules": 7,
-      "fanInEntropy": 7.5588,
-      "fanInGini": 0.3824,
+      "fanInEntropy": 7.5621,
+      "fanInGini": 0.3807,
       "largestRecursiveComponent": {
         "members": [
-          "@yacc/parameterized/words/2",
           "aref_args",
           "arg",
           "arg_rhs",
@@ -9053,7 +9041,6 @@
           "command_call",
           "command_call_value",
           "command_rhs",
-          "compstmt",
           "cpath",
           "def_endless_method",
           "defs_head",
@@ -9125,8 +9112,6 @@
           "paren_args",
           "primary",
           "primary_value",
-          "qsymbols",
-          "qwords",
           "regexp",
           "regexp_contents",
           "rel_expr",
@@ -9154,12 +9139,11 @@
           "xstring",
           "xstring_contents"
         ],
-        "ratio": 0.5299,
-        "value": 133
+        "ratio": 0.5139,
+        "value": 129
       },
       "largestSccSize": {
         "members": [
-          "@yacc/parameterized/words/2",
           "aref_args",
           "arg",
           "arg_rhs",
@@ -9192,7 +9176,6 @@
           "command_call",
           "command_call_value",
           "command_rhs",
-          "compstmt",
           "cpath",
           "def_endless_method",
           "defs_head",
@@ -9264,8 +9247,6 @@
           "paren_args",
           "primary",
           "primary_value",
-          "qsymbols",
-          "qwords",
           "regexp",
           "regexp_contents",
           "rel_expr",
@@ -9293,7 +9274,7 @@
           "xstring",
           "xstring_contents"
         ],
-        "value": 133
+        "value": 129
       },
       "maxDependencyDepth": 8,
       "maxExpressionNestingDepth": 3,
@@ -9307,12 +9288,12 @@
       "reachableRules": 251,
       "recursionSccCount": 2,
       "recursiveRules": {
-        "count": 144,
-        "ratio": 0.5737
+        "count": 140,
+        "ratio": 0.5578
       },
       "sccSizeHistogram": [
         {
-          "count": 116,
+          "count": 120,
           "size": 1
         },
         {
@@ -9321,7 +9302,7 @@
         },
         {
           "count": 1,
-          "size": 133
+          "size": 129
         }
       ],
       "shortestDerivation": [],
@@ -9591,43 +9572,43 @@
       "topBetweenness": [
         {
           "symbol": "primary",
-          "value": 17329.1045
+          "value": 17554.4358
         },
         {
           "symbol": "arg",
-          "value": 14246.3543
+          "value": 14263.858
         },
         {
           "symbol": "expr",
-          "value": 11292.1443
+          "value": 11129.7859
         },
         {
           "symbol": "stmt",
-          "value": 10216.2841
+          "value": 9263.8484
         },
         {
           "symbol": "stmt_or_begin",
-          "value": 9429.8317
+          "value": 8449.4317
         },
         {
           "symbol": "stmts",
-          "value": 9415.6722
-        },
-        {
-          "symbol": "string_content",
-          "value": 6358.1167
+          "value": 8423.3928
         },
         {
           "symbol": "arg_value",
-          "value": 6033.6411
+          "value": 6029.6084
+        },
+        {
+          "symbol": "string_content",
+          "value": 5611.2
         },
         {
           "symbol": "primary_value",
-          "value": 5084.4867
+          "value": 5099.8421
         },
         {
           "symbol": "p_expr_basic",
-          "value": 3606.6333
+          "value": 3586.6333
         }
       ],
       "topFanIn": [
@@ -9636,12 +9617,12 @@
           "symbol": "none"
         },
         {
-          "count": 14,
-          "symbol": "stmts"
+          "count": 13,
+          "symbol": "compstmt"
         },
         {
           "count": 13,
-          "symbol": "compstmt"
+          "symbol": "stmts"
         },
         {
           "count": 11,

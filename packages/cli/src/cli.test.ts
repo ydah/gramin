@@ -293,7 +293,7 @@ describe("gramin CLI", () => {
 
     const version = harness();
     expect(await runCli(["--version"], version.io)).toBe(EXIT_SUCCESS);
-    expect(version.stdout.join("")).toBe("1.0.0\n");
+    expect(version.stdout.join("")).toBe("1.0.1\n");
 
     const commandHelp = harness();
     expect(await runCli(["analyze", "--help"], commandHelp.io)).toBe(EXIT_SUCCESS);
@@ -807,7 +807,14 @@ describe("gramin CLI", () => {
     expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
     expect(features.size.rhsLengthPercentiles).toEqual({ p50: 1, p95: 5 });
     expect(features.size.rules).toBe(251);
-    expect(features.structure.recursiveRules).toEqual({ count: 144, ratio: 0.5737 });
+    expect(features.structure.recursiveRules).toEqual({ count: 140, ratio: 0.5578 });
+    for (const rule of parsed.ir.rules) {
+      const vector = features.perRule.find(({ rule: name }) => name === rule.name);
+      expect(vector).toBeDefined();
+      for (const parameter of rule.params ?? []) {
+        expect(vector?.references).not.toContain(parameter);
+      }
+    }
     expect(features.parseability).toMatchObject({
       context: {
         representation: "parameter-expansion-bnf-v1",

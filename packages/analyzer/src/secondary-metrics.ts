@@ -171,12 +171,14 @@ export const sugarFeatures = (ir: GrammarIR): GrammarFeatures["sugar"] => {
   let plus = 0;
   let parameterizedCalls = 0;
   const known = new Map<string, number>();
+  const ruleNames = new Set(ir.rules.map((rule) => rule.name));
   const standardLibraryNames = new Set(
     ir.externalSymbols
       .filter((symbol) => symbol.origin === "stdlib" && symbol.kind === "rule")
       .map((symbol) => symbol.name),
   );
   ir.rules.forEach((rule) => {
+    const parameters = new Set(rule.params);
     rule.alternatives.forEach((alternative) => {
       alternative.items.forEach((item) => {
         walkExpression(item, (expression) => {
@@ -185,7 +187,11 @@ export const sugarFeatures = (ir: GrammarIR): GrammarFeatures["sugar"] => {
           if (expression.kind === "plus") plus += 1;
           if (expression.kind === "symbol" && expression.args !== undefined) {
             parameterizedCalls += 1;
-            if (standardLibraryNames.has(expression.name)) {
+            if (
+              !parameters.has(expression.name) &&
+              !ruleNames.has(expression.name) &&
+              standardLibraryNames.has(expression.name)
+            ) {
               known.set(expression.name, (known.get(expression.name) ?? 0) + 1);
             }
           }

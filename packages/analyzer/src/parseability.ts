@@ -197,12 +197,14 @@ const distribution = (
 const unitTarget = (
   alternative: Alternative,
   ruleNames: ReadonlySet<string>,
+  parameters: ReadonlySet<string>,
 ): string | undefined => {
   const items = alternative.items.filter((item) => item.kind !== "midRuleAction");
   let item: Expr | undefined = items[0];
   while (item?.kind === "group") item = item.expr;
   return items.length === 1 &&
     item?.kind === "symbol" &&
+    !parameters.has(item.name) &&
     item.args === undefined &&
     ruleNames.has(item.name)
     ? item.name
@@ -425,8 +427,9 @@ export const parseabilityAnalysis = (
   const unitRulesByRule = new Map(rules.map((rule) => [rule.name, 0]));
   let unitRules = 0;
   rules.forEach((rule) => {
+    const parameters = new Set(rule.params);
     rule.alternatives.forEach((alternative) => {
-      const target = unitTarget(alternative, ruleNames);
+      const target = unitTarget(alternative, ruleNames, parameters);
       if (target === undefined) return;
       unitRules += 1;
       unitRulesByRule.set(rule.name, (unitRulesByRule.get(rule.name) ?? 0) + 1);

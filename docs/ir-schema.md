@@ -1,6 +1,6 @@
 # Grammar IR v1
 
-The current producer version is 1.3.0.
+The current producer version is 1.4.0.
 
 The normative machine-readable contract is
 `packages/core/schema/grammar-ir-v1.schema.json`. `@gramin/core` exports the same
@@ -26,6 +26,13 @@ adjacency, selected declaration-directive counts, explicit `%empty` count, and p
 versus named action-reference counts.
 `Rule.orderedAlternatives` preserves PEG-style first-success semantics after top-level
 choices are flattened; nested ordered choices use `choice(ordered: true)`.
+
+Within a rule, symbol names listed in `Rule.params` bind formal parameters and
+shadow global rules and external symbols. Explicit terminal nodes retain their
+terminal identity. References inside call arguments still use the surrounding
+rule's scope. A local rule definition takes precedence over an external library
+definition with the same name. An external symbol declared as a rule is not a
+terminal merely because its name matches a token convention such as `error`.
 
 ## Canonical form
 

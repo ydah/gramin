@@ -67,20 +67,31 @@ export const expressionRhsLength = (expression: Expr): number => {
 export const alternativeRhsLength = (alternative: Alternative): number =>
   alternative.items.reduce((total, item) => total + expressionRhsLength(item), 0);
 
-export const collectReferences = (alternative: Alternative): Set<string> => {
+export const collectReferences = (
+  alternative: Alternative,
+  parameters?: ReadonlySet<string>,
+): Set<string> => {
   const references = new Set<string>();
   for (const item of alternative.items) {
     walkExpression(item, (expression) => {
-      if (expression.kind === "symbol") references.add(expression.name);
+      if (expression.kind === "symbol" && !parameters?.has(expression.name)) {
+        references.add(expression.name);
+      }
     });
   }
   return references;
 };
 
-const edgeReference = (expression: Expr, direction: "first" | "last"): string | undefined => {
+const edgeReference = (
+  expression: Expr,
+  direction: "first" | "last",
+  parameters?: ReadonlySet<string>,
+): string | undefined => {
   let current = expression;
   while (true) {
-    if (current.kind === "symbol") return current.name;
+    if (current.kind === "symbol") {
+      return parameters?.has(current.name) ? undefined : current.name;
+    }
     if (current.kind === "group") {
       current = current.expr;
       continue;
@@ -105,11 +116,12 @@ const edgeReference = (expression: Expr, direction: "first" | "last"): string | 
 export const alternativeEdgeReference = (
   alternative: Alternative,
   direction: "first" | "last",
+  parameters?: ReadonlySet<string>,
 ): string | undefined => {
   const items = direction === "first" ? alternative.items : [...alternative.items].reverse();
   for (const item of items) {
     if (item.kind === "midRuleAction") continue;
-    return edgeReference(item, direction);
+    return edgeReference(item, direction, parameters);
   }
   return undefined;
 };

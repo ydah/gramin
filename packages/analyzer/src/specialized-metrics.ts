@@ -39,26 +39,32 @@ const shadows = (left: readonly Expr[], right: readonly Expr[]): boolean => {
 const leadingExpressionLiterals = (
   expression: Expr,
   leadingRules: ReadonlyMap<string, ReadonlySet<string>>,
+  parameters: ReadonlySet<string>,
 ): ReadonlySet<string> => {
   if (expression.kind === "terminal") {
     return new Set(expression.literal === undefined ? [] : [expression.literal]);
   }
-  if (expression.kind === "symbol") return leadingRules.get(expression.name) ?? new Set();
+  if (expression.kind === "symbol") {
+    return parameters.has(expression.name)
+      ? new Set()
+      : (leadingRules.get(expression.name) ?? new Set());
+  }
   if (expression.kind === "choice") {
     return new Set(
       expression.alts.flatMap((alternative) => [
-        ...leadingExpressionLiterals(alternative, leadingRules),
+        ...leadingExpressionLiterals(alternative, leadingRules, parameters),
       ]),
     );
   }
-  if (expression.kind === "seq") return leadingSequenceLiterals(expression.items, leadingRules);
+  if (expression.kind === "seq")
+    return leadingSequenceLiterals(expression.items, leadingRules, parameters);
   if (
     expression.kind === "opt" ||
     expression.kind === "star" ||
     expression.kind === "plus" ||
     expression.kind === "group"
   ) {
-    return leadingExpressionLiterals(expression.expr, leadingRules);
+    return leadingExpressionLiterals(expression.expr, leadingRules, parameters);
   }
   return new Set();
 };
@@ -66,9 +72,12 @@ const leadingExpressionLiterals = (
 const leadingSequenceLiterals = (
   items: readonly Expr[],
   leadingRules: ReadonlyMap<string, ReadonlySet<string>>,
+  parameters: ReadonlySet<string>,
 ): ReadonlySet<string> => {
   const first = items.find((item) => item.kind !== "midRuleAction" && item.kind !== "predicate");
-  return first === undefined ? new Set() : leadingExpressionLiterals(first, leadingRules);
+  return first === undefined
+    ? new Set()
+    : leadingExpressionLiterals(first, leadingRules, parameters);
 };
 
 const leadingLiteralSets = (ir: GrammarIR): ReadonlyMap<string, ReadonlySet<string>> => {
@@ -79,10 +88,11 @@ const leadingLiteralSets = (ir: GrammarIR): ReadonlyMap<string, ReadonlySet<stri
   while (changed) {
     changed = false;
     rules.forEach((rule) => {
+      const parameters = new Set(rule.params);
       const target = leading.get(rule.name);
       if (!target) return;
       rule.alternatives.forEach((alternative) => {
-        leadingSequenceLiterals(alternative.items, leading).forEach((literal) => {
+        leadingSequenceLiterals(alternative.items, leading, parameters).forEach((literal) => {
           if (target.has(literal)) return;
           target.add(literal);
           changed = true;
@@ -97,9 +107,12 @@ const potentiallyShadows = (
   left: readonly Expr[],
   right: readonly Expr[],
   leading: ReadonlyMap<string, ReadonlySet<string>>,
+  parameters: ReadonlySet<string>,
 ): boolean =>
-  [...leadingSequenceLiterals(left, leading)].some((prefix) =>
-    [...leadingSequenceLiterals(right, leading)].some((literal) => literal.startsWith(prefix)),
+  [...leadingSequenceLiterals(left, leading, parameters)].some((prefix) =>
+    [...leadingSequenceLiterals(right, leading, parameters)].some((literal) =>
+      literal.startsWith(prefix),
+    ),
   );
 
 interface Interval {
@@ -255,6 +268,7 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
   const leading = leadingLiteralSets(ir);
   const backtrackingHotspots: { rule: string; score: number }[] = [];
   mergeRulesByName(ir.rules).forEach((rule) => {
+    const parameters = new Set(rule.params);
     let score = 0;
     for (const group of choiceGroups.get(rule.name) ?? []) {
       const alternatives = group.map((items) =>
@@ -266,7 +280,7 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
           const rightItems = alternatives[right] ?? [];
           const shared = commonPrefixLength(leftItems, rightItems);
           if (shadows(leftItems, rightItems)) shadowedAlternativePairs += 1;
-          else if (potentiallyShadows(leftItems, rightItems, leading)) {
+          else if (potentiallyShadows(leftItems, rightItems, leading, parameters)) {
             potentialShadowedAlternativePairs += 1;
           }
           score += shared * (right + 1);
@@ -322,11 +336,15 @@ export const pegFeatures = (ir: GrammarIR): GrammarFeatures["peg"] => {
 };
 
 export const operationsFeatures = (ir: GrammarIR): GrammarFeatures["operations"] => {
+  const errorIsRule =
+    ir.rules.some((rule) => rule.name === "error") ||
+    ir.externalSymbols.some((symbol) => symbol.name === "error" && symbol.kind === "rule");
   let errorTokenUses = 0;
   let namedReferences = 0;
   let symbolReferences = 0;
   let rulesWithErrorRecovery = 0;
   ir.rules.forEach((rule) => {
+    const parameters = new Set(rule.params);
     let recovers = false;
     rule.alternatives.forEach((alternative) => {
       alternative.items.forEach((item) => {
@@ -334,7 +352,7 @@ export const operationsFeatures = (ir: GrammarIR): GrammarFeatures["operations"]
           if (expression.kind === "symbol") {
             symbolReferences += 1;
             if (expression.label !== undefined) namedReferences += 1;
-            if (expression.name === "error") {
+            if (expression.name === "error" && !parameters.has(expression.name) && !errorIsRule) {
               errorTokenUses += 1;
               recovers = true;
             }

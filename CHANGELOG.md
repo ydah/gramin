@@ -1,11 +1,24 @@
 # Changelog
 
-## 1.0.0 — 2026-11-10
+## 1.0.1 — 2026-11-10
+
+- Exclude bound formal parameters from source dependency edges, recursion, unit
+  cycles, reference-based redundancy, and structural-diff blast radius. A formal
+  name that matches a real rule no longer creates a false reference.
+- Respect local and formal shadowing in recovery-token and standard-library call
+  classification, and in PEG leading-literal estimates. Raw occurrence totals remain
+  source-based.
+- The pinned Ruby corpus now has 140 source recursive rules instead of 144 after
+  removing three false edges from formal parameters. Its expanded parseability
+  measurements are unchanged.
 
 - Stabilize the CLI, public package APIs, and features v1 under the documented
   compatibility policy. Preserve historical feature schemas and Grammar IR v1.
 - Add a source SCC-size histogram and show component frequencies in the sandbox.
 - Publish the external frontend template and starter issues for contributors.
+
+The 1.0.0 preparation tag was superseded before npm publication. The first stable
+package release is 1.0.1; the features contract is 1.0.0.
 
 ## 0.4.0 — 2026-11-10
 

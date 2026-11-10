@@ -14,9 +14,10 @@ export const buildDependencyGraph = (ir: GrammarIR): DependencyGraph => {
   const ruleNames = new Set(ir.rules.map((rule) => rule.name));
   const graph = new Map<string, Set<string>>();
   for (const rule of ir.rules) {
+    const parameters = new Set(rule.params);
     const references = graph.get(rule.name) ?? new Set<string>();
     for (const alternative of rule.alternatives) {
-      for (const reference of collectReferences(alternative)) {
+      for (const reference of collectReferences(alternative, parameters)) {
         if (ruleNames.has(reference)) references.add(reference);
       }
     }

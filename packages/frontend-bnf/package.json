@@ -1,6 +1,6 @@
 {
   "name": "@gramin/frontend-bnf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Yudai Takada",
   "description": "BNF and EBNF frontend for gramin",
   "keywords": [

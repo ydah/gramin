@@ -177,7 +177,7 @@ export const runAction = async ({
   await Promise.all(files.map((file) => assertInput(workspace, file)));
   if (baselineInput) await assertInput(workspace, baselineInput);
   await assertOutput(workspace, output, [...files, ...(baselineInput ? [baselineInput] : [])]);
-  const packageName = env.GRAMIN_CLI_PACKAGE ?? "@gramin/cli@1.0.0";
+  const packageName = env.GRAMIN_CLI_PACKAGE ?? "@gramin/cli@1.0.1";
   if (!/^@gramin\/cli@\d+\.\d+\.\d+(?:-[\w.-]+)?$/u.test(packageName))
     throw new Error("Expected a pinned @gramin/cli version");
   const event = env.GITHUB_EVENT_PATH

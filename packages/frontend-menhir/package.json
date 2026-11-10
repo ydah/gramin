@@ -1,6 +1,6 @@
 {
   "name": "@gramin/frontend-menhir",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Yudai Takada",
   "description": "Menhir grammar frontend for gramin",
   "keywords": [

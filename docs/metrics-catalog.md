@@ -143,7 +143,9 @@ All are **E/B**. Occurrence and parameter-use fields require the relevant capabi
   including nested and unreachable occurrences; no generated helper contributes.
 - `parameterizedRuleDefs`: rules with parameters.
 - `parameterizedCalls.total`: symbol calls carrying arguments.
-- `parameterizedCalls.known`: counts grouped for recognized standard-library calls.
+- `parameterizedCalls.known`: counts grouped for recognized standard-library calls,
+  excluding names shadowed by formal parameters or local definitions. The total
+  remains a syntactic call count, including calls through formal parameters.
 - `inlineRules`: rules declared inline.
 
 Nullable repetitions require no analysis flag. An empty or plain BNF source grammar has
@@ -283,7 +285,8 @@ These fields are omitted unless `orderedChoice` is true.
 ## Error recovery, style, and per-rule records
 
 - `operations.errorTokenUses`, `rulesWithErrorRecovery`, `recoveryRuleRatio`: explicit
-  `error` token adoption (**E/B**).
+  `error` token adoption (**E/B**). Bound formals and declared local or external rules
+  named `error` are not recovery tokens; explicit terminals retain their identity.
 - `operations.namedReferences`, `symbolReferences`, `namedReferenceRatio`: labeled symbol
   reference adoption (**E/C**).
 - `operations.declarationDirectives`: `%destructor`, `%printer`, `%union`, and `%code`

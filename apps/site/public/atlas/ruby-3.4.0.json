@@ -690,7 +690,6 @@
         "expr_value"
       ],
       "deepestRecursionMembers": [
-        "@yacc/parameterized/words/2",
         "aref_args",
         "arg",
         "arg_rhs",
@@ -790,8 +789,6 @@
         "paren_args",
         "primary",
         "primary_value",
-        "qsymbols",
-        "qwords",
         "regexp",
         "regexp_contents",
         "rel_expr",
@@ -940,7 +937,7 @@
       {
         "alternatives": 1,
         "fanIn": 4,
-        "fanOut": 1,
+        "fanOut": 0,
         "maxExpressionNestingDepth": 2,
         "maxRhsItems": 4,
         "reachableFromStarts": [
@@ -952,9 +949,7 @@
           "symbols",
           "words"
         ],
-        "references": [
-          "word_list"
-        ],
+        "references": [],
         "rhsItems": 4,
         "rule": "@yacc/parameterized/words/2",
         "unitRules": 0
@@ -7765,7 +7760,7 @@
       },
       {
         "alternatives": 2,
-        "fanIn": 3,
+        "fanIn": 2,
         "fanOut": 2,
         "firstSetSize": 3,
         "followSetSize": 4,
@@ -7780,7 +7775,6 @@
           "program"
         ],
         "referencedBy": [
-          "@yacc/parameterized/words/2",
           "word_list",
           "words"
         ],
@@ -8078,7 +8072,7 @@
       "format": "lrama",
       "frontend": {
         "id": "yacc-family",
-        "version": "1.0.0"
+        "version": "1.0.1"
       }
     },
     "structure": {
@@ -8213,11 +8207,10 @@
       ],
       "directLeftRecursiveRules": 35,
       "directRightRecursiveRules": 7,
-      "fanInEntropy": 7.5118,
-      "fanInGini": 0.3726,
+      "fanInEntropy": 7.5113,
+      "fanInGini": 0.3725,
       "largestRecursiveComponent": {
         "members": [
-          "@yacc/parameterized/words/2",
           "aref_args",
           "arg",
           "arg_rhs",
@@ -8317,8 +8310,6 @@
           "paren_args",
           "primary",
           "primary_value",
-          "qsymbols",
-          "qwords",
           "regexp",
           "regexp_contents",
           "rel_expr",
@@ -8345,12 +8336,11 @@
           "xstring",
           "xstring_contents"
         ],
-        "ratio": 0.5359,
-        "value": 127
+        "ratio": 0.5232,
+        "value": 124
       },
       "largestSccSize": {
         "members": [
-          "@yacc/parameterized/words/2",
           "aref_args",
           "arg",
           "arg_rhs",
@@ -8450,8 +8440,6 @@
           "paren_args",
           "primary",
           "primary_value",
-          "qsymbols",
-          "qwords",
           "regexp",
           "regexp_contents",
           "rel_expr",
@@ -8478,7 +8466,7 @@
           "xstring",
           "xstring_contents"
         ],
-        "value": 127
+        "value": 124
       },
       "maxDependencyDepth": 7,
       "maxExpressionNestingDepth": 2,
@@ -8492,12 +8480,12 @@
       "reachableRules": 237,
       "recursionSccCount": 2,
       "recursiveRules": {
-        "count": 138,
-        "ratio": 0.5823
+        "count": 135,
+        "ratio": 0.5696
       },
       "sccSizeHistogram": [
         {
-          "count": 107,
+          "count": 110,
           "size": 1
         },
         {
@@ -8506,7 +8494,7 @@
         },
         {
           "count": 1,
-          "size": 127
+          "size": 124
         }
       ],
       "shortestDerivation": [],
@@ -8762,43 +8750,43 @@
       "topBetweenness": [
         {
           "symbol": "primary",
-          "value": 14891.4143
+          "value": 14692.5643
         },
         {
           "symbol": "arg",
-          "value": 10585.4262
+          "value": 10500.1429
         },
         {
           "symbol": "stmt",
-          "value": 9131.8107
-        },
-        {
-          "symbol": "stmt_or_begin",
-          "value": 8390.7774
-        },
-        {
-          "symbol": "stmts",
-          "value": 8314.1702
+          "value": 8488.8107
         },
         {
           "symbol": "expr",
-          "value": 8001.7976
+          "value": 7817.5143
+        },
+        {
+          "symbol": "stmt_or_begin",
+          "value": 7729.7774
+        },
+        {
+          "symbol": "stmts",
+          "value": 7647.1702
         },
         {
           "symbol": "compstmt",
-          "value": 7986.8917
+          "value": 7310.8917
         },
         {
           "symbol": "primary_value",
-          "value": 6828.581
-        },
-        {
-          "symbol": "string_content",
-          "value": 5927.9833
+          "value": 6694.0143
         },
         {
           "symbol": "arg_value",
           "value": 5578.5667
+        },
+        {
+          "symbol": "string_content",
+          "value": 5236.9833
         }
       ],
       "topFanIn": [

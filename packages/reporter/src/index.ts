@@ -19,4 +19,4 @@ export {
 export { renderMarkdown } from "./markdown.js";
 export { renderSarif } from "./sarif.js";
 
-export const REPORTER_VERSION = "1.0.0";
+export const REPORTER_VERSION = "1.0.1";

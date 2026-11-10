@@ -234,16 +234,23 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
       if (!rules.has(rule)) startIntersection.delete(rule);
     });
   });
-  const directLeftRecursiveRules = ir.rules.filter((rule) =>
-    rule.alternatives.some(
-      (alternative) => alternativeEdgeReference(alternative, "first") === rule.name,
-    ),
-  ).length;
-  const directRightRecursiveRules = ir.rules.filter((rule) =>
-    rule.alternatives.some(
-      (alternative) => alternativeEdgeReference(alternative, "last") === rule.name,
-    ),
-  ).length;
+  let directLeftRecursiveRules = 0;
+  let directRightRecursiveRules = 0;
+  ir.rules.forEach((rule) => {
+    const parameters = new Set(rule.params);
+    if (
+      rule.alternatives.some(
+        (alternative) => alternativeEdgeReference(alternative, "first", parameters) === rule.name,
+      )
+    )
+      directLeftRecursiveRules += 1;
+    if (
+      rule.alternatives.some(
+        (alternative) => alternativeEdgeReference(alternative, "last", parameters) === rule.name,
+      )
+    )
+      directRightRecursiveRules += 1;
+  });
   const nullable =
     ir.capabilities.orderedChoice ||
     ir.capabilities.parameterizedRules ||

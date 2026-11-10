@@ -355,14 +355,19 @@ const normalizedRules = (ir: GrammarIR): Map<string, unknown> =>
     ]),
   );
 
-const collectRuleReferences = (expression: Expr, ruleNames: ReadonlySet<string>): string[] => {
+const collectRuleReferences = (
+  expression: Expr,
+  ruleNames: ReadonlySet<string>,
+  boundNames: ReadonlySet<string>,
+): string[] => {
   const references: string[] = [];
   const pending = [expression];
   while (pending.length > 0) {
     const current = pending.pop();
     if (!current) break;
     if (current.kind === "symbol") {
-      if (ruleNames.has(current.name)) references.push(current.name);
+      if (ruleNames.has(current.name) && !boundNames.has(current.name))
+        references.push(current.name);
       if (current.args) pending.push(...current.args);
     } else if (current.kind === "seq") pending.push(...current.items);
     else if (current.kind === "choice") pending.push(...current.alts);
@@ -385,9 +390,10 @@ const dependencyGraph = (
 ): Map<string, Set<string>> => {
   const graph = new Map([...allRules].map((rule) => [rule, new Set<string>()]));
   mergeRulesByName(ir.rules).forEach((rule) => {
+    const boundNames = new Set(rule.params);
     rule.alternatives.forEach((alternative) => {
       alternative.items.forEach((item) => {
-        collectRuleReferences(item, allRules).forEach((target) => {
+        collectRuleReferences(item, allRules, boundNames).forEach((target) => {
           graph.get(rule.name)?.add(target);
         });
       });

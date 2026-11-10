@@ -3,7 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
 import { runIsolated } from "./executor.js";
 import { MCP_LIMITS, TOOL_DEFINITIONS } from "./tools.js";
 
-export const MCP_VERSION = "1.0.0";
+export const MCP_VERSION = "1.0.1";
 
 export const createMcpServer = (): McpServer => {
   const server = new McpServer(

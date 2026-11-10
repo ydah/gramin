@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import type { GrammarFeatures, GrammarIR } from "@gramin/core";
+import { type GrammarFeatures, type GrammarIR, validateIR } from "@gramin/core";
 import { describe, expect, it } from "vitest";
 import { diffFeatures, renderFeatureDiffJson, renderFeatureDiffMarkdown } from "./diff.js";
 
@@ -29,6 +29,30 @@ const concreteContext = (
   },
   limits: { instances: 10000, nodeVisits: 1000000, depth: 256, keyBytes: 8388608 },
 });
+
+const parameterizedGrammar = (rules: GrammarIR["rules"]): GrammarIR => {
+  const result = validateIR({
+    irVersion: "1.4.0",
+    source: { format: "lrama", dialect: "lrama", frontend: { id: "test", version: "1.0.0" } },
+    capabilities: {
+      orderedChoice: false,
+      ebnfSugar: false,
+      predicates: false,
+      scannerless: false,
+      precedenceTable: false,
+      parameterizedRules: true,
+      lexerRules: false,
+    },
+    startSymbols: ["start"],
+    terminals: [],
+    externalSymbols: [],
+    precedence: [],
+    rules,
+    diagnostics: [],
+  });
+  if (!result.ok) throw new Error(JSON.stringify(result.issues));
+  return result.value;
+};
 
 describe("feature diffs", () => {
   it("matches source rows by name and orders escaped field paths deterministically", () => {
@@ -401,6 +425,63 @@ describe("feature diffs", () => {
       blastRadius: { forward: 1, reverse: 2, total: 2, rules: ["start", "value"] },
     });
     expect(diff.structural?.editDistance).toBeGreaterThan(0);
+  });
+
+  it("excludes shadowed global rule names from the dependency blast radius", () => {
+    const grammar = (literal: string) =>
+      parameterizedGrammar([
+        { name: "p", params: ["X"], alternatives: [{ items: [{ kind: "symbol", name: "X" }] }] },
+        {
+          name: "start",
+          alternatives: [
+            { items: [{ kind: "symbol", name: "p", args: [{ kind: "terminal", literal: "a" }] }] },
+          ],
+        },
+        { name: "X", alternatives: [{ items: [{ kind: "terminal", literal }] }] },
+      ]);
+    const features = fixtureFeatures();
+    const diff = diffFeatures(features, structuredClone(features), {
+      beforeIR: grammar("b"),
+      afterIR: grammar("c"),
+    });
+
+    expect(diff.structural).toEqual({
+      editDistance: 1,
+      changedRules: ["X"],
+      blastRadius: { forward: 1, reverse: 1, total: 1, rules: ["X"] },
+    });
+  });
+
+  it("retains unbound rule references inside arguments of a formal symbol", () => {
+    const grammar = (literal: string) =>
+      parameterizedGrammar([
+        {
+          name: "p",
+          params: ["F"],
+          alternatives: [
+            { items: [{ kind: "symbol", name: "F", args: [{ kind: "symbol", name: "value" }] }] },
+          ],
+        },
+        {
+          name: "start",
+          alternatives: [
+            { items: [{ kind: "symbol", name: "p", args: [{ kind: "terminal", literal: "a" }] }] },
+          ],
+        },
+        { name: "F", alternatives: [{ items: [{ kind: "terminal", literal: "f" }] }] },
+        { name: "value", alternatives: [{ items: [{ kind: "terminal", literal }] }] },
+      ]);
+    const features = fixtureFeatures();
+    const diff = diffFeatures(features, structuredClone(features), {
+      beforeIR: grammar("b"),
+      afterIR: grammar("c"),
+    });
+
+    expect(diff.structural).toEqual({
+      editDistance: 1,
+      changedRules: ["value"],
+      blastRadius: { forward: 1, reverse: 3, total: 3, rules: ["p", "start", "value"] },
+    });
   });
 
   it("tracks parsing metadata but ignores action-only metadata", () => {
