@@ -131,7 +131,7 @@ if (frontends.some((frontend) => typeof frontend?.parse !== "function")) {
   throw new Error("a public frontend export is missing");
 }
 if (
-  IR_VERSION !== "1.3.0" ||
+  IR_VERSION !== "1.4.0" ||
   [ANALYZER_VERSION, CLI_VERSION, REPORTER_VERSION].some((version) => version !== "0.2.1") ||
   frontends.some((frontend) => frontend.version !== "0.2.1")
 ) {
