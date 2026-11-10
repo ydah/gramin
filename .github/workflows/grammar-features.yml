@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ydah/gramin@c4904b79c0808c45d126f41b364f994b85ad89d1
+      - uses: ydah/gramin@31cda3913a6842bcb2a8ae4a3e8202334dbb23a1 # v1.0.1
         with:
           files: examples/action-demo/sample.y
           frontend: yacc-family

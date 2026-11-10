@@ -199,7 +199,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ydah/gramin@v0.4.0
+      - uses: ydah/gramin@v1
         id: gramin
         with:
           files: grammar.y
