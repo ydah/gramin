@@ -1,4 +1,4 @@
-import type { Diagnostic, SourceSpan } from "@gramin/core";
+import type { Diagnostic, GrammarIR, SourceSpan } from "@gramin/core";
 
 export interface YaccTerminal {
   readonly name?: string;
@@ -54,6 +54,7 @@ export interface YaccAst {
     readonly loc: SourceSpan;
   }[];
   readonly rules: readonly YaccRule[];
+  readonly expectedConflicts?: GrammarIR["expectedConflicts"];
   readonly sourceMetrics?: {
     readonly sourceCharacters: number;
     readonly comments: {

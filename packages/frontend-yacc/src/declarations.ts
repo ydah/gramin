@@ -16,6 +16,7 @@ export interface DeclarationResult {
     readonly union: number;
     readonly code: number;
   };
+  readonly expectedConflicts?: YaccAst["expectedConflicts"];
 }
 
 const ignoredDirectives = new Set([
@@ -28,8 +29,6 @@ const ignoredDirectives = new Set([
   "debug",
   "define",
   "destructor",
-  "expect",
-  "expect-rr",
   "initial-action",
   "language",
   "lex-param",
@@ -102,6 +101,8 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
   const preambleRules: YaccRule[] = [];
   let lramaSyntaxSeen = false;
   const directiveCounts = { destructor: 0, printer: 0, union: 0, code: 0 };
+  const expectedConflicts: { shiftReduce?: number; reduceReduce?: number } = {};
+  const seenExpectations = new Set<keyof typeof expectedConflicts>();
 
   while (stream.peek().kind !== "section" && stream.peek().kind !== "eof") {
     if (
@@ -119,6 +120,46 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
       continue;
     }
     const tokens = collectDeclarationTokens(stream);
+
+    if (directive.value === "expect" || directive.value === "expect-rr") {
+      const kind = directive.value === "expect" ? "shiftReduce" : "reduceReduce";
+      if (seenExpectations.has(kind)) {
+        delete expectedConflicts[kind];
+        stream.diagnostics.push({
+          severity: "error",
+          code: "YACC104_DUPLICATE_CONFLICT_EXPECTATION",
+          message: `duplicate global %${directive.value} declaration; omitted declared count`,
+          loc: directive.loc,
+        });
+        continue;
+      }
+      seenExpectations.add(kind);
+      while (tokens.at(-1)?.kind === "semicolon") tokens.pop();
+      const contiguousDigits =
+        tokens.length > 0 &&
+        tokens.every((token, index) => {
+          const previous = tokens[index - 1];
+          return (
+            token.kind === "other" &&
+            /^[0-9]$/u.test(token.value) &&
+            (previous === undefined ||
+              (previous.loc.endLine === token.loc.startLine &&
+                previous.loc.endCol === token.loc.startCol))
+          );
+        });
+      const value = Number(tokens.map((token) => token.value).join(""));
+      if (!contiguousDigits || !Number.isSafeInteger(value)) {
+        stream.diagnostics.push({
+          severity: "error",
+          code: "YACC103_INVALID_CONFLICT_EXPECTATION",
+          message: `expected one nonnegative safe integer after global %${directive.value}`,
+          loc: directive.loc,
+        });
+        continue;
+      }
+      expectedConflicts[kind] = value;
+      continue;
+    }
 
     if (directive.value === "token" || directive.value === "nterm") {
       parseTerminals(tokens, terminals);
@@ -176,5 +217,6 @@ export const parseDeclarations = (stream: TokenStream): DeclarationResult => {
     preambleRules,
     lramaSyntaxSeen,
     directiveCounts,
+    ...(Object.keys(expectedConflicts).length === 0 ? {} : { expectedConflicts }),
   };
 };

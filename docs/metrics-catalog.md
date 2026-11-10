@@ -1,6 +1,6 @@
-# Metrics catalog v0.7
+# Metrics catalog v0.8
 
-This file is the normative definition of metrics emitted in features v0.7.
+This file is the normative definition of metrics emitted in features v0.8.
 
 - Classification: **E** is exact and mechanically determined; **H** is heuristic.
 - Comparability: **A** compares across formats; **B** compares only with the stated
@@ -30,6 +30,15 @@ This file is the normative definition of metrics emitted in features v0.7.
 the representation context needed to interpret class-B measurements. Consumers must not
 infer the same context from `source.format`.
 
+Successful parameter expansion adds `parseability.context` for FIRST/FOLLOW, LL(1), and
+SLR only. Its concrete domain contains every zero-arity source rule, required parameter
+instances, and deterministic EBNF helpers. Source structural, sugar, and unit-rule metrics
+retain their original domain. Context fields are metadata, not metric declarations.
+Compare derived values only under the same representation, effective capabilities, and
+limit policy; sample counts and omitted template names are not comparison identity keys.
+Missing external or standard-library bodies prevent complete expansion. See
+[RFC 0007](./rfcs/0007-expand-parameterized-rules-for-parseability.md).
+
 ## Size
 
 | Metric | Definition | Class | Compare |
@@ -55,6 +64,7 @@ nested choice and sugar metrics.
 | Metric | Definition | Class | Compare |
 |---|---|---:|---:|
 | `directLeftRecursiveRules` | Rules whose first effective reference is themselves | E | B |
+| `indirectLeftRecursiveRules` | Source rules in left-corner SCCs containing at least two distinct rules; nullable prefixes expose subsequent references | E | B (source CFG) |
 | `directRightRecursiveRules` | Rules whose last effective reference is themselves | E | B |
 | `recursionSccCount` | Tarjan SCCs containing two or more rules | E | B |
 | `largestSccSize` | Largest recursive SCC, with sorted members | E | B |
@@ -77,6 +87,17 @@ rules; unresolved symbols are not assumed to be productive. A non-empty list als
 `ANALYZER006_UNPRODUCTIVE_RULES`. Productivity and shortest derivation are omitted for
 ordered-choice, predicate-bearing, and unexpanded parameterized grammars; their required
 compatibility arrays remain empty and are listed in `notApplicable`.
+
+Indirect left recursion visits every source rule, including unreachable rules. Groups,
+unordered choices, and repetitions expose their child left corners; sequences continue
+through nullable prefixes. Direct-only self-loops contribute zero, while rules with both
+direct and indirect cycles can occur in both counts. Ordered choice, predicates, or
+source parameterization omit this metric before checking for a zero. A referenced
+external rule or unresolved symbol conservatively omits the complete count with an
+`undefined rule` reason, even behind a consuming prefix. Declared and external terminals
+consume input; defined rules take precedence over terminal declarations. Unused external
+declarations do not affect applicability. See
+[RFC 0011](./rfcs/0011-indirect-left-recursion.md).
 
 ## Precedence
 
@@ -107,19 +128,31 @@ listed in `notApplicable` because they do not describe a separate lexer.
 
 ## Sugar and extensions
 
-All are **E/B** and are emitted only for the relevant capability.
+All are **E/B**. Occurrence and parameter-use fields require the relevant capability;
+`nullableRepetitions` instead requires source CFG semantics.
 
 - `opt`, `star`, `plus`: corresponding expression-node counts.
+- `nullableRepetitions`: source `star` and `plus` occurrences whose operands are CFG-nullable,
+  including nested and unreachable occurrences; no generated helper contributes.
 - `parameterizedRuleDefs`: rules with parameters.
 - `parameterizedCalls.total`: symbol calls carrying arguments.
 - `parameterizedCalls.known`: counts grouped for recognized standard-library calls.
 - `inlineRules`: rules declared inline.
 
+Nullable repetitions require no analysis flag. An empty or plain BNF source grammar has
+an exact zero. Ordered choice, predicates, and source parameterization omit the field
+before the zero check. With repetitions present, any referenced external rule or unresolved
+symbol conservatively omits the complete count with an `undefined rule` reason; with no
+repetitions the known zero remains available. Unused external declarations do not matter,
+and declared or external terminals consume input. Defined rules take precedence over
+terminal declarations. See [RFC 0010](./rfcs/0010-nullable-repetitions.md).
+
 ## Actions
 
 Action metrics are **E/C** because action-writing style differs strongly by format.
-`completeness` is `partial` when an `IR010_LOSSY_ACTION` diagnostic says source actions
-were omitted, and `complete` otherwise:
+
+- `completeness`: `partial` when an `IR010_LOSSY_ACTION` diagnostic says source actions
+  were omitted, and `complete` otherwise.
 
 - `altActionCoverage`: alternatives with a trailing action divided by alternatives.
 - `midRuleActions`: opaque actions inside RHS items.
@@ -137,7 +170,7 @@ defined in features 0.3.
 ## Parseability
 
 FIRST and FOLLOW measurements are **E/B (CFG)** and are omitted for ordered choice,
-semantic predicates, and unexpanded parameterized rules.
+semantic predicates, and parameterized rules whose concrete expansion cannot complete.
 Terminal identities distinguish symbolic names, literals, character classes, any-char,
 external symbols, and end-of-input.
 
@@ -151,8 +184,44 @@ external symbols, and end-of-input.
   result produces `ANALYZER007_CYCLIC_UNIT_RULES`.
 - `slr`: canonical LR(0) state count and raw SLR shift/reduce and reduce/reduce
   conflict-cell counts before precedence resolution (**E/B (plain CFG)**). It is opt-in
-  through `--analysis lr` and omitted when the IR contains expressions that require EBNF
-  expansion or parameter substitution.
+  through `--analysis lr`. A successful parameter-expansion path also lowers EBNF; outside
+  that path, unsupported non-BNF expressions still omit SLR.
+- `slr.conflictInvolvement.total`: distinct contributing LR item and conflicting state/token
+  cell pairs, attributed to production left-hand rules and summed over the concrete domain
+  (**E/B**, same SLR context).
+- `slr.conflictInvolvement.involvedRules`: concrete rules with positive involvement,
+  including unreachable rules in the domain (**E/B**, same SLR context).
+- `slr.conflictInvolvement.ruleRatio`: involved rules divided by all concrete rules,
+  rounded to four decimal places; omitted for an empty domain (**E/B**, same SLR context).
+- `slr.conflictInvolvement.percentiles`: nearest-rank p50 and p95 over every concrete rule's
+  involvement, including zeros; omitted for an empty domain (**E/B**, same SLR context).
+- `declaredConflicts`: accepted global `%expect` and `%expect-rr` source counts as optional
+  `shiftReduce` and `reduceReduce` nonnegative safe integers (**E/C**); copied from IR
+  `expectedConflicts` independently of SLR opt-in or applicability.
+
+An involvement item is identified by production occurrence and dot position. Distinct
+items behind one deduplicated shift all count. A completed item in two conflicting FOLLOW
+cells counts twice; an item in a cell with both conflict kinds counts once. Augmented
+start items and ACCEPT actions do not contribute. Conflict-free and no-start concrete
+grammars have measured zeros. An empty concrete domain retains `total: 0` and
+`involvedRules: 0`, with `grammar has no rules` reasons under both
+`slr.conflictInvolvement.ruleRatio` and `slr.conflictInvolvement.percentiles`. Unavailable
+SLR omits the whole object and local involvement, retaining the `slr` reason instead.
+SLR has no additional state/work budget; finite LR(0) construction can be exponential.
+
+Source `perRule` rows omit templates' concrete values and exclude generated rows. With
+derived context, neither involvement totals nor FIRST/FOLLOW and LL(1) aggregates must
+equal source-row sums. All-rule distributions include zero-valued helpers and instances.
+Changing helper structure can change these measurements without changing the language.
+See [RFC 0008](./rfcs/0008-rule-slr-conflict-involvement.md) and
+[RFC 0009](./rfcs/0009-slr-involvement-distribution.md).
+
+Declared conflict counts describe author expectations, not measured parser behavior.
+Absent accepted declarations omit `declaredConflicts` with a reason; explicit zero stays
+present. For each kind, a duplicate or invalid global declaration permanently omits that
+kind, while a valid other kind can remain. Rule-local annotations never supply a global
+count. Do not compare declarations with raw SLR cells, resolved generator conflicts, or
+LALR/IELR/GLR behavior. See [RFC 0012](./rfcs/0012-declared-conflict-expectations.md).
 
 ## Redundancy and refactoring candidates
 
@@ -175,8 +244,8 @@ external symbols, and end-of-input.
 - `topBetweenness`: top ten directed, unweighted Brandes betweenness values (**E/A**).
 - `fanInGini`, `fanInEntropy`: Gini coefficient and base-2 Shannon entropy of unique
   incoming dependency counts (**E/A**).
-- `shortestDerivation`: least fixed-point minimum consumed-terminal length per rule;
-  `shortestDerivationUnknown` lists rules without a finite result (**E/B**).
+- `shortestDerivation`, `shortestDerivationUnknown`: least fixed-point minimum
+  consumed-terminal length per rule, and rules without a finite result (**E/B**).
 - `startSymbolReachability`: sorted reachable-rule sets and counts for each start symbol,
   plus intersection divided by union across start symbols (**E/A**).
 - `maxExpressionNestingDepth`: deepest IR expression node below an alternative (**E/B**).
@@ -224,6 +293,8 @@ These fields are omitted unless `orderedChoice` is true.
   incoming/outgoing dependencies, start-symbol reachability, unit rules, optional CFG
   FIRST/FOLLOW sizes and LL(1) conflicts, and finite shortest derivation. Records use
   symbol byte order and are not collapsed into a score.
+- `perRule.slrConflictInvolvement`: contributing item/cell count for a source zero-arity
+  rule when SLR is available; omitted for templates under derived context (**E/B**).
 
 Source-to-source `gramin diff` additionally emits normalized rule-tree edit distance and
 the union of forward and reverse dependency reachability from changed rules. A features

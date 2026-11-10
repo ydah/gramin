@@ -1,12 +1,13 @@
 import {
+  compareBytes,
   type Diagnostic,
   FEATURES_VERSION,
   type GrammarFeatures,
   type GrammarIR,
-  compareBytes,
   mergeRulesByName,
   validateFeatures,
 } from "@gramin/core";
+import { cfgExtensionFeatures } from "./cfg-extensions.js";
 import { alternativeRhsLength, maxExpressionNestingDepth, walkExpression } from "./expressions.js";
 import { parseabilityAnalysis } from "./parseability.js";
 import { redundancyFeatures } from "./redundancy.js";
@@ -41,7 +42,7 @@ const versionDiagnostics = (version: string): Diagnostic[] => {
     ];
   }
   if (major !== 1) throw new UnsupportedIRVersionError(version);
-  if (minor <= 3) return [];
+  if (minor <= 4) return [];
   return [
     {
       severity: "warning",
@@ -137,8 +138,25 @@ export interface AnalyzeOptions {
 export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): GrammarFeatures => {
   const size = sizeFeatures(ir);
   const structure = structureFeatures(ir);
+  const extensions = cfgExtensionFeatures(ir);
+  const sugar = sugarFeatures(ir);
+  const structureNotApplicable = {
+    ...structure.features.notApplicable,
+    ...extensions.structure.notApplicable,
+  };
+  const sugarNotApplicable = { ...sugar.notApplicable, ...extensions.sugar.notApplicable };
   const parseabilityResult = parseabilityAnalysis(ir, options);
-  const parseability = parseabilityResult.features;
+  const parseability: GrammarFeatures["parseability"] = {
+    ...parseabilityResult.features,
+    ...(ir.expectedConflicts === undefined
+      ? {
+          notApplicable: {
+            ...parseabilityResult.features.notApplicable,
+            declaredConflicts: "no valid global conflict expectation declaration was captured",
+          },
+        }
+      : { declaredConflicts: { ...ir.expectedConflicts } }),
+  };
   const peg = pegFeatures(ir);
   const diagnostics = [
     ...ir.diagnostics,
@@ -172,6 +190,9 @@ export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): Gra
           .filter((entry) => entry.rules.includes(rule.name))
           .map((entry) => entry.symbol),
         unitRules: ruleParseability?.unitRules ?? 0,
+        ...(ruleParseability?.slrConflictInvolvement === undefined
+          ? {}
+          : { slrConflictInvolvement: ruleParseability.slrConflictInvolvement }),
         ...(ruleParseability?.firstSetSize === undefined
           ? {}
           : { firstSetSize: ruleParseability.firstSetSize }),
@@ -192,10 +213,22 @@ export const analyzeGrammar = (ir: GrammarIR, options: AnalyzeOptions = {}): Gra
     source: { ...ir.source },
     capabilities: { ...ir.capabilities },
     size,
-    structure: structure.features,
+    structure: {
+      ...structure.features,
+      ...extensions.structure,
+      ...(Object.keys(structureNotApplicable).length === 0
+        ? {}
+        : { notApplicable: structureNotApplicable }),
+    },
     precedence: precedenceFeatures(ir),
     lexicon: lexiconFeatures(ir),
-    sugar: sugarFeatures(ir),
+    sugar: {
+      ...sugar,
+      ...extensions.sugar,
+      ...(Object.keys(sugarNotApplicable).length === 0
+        ? {}
+        : { notApplicable: sugarNotApplicable }),
+    },
     actions: actionFeatures(ir),
     parseability,
     redundancy: redundancyFeatures(ir),

@@ -3,6 +3,110 @@ import { serializeCanonical, validateIR } from "@gramin/core";
 import { describe, expect, it } from "vitest";
 import { lexYacc, lowerYaccAst, parseYaccAst, yaccFrontend } from "./index.js";
 
+describe("global conflict expectations", () => {
+  it.each(["yacc", "bison", "lrama"])("retains explicit zero and two in %s", (dialect) => {
+    const source = "%expect 0\n%expect-rr 2\n%%\nentry: 'x';\n%%";
+    const parsed = parseYaccAst(source, dialect);
+    const result = yaccFrontend.parse([{ name: "expect.y", content: source }], { dialect });
+    expect(parsed.ast.expectedConflicts).toEqual({ shiftReduce: 0, reduceReduce: 2 });
+    expect(result.ir?.expectedConflicts).toEqual({ shiftReduce: 0, reduceReduce: 2 });
+    expect(validateIR(result.ir).ok).toBe(true);
+    expect(result.diagnostics).toEqual([]);
+    expect(JSON.parse(serializeCanonical(result.ir)).expectedConflicts).toEqual({
+      shiftReduce: 0,
+      reduceReduce: 2,
+    });
+  });
+
+  it.each([
+    ["%expect 12", { shiftReduce: 12 }],
+    ["%expect-rr 0", { reduceReduce: 0 }],
+    ["%expect 0;", { shiftReduce: 0 }],
+    ["%expect-rr 2;", { reduceReduce: 2 }],
+    ["%expect 9007199254740991", { shiftReduce: Number.MAX_SAFE_INTEGER }],
+  ])("captures a single declaration %s", (declaration, expected) => {
+    const result = yaccFrontend.parse(
+      [{ name: "expect.y", content: `${declaration}\n%%\nentry: 'x';` }],
+      {},
+    );
+    expect(result.ir?.expectedConflicts).toEqual(expected);
+    expect(result.diagnostics).toEqual([]);
+  });
+
+  it.each(["", "-1", "+1", "1.5", "9007199254740992", "1 2", "one", "'2'"])(
+    "rejects an invalid value %j while retaining the other kind",
+    (value) => {
+      const result = yaccFrontend.parse(
+        [{ name: "expect.y", content: `%expect ${value}\n%expect-rr 2\n%%\nentry: 'x';` }],
+        {},
+      );
+      expect(result.ir?.expectedConflicts).toEqual({ reduceReduce: 2 });
+      expect(result.diagnostics).toContainEqual(
+        expect.objectContaining({
+          code: "YACC103_INVALID_CONFLICT_EXPECTATION",
+          severity: "error",
+        }),
+      );
+      expect(validateIR(result.ir).ok).toBe(true);
+      expect(result.ir?.rules.map((rule) => rule.name)).toEqual(["entry"]);
+    },
+  );
+
+  it.each([
+    "%expect 1\n%expect 1",
+    "%expect 1\n%expect 2\n%expect 3",
+    "%expect -1\n%expect 2",
+    "%expect 1\n%expect -1",
+  ])("omits a duplicated kind permanently: %s", (declarations) => {
+    const result = yaccFrontend.parse(
+      [{ name: "expect.y", content: `${declarations}\n%expect-rr 2\n%%\nentry: 'x';` }],
+      {},
+    );
+    expect(result.ir?.expectedConflicts).toEqual({ reduceReduce: 2 });
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({
+        code: "YACC104_DUPLICATE_CONFLICT_EXPECTATION",
+        severity: "error",
+      }),
+    );
+  });
+
+  it("does not emit an empty object when every declaration is invalid", () => {
+    const result = yaccFrontend.parse(
+      [{ name: "expect.y", content: "%expect -1\n%expect-rr 1.5\n%%\nentry: 'x';" }],
+      {},
+    );
+    expect(result.ir?.expectedConflicts).toBeUndefined();
+    expect(validateIR(result.ir).ok).toBe(true);
+  });
+
+  it("keeps rule-local annotations out of global declarations and preserves following rules", () => {
+    const result = yaccFrontend.parse(
+      [
+        {
+          name: "expect.y",
+          content:
+            "%rule template(X): X %expect 1;\n%%\nentry: 'x' %expect 0 %expect-rr 2;\nnext: 'y';",
+        },
+      ],
+      {},
+    );
+    expect(result.ir?.expectedConflicts).toBeUndefined();
+    expect(result.ir?.rules.map((rule) => rule.name)).toEqual(["template", "entry", "next"]);
+    expect(
+      result.diagnostics.filter(
+        (diagnostic) => diagnostic.code === "YACC206_UNKNOWN_RULE_DIRECTIVE",
+      ),
+    ).toHaveLength(3);
+    expect(result.diagnostics.some((diagnostic) => diagnostic.severity === "error")).toBe(false);
+  });
+
+  it("leaves undeclared expectations absent", () => {
+    const result = yaccFrontend.parse([{ name: "expect.y", content: "%%\nentry: 'x';" }], {});
+    expect(result.ir?.expectedConflicts).toBeUndefined();
+  });
+});
+
 const fixture = (name: string): string =>
   readFileSync(new URL(`../fixtures/${name}`, import.meta.url), "utf8");
 

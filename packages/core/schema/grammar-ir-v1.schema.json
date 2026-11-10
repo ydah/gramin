@@ -104,6 +104,23 @@
       },
       "type": "array"
     },
+    "expectedConflicts": {
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "reduceReduce": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "shiftReduce": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "externalSymbols": {
       "items": {
         "additionalProperties": false,

@@ -393,6 +393,9 @@ export const lowerYaccAst = (ast: YaccAst, options: LowerOptions): GrammarIR => 
       lexerRules: false,
     },
     startSymbols,
+    ...(ast.expectedConflicts === undefined
+      ? {}
+      : { expectedConflicts: { ...ast.expectedConflicts } }),
     terminals,
     externalSymbols: [
       ...[...stdlibNames]

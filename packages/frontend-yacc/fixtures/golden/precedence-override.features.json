@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.7.2",
+  "featuresVersion": "0.8.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -108,6 +108,7 @@
       "total": 2
     },
     "notApplicable": {
+      "declaredConflicts": "no valid global conflict expectation declaration was captured",
       "slr": "requires --analysis lr"
     },
     "unitRules": 0
@@ -234,6 +235,7 @@
     "directRightRecursiveRules": 1,
     "fanInEntropy": 0,
     "fanInGini": 0,
+    "indirectLeftRecursiveRules": 0,
     "largestRecursiveComponent": {
       "members": [
         "expr"
@@ -314,6 +316,7 @@
       "parameterizedRuleDefs": "parameterizedRules capability is false",
       "plus": "ebnfSugar capability is false",
       "star": "ebnfSugar capability is false"
-    }
+    },
+    "nullableRepetitions": 0
   }
 }

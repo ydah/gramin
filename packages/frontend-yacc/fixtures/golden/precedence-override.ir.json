@@ -10,7 +10,7 @@
   },
   "diagnostics": [],
   "externalSymbols": [],
-  "irVersion": "1.3.0",
+  "irVersion": "1.4.0",
   "precedence": [
     {
       "assoc": "left",

@@ -5,65 +5,84 @@ import {
   type GrammarIR,
   mergeRulesByName,
 } from "@gramin/core";
-import { isExpressionNullable } from "./expressions.js";
+import { isExpressionNullable, walkExpression } from "./expressions.js";
 import { stronglyConnectedComponents } from "./graph.js";
 import { compareBytes, nearestRankPercentile, round4 } from "./numbers.js";
+import { expandParameterizedRules, PARAMETER_EXPANSION_LIMITS } from "./parameter-expansion.js";
 import { computeNullableRules } from "./structure.js";
-
-type TokenSet = Set<string>;
-
-const addAll = (target: TokenSet, values: ReadonlySet<string>): boolean => {
-  const before = target.size;
-  values.forEach((value) => {
-    target.add(value);
-  });
-  return target.size !== before;
-};
+import { type TokenSet, TokenUniverse } from "./token-set.js";
 
 const terminalKey = (expression: Extract<Expr, { kind: "terminal" }>): string =>
   expression.name === undefined ? `literal:${expression.literal}` : `name:${expression.name}`;
 
+const tokenUniverse = (ir: GrammarIR, ruleNames: ReadonlySet<string>): TokenUniverse => {
+  const keys = new Set(["end-of-input"]);
+  for (const rule of ir.rules) {
+    for (const alternative of rule.alternatives) {
+      for (const item of alternative.items) {
+        walkExpression(item, (expression) => {
+          if (expression.kind === "terminal" && expression.literal !== "") {
+            keys.add(terminalKey(expression));
+          } else if (expression.kind === "charClass") keys.add(`class:${expression.pattern}`);
+          else if (expression.kind === "anyChar") keys.add("any-char");
+          else if (expression.kind === "symbol" && !ruleNames.has(expression.name)) {
+            keys.add(`symbol:${expression.name}`);
+          }
+        });
+      }
+    }
+  }
+  return new TokenUniverse(keys);
+};
+
 const firstExpression = (
   expression: Expr,
-  firstRules: ReadonlyMap<string, ReadonlySet<string>>,
+  firstRules: ReadonlyMap<string, TokenSet>,
   nullable: ReadonlySet<string>,
+  tokens: TokenUniverse,
 ): TokenSet => {
   if (expression.kind === "terminal") {
-    return new Set(expression.literal === "" ? [] : [terminalKey(expression)]);
+    return tokens.set(expression.literal === "" ? [] : [terminalKey(expression)]);
   }
-  if (expression.kind === "charClass") return new Set([`class:${expression.pattern}`]);
-  if (expression.kind === "anyChar") return new Set(["any-char"]);
+  if (expression.kind === "charClass") return tokens.set([`class:${expression.pattern}`]);
+  if (expression.kind === "anyChar") return tokens.set(["any-char"]);
   if (expression.kind === "symbol") {
-    return new Set(firstRules.get(expression.name) ?? [`symbol:${expression.name}`]);
+    return firstRules.get(expression.name)?.clone() ?? tokens.set([`symbol:${expression.name}`]);
   }
-  if (expression.kind === "midRuleAction" || expression.kind === "predicate") return new Set();
+  if (expression.kind === "midRuleAction" || expression.kind === "predicate") return tokens.set();
   if (expression.kind === "choice") {
-    const result = new Set<string>();
+    const result = tokens.set();
     expression.alts.forEach((alternative) => {
-      addAll(result, firstExpression(alternative, firstRules, nullable));
+      result.addAll(firstExpression(alternative, firstRules, nullable, tokens));
     });
     return result;
   }
   if (expression.kind === "seq") {
-    const result = new Set<string>();
+    const result = tokens.set();
     for (const item of expression.items) {
-      addAll(result, firstExpression(item, firstRules, nullable));
+      result.addAll(firstExpression(item, firstRules, nullable, tokens));
       if (!isExpressionNullable(item, nullable)) break;
     }
     return result;
   }
-  return firstExpression(expression.expr, firstRules, nullable);
+  return firstExpression(expression.expr, firstRules, nullable, tokens);
 };
 
 const firstAlternative = (
   alternative: Alternative,
-  firstRules: ReadonlyMap<string, ReadonlySet<string>>,
+  firstRules: ReadonlyMap<string, TokenSet>,
   nullable: ReadonlySet<string>,
-): TokenSet => firstExpression({ kind: "seq", items: alternative.items }, firstRules, nullable);
+  tokens: TokenUniverse,
+): TokenSet =>
+  firstExpression({ kind: "seq", items: alternative.items }, firstRules, nullable, tokens);
 
-const computeFirstSets = (ir: GrammarIR, nullable: ReadonlySet<string>): Map<string, TokenSet> => {
+const computeFirstSets = (
+  ir: GrammarIR,
+  nullable: ReadonlySet<string>,
+  tokens: TokenUniverse,
+): Map<string, TokenSet> => {
   const rules = mergeRulesByName(ir.rules);
-  const first = new Map(rules.map((rule) => [rule.name, new Set<string>()]));
+  const first = new Map(rules.map((rule) => [rule.name, tokens.set()]));
   let changed = true;
   while (changed) {
     changed = false;
@@ -71,7 +90,7 @@ const computeFirstSets = (ir: GrammarIR, nullable: ReadonlySet<string>): Map<str
       const target = first.get(rule.name);
       if (!target) return;
       rule.alternatives.forEach((alternative) => {
-        if (addAll(target, firstAlternative(alternative, first, nullable))) changed = true;
+        if (target.addAll(firstAlternative(alternative, first, nullable, tokens))) changed = true;
       });
     });
   }
@@ -80,56 +99,55 @@ const computeFirstSets = (ir: GrammarIR, nullable: ReadonlySet<string>): Map<str
 
 const propagateFollow = (
   expression: Expr,
-  trailer: ReadonlySet<string>,
-  first: ReadonlyMap<string, ReadonlySet<string>>,
+  trailer: TokenSet,
+  first: ReadonlyMap<string, TokenSet>,
   follow: ReadonlyMap<string, TokenSet>,
   nullable: ReadonlySet<string>,
+  tokens: TokenUniverse,
 ): boolean => {
   if (expression.kind === "symbol") {
     const target = follow.get(expression.name);
-    return target ? addAll(target, trailer) : false;
+    return target ? target.addAll(trailer) : false;
   }
   if (expression.kind === "seq") {
     let changed = false;
-    let next = new Set(trailer);
+    let next = trailer.clone();
     for (let index = expression.items.length - 1; index >= 0; index -= 1) {
       const item = expression.items[index];
       if (!item) continue;
-      if (propagateFollow(item, next, first, follow, nullable)) changed = true;
-      const itemFirst = firstExpression(item, first, nullable);
-      next = isExpressionNullable(item, nullable) ? new Set([...itemFirst, ...next]) : itemFirst;
+      if (propagateFollow(item, next, first, follow, nullable, tokens)) changed = true;
+      const itemFirst = firstExpression(item, first, nullable, tokens);
+      if (isExpressionNullable(item, nullable)) itemFirst.addAll(next);
+      next = itemFirst;
     }
     return changed;
   }
   if (expression.kind === "choice") {
     return expression.alts.reduce(
       (changed, alternative) =>
-        propagateFollow(alternative, trailer, first, follow, nullable) || changed,
+        propagateFollow(alternative, trailer, first, follow, nullable, tokens) || changed,
       false,
     );
   }
   if (expression.kind === "star" || expression.kind === "plus") {
-    return propagateFollow(
-      expression.expr,
-      new Set([...trailer, ...firstExpression(expression.expr, first, nullable)]),
-      first,
-      follow,
-      nullable,
-    );
+    const repeated = trailer.clone();
+    repeated.addAll(firstExpression(expression.expr, first, nullable, tokens));
+    return propagateFollow(expression.expr, repeated, first, follow, nullable, tokens);
   }
   if (expression.kind === "opt" || expression.kind === "group") {
-    return propagateFollow(expression.expr, trailer, first, follow, nullable);
+    return propagateFollow(expression.expr, trailer, first, follow, nullable, tokens);
   }
   return false;
 };
 
 const computeFollowSets = (
   ir: GrammarIR,
-  first: ReadonlyMap<string, ReadonlySet<string>>,
+  first: ReadonlyMap<string, TokenSet>,
   nullable: ReadonlySet<string>,
+  tokens: TokenUniverse,
 ): Map<string, TokenSet> => {
   const rules = mergeRulesByName(ir.rules);
-  const follow = new Map(rules.map((rule) => [rule.name, new Set<string>()]));
+  const follow = new Map(rules.map((rule) => [rule.name, tokens.set()]));
   ir.startSymbols.forEach((symbol) => {
     follow.get(symbol)?.add("end-of-input");
   });
@@ -137,7 +155,7 @@ const computeFollowSets = (
   while (changed) {
     changed = false;
     rules.forEach((rule) => {
-      const trailer = follow.get(rule.name) ?? new Set<string>();
+      const trailer = follow.get(rule.name) ?? tokens.set();
       rule.alternatives.forEach((alternative) => {
         if (
           propagateFollow(
@@ -146,6 +164,7 @@ const computeFollowSets = (
             first,
             follow,
             nullable,
+            tokens,
           )
         ) {
           changed = true;
@@ -156,11 +175,8 @@ const computeFollowSets = (
   return follow;
 };
 
-const intersects = (left: ReadonlySet<string>, right: ReadonlySet<string>): boolean =>
-  [...left].some((value) => right.has(value));
-
 const distribution = (
-  values: ReadonlyMap<string, ReadonlySet<string>>,
+  values: ReadonlyMap<string, TokenSet>,
 ): NonNullable<GrammarFeatures["parseability"]["firstSetSize"]> | undefined => {
   if (values.size === 0) return undefined;
   const entries = [...values].map(([rule, set]) => ({ rule, value: set.size }));
@@ -200,6 +216,7 @@ interface ParseabilityOptions {
 export interface RuleParseabilityMetrics {
   readonly firstSetSize?: number;
   readonly followSetSize?: number;
+  readonly slrConflictInvolvement?: number;
   readonly ll1Conflicts?: {
     readonly firstFirst: number;
     readonly firstFollow: number;
@@ -250,8 +267,13 @@ const productionItems = (
 
 const slrFeatures = (
   ir: GrammarIR,
-  follow: ReadonlyMap<string, ReadonlySet<string>>,
-): NonNullable<GrammarFeatures["parseability"]["slr"]> | undefined => {
+  follow: ReadonlyMap<string, TokenSet>,
+):
+  | {
+      readonly features: NonNullable<GrammarFeatures["parseability"]["slr"]>;
+      readonly perRule: ReadonlyMap<string, number>;
+    }
+  | undefined => {
   const rules = mergeRulesByName(ir.rules);
   if (rules.some((rule) => rule.params !== undefined)) return undefined;
   const ruleNames = new Set(rules.map((rule) => rule.name));
@@ -266,8 +288,6 @@ const slrFeatures = (
       productions.push({ lhs: rule.name, rhs, augmented: false });
     }
   }
-  if (startProductionCount === 0)
-    return { states: 0, shiftReduceConflicts: 0, reduceReduceConflicts: 0 };
   const byLhs = new Map<string, number[]>();
   productions.forEach((production, index) => {
     const entries = byLhs.get(production.lhs) ?? [];
@@ -304,7 +324,7 @@ const slrFeatures = (
     .flatMap((production, index) => (production.augmented ? [itemKey(index, 0)] : []))
     .sort();
   const initial = closure(initialKernel);
-  const states = [initial];
+  const states = startProductionCount === 0 ? [] : [initial];
   const stateByKey = new Map([[stateKey(initialKernel), 0]]);
   const transitions = new Map<string, number>();
   for (let state = 0; state < states.length; state += 1) {
@@ -331,12 +351,18 @@ const slrFeatures = (
 
   let shiftReduceConflicts = 0;
   let reduceReduceConflicts = 0;
+  const perRule = new Map(rules.map((rule) => [rule.name, 0]));
   states.forEach((items, state) => {
     const actions = new Map<string, Set<string>>();
-    const addAction = (token: string, action: string): void => {
+    const contributors = new Map<string, Set<string>>();
+    const addAction = (token: string, action: string, item?: string): void => {
       const entries = actions.get(token) ?? new Set<string>();
       entries.add(action);
       actions.set(token, entries);
+      if (item === undefined) return;
+      const items = contributors.get(token) ?? new Set<string>();
+      items.add(item);
+      contributors.set(token, items);
     };
     items.forEach((item) => {
       const [productionIndex, dot] = parseItem(item);
@@ -345,23 +371,48 @@ const slrFeatures = (
       const symbol = production.rhs[dot];
       if (symbol?.startsWith("T:")) {
         const target = transitions.get(`${state}\0${symbol}`);
-        if (target !== undefined) addAction(symbol.slice(2), `shift:${target}`);
+        if (target !== undefined) addAction(symbol.slice(2), `shift:${target}`, item);
       } else if (symbol === undefined && production.augmented) {
         addAction("end-of-input", "accept");
       } else if (symbol === undefined) {
-        (follow.get(production.lhs) ?? []).forEach((token) => {
-          addAction(token, `reduce:${productionIndex}`);
-        });
+        for (const token of follow.get(production.lhs) ?? []) {
+          addAction(token, `reduce:${productionIndex}`, item);
+        }
       }
     });
-    actions.forEach((entries) => {
+    actions.forEach((entries, token) => {
       const shifts = [...entries].filter((entry) => entry.startsWith("shift:")).length;
       const reductions = [...entries].filter((entry) => entry.startsWith("reduce:")).length;
       if (shifts > 0 && reductions > 0) shiftReduceConflicts += 1;
       if (reductions > 1) reduceReduceConflicts += 1;
+      if (!(shifts > 0 && reductions > 0) && reductions <= 1) return;
+      for (const item of contributors.get(token) ?? []) {
+        const [productionIndex] = parseItem(item);
+        const production = productions[productionIndex];
+        if (production === undefined || production.augmented) continue;
+        perRule.set(production.lhs, (perRule.get(production.lhs) ?? 0) + 1);
+      }
     });
   });
-  return { states: states.length, shiftReduceConflicts, reduceReduceConflicts };
+  const counts = [...perRule.values()];
+  const total = counts.reduce((sum, count) => sum + count, 0);
+  const involvedRules = counts.filter((count) => count > 0).length;
+  const p50 = nearestRankPercentile(counts, 0.5);
+  const p95 = nearestRankPercentile(counts, 0.95);
+  return {
+    features: {
+      states: states.length,
+      shiftReduceConflicts,
+      reduceReduceConflicts,
+      conflictInvolvement: {
+        total,
+        involvedRules,
+        ...(counts.length === 0 ? {} : { ruleRatio: round4(involvedRules / counts.length) }),
+        ...(p50 === undefined || p95 === undefined ? {} : { percentiles: { p50, p95 } }),
+      },
+    },
+    perRule,
+  };
 };
 
 export const parseabilityAnalysis = (
@@ -389,13 +440,56 @@ export const parseabilityAnalysis = (
         (component[0] !== undefined && unitGraph.get(component[0])?.has(component[0]) === true),
     )
     .sort((left, right) => compareBytes(left.join("\0"), right.join("\0")));
-  const cfgNotApplicable = ir.capabilities.orderedChoice
+  let cfgNotApplicable = ir.capabilities.orderedChoice
     ? "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
-    : ir.capabilities.parameterizedRules
-      ? "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis"
-      : ir.capabilities.predicates
-        ? "predicates grammar: CFG FIRST, FOLLOW, LL(1), and SLR analysis does not apply"
-        : undefined;
+    : ir.capabilities.predicates
+      ? "predicates grammar: CFG FIRST, FOLLOW, LL(1), and SLR analysis does not apply"
+      : undefined;
+  if (cfgNotApplicable === undefined && ir.capabilities.parameterizedRules) {
+    const expanded = expandParameterizedRules(ir);
+    if (!expanded.ok) cfgNotApplicable = expanded.reason;
+    else {
+      const derived = parseabilityAnalysis(expanded.ir, options);
+      const sourceRules = new Set(expanded.sourceRuleNames);
+      return {
+        features: {
+          ...derived.features,
+          unitRules,
+          cyclicUnitRules,
+          context: {
+            representation: "parameter-expansion-bnf-v1",
+            sourceRules: ir.rules.length,
+            concreteRules: expanded.ir.rules.length,
+            parameterInstances: expanded.instanceCount,
+            ebnfHelpers: expanded.helperCount,
+            omittedTemplateRules: [...expanded.omittedTemplateNames],
+            effectiveCapabilities: {
+              ...expanded.ir.capabilities,
+              orderedChoice: false,
+              predicates: false,
+              parameterizedRules: false,
+              ebnfSugar: false,
+            },
+            limits: {
+              instances: PARAMETER_EXPANSION_LIMITS.maxInstances,
+              nodeVisits: PARAMETER_EXPANSION_LIMITS.maxNodeVisits,
+              depth: PARAMETER_EXPANSION_LIMITS.maxDepth,
+              keyBytes: PARAMETER_EXPANSION_LIMITS.maxKeyBytes,
+            },
+          },
+        },
+        perRule: new Map(
+          rules.map((rule) => [
+            rule.name,
+            {
+              ...(sourceRules.has(rule.name) ? derived.perRule.get(rule.name) : {}),
+              unitRules: unitRulesByRule.get(rule.name) ?? 0,
+            },
+          ]),
+        ),
+      };
+    }
+  }
   if (cfgNotApplicable !== undefined) {
     return {
       features: {
@@ -415,14 +509,15 @@ export const parseabilityAnalysis = (
   }
 
   const nullable = computeNullableRules({ ...ir, rules });
-  const first = computeFirstSets({ ...ir, rules }, nullable);
-  const follow = computeFollowSets({ ...ir, rules }, first, nullable);
+  const tokens = tokenUniverse({ ...ir, rules }, ruleNames);
+  const first = computeFirstSets({ ...ir, rules }, nullable, tokens);
+  const follow = computeFollowSets({ ...ir, rules }, first, nullable, tokens);
   let firstFirst = 0;
   let firstFollow = 0;
   const perRule = new Map<string, RuleParseabilityMetrics>();
   rules.forEach((rule) => {
     const alternatives = rule.alternatives.map((alternative) => ({
-      first: firstAlternative(alternative, first, nullable),
+      first: firstAlternative(alternative, first, nullable, tokens),
       nullable: alternative.items.every((item) => isExpressionNullable(item, nullable)),
     }));
     let ruleFirstFirst = 0;
@@ -432,14 +527,14 @@ export const parseabilityAnalysis = (
         const leftAlt = alternatives[left];
         const rightAlt = alternatives[right];
         if (!leftAlt || !rightAlt) continue;
-        if (intersects(leftAlt.first, rightAlt.first)) {
+        if (leftAlt.first.intersects(rightAlt.first)) {
           firstFirst += 1;
           ruleFirstFirst += 1;
         }
-        const ruleFollow = follow.get(rule.name) ?? new Set<string>();
+        const ruleFollow = follow.get(rule.name) ?? tokens.set();
         if (
-          (leftAlt.nullable && intersects(rightAlt.first, ruleFollow)) ||
-          (rightAlt.nullable && intersects(leftAlt.first, ruleFollow)) ||
+          (leftAlt.nullable && rightAlt.first.intersects(ruleFollow)) ||
+          (rightAlt.nullable && leftAlt.first.intersects(ruleFollow)) ||
           (leftAlt.nullable && rightAlt.nullable && ruleFollow.size > 0)
         ) {
           firstFollow += 1;
@@ -461,12 +556,20 @@ export const parseabilityAnalysis = (
   const firstSetSize = distribution(first);
   const followSetSize = distribution(follow);
   const slr = options.lr ? slrFeatures({ ...ir, rules }, follow) : undefined;
+  slr?.perRule.forEach((slrConflictInvolvement, name) => {
+    const metrics = perRule.get(name);
+    if (metrics !== undefined) perRule.set(name, { ...metrics, slrConflictInvolvement });
+  });
   const notApplicable: Record<string, string> = {};
   if (!options.lr) notApplicable.slr = "requires --analysis lr";
   else if (slr === undefined) notApplicable.slr = "SLR analysis requires plain BNF expressions";
   if (rules.length === 0) {
     notApplicable.firstSetSize = "grammar has no rules";
     notApplicable.followSetSize = "grammar has no rules";
+    if (slr !== undefined) {
+      notApplicable["slr.conflictInvolvement.ruleRatio"] = "grammar has no rules";
+      notApplicable["slr.conflictInvolvement.percentiles"] = "grammar has no rules";
+    }
   }
   return {
     features: {
@@ -475,7 +578,7 @@ export const parseabilityAnalysis = (
       ll1Conflicts: { firstFirst, firstFollow, total: firstFirst + firstFollow },
       unitRules,
       cyclicUnitRules,
-      ...(slr === undefined ? {} : { slr }),
+      ...(slr === undefined ? {} : { slr: slr.features }),
       ...(Object.keys(notApplicable).length === 0 ? {} : { notApplicable }),
     },
     perRule,

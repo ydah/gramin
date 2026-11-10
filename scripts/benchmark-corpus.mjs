@@ -13,6 +13,13 @@ const cases = [
     files: ["fixtures/downloaded/ruby/parse.y"],
   },
   {
+    key: "ruby/parse.y (lr)",
+    frontend: yaccFrontend,
+    options: { dialect: "lrama" },
+    analysis: { lr: true },
+    files: ["fixtures/downloaded/ruby/parse.y"],
+  },
+  {
     key: "php/zend_language_parser.y (lr)",
     frontend: yaccFrontend,
     options: { dialect: "bison" },

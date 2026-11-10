@@ -246,14 +246,16 @@ describe("analyzeGrammar", () => {
       rules: [{ name: "start", alternatives: [{ items: [{ kind: "terminal", name: "A" }] }] }],
     };
     expect(analyzeGrammar(ir).parseability.slr).toBeUndefined();
-    expect(analyzeGrammar(ir, { lr: true }).parseability.slr).toEqual({
+    expect(analyzeGrammar(ir).perRule[0]?.slrConflictInvolvement).toBeUndefined();
+    expect(analyzeGrammar(ir, { lr: true }).parseability.slr).toMatchObject({
       states: 3,
       shiftReduceConflicts: 0,
       reduceReduceConflicts: 0,
     });
+    expect(analyzeGrammar(ir, { lr: true }).perRule[0]?.slrConflictInvolvement).toBe(0);
   });
 
-  it("does not report CFG results before parameterized rules are expanded", () => {
+  it("measures expanded parameters while preserving source structural applicability", () => {
     const base = fixtureIR("empty");
     const features = analyzeGrammar(
       {
@@ -287,10 +289,29 @@ describe("analyzeGrammar", () => {
     );
 
     expect(features.parseability).toMatchObject({ unitRules: 0, cyclicUnitRules: [] });
-    expect(features.parseability.firstSetSize).toBeUndefined();
-    expect(features.parseability.ll1Conflicts).toBeUndefined();
-    expect(features.parseability.slr).toBeUndefined();
-    expect(features.parseability.notApplicable?.slr).toContain("parameterizedRules");
+    expect(features.parseability.firstSetSize?.average).toBe(1);
+    expect(features.parseability.followSetSize?.average).toBe(1);
+    expect(features.parseability.ll1Conflicts).toEqual({ firstFirst: 0, firstFollow: 0, total: 0 });
+    expect(features.parseability.slr).toMatchObject({
+      states: 4,
+      shiftReduceConflicts: 0,
+      reduceReduceConflicts: 0,
+    });
+    expect(features.parseability.context).toMatchObject({
+      representation: "parameter-expansion-bnf-v1",
+      sourceRules: 2,
+      concreteRules: 2,
+      parameterInstances: 1,
+      ebnfHelpers: 0,
+      omittedTemplateRules: ["wrapper"],
+      effectiveCapabilities: { parameterizedRules: false, ebnfSugar: false },
+    });
+    expect(features.capabilities.parameterizedRules).toBe(true);
+    expect(features.size.rules).toBe(2);
+    expect(features.perRule.map(({ rule }) => rule)).toEqual(["start", "wrapper"]);
+    expect(features.perRule[0]).toMatchObject({ firstSetSize: 1, followSetSize: 1, unitRules: 0 });
+    expect(features.perRule[0]?.slrConflictInvolvement).toBe(0);
+    expect(features.perRule[1]?.firstSetSize).toBeUndefined();
     expect(features.structure.nullableRules).toBeUndefined();
     expect(features.structure.notApplicable?.nullableRules).toContain("parameterizedRules");
     expect(features.structure.unproductiveSymbols).toEqual([]);
@@ -299,6 +320,120 @@ describe("analyzeGrammar", () => {
     expect(features.diagnostics.map(({ code }) => code)).not.toContain(
       "ANALYZER006_UNPRODUCTIVE_RULES",
     );
+  });
+
+  it("lowers EBNF only in the derived parameter view and leaves source IR unchanged", () => {
+    const base = fixtureIR("empty");
+    const ir: GrammarIR = {
+      ...base,
+      capabilities: { ...base.capabilities, parameterizedRules: true, ebnfSugar: true },
+      startSymbols: ["start"],
+      terminals: [{ name: "A" }],
+      rules: [
+        {
+          name: "start",
+          alternatives: [
+            {
+              items: [
+                {
+                  kind: "symbol",
+                  name: "wrapper",
+                  args: [{ kind: "opt", expr: { kind: "terminal", name: "A" } }],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "wrapper",
+          params: ["X"],
+          alternatives: [{ items: [{ kind: "symbol", name: "X" }] }],
+        },
+      ],
+    };
+    const before = serializeCanonical(ir);
+    const features = analyzeGrammar(ir, { lr: true });
+    expect(features.parseability.slr).toBeDefined();
+    expect(features.parseability.context).toMatchObject({ concreteRules: 3, ebnfHelpers: 1 });
+    expect(features.size.rules).toBe(2);
+    expect(features.sugar.opt).toBe(1);
+    expect(features.structure.nullableRules).toBeUndefined();
+    expect(serializeCanonical(ir)).toBe(before);
+  });
+
+  it("keeps unavailable library bodies distinct from measured zero", () => {
+    const base = fixtureIR("empty");
+    const features = analyzeGrammar(
+      {
+        ...base,
+        capabilities: { ...base.capabilities, parameterizedRules: true },
+        startSymbols: ["start"],
+        externalSymbols: [{ name: "unknown", origin: "stdlib", kind: "rule" }],
+        rules: [
+          {
+            name: "start",
+            alternatives: [{ items: [{ kind: "symbol", name: "unknown", args: [] }] }],
+          },
+        ],
+      },
+      { lr: true },
+    );
+    for (const field of ["firstSetSize", "followSetSize", "ll1Conflicts", "slr"] as const) {
+      expect(features.parseability[field]).toBeUndefined();
+      expect(features.parseability.notApplicable?.[field]).toContain(
+        "parameter-definition-unavailable",
+      );
+    }
+    expect(features.parseability.context).toBeUndefined();
+  });
+
+  it("exposes source CFG extensions without losing existing applicability reasons", () => {
+    const ir = fixtureIR("empty");
+    delete ir.sourceMetrics;
+    ir.capabilities = { ...ir.capabilities, ebnfSugar: true, precedenceTable: false };
+    ir.precedence = [];
+    ir.startSymbols = ["S"];
+    ir.terminals = [{ literal: "x" }, { literal: "a" }, { literal: "c" }];
+    ir.rules = [
+      {
+        name: "S",
+        alternatives: [
+          {
+            items: [
+              { kind: "star", expr: { kind: "symbol", name: "N" } },
+              { kind: "plus", expr: { kind: "symbol", name: "N" } },
+              { kind: "star", expr: { kind: "terminal", literal: "x" } },
+            ],
+          },
+        ],
+      },
+      { name: "N", alternatives: [{ items: [] }, { items: [{ kind: "terminal", literal: "x" }] }] },
+      {
+        name: "A",
+        alternatives: [
+          {
+            items: [
+              { kind: "symbol", name: "B" },
+              { kind: "terminal", literal: "x" },
+            ],
+          },
+          { items: [{ kind: "terminal", literal: "a" }] },
+        ],
+      },
+      { name: "B", alternatives: [{ items: [{ kind: "symbol", name: "C" }] }] },
+      {
+        name: "C",
+        alternatives: [
+          { items: [{ kind: "symbol", name: "A" }] },
+          { items: [{ kind: "terminal", literal: "c" }] },
+        ],
+      },
+    ];
+    expect(validateIR(ir).ok).toBe(true);
+    const features = analyzeGrammar(ir);
+    expect(features.sugar.nullableRepetitions).toBe(2);
+    expect(features.structure.indirectLeftRecursiveRules).toBe(3);
+    expect(features.sugar.notApplicable?.parameterizedCalls).toContain("parameterizedRules");
   });
 
   it("counts the shared FOLLOW set conflict between two nullable alternatives", () => {
@@ -340,7 +475,11 @@ describe("analyzeGrammar", () => {
     });
     expect(features.parseability).toMatchObject({
       firstSetSize: { average: 0, maximum: { rule: "start", value: 0 } },
-      slr: { states: 2, shiftReduceConflicts: 0, reduceReduceConflicts: 0 },
+      slr: expect.objectContaining({
+        states: 2,
+        shiftReduceConflicts: 0,
+        reduceReduceConflicts: 0,
+      }),
     });
     expect(features.lexicon.literalPrefixCollisions).toContainEqual({ prefix: "", literal: "a" });
   });
@@ -785,8 +924,15 @@ describe("analyzeGrammar", () => {
   });
 
   it("warns when analyzing a future compatible v1 minor", () => {
-    const future = { ...fixtureIR("calc"), irVersion: "1.4.0" };
+    const future = { ...fixtureIR("calc"), irVersion: "1.5.0" };
     expect(analyzeGrammar(future).diagnostics).toContainEqual(
+      expect.objectContaining({ code: "ANALYZER004_FUTURE_IR_MINOR" }),
+    );
+  });
+
+  it("accepts the current v1.4 minor without a future-version warning", () => {
+    const current = { ...fixtureIR("calc"), irVersion: "1.4.0" };
+    expect(analyzeGrammar(current).diagnostics).not.toContainEqual(
       expect.objectContaining({ code: "ANALYZER004_FUTURE_IR_MINOR" }),
     );
   });

@@ -570,13 +570,28 @@ describe("gramin CLI", () => {
     const parsed = yaccFrontend.parse([{ name, content }], { dialect: "lrama" });
     expect(parsed.ir).not.toBeNull();
     if (!parsed.ir) return;
-    const features = analyzeGrammar(parsed.ir);
+    const original = serializeCanonical(parsed.ir);
+    const features = analyzeGrammar(parsed.ir, { lr: true });
     expect(parsed.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(features.size.unresolvedSymbols).toEqual({ count: 0, names: [] });
     expect(features.size.altPerRulePercentiles).toEqual({ p50: 2, p95: 8 });
     expect(features.size.rhsLengthPercentiles).toEqual({ p50: 1, p95: 5 });
     expect(features.size.rules).toBe(251);
     expect(features.structure.recursiveRules).toEqual({ count: 144, ratio: 0.5737 });
+    expect(features.parseability).toMatchObject({
+      context: {
+        representation: "parameter-expansion-bnf-v1",
+        sourceRules: 251,
+        concreteRules: 308,
+        parameterInstances: 47,
+        ebnfHelpers: 28,
+      },
+      firstSetSize: { average: 17.1039 },
+      followSetSize: { average: 32.5032 },
+      ll1Conflicts: { firstFirst: 1255, firstFollow: 9, total: 1264 },
+      slr: { states: 1440, shiftReduceConflicts: 4911, reduceReduceConflicts: 3039 },
+    });
+    expect(serializeCanonical(parsed.ir)).toBe(original);
     expect(features.precedence).toMatchObject({
       maxTokensPerLevel: 6,
       rulesWithPrecOverrides: 8,

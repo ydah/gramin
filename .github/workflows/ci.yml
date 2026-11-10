@@ -66,6 +66,7 @@ jobs:
       - run: pnpm lint
       - run: pnpm check:cross-format
       - run: pnpm check:readme
+      - run: pnpm check:metrics
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

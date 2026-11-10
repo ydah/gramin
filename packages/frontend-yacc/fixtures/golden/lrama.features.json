@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.7.2",
+  "featuresVersion": "0.8.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -78,10 +78,11 @@
   "parseability": {
     "cyclicUnitRules": [],
     "notApplicable": {
-      "firstSetSize": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
-      "followSetSize": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
-      "ll1Conflicts": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis",
-      "slr": "parameterizedRules grammar: expand parameters before CFG FIRST, FOLLOW, LL(1), or SLR analysis"
+      "declaredConflicts": "no valid global conflict expectation declaration was captured",
+      "firstSetSize": "parameter-definition-unavailable: no body for \"option\"",
+      "followSetSize": "parameter-definition-unavailable: no body for \"option\"",
+      "ll1Conflicts": "parameter-definition-unavailable: no body for \"option\"",
+      "slr": "parameter-definition-unavailable: no body for \"option\""
     },
     "unitRules": 0
   },
@@ -231,6 +232,7 @@
     "maxDependencyDepth": 1,
     "maxExpressionNestingDepth": 3,
     "notApplicable": {
+      "indirectLeftRecursiveRules": "parameterizedRules grammar: concrete expansion does not preserve these source CFG measurements",
       "nullableRules": "parameterizedRules grammar: expand parameters before CFG nullability analysis",
       "shortestDerivation": "parameterizedRules grammar: expand parameters before productivity or shortest derivation analysis",
       "shortestDerivationUnknown": "parameterizedRules grammar: expand parameters before productivity or shortest derivation analysis",
@@ -306,6 +308,7 @@
   "sugar": {
     "inlineRules": 1,
     "notApplicable": {
+      "nullableRepetitions": "parameterizedRules grammar: concrete expansion does not preserve these source CFG measurements",
       "opt": "ebnfSugar capability is false",
       "plus": "ebnfSugar capability is false",
       "star": "ebnfSugar capability is false"

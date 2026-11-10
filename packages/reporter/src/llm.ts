@@ -64,9 +64,46 @@ const renderDigest = (features: GrammarFeatures, detail: DigestDetail): string =
   const precedence = features.precedence;
   const sugar = features.sugar;
   const slr = features.parseability.slr;
-  const slrSummary = slr
-    ? `\n\n## Parseability\n\n- Raw SLR states/shift-reduce/reduce-reduce: ${slr.states}/${slr.shiftReduceConflicts}/${slr.reduceReduceConflicts}\n- Raw SLR counts ignore precedence/associativity resolution and cannot be compared to \`%expect\` declarations.`
+  const context = features.parseability.context;
+  const declared = features.parseability.declaredConflicts;
+  const parseabilityNotes = [
+    ...(context
+      ? [
+          `Derived representation: ${codeSpan(context.representation)}. FIRST/FOLLOW, LL(1), and raw SLR use derived BNF; global distributions include helpers; template per-rule CFG values are omitted. Structural, unit-rule, and sugar facts use source IR.`,
+          `Source/concrete/instances/helpers: ${context.sourceRules}/${context.concreteRules}/${context.parameterInstances}/${context.ebnfHelpers}; omitted templates: ${codeList(context.omittedTemplateRules, detail.listLimit)}`,
+          `Effective capabilities: ${JSON.stringify(context.effectiveCapabilities)}`,
+          `Limits instances/nodeVisits/depth/keyBytes: ${context.limits.instances}/${context.limits.nodeVisits}/${context.limits.depth}/${context.limits.keyBytes}`,
+          "Class-B comparison requires matching representation, effective capabilities, and limits; counts are not comparison identity.",
+        ]
+      : []),
+    ...(declared
+      ? [
+          `Generator-specific declared shift-reduce/reduce-reduce: ${declared.shiftReduce ?? "not applicable"}/${declared.reduceReduce ?? "not applicable"}`,
+        ]
+      : []),
+    ...(slr
+      ? [
+          `Raw SLR states/shift-reduce/reduce-reduce: ${slr.states}/${slr.shiftReduceConflicts}/${slr.reduceReduceConflicts}`,
+          "Raw SLR counts ignore precedence/associativity resolution and cannot be compared to `%expect` declarations.",
+          ...(slr.conflictInvolvement
+            ? [
+                `SLR conflict involvement total/rules/ratio: ${slr.conflictInvolvement.total}/${slr.conflictInvolvement.involvedRules}/${slr.conflictInvolvement.ruleRatio ?? "not applicable"}`,
+              ]
+            : []),
+        ]
+      : []),
+  ];
+  const slrSummary = parseabilityNotes.length
+    ? `\n\n## Parseability\n\n${parseabilityNotes.map((note) => `- ${note}`).join("\n")}`
     : "";
+  const indirectRecursionSummary =
+    features.structure.indirectLeftRecursiveRules === undefined
+      ? ""
+      : `\n- Indirect left-recursive rules: ${features.structure.indirectLeftRecursiveRules}`;
+  const nullableRepetitionSummary =
+    sugar.nullableRepetitions === undefined
+      ? ""
+      : `\n- Nullable repetitions: ${sugar.nullableRepetitions}`;
   const diagnostics = detail.includeDiagnosticCodes
     ? codeList(
         features.diagnostics.map((diagnostic) => diagnostic.code),
@@ -104,7 +141,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 
 - Terminals/rules/alternatives: ${features.size.terminals}/${features.size.rules}/${features.size.alternatives}; empty alternatives ${features.size.emptyAlternatives}
 - Alternatives/rule p50/p95 ${features.size.altPerRulePercentiles ? `${features.size.altPerRulePercentiles.p50}/${features.size.altPerRulePercentiles.p95}` : "not applicable"}; RHS p50/p95 ${features.size.rhsLengthPercentiles ? `${features.size.rhsLengthPercentiles.p50}/${features.size.rhsLengthPercentiles.p95}` : "not applicable"}
-- Reachable/recursive rules: ${features.structure.reachableRules}/${features.structure.recursiveRules.count}; recursive ratio ${features.structure.recursiveRules.ratio ?? "not applicable"}
+- Reachable/recursive rules: ${features.structure.reachableRules}/${features.structure.recursiveRules.count}; recursive ratio ${features.structure.recursiveRules.ratio ?? "not applicable"}${indirectRecursionSummary}${nullableRepetitionSummary}
 - Dependency depth ${features.structure.maxDependencyDepth}; unreachable ${codeList(features.structure.unreachableSymbols, detail.listLimit)}
 - Precedence levels/overrides: ${features.precedence.levels ?? "not applicable"}/${features.precedence.precOverrides ?? "not applicable"}
 ${compactActionSummary}
@@ -148,7 +185,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 
 ## Structure
 
-- Direct left/right recursive rules: ${features.structure.directLeftRecursiveRules}/${features.structure.directRightRecursiveRules}
+- Direct left/right recursive rules: ${features.structure.directLeftRecursiveRules}/${features.structure.directRightRecursiveRules}${indirectRecursionSummary}
 - Reachable rules ${features.structure.reachableRules}; recursive rules ${features.structure.recursiveRules.count}, ratio ${features.structure.recursiveRules.ratio ?? "not applicable"}
 - Mutual-recursion SCCs ${features.structure.recursionSccCount}; largest mutual size ${features.structure.largestSccSize.value}: ${codeList(features.structure.largestSccSize.members, detail.listLimit)}
 - Largest recursive component ${features.structure.largestRecursiveComponent.value}, ratio ${features.structure.largestRecursiveComponent.ratio ?? "not applicable"}: ${codeList(features.structure.largestRecursiveComponent.members, detail.listLimit)}
@@ -173,7 +210,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 
 ## Sugar and extensions
 
-- opt/star/plus: ${sugar.opt ?? "not applicable"}/${sugar.star ?? "not applicable"}/${sugar.plus ?? "not applicable"}
+- opt/star/plus: ${sugar.opt ?? "not applicable"}/${sugar.star ?? "not applicable"}/${sugar.plus ?? "not applicable"}${nullableRepetitionSummary}
 - Parameterized definitions/calls: ${sugar.parameterizedRuleDefs ?? "not applicable"}/${sugar.parameterizedCalls?.total ?? "not applicable"}; inline rules ${sugar.inlineRules ?? "not applicable"}
 - Not applicable: ${notApplicable(sugar.notApplicable)}
 

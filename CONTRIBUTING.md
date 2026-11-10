@@ -73,3 +73,9 @@ network requirement.
 Explain the problem, the resulting behavior, and the commands you used to verify it. Link
 the relevant issue or RFC. Call out changed metric definitions, schema versions, capability
 context, and golden output so reviewers can assess compatibility.
+
+When changing parseability, distinguish the source domain from a parameter-expanded
+concrete domain. Keep source capabilities and structural metrics unchanged, record the
+derived representation policy, and test both omitted values and measured zeros. Update
+the [metric coverage mapping](docs/metrics-coverage.json) with real implementation symbols
+and named tests, then run `pnpm check:metrics`.

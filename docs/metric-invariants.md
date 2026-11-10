@@ -1,15 +1,15 @@
 # Metric invariants
 
-This is the roadmap next-step 4 checklist for future property tests. It records
-relationships implied by the current implementation; it does not add a generator,
+This checklist records relationships implied by the current implementation and
+identifies existing example and fixed-seed checks. It does not add a generator,
 test dependency, or new metric. The definitions in the [metrics catalog](./metrics-catalog.md)
 and the [features schema](./features-schema.md) remain the public contract.
 
 ## Scope and notation
 
-The target is features **0.7.2**, using the current
+The target is features **0.8.0**, using the current
 [`GrammarFeatures` schema](../packages/core/src/schemas/features.ts) and canonical
-Grammar IR v1, currently **1.3.0**. Earlier feature schemas do not necessarily contain
+Grammar IR v1, currently **1.4.0**. Earlier feature schemas do not necessarily contain
 these fields. Legacy IR v0 support and future-compatible v1 warnings are separate
 compatibility checks, not permission to apply current equations to older feature files.
 
@@ -22,6 +22,13 @@ unchanged input and analyzer options. Let:
 - `G = (R, E)` be the directed dependency graph, with one edge per distinct rule pair;
 - `Q` be the rules reachable from all start symbols together;
 - `q(x)` mean the implementation's `round4(x)`.
+
+These sets describe the source IR. Let `D` be the domain used for CFG parseability and
+`K` its rule count. Without derived context, `D = R` and `K = N`. With
+`parseability.context`, `K = context.concreteRules`: the concrete BNF domain contains
+zero-arity source roots, required instances, and EBNF helpers; templates are absent.
+Source vectors omit generated rows and templates' concrete values, so their CFG sample
+is not `D`. Context counts describe that sample and are not comparison identity keys.
 
 `validateIR` checks canonical form as well as schema shape. `analyzeGrammar` accepts a
 typed object directly and does not itself validate the input IR. Its defensive handling
@@ -115,22 +122,29 @@ required. `altPerRulePercentiles` samples `P.alternatives`; `rhsLengthPercentile
 samples **all alternative lengths**, not `P.maxRhsItems` or per-rule averages. Empty
 samples omit the corresponding object and record a reason.
 
-CFG nullability, productivity, shortest derivation, FIRST, FOLLOW, and LL(1) properties
-require all of `orderedChoice`, `predicates`, and `parameterizedRules` to be false.
-This is a capability gate, not a check of the source-format name. EBNF sugar alone
-does not disable FIRST/FOLLOW or shortest derivation.
+Source CFG nullability, productivity, shortest derivation, nullable repetitions, and
+indirect left recursion require all of `orderedChoice`, `predicates`, and
+`parameterizedRules` to be false. This is a capability gate, not a check of the
+source-format name. FIRST, FOLLOW, and LL(1) can instead use a successfully expanded
+concrete domain recorded by `parseability.context`. EBNF sugar alone does not disable
+FIRST/FOLLOW or shortest derivation.
 
 | ID | Property and conditions |
 |---|---|
 | C1 | Under the CFG gate, `0 <= nullableRules <= N`. Nullable rules form the least fixed point of alternative nullability. An empty literal consumes zero and is nullable; a named terminal without an empty literal is not. |
 | C2 | Under the CFG gate, finite `shortestDerivation` records and `shortestDerivationUnknown` partition `R`. Finite lengths are nonnegative integers, agree with the corresponding optional `perRule.shortestDerivation`, and length zero occurs exactly for nullable rules. An unknown result is absent locally, not zero. |
-| C3 | Each rule has FIRST/FOLLOW cardinalities and local LL(1) counts under the CFG gate. Global FIRST/FOLLOW distributions use these local cardinalities: average is `q(sum / N)`, maximum uses value/name tie-breaking, and percentiles use nearest rank. For `N = 0`, distributions are absent with reasons. |
-| C4 | Local and global `ll1Conflicts.total = firstFirst + firstFollow`. Each global component equals the sum of its local components. For a rule with `k` alternatives, each component is at most `k * (k - 1) / 2`; total can reach twice that bound because one pair can satisfy both conflict tests. Counts are conflicting alternative pairs, not overlapping token counts. |
+| C3 | With no derived context and an open CFG gate, each source rule has FIRST/FOLLOW cardinalities and local LL(1) counts. Global FIRST/FOLLOW distributions use these local cardinalities: average is `q(sum / N)`, maximum uses value/name tie-breaking, and percentiles use nearest rank. For `N = 0`, distributions are absent with reasons. With context, use all `K` concrete rules instead; published source rows are a partial sample. |
+| C4 | Local and global `ll1Conflicts.total = firstFirst + firstFollow`. With no derived context, each global component equals the sum of its source local components. With context, the equality requires all concrete rows, not the published source rows. For a concrete rule with `k` alternatives, each component is at most `k * (k - 1) / 2`; total can reach twice that bound because one pair can satisfy both conflict tests. Counts are conflicting alternative pairs, not overlapping token counts. |
 | C5 | FIRST/FOLLOW set sizes are bounded by the analyzer's tagged token-identity universe, not just `size.terminals`. Identities include literal/name terminals, character classes, any-char, external or unresolved symbols, and FOLLOW's end-of-input marker. Every start rule has FOLLOW size at least one. |
 | C6 | `parseability.unitRules = sum(P.unitRules) <= M` in every capability context. These count alternatives, not unique unit edges. `cyclicUnitRules` contains disjoint cyclic SCCs of the unit-edge graph, including self-loops. Every listed member is a rule on a cycle in the full dependency graph; other alternatives in that rule need not be unit alternatives. |
+| C7 | When applicable, `0 <= indirectLeftRecursiveRules <= N`. It counts the union of source left-corner SCCs of size at least two, including unreachable rules. Direct-only self-loops contribute zero; overlap with direct left recursion is permitted. Unknown referenced rule bodies omit the complete count, even behind consuming prefixes. |
+| C8 | When applicable, `0 <= sugar.nullableRepetitions <= source star + source plus occurrences`. Each nullable operand contributes once per occurrence. No repetitions gives known zero, including plain BNF; source capability gates still precede this check. Unknown rule nullability omits the complete count when repetitions exist. |
 
-When the CFG gate is closed, `nullableRules`, FIRST/FOLLOW distributions, LL(1)
-conflicts, SLR, and the corresponding optional local CFG fields are absent. The
+When the source CFG gate is closed, `nullableRules`, nullable repetitions, indirect
+left recursion, and source shortest derivations are unavailable. FIRST/FOLLOW, LL(1),
+SLR, and corresponding optional local values can remain available only when parameter
+expansion succeeds under CFG semantics; ordered choice and predicates still omit them.
+Failed expansion omits all dependent aggregate and local results. The
 structure section retains empty `unproductiveSymbols`, `shortestDerivation`, and
 `shortestDerivationUnknown` arrays with `notApplicable` reasons for compatibility;
 do not run the partition property C2 on them. Unit-rule counts remain available.
@@ -138,11 +152,30 @@ do not run the partition property C2 on them. Unit-rule counts remain available.
 SLR additionally requires `{ lr: true }`, no rule `params` property, no symbol `args`,
 and RHS expressions accepted by `productionItems`: symbols, terminals, character
 classes, any-char, mid-rule actions, groups, and sequences. Choice, opt, star, plus,
-and predicates require expansion or different semantics. Missing opt-in or unsupported
-expressions omit `slr` with a reason. Candidate checks for emitted SLR are integer
-nonnegative state/conflict counts; no starts gives all three counts zero. With a valid
+and predicates require expansion or different semantics. A successful parameter path
+already lowers EBNF into BNF; source EBNF outside that path can still omit SLR.
+Missing opt-in or unsupported expressions omit `slr` with a reason. Candidate checks
+for emitted SLR are integer nonnegative state/conflict counts; no starts gives all three
+counts zero. With a valid
 start there is at least one state. Conflicts count state/token cells before precedence
 resolution, so neither conflict count is bounded by the number of productions alone.
+
+For available SLR, let `v(d)` be each concrete rule's distinct contributing item/cell
+count. `conflictInvolvement.total = sum(v(d))` and `involvedRules = count(v(d) > 0)`.
+An item in a cell with both conflict kinds counts once; augmented start items do not
+contribute. Without derived context, local source involvement sums to total. With
+context, source rows omit templates and generated rules, so that equality is not required.
+For nonempty `D`, `ruleRatio = q(involvedRules / K)` and percentiles sample every `v(d)`,
+including unreachable zero-valued rules. For empty `D`, total and involved rules are zero,
+but ratio and percentiles are absent with their exact child `notApplicable` keys.
+Missing starts gives available zero samples; unavailable SLR omits the whole object.
+There is no additional SLR state/work budget, and LR(0) state growth can be exponential.
+
+`parseability.declaredConflicts` equals accepted source `IR.expectedConflicts`, independent
+of LR opt-in or SLR applicability. Each present kind is a nonnegative safe integer;
+explicit zero remains present, absent capture has a reason, and an empty object is
+invalid. These source expectations have no equality or bound relationship with raw
+SLR conflicts or involvement.
 
 Do not equate productivity with finite shortest derivation for arbitrary external
 symbols: declared external rules can be assumed productive while their consumed length
@@ -190,15 +223,20 @@ byte-sorted; precedence levels retain source order. Ranking ties use byte order 
 ranking stage, which can precede rounding (for betweenness). Do not re-sort rounded
 betweenness ties and assume the output changed incorrectly.
 
-The following checks are **already tested** as examples. They do not constitute a
-general property-test suite or establish all candidate equations above.
+The following example and bounded fixed-seed checks are **already tested**. They do not
+establish every candidate equation or every capability context above.
 
 | Test file | Verified existing checks (test names) |
 |---|---|
 | [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `matches hand-calculated calculator metrics`: concrete size, percentiles, recursion, precedence, and complete action values; `finds mutual recursion, dependency depth, and nullability`: one mutual SCC and rounded ratios. |
 | [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `computes CFG parseability and refactoring candidates`: concrete FIRST, conflict, unit-rule, and local counts; `counts the shared FOLLOW set conflict between two nullable alternatives`: FIRST/FOLLOW conflict count; `treats an empty literal as an empty derivation`: zero RHS, nullability, FIRST, shortest derivation, and SLR example. |
 | [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `computes advanced graph shape and shortest derivations`: concrete bridges, articulation point, start reachability, and local graph vector; `diagnoses cycles made only of unit rules`: one unit SCC; `handles a long dependency chain without recursive graph frames`: reachability and depth for 5,000 rules. |
-| [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `runs opt-in SLR analysis`; `does not report CFG results before parameterized rules are expanded`; `does not apply CFG analysis to predicate-bearing grammars`; `omits CFG nullability for ordered choice with a reason`; `does not apply CFG productivity diagnostics to ordered choice`: specific option and capability gates. |
+| [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `runs opt-in SLR analysis`; `measures expanded parameters while preserving source structural applicability`; `does not apply CFG analysis to predicate-bearing grammars`; `omits CFG nullability for ordered choice with a reason`; `does not apply CFG productivity diagnostics to ordered choice`: specific option and capability gates. |
+| [`parameter-expansion.test.ts`](../packages/analyzer/src/parameter-expansion.test.ts) | `matches a hand-written nullable concrete grammar exactly`; `lowers opt, star, plus, nested choice, groups, and sequences to finite BNF`; `accepts exact instance and work budgets and rejects one less`; `accepts the exact cumulative UTF-8 identity/name byte budget and rejects one byte less`: concrete-domain oracles and deterministic limits. |
+| [`parseability.test.ts`](../packages/analyzer/src/parseability.test.ts) | `attributes a shift/reduce cell to both contributing rules`; `counts an item once in a cell with both conflict kinds`; `samples unreachable zero-valued rules with nearest-rank percentiles`; `omits empty-domain ratios and percentiles with precise reasons`; `samples concrete parameter instances while preserving source rule rows`: involvement and sample-domain examples. |
+| [`cfg-extensions.test.ts`](../packages/analyzer/src/cfg-extensions.test.ts) | `counts nested source occurrences and empty literals without expanding sugar`; `follows nullable rule prefixes and retains direct-plus-indirect overlap`; `does not mistake unresolved nullable prefixes for a known zero`: source scope, nullable-prefix, and absence boundaries. |
+| [`declared-conflicts.test.ts`](../packages/analyzer/src/declared-conflicts.test.ts) | `copies explicit declarations independently of LR mode %s`; `preserves declarations when SLR is unavailable`; `explains absent declarations without supplying zero or losing other reasons`: source expectations are independent of measured SLR. |
+| [`invariants.test.ts`](../packages/analyzer/src/invariants.test.ts) | `preserves canonical CFG invariants across fixed seeds`: bounded generated plain-CFG size, graph, reachability, and parseability checks. The generator does not establish properties for every capability context. |
 | [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `bounds precedence coverage to declared terminals`; `uses retained source statistics for operational and style metrics`; `marks empty-sample ratios and percentiles as not applicable`; `marks action measurements partial when a frontend reports omitted actions`: selected boundaries and absence checks. |
 | [`analyze.test.ts`](../packages/analyzer/src/analyze.test.ts) | `uses byte-order tie breaking for rankings`; `serializes deterministically`; `unions dependencies when a noncanonical IR repeats a rule name`: selected ordering, repeatability, and defensive graph behavior. |
 | [`numbers.test.ts`](../packages/analyzer/src/numbers.test.ts) | `uses deterministic nearest ranks for small and unsorted samples`; `omits empty samples and rejects invalid percentile bounds`: percentile examples and argument boundaries. There is no dedicated `round4` test in this file. |
@@ -206,7 +244,7 @@ general property-test suite or establish all candidate equations above.
 | [`core.test.ts`](../packages/core/src/core.test.ts) | `rejects repeated rule names in the canonical form`; `rejects source metrics that cannot describe the grammar`; `is byte deterministic and can remove source locations`; `orders strings by UTF-8 bytes`: generator preconditions and serializer examples. |
 | [`cross-format.test.ts`](../packages/cli/src/cross-format.test.ts) | `matches every applicable catalog class-A metric in the documented parser scope` checks the aligned JSON corpus after explicit scope normalization; `explains class-B applicability through the capabilities of %s` checks its capability caveats. This does not assert equality for arbitrary language-equivalent grammars. |
 
-## Minimal future generator boundary
+## Generator boundary
 
 Start with bounded canonical IR: unique rule names, valid start references, at least one
 alternative per rule, flattened top-level sequences/choices, permitted groups, and node-derived

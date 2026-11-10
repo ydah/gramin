@@ -1,5 +1,5 @@
 import { type Static, Type } from "@sinclair/typebox";
-import { CapabilitiesSchema } from "./ir.js";
+import { CapabilitiesSchema, ExpectedConflictsSchema } from "./ir.js";
 import { DiagnosticSchema, SemverStringSchema } from "./primitives.js";
 
 const NotApplicableSchema = Type.Record(Type.String(), Type.String({ minLength: 1 }));
@@ -70,6 +70,7 @@ const SizeFeaturesSchema = Type.Object(
 const StructureFeaturesSchema = Type.Object(
   {
     directLeftRecursiveRules: Type.Integer({ minimum: 0 }),
+    indirectLeftRecursiveRules: Type.Optional(Type.Integer({ minimum: 0 })),
     directRightRecursiveRules: Type.Integer({ minimum: 0 }),
     recursionSccCount: Type.Integer({ minimum: 0 }),
     largestSccSize: Type.Object(
@@ -208,6 +209,7 @@ const LexiconFeaturesSchema = Type.Object(
 
 const SugarFeaturesSchema = Type.Object(
   {
+    nullableRepetitions: Type.Optional(Type.Integer({ minimum: 0 })),
     opt: Type.Optional(Type.Integer({ minimum: 0 })),
     star: Type.Optional(Type.Integer({ minimum: 0 })),
     plus: Type.Optional(Type.Integer({ minimum: 0 })),
@@ -244,6 +246,39 @@ const ActionFeaturesSchema = Type.Object(
 
 const ParseabilityFeaturesSchema = Type.Object(
   {
+    declaredConflicts: Type.Optional(ExpectedConflictsSchema),
+    context: Type.Optional(
+      Type.Object(
+        {
+          representation: Type.Literal("parameter-expansion-bnf-v1"),
+          sourceRules: Type.Integer({ minimum: 0 }),
+          concreteRules: Type.Integer({ minimum: 0 }),
+          parameterInstances: Type.Integer({ minimum: 0 }),
+          ebnfHelpers: Type.Integer({ minimum: 0 }),
+          omittedTemplateRules: Type.Array(Type.String({ minLength: 1 }), { uniqueItems: true }),
+          effectiveCapabilities: Type.Object(
+            {
+              ...CapabilitiesSchema.properties,
+              orderedChoice: Type.Literal(false),
+              predicates: Type.Literal(false),
+              parameterizedRules: Type.Literal(false),
+              ebnfSugar: Type.Literal(false),
+            },
+            { additionalProperties: false },
+          ),
+          limits: Type.Object(
+            {
+              instances: Type.Integer({ minimum: 1 }),
+              nodeVisits: Type.Integer({ minimum: 1 }),
+              depth: Type.Integer({ minimum: 1 }),
+              keyBytes: Type.Integer({ minimum: 1 }),
+            },
+            { additionalProperties: false },
+          ),
+        },
+        { additionalProperties: false },
+      ),
+    ),
     firstSetSize: Type.Optional(DistributionSchema),
     followSetSize: Type.Optional(DistributionSchema),
     ll1Conflicts: Type.Optional(
@@ -264,6 +299,17 @@ const ParseabilityFeaturesSchema = Type.Object(
           states: Type.Integer({ minimum: 0 }),
           shiftReduceConflicts: Type.Integer({ minimum: 0 }),
           reduceReduceConflicts: Type.Integer({ minimum: 0 }),
+          conflictInvolvement: Type.Optional(
+            Type.Object(
+              {
+                total: Type.Integer({ minimum: 0 }),
+                involvedRules: Type.Integer({ minimum: 0 }),
+                ruleRatio: Type.Optional(Type.Number({ minimum: 0, maximum: 1 })),
+                percentiles: Type.Optional(PercentilesSchema),
+              },
+              { additionalProperties: false },
+            ),
+          ),
         },
         { additionalProperties: false },
       ),
@@ -397,6 +443,7 @@ const PerRuleFeaturesSchema = Type.Array(
       reachableFromStarts: Type.Array(Type.String()),
       firstSetSize: Type.Optional(Type.Integer({ minimum: 0 })),
       followSetSize: Type.Optional(Type.Integer({ minimum: 0 })),
+      slrConflictInvolvement: Type.Optional(Type.Integer({ minimum: 0 })),
       ll1Conflicts: Type.Optional(
         Type.Object(
           {
@@ -465,7 +512,7 @@ export const GrammarFeaturesSchema = Type.Object(
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.7.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.8.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;

@@ -67,8 +67,26 @@ export const renderMarkdown = (features: GrammarFeatures): string => {
   const sections = Object.entries(features)
     .filter(([key]) => key !== "featuresVersion")
     .map(([key, value]) => {
-      if (key === "parseability" && features.parseability.slr) {
-        return `${renderSection(key, value)}\n\nRaw SLR counts ignore precedence/associativity resolution and cannot be compared to \`%expect\` declarations.`;
+      if (key === "parseability") {
+        const notes = [
+          ...(features.parseability.context
+            ? [
+                "FIRST/FOLLOW, LL(1), and raw SLR use derived BNF; global distributions include helpers; template per-rule CFG values are omitted. Structural, unit-rule, and sugar facts use source IR.",
+                "Class-B comparison requires matching representation, effective capabilities, and limits; counts are not comparison identity.",
+              ]
+            : []),
+          ...(features.parseability.declaredConflicts
+            ? [
+                "Generator-specific declared conflicts are source declarations, separate from raw SLR analysis.",
+              ]
+            : []),
+          ...(features.parseability.slr
+            ? [
+                "Raw SLR counts ignore precedence/associativity resolution and cannot be compared to `%expect` declarations.",
+              ]
+            : []),
+        ];
+        return [renderSection(key, value), ...notes].join("\n\n");
       }
       if (key !== "actions" || features.actions.completeness !== "partial") {
         return renderSection(key, value);

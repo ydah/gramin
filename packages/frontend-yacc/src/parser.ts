@@ -86,6 +86,9 @@ export const parseYaccAst = (
             : [],
       terminals: declarations.terminals,
       precedence: declarations.precedence,
+      ...(declarations.expectedConflicts === undefined
+        ? {}
+        : { expectedConflicts: declarations.expectedConflicts }),
       rules,
       sourceMetrics: {
         sourceCharacters: lexed.sourceCharacters,

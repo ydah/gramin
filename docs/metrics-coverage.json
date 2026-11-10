@@ -1,0 +1,1082 @@
+{
+  "actions.altActionCoverage": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.avgActionLength": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.completeness": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.maxActionLength": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.midRuleActions": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.rulesWithActions": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.totalActions": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "actions.trailingActions": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "actionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "lexicon.anyCharCount": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.charClassCount": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.keywordIdentifierCollisions": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.keywordLike": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.literalOccurrences": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.literalPrefixCollisions": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.literalTokens": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.namedTokens": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.punctuationLike": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "lexicon.tokenUsage": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "lexiconFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "operations.actionReferences": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "uses retained source statistics for operational and style metrics"
+    }
+  },
+  "operations.declarationDirectives": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "uses retained source statistics for operational and style metrics"
+    }
+  },
+  "operations.errorTokenUses": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "operations.explicitEmptyAlternatives": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "uses retained source statistics for operational and style metrics"
+    }
+  },
+  "operations.namedReferenceRatio": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "operations.namedReferences": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "operations.recoveryRuleRatio": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "operations.rulesWithErrorRecovery": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "operations.symbolReferences": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "operationsFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "parseability.cyclicUnitRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "diagnoses cycles made only of unit rules"
+    }
+  },
+  "parseability.declaredConflicts": {
+    "implementation": {
+      "file": "packages/analyzer/src/analyze.ts",
+      "symbol": "analyzeGrammar"
+    },
+    "test": {
+      "file": "packages/analyzer/src/declared-conflicts.test.ts",
+      "name": "copies explicit declarations independently of LR mode %s"
+    }
+  },
+  "parseability.firstSetSize": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "parseability.followSetSize": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "parseability.ll1Conflicts.firstFirst": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "parseability.ll1Conflicts.firstFollow": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "parseability.slr": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "runs opt-in SLR analysis"
+    }
+  },
+  "parseability.slr.conflictInvolvement.involvedRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "slrFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/parseability.test.ts",
+      "name": "samples unreachable zero-valued rules with nearest-rank percentiles"
+    }
+  },
+  "parseability.slr.conflictInvolvement.percentiles": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "slrFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/parseability.test.ts",
+      "name": "samples unreachable zero-valued rules with nearest-rank percentiles"
+    }
+  },
+  "parseability.slr.conflictInvolvement.ruleRatio": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "slrFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/parseability.test.ts",
+      "name": "samples unreachable zero-valued rules with nearest-rank percentiles"
+    }
+  },
+  "parseability.slr.conflictInvolvement.total": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "slrFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/parseability.test.ts",
+      "name": "counts an item once in a cell with both conflict kinds"
+    }
+  },
+  "parseability.unitRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "peg.backtrackingHotspots": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "pegFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "peg.charClassOverlapPairs": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "pegFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "peg.maxPredicateNestingDepth": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "pegFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "peg.potentialShadowedAlternativePairs": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "pegFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "reports symbol-expanded PEG shadowing separately as a heuristic"
+    }
+  },
+  "peg.predicates": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "pegFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "peg.shadowedAlternativePairs": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "pegFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "perRule": {
+    "implementation": {
+      "file": "packages/analyzer/src/analyze.ts",
+      "symbol": "analyzeGrammar"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "perRule.slrConflictInvolvement": {
+    "implementation": {
+      "file": "packages/analyzer/src/parseability.ts",
+      "symbol": "parseabilityAnalysis"
+    },
+    "test": {
+      "file": "packages/analyzer/src/parseability.test.ts",
+      "name": "attributes a shift/reduce cell to both contributing rules"
+    }
+  },
+  "precedence.assocBreakdown": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "precedence.levels": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "precedence.maxTokensPerLevel": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "precedence.precOverrideAlternativeRatio": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "precedence.precOverrides": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "precedence.rulesWithPrecOverrides": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "precedence.tokensInPrecedence": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "precedenceFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "redundancy.commonPrefixPairs": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes CFG parseability and refactoring candidates"
+    }
+  },
+  "redundancy.duplicateAlternatives": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "redundancy.listRecursion": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "recognizes list recursion without classifying every recursive expression rule"
+    }
+  },
+  "redundancy.maxCommonPrefixLength": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes CFG parseability and refactoring candidates"
+    }
+  },
+  "redundancy.singleReferenceRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes CFG parseability and refactoring candidates"
+    }
+  },
+  "redundancy.structuralCloneGroups": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "redundancy.undefinedPrecedenceOverrides": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "redundancy.unusedPrecedenceTokens": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes CFG parseability and refactoring candidates"
+    }
+  },
+  "redundancy.unusedTerminals": {
+    "implementation": {
+      "file": "packages/analyzer/src/redundancy.ts",
+      "symbol": "redundancyFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes CFG parseability and refactoring candidates"
+    }
+  },
+  "size.altPerRulePercentiles": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.alternatives": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.avgAltPerRule": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.avgRhsLength": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.emptyAlternatives": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.maxAltPerRule": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.maxRhsLength": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.nestedChoiceCount": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "size.nonterminals": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.rhsLengthPercentiles": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.rules": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.terminals": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "size.unresolvedSymbols": {
+    "implementation": {
+      "file": "packages/analyzer/src/size.ts",
+      "symbol": "sizeFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.articulationPoints": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes advanced graph shape and shortest derivations"
+    }
+  },
+  "structure.bridges": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes advanced graph shape and shortest derivations"
+    }
+  },
+  "structure.directLeftRecursiveRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.directRightRecursiveRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.fanInEntropy": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.fanInGini": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.indirectLeftRecursiveRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/cfg-extensions.ts",
+      "symbol": "cfgExtensionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/cfg-extensions.test.ts",
+      "name": "follows nullable rule prefixes and retains direct-plus-indirect overlap"
+    }
+  },
+  "structure.largestRecursiveComponent": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "structure.largestSccSize": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds mutual recursion, dependency depth, and nullability"
+    }
+  },
+  "structure.maxDependencyDepth": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds mutual recursion, dependency depth, and nullability"
+    }
+  },
+  "structure.maxExpressionNestingDepth": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes advanced graph shape and shortest derivations"
+    }
+  },
+  "structure.nullableRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "structure.reachableRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "structure.recursionSccCount": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds mutual recursion, dependency depth, and nullability"
+    }
+  },
+  "structure.recursiveRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "matches hand-calculated calculator metrics"
+    }
+  },
+  "structure.shortestDerivation": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "structure.shortestDerivationUnknown": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "structure.startSymbolReachability": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "structure.topBetweenness": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "computes advanced graph shape and shortest derivations"
+    }
+  },
+  "structure.topFanIn": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.topFanOut": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "structure.unproductiveSymbols": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "reports reachable rules that cannot derive a terminal sequence"
+    }
+  },
+  "structure.unreachableSymbols": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/invariants.test.ts",
+      "name": "preserves canonical CFG invariants across fixed seeds"
+    }
+  },
+  "style": {
+    "implementation": {
+      "file": "packages/analyzer/src/specialized-metrics.ts",
+      "symbol": "styleFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/analyze.test.ts",
+      "name": "finds ordered-choice, recovery, and naming signals"
+    }
+  },
+  "sugar.inlineRules": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "sugar.nullableRepetitions": {
+    "implementation": {
+      "file": "packages/analyzer/src/cfg-extensions.ts",
+      "symbol": "cfgExtensionFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/cfg-extensions.test.ts",
+      "name": "counts star and plus occurrences whose referenced operand accepts epsilon"
+    }
+  },
+  "sugar.opt": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "sugar.parameterizedCalls.known": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "sugar.parameterizedCalls.total": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "sugar.parameterizedRuleDefs": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "sugar.plus": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  },
+  "sugar.star": {
+    "implementation": {
+      "file": "packages/analyzer/src/secondary-metrics.ts",
+      "symbol": "sugarFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/golden.test.ts",
+      "name": "matches %s.features.json"
+    }
+  }
+}

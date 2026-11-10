@@ -160,6 +160,14 @@ const RuleSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const ExpectedConflictsSchema = Type.Object(
+  {
+    shiftReduce: Type.Optional(Type.Integer({ minimum: 0, maximum: Number.MAX_SAFE_INTEGER })),
+    reduceReduce: Type.Optional(Type.Integer({ minimum: 0, maximum: Number.MAX_SAFE_INTEGER })),
+  },
+  { additionalProperties: false, minProperties: 1 },
+);
+
 export const GrammarIRSchema = Type.Object(
   {
     irVersion: SemverStringSchema,
@@ -183,6 +191,7 @@ export const GrammarIRSchema = Type.Object(
     terminals: Type.Array(TerminalDeclSchema),
     externalSymbols: Type.Array(ExternalSymbolSchema),
     precedence: Type.Array(PrecedenceLevelSchema),
+    expectedConflicts: Type.Optional(ExpectedConflictsSchema),
     sourceMetrics: Type.Optional(
       Type.Object(
         {

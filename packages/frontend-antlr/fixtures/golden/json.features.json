@@ -25,7 +25,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.7.2",
+  "featuresVersion": "0.8.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -124,6 +124,7 @@
       "total": 0
     },
     "notApplicable": {
+      "declaredConflicts": "no valid global conflict expectation declaration was captured",
       "slr": "requires --analysis lr"
     },
     "unitRules": 2
@@ -367,6 +368,7 @@
     "directRightRecursiveRules": 0,
     "fanInEntropy": 1.7925,
     "fanInGini": 0.4,
+    "indirectLeftRecursiveRules": 0,
     "largestRecursiveComponent": {
       "members": [
         "array",
@@ -521,6 +523,7 @@
       "parameterizedCalls": "parameterizedRules capability is false",
       "parameterizedRuleDefs": "parameterizedRules capability is false"
     },
+    "nullableRepetitions": 0,
     "opt": 2,
     "plus": 0,
     "star": 2

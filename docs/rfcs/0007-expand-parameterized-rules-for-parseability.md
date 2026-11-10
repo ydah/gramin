@@ -1,21 +1,25 @@
 # RFC 0007: Expand parameterized rules for parseability
 
-- Status: Proposed
+- Status: Accepted for local definitions; library profile transport remains open
 - Date: 2026-11-10
 
 ## Summary
 
-Build a finite, concrete grammar for FIRST/FOLLOW, LL(1), and optional raw SLR
+Build a finite, concrete BNF grammar for FIRST/FOLLOW, LL(1), and optional raw SLR
 measurements when Grammar IR contains parameterized rules. Keep the input IR and
 source-based measurements unchanged. Record the derived representation and its limits
 with the measurements. If expansion cannot finish with known definitions, omit the
 dependent measurements and explain why in `notApplicable`.
 
-This RFC proposes behavior; it does not describe an implemented expansion API or schema.
+Features 0.8 implements local-definition expansion, deterministic EBNF lowering, and
+parseability context. The internal expansion module can consume explicitly supplied
+definitions, but the public analysis API and IR do not transport versioned library
+profiles. That delivery boundary remains open; recognized library names alone never
+authorize invented bodies.
 
 ## Problem and current contract
 
-[Grammar IR 1.3](../ir-schema.md) already represents definitions through `Rule.params`
+[Grammar IR v1](../ir-schema.md) represents definitions through `Rule.params`
 and applications through `symbol.args`. Arguments are expression trees, so applications
 can be nested. A formal reference uses an ordinary `symbol` node. `isInline` is retained
 separately. The input capability `parameterizedRules` must reflect these nodes exactly.
@@ -25,18 +29,20 @@ library modules currently list recognized names, not bodies or arities. A recogn
 call without a local definition becomes an `externalSymbols` entry with `origin:
 "stdlib"` and `kind: "rule"`. That declaration does not establish what the rule derives.
 
-The analyzer currently omits FIRST/FOLLOW, LL(1), and SLR measurements whenever
-`parameterizedRules` is true. It still measures source unit rules and unit cycles.
+The analyzer expands finite, fully defined parameterized grammars before FIRST/FOLLOW,
+LL(1), and requested SLR analysis. Missing bodies or failed expansion omit those results.
+It still measures source unit rules and unit cycles.
 Parameterized grammars also lack CFG nullability, productivity, and shortest derivation
-in `structure`. This proposal only changes the parseability measurement path. In
-particular, Ruby's pinned `parse.y` should become measurable without replacing its
-source grammar with generated helper rules throughout the features document.
+in `structure`. Expansion only changes the parseability measurement path. Ruby's pinned
+`parse.y` is measurable through its local definitions without replacing its source
+grammar with generated helper rules throughout the features document.
 
 ## Measurement definition and scope
 
 The measurement domain is every zero-arity source rule, including unreachable rules,
-plus every concrete parameterized instance required by those rules. Keep the declared
-start symbols; each must identify a zero-arity rule. Uncalled templates have no concrete
+plus every concrete parameterized instance required by those rules and EBNF helper
+rules required by that concrete domain. Keep the declared start symbols; each must
+identify a zero-arity rule. Uncalled templates have no concrete
 instance and do not contribute a sample. This preserves the existing all-rule domain
 for grammars without parameters while making the changed domain explicit.
 
@@ -46,7 +52,7 @@ On a complete expansion:
   domain, using the existing cardinality, ranking, rounding, and percentile definitions.
 - Compute `parseability.ll1Conflicts` over alternative pairs within those concrete rules,
   using the existing FIRST/FIRST and FIRST/FOLLOW definitions.
-- When `--analysis lr` is requested and the concrete expressions are plain BNF, compute
+- When `--analysis lr` is requested, compute
   `parseability.slr` with the existing canonical LR(0) and raw SLR definitions.
 
 These measurements are E/B: exact for the declared concrete representation, comparable
@@ -94,13 +100,31 @@ running a parser generator, semantic action, predicate, or target-language code.
    the callee's formals. This prevents accidental capture.
 4. Replace a formal reference with its argument expression, then expand applications
    found in the substituted body. Preserve alternative order and multiplicity. Restore
-   the canonical sequence/group shape where substitution inserts a sequence. Do not
-   distribute choices or invent EBNF lowering as part of parameter substitution.
+   the canonical sequence/group shape where substitution inserts a sequence. Lower the
+   resulting expressions into deterministic BNF helpers as specified below.
 5. Applying a formal as a constructor, such as `F(X)` where `F` is itself a formal, is a
-   higher-order application. The initial proposal reports it as unsupported rather than
+   higher-order application. The implementation reports it as unsupported rather than
    guessing how an arbitrary expression becomes a callable definition. Ordinary nested
    applications such as `list(option(expr))` remain in scope. Higher-order support is an
-   acceptance decision below.
+   open profile decision below.
+
+### EBNF lowering
+
+The derived path flattens sequences and groups, removes epsilon literals and mid-rule
+actions, and replaces each choice, opt, star, or plus occurrence with a helper rule.
+Occurrence identity includes the owner instance and expression path; helpers are not
+merged merely because their bodies match. For lowered operand sequence `X` and helper
+`H`, preserve alternative order with these productions:
+
+- choice: its alternatives in source order;
+- opt: `H: X | epsilon`;
+- star: `H: epsilon | X H`;
+- plus: `H: X | X H`.
+
+This lowering is part of `parameter-expansion-bnf-v1`, including when EBNF occurs in a
+zero-arity source root. It does not enable a separate general EBNF-to-SLR path for
+nonparameterized input. Ordered choice and predicates remain inapplicable. Recognition
+is preserved while rule identity, FOLLOW distributions, and conflict counts can change.
 
 Inline declarations do not authorize execution or generator-specific inlining. Concrete
 instances are ordinary helper rules for these measurements. Existing action metadata
@@ -112,7 +136,8 @@ Ordered choices and predicates keep their existing CFG applicability restriction
 A library call can expand only when a selected, versioned definition profile provides
 its body and arity. Profiles must distinguish Lrama and Menhir; the shared name `list`
 does not prove shared structure. Record the profile identifier and a content digest.
-Local definitions need no library profile. The analyzer must not select semantics from
+Local definitions need no library profile. Profile transport and identity recording are
+not implemented by the public API. The analyzer must not select semantics from
 an unversioned name list or silently fetch the latest library at analysis time.
 
 The current `origin: "stdlib"` declaration lacks enough information to select such a
@@ -137,8 +162,8 @@ retain terminal identities, expression kinds, and choice order. Share one instan
 each equal key. Insert its placeholder before expanding the body so direct or mutual
 recursion back to the same instance becomes an ordinary graph edge.
 
-Generated rule names must encode that key injectively. One candidate is the full UTF-8
-key encoded as hexadecimal beneath a generated prefix. Start with `@gramin:parameter:`
+Generated rule names encode that key injectively using its full UTF-8 hexadecimal
+encoding beneath a generated prefix. Start with `@gramin:parameter:`
 and append colons until it is not a prefix of any input symbol name. This avoids collisions
 between instances and collisions with user names without trusting a truncated hash.
 `option[expr]` may serve as a display label, but delimiter concatenation alone is not a
@@ -150,13 +175,15 @@ instance. A finite mutual cycle likewise terminates through memoization. In cont
 `p(X): p(box(X))` can require endlessly different argument trees even when `box` has a
 finite definition. Memoization cannot make that instance set finite.
 
-Bound expansion with fixed, versioned counters. Proposed initial limits are 10,000
-distinct instances, 1,000,000 expression-node visits across substitution and key
-construction, and derived expression depth 256. Charge one visit before processing each
-expression node in either operation, including intermediate arguments and completed
-bodies; memo hits still charge for argument-key construction. Check each limit before
-the operation that would exceed it, and test its boundary. These values are
-proposals to validate against the pinned corpus, not current CLI options. No elapsed-time
+Bound expansion with fixed, versioned counters: 10,000 generated rules across instances
+and EBNF helpers, 1,000,000 work visits, expression depth 256, and 8 MiB of cumulative
+canonical identity and generated-name UTF-8 bytes. Work visits charge definition
+indexing, rules, formal binders, alternatives, and expressions, including substitution,
+key construction, lowering, and generated helper bodies. Empty bodies and unused
+templates therefore cannot bypass the work limit. Memo hits still charge key construction
+and its identity bytes. Preflight identity and name byte costs before allocating their
+encoded strings. Check each limit before the operation that would exceed it and test
+the exact boundary. These are internal fixed policies, not CLI options. No elapsed-time
 limit, machine-speed-dependent fallback, or partial sample determines a measurement.
 
 ## Context and applicability
@@ -165,14 +192,20 @@ Preserve top-level features `capabilities` as the unchanged source IR capabiliti
 required by [RFC 0004](./0004-contextual-structural-features.md). Do not set its
 `parameterizedRules` flag to false just to enable analysis.
 
-Add proposed parseability-local metadata that identifies the affected FIRST/FOLLOW,
+On successful expansion, `parseability.context` identifies the domain of FIRST/FOLLOW,
 LL(1), and SLR fields and records:
 
-- representation policy/version and whether expansion was required and completed;
+- `representation: "parameter-expansion-bnf-v1"`;
 - effective capabilities of the concrete grammar, with `parameterizedRules: false` only
   after all applications and templates have been eliminated from that representation;
-- selected definition-profile identifiers/digests and the fixed limit policy;
-- the concrete-rule sampling domain and the source-template `perRule` omission policy.
+- `limits: { instances: 10000, nodeVisits: 1000000, depth: 256, keyBytes: 8388608 }`;
+- `sourceRules`, `concreteRules`, `parameterInstances`, `ebnfHelpers`, and
+  `omittedTemplateRules`, describing the sample and source-vector omission policy.
+
+Context is metadata, not a metric. Comparison identity excludes these sample counts and
+template names; it includes the representation, effective capabilities, and limit policy.
+A future library profile contract must also identify profile contents before results can
+be compared under it. Failed expansion has no successful-domain context.
 
 Reporters and future comparison code must use this local context for the affected E/B
 values and the source context for unchanged fields. Different profiles or policies do
@@ -181,8 +214,8 @@ not establish numerical comparability merely because both inputs use parameters.
 Expansion is all-or-none for dependent measurements. On failure, discard the partial
 derived grammar and omit FIRST/FOLLOW distributions, LL(1) conflicts, SLR values, and
 dependent per-rule values. Preserve source measurements. Record stable reasons under
-each affected aggregate field in `parseability.notApplicable`; metadata explains the
-per-rule omissions. Proposed reason categories are:
+each affected aggregate field in `parseability.notApplicable`; those reasons also
+explain the dependent per-rule omissions. Reason categories are:
 
 | Category | Condition |
 |---|---|
@@ -190,41 +223,40 @@ per-rule omissions. Proposed reason categories are:
 | `parameter-binding-unsupported` | Duplicate binders, incompatible available definitions, or higher-order application |
 | `parameter-arity-mismatch` | Definition and application arities disagree, including a parameterized start |
 | `parameter-symbol-unresolved` | A required concrete reference has no rule or terminal interpretation |
-| `parameter-expansion-limit` | A named deterministic instance, node-work, or depth limit is reached |
+| `parameter-expansion-limit` | A named generated-rule, work, depth, or key-byte limit is reached |
 
-Reasons must name the failing definition or reference and the violated limit where
-relevant. These are proposed stable string prefixes within the existing string-valued
-`notApplicable` maps, not already implemented diagnostic codes. Select failures in a
-fixed order. Ordered choice and predicates retain their reasons; after successful
-expansion, SLR still requires `--analysis lr` and plain BNF. EBNF expressions can therefore
-allow FIRST/FOLLOW and LL(1) while leaving only SLR inapplicable. An empty concrete sample
-continues to use the existing empty-sample rules.
+Reasons name the failing definition or reference and the violated limit where
+relevant. These are implemented string prefixes within the existing string-valued
+`notApplicable` maps, not diagnostic codes. Select failures in a fixed order.
+Ordered choice and predicates retain their reasons; after successful
+expansion, SLR still requires `--analysis lr`; the derived path already supplies plain
+BNF. An empty concrete sample continues to use the existing empty-sample rules.
 
 ## Contract changes and open decisions
 
-The existing strict features schema has no place for this local context. Acceptance must
-settle the exact metadata shape, optional source-rule parseability behavior, and reporter
-and comparison handling together. A future features minor version and packaged schema
-would describe the additive fields and the newly available measurements; this draft does
-not reserve a version number. Preserve historical schema artifacts under the policy in
+Features 0.8 and its packaged schema define the context and optional source-rule
+parseability behavior above. Preserve historical schema artifacts under the policy in
 [RFC 0001](./0001-grammar-ir-v1.md) and the source-vector meaning in
 [RFC 0006](./0006-rule-vectors-and-peg-shadowing.md).
 
 Also settle how versioned library definitions reach analysis without source-format
 branches in the analyzer. A frontend-provided definition payload or explicit analysis
-profile would require a reviewed IR/protocol or API contract. The existing IR 1.3 fields
+profile would require a reviewed IR/protocol or API contract. The existing IR fields
 alone cannot identify an upstream library version. Do not claim expansion support for
 external producers until this boundary is defined. Confirm whether higher-order
-applications are required for the first supported profiles and whether the proposed
-budgets accommodate the pinned corpus before accepting this RFC.
+applications are required for the first supported profiles and whether the fixed
+budgets accommodate them before claiming support for those profiles.
 
 ## Acceptance and regression checks
 
 - Analyze the Ruby `parse.y` pinned by [the corpus fetcher](../../scripts/fetch-corpus.mjs),
-  commit `33db313e855dfa83d7c66c2de6d63b9b401c32a0`, with the matching explicit Lrama
-  definition profile. FIRST/FOLLOW distributions and LL(1) conflicts must be present;
+  commit `33db313e855dfa83d7c66c2de6d63b9b401c32a0`, through its local definitions.
+  FIRST/FOLLOW distributions and LL(1) conflicts must be present;
   `--analysis lr` must also return finite raw SLR values. None may retain a generic
-  unexpanded-parameters reason. Commit numeric fixtures after reviewing the profile.
+  unexpanded-parameters reason. The current baseline has 251 source rules, 47 parameter
+  instances, 28 EBNF helpers, and 308 concrete rules; raw SLR has 1,440 states, 4,911
+  shift/reduce cells, and 3,039 reduce/reduce cells. These are representation-specific
+  regression values, not a reproduction of Ruby's generator conflict report.
 - Compare a small parameterized grammar with a hand-written concrete counterpart under
   the same helper-rule structure. FIRST/FOLLOW cardinalities, LL(1) conflict counts,
   and requested SLR values must agree exactly. Include nullable and terminal arguments,

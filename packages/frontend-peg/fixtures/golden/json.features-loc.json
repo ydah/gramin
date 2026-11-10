@@ -53,7 +53,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.7.2",
+  "featuresVersion": "0.8.0",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -134,6 +134,7 @@
   "parseability": {
     "cyclicUnitRules": [],
     "notApplicable": {
+      "declaredConflicts": "no valid global conflict expectation declaration was captured",
       "firstSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
       "followSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
       "ll1Conflicts": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
@@ -454,6 +455,7 @@
     "maxDependencyDepth": 2,
     "maxExpressionNestingDepth": 7,
     "notApplicable": {
+      "indirectLeftRecursiveRules": "orderedChoice grammar: source CFG nullable repetitions and indirect left recursion do not apply",
       "nullableRules": "orderedChoice grammar: CFG nullability does not apply; see PEG interpretation",
       "shortestDerivation": "orderedChoice grammar: exact productivity and shortest derivation require PEG semantics",
       "shortestDerivationUnknown": "orderedChoice grammar: exact productivity and shortest derivation require PEG semantics",
@@ -635,6 +637,7 @@
   "sugar": {
     "notApplicable": {
       "inlineRules": "parameterizedRules capability is false",
+      "nullableRepetitions": "orderedChoice grammar: source CFG nullable repetitions and indirect left recursion do not apply",
       "parameterizedCalls": "parameterizedRules capability is false",
       "parameterizedRuleDefs": "parameterizedRules capability is false"
     },
