@@ -1,3 +1,3 @@
-%token X
+%token X Y Z
 %%
-start: X;
+start: X | Y | Z;
