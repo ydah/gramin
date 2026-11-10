@@ -282,12 +282,14 @@ const slrFeatures = (
   const closure = (seed: Iterable<string>): string[] => {
     const items = new Set(seed);
     const pending = [...items];
+    const expanded = new Set<string>();
     while (pending.length > 0) {
       const item = pending.pop();
       if (item === undefined) break;
       const [productionIndex, dot] = parseItem(item);
       const symbol = productions[productionIndex]?.rhs[dot];
-      if (!symbol?.startsWith("N:")) continue;
+      if (!symbol?.startsWith("N:") || expanded.has(symbol)) continue;
+      expanded.add(symbol);
       for (const next of byLhs.get(symbol.slice(2)) ?? []) {
         const key = itemKey(next, 0);
         if (items.has(key)) continue;
@@ -295,14 +297,15 @@ const slrFeatures = (
         pending.push(key);
       }
     }
-    return [...items].sort(compareBytes);
+    return [...items].sort();
   };
   const stateKey = (items: readonly string[]): string => items.join("|");
-  const initial = closure(
-    productions.flatMap((production, index) => (production.augmented ? [itemKey(index, 0)] : [])),
-  );
+  const initialKernel = productions
+    .flatMap((production, index) => (production.augmented ? [itemKey(index, 0)] : []))
+    .sort();
+  const initial = closure(initialKernel);
   const states = [initial];
-  const stateByKey = new Map([[stateKey(initial), 0]]);
+  const stateByKey = new Map([[stateKey(initialKernel), 0]]);
   const transitions = new Map<string, number>();
   for (let state = 0; state < states.length; state += 1) {
     const grouped = new Map<string, string[]>();
@@ -315,13 +318,12 @@ const slrFeatures = (
       grouped.set(symbol, target);
     }
     for (const [symbol, items] of grouped) {
-      const targetItems = closure(items);
-      const key = stateKey(targetItems);
+      const key = stateKey(items.sort());
       let target = stateByKey.get(key);
       if (target === undefined) {
         target = states.length;
         stateByKey.set(key, target);
-        states.push(targetItems);
+        states.push(closure(items));
       }
       transitions.set(`${state}\0${symbol}`, target);
     }

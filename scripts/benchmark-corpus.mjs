@@ -13,6 +13,20 @@ const cases = [
     files: ["fixtures/downloaded/ruby/parse.y"],
   },
   {
+    key: "php/zend_language_parser.y (lr)",
+    frontend: yaccFrontend,
+    options: { dialect: "bison" },
+    analysis: { lr: true },
+    files: ["fixtures/downloaded/php/zend_language_parser.y"],
+  },
+  {
+    key: "perl/perly.y (lr)",
+    frontend: yaccFrontend,
+    options: { dialect: "bison" },
+    analysis: { lr: true },
+    files: ["fixtures/downloaded/perl/perly.y"],
+  },
+  {
     key: "antlr/json/JSON.g4",
     frontend: antlrFrontend,
     options: {},
@@ -49,7 +63,7 @@ for (const benchmark of cases) {
   const startedAt = performance.now();
   const parsed = benchmark.frontend.parse(files, benchmark.options);
   if (!parsed.ir) throw new Error(`${benchmark.key} did not produce Grammar IR`);
-  const features = analyzeGrammar(parsed.ir);
+  const features = analyzeGrammar(parsed.ir, benchmark.analysis);
   const elapsedMilliseconds = performance.now() - startedAt;
   const errors = parsed.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
   const result = {
@@ -60,11 +74,13 @@ for (const benchmark of cases) {
     terminals: parsed.ir.terminals.length,
     errors: errors.length,
     unresolvedSymbols: features.size.unresolvedSymbols,
+    slr: features.parseability.slr,
   };
   results.push(result);
   if (
     result.limitMilliseconds === undefined ||
     result.elapsedMilliseconds > result.limitMilliseconds ||
+    (benchmark.analysis?.lr && !(result.slr?.states > 0)) ||
     result.errors > 0 ||
     result.unresolvedSymbols.count > 0
   ) {

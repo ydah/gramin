@@ -1,5 +1,7 @@
 {
   "ruby/parse.y": 500,
+  "php/zend_language_parser.y (lr)": 2000,
+  "perl/perly.y (lr)": 1000,
   "antlr/json/JSON.g4": 500,
   "antlr/sqlite/SQLiteParser.g4+SQLiteLexer.g4": 1000,
   "antlr/java/JavaParser.g4+JavaLexer.g4": 1000
