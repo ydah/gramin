@@ -22,10 +22,6 @@ JSON, CSV, Markdown, bounded LLM digests, or SARIF.
 It is a grammar analysis toolkit — not a parser generator and not a language-correctness
 proof. Its job is to make grammar structure visible before you change it.
 
-[![Explore measured grammar distributions and rule vectors](docs/assets/sandbox-demo.gif)](https://ydah.github.io/gramin/sandbox)
-
-[![Automatic grammar feature review on a real pull request](docs/assets/feature-review.png)](https://github.com/ydah/gramin/pull/36#issuecomment-6758341450)
-
 ## Try in 30 seconds
 
 Open the [sandbox with runnable samples](https://ydah.github.io/gramin/sandbox), or
