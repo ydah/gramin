@@ -1,0 +1,5 @@
+grammar,scope,rule,metric,value,notApplicable
+'@choice.peggy,grammar,,parseability.firstSetSize,,"orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
+'@choice.peggy,rule,start,fanIn,0,
+empty.bnf,rule,start,fanIn,0,
+empty.bnf,rule,start,firstSetSize,0,
