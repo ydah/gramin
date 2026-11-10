@@ -50,3 +50,5 @@ Every renderer starts from the same validated feature object:
 | `sarif` | GitHub Code Scanning and CI annotations |
 
 See [How it works](/guide/how-it-works) for the boundary between parsing, analysis, and reporting.
+For examples of measured zero and a missing derivation value, see
+[Epsilon and productivity](/guide/epsilon-and-productivity).

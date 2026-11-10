@@ -27,6 +27,76 @@ copy/download actions for generated reports. External frontend executables, pars
 generation, semantic action execution, and automatic LLM calls are not available in the
 browser.
 
+## Compare a Peggy grammar
+
+Add one alternative to this ordered-choice grammar. The checked-in
+[before](https://github.com/ydah/gramin/blob/main/examples/grammar-guide/choice-before.peggy)
+and [after](https://github.com/ydah/gramin/blob/main/examples/grammar-guide/choice-after.peggy)
+files contain these sources.
+
+Before:
+
+```text
+start = "x" / "y"
+```
+
+After:
+
+```text
+start = "x" / "y" / "z"
+```
+
+1. Choose `Compare before / after` as the analysis mode.
+2. Set both `Before frontend` and `After frontend` to `Peggy / PEG.js`, and paste
+   the sources into their corresponding editors.
+3. Select `Analyze`, then open `Feature diff`.
+
+The bundled `peggy` frontend produces these source-count changes. Both inputs
+have the same capability context, so the counts can be compared directly.
+
+| Metric | Before | After |
+| --- | ---: | ---: |
+| `size.rules` | 1 | 1 |
+| `size.alternatives` | 2 | 3 |
+| `size.terminals` | 2 | 3 |
+| `perRule` alternatives for `start` | 2 | 3 |
+
+The unchanged rule count does not appear in the diff. The `Regressions` list flags
+the increases in alternatives and terminals under the tracked complexity policy.
+
+Peggy's `/` tries alternatives in order. Both reports declare `orderedChoice: true`,
+so CFG FIRST/FOLLOW, LL(1), and raw SLR measurements are unavailable. The `Features`
+tab shows the after report, including this excerpt:
+
+```json
+{
+  "parseability": {
+    "notApplicable": {
+      "firstSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
+      "followSetSize": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
+      "ll1Conflicts": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply",
+      "slr": "orderedChoice grammar: CFG FIRST, FOLLOW, and LL(1) analysis does not apply"
+    }
+  }
+}
+```
+
+These numeric fields are omitted in both reports. Their absence from the diff
+does not mean zero conflicts or zero-sized FIRST sets. To inspect the before
+report, analyze its source separately. The same SLR reason remains when the CLI
+explicitly requests `--analysis lr`.
+
+From a built repository checkout, reproduce the comparison with:
+
+```sh
+node packages/cli/dist/bin.js diff examples/grammar-guide/choice-before.peggy examples/grammar-guide/choice-after.peggy --frontend peggy --format md
+node packages/cli/dist/bin.js analyze examples/grammar-guide/choice-before.peggy --frontend peggy --analysis lr --format json
+```
+
+See [metric comparability](/concepts/comparability) for capability-sensitive
+comparisons and [epsilon and productivity](/guide/epsilon-and-productivity) for
+examples of measured zero and missing derivation values.
+
 ## Privacy and limits
 
 Grammar contents are analyzed locally in this browser and are not sent by the sandbox. The page does not persist source in `localStorage`, embed it in a URL, or send it to analytics. A browser worker keeps analysis off the UI thread; for large grammars, use the CLI where you can configure files and resource limits explicitly.

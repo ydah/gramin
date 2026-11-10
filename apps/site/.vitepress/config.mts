@@ -41,6 +41,7 @@ export default defineConfig({
           items: [
             { text: "Getting started", link: "/guide/getting-started" },
             { text: "How it works", link: "/guide/how-it-works" },
+            { text: "Epsilon and productivity", link: "/guide/epsilon-and-productivity" },
             { text: "Reviewing grammar changes", link: "/guide/reviewing-changes" },
             { text: "GitHub Actions and SARIF", link: "/guide/github-actions" },
             { text: "CSV and batch analysis", link: "/guide/data-output" },
