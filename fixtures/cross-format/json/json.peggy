@@ -1,0 +1,21 @@
+json = _ value EOF
+value = object / array / STRING / NUMBER / TRUE / FALSE / NULL
+object = LBRACE members RBRACE / LBRACE RBRACE
+members = member COMMA members / member
+member = STRING COLON value
+array = LBRACKET elements RBRACKET / LBRACKET RBRACKET
+elements = value COMMA elements / value
+
+STRING = '"' ([^"\\\x00-\x1F] / '\\' (["\\/bfnrt] / 'u' [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F]))* '"' _
+NUMBER = '-'? ('0' / [1-9] [0-9]*) ('.' [0-9]+)? ([eE] [+-]? [0-9]+)? _
+TRUE = 'true' _
+FALSE = 'false' _
+NULL = 'null' _
+LBRACE = '{' _
+RBRACE = '}' _
+LBRACKET = '[' _
+RBRACKET = ']' _
+COLON = ':' _
+COMMA = ',' _
+EOF = !.
+_ = [ \t\r\n]*

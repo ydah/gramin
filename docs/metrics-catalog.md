@@ -9,7 +9,8 @@ This file is the normative definition of metrics emitted in features v0.7.
 
 ## Shared counting rules
 
-1. RHS length is the sum of direct `Alternative.items`. A `midRuleAction` counts as zero.
+1. RHS length is the sum of direct `Alternative.items`. A `midRuleAction` or a terminal
+   with an empty literal counts as zero.
    A `group` is transparent and contributes the count of its child. Every other expression,
    including sugar, choice, predicate, `charClass`, and `anyChar`, contributes one.
 2. Dependency edges visit `symbol` references at every expression depth, including
@@ -197,7 +198,8 @@ These fields are omitted unless `orderedChoice` is true.
 
 ## Lexical usage
 
-- `literalPrefixCollisions`: distinct non-empty literal-prefix pairs (**E/B**).
+- `literalPrefixCollisions`: distinct proper literal-prefix pairs, including an empty
+  literal as a prefix of a non-empty literal (**E/B**).
 - `keywordIdentifierCollisions`: keyword-like literals when an identifier-like declaration
   or rule exists (**H/C**).
 - `tokenUsage`: declaration coverage and terminals used exactly once (**E/A**).
