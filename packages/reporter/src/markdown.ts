@@ -67,6 +67,9 @@ export const renderMarkdown = (features: GrammarFeatures): string => {
   const sections = Object.entries(features)
     .filter(([key]) => key !== "featuresVersion")
     .map(([key, value]) => {
+      if (key === "parseability" && features.parseability.slr) {
+        return `${renderSection(key, value)}\n\nRaw SLR counts ignore precedence/associativity resolution and cannot be compared to \`%expect\` declarations.`;
+      }
       if (key !== "actions" || features.actions.completeness !== "partial") {
         return renderSection(key, value);
       }

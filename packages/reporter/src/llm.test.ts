@@ -28,7 +28,26 @@ describe("LLM digest", () => {
     expect(digest).toContain("approximate");
     expect(digest).toContain("Capability interpretation");
     expect(digest).toContain("Alternatives/rule p50/p95");
+    expect(digest).not.toContain("Raw SLR counts");
   });
+
+  it.each([8_000, 2_500])(
+    "keeps raw SLR counts and their caveat together within a %i-character budget",
+    (budgetChars) => {
+      const features = fixtureFeatures();
+      features.parseability.slr = {
+        states: 12,
+        shiftReduceConflicts: 2,
+        reduceReduceConflicts: 1,
+      };
+      const digest = renderLlmDigest(features, { budgetChars });
+      expect(digest.length).toBeLessThanOrEqual(budgetChars);
+      expect(digest).toContain("Raw SLR states/shift-reduce/reduce-reduce: 12/2/1");
+      expect(digest).toContain(
+        "Raw SLR counts ignore precedence/associativity resolution and cannot be compared to `%expect` declarations.",
+      );
+    },
+  );
 
   it("safely code-spans newlines, backticks, and instruction-like literals", () => {
     const features = fixtureFeatures();

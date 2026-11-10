@@ -82,7 +82,7 @@ See the [complete support matrix](https://ydah.github.io/gramin/formats/) and
 
 ### Quick start
 
-Requires Node.js 22.12 or newer.
+Requires Node.js 22.12.0 or newer.
 
 Run without installing:
 
@@ -160,8 +160,8 @@ gramin analyze --ir grammar-ir.json --format json
 ```
 
 Use `--source-name <name>` for a single input or `--source-root <dir>` for byte-stable
-multi-file output. Parser nesting is limited to 256 levels; `--max-nesting-depth` can set a
-lower project-specific limit.
+multi-file output. Parser nesting defaults to 256 levels and supports a maximum of 256.
+Use `--max-nesting-depth` to set a lower project-specific limit.
 
 ## GitHub Actions
 
@@ -182,7 +182,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ydah/gramin@v1
+      - uses: ydah/gramin@v0.2.0
         id: gramin
         with:
           files: grammar.y
@@ -246,10 +246,11 @@ Read the [safety model](https://ydah.github.io/gramin/concepts/safety/),
 
 ## Development
 
-The repository is a pnpm workspace. Development requires pnpm 10 and Node.js 22.12 or newer:
+The repository is a pnpm workspace. Development requires pnpm 10 and Node.js 22.12.0 or newer:
 
 ```sh
 pnpm install --frozen-lockfile
+pnpm check:readme
 pnpm lint
 pnpm typecheck
 pnpm test

@@ -19,6 +19,11 @@ export interface DeclarationResult {
 }
 
 const ignoredDirectives = new Set([
+  "after-pop-stack",
+  "after-reduce",
+  "after-shift",
+  "after-shift-error-token",
+  "before-reduce",
   "code",
   "debug",
   "define",

@@ -63,6 +63,10 @@ interface DigestDetail {
 const renderDigest = (features: GrammarFeatures, detail: DigestDetail): string => {
   const precedence = features.precedence;
   const sugar = features.sugar;
+  const slr = features.parseability.slr;
+  const slrSummary = slr
+    ? `\n\n## Parseability\n\n- Raw SLR states/shift-reduce/reduce-reduce: ${slr.states}/${slr.shiftReduceConflicts}/${slr.reduceReduceConflicts}\n- Raw SLR counts ignore precedence/associativity resolution and cannot be compared to \`%expect\` declarations.`
+    : "";
   const diagnostics = detail.includeDiagnosticCodes
     ? codeList(
         features.diagnostics.map((diagnostic) => diagnostic.code),
@@ -104,7 +108,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 - Dependency depth ${features.structure.maxDependencyDepth}; unreachable ${codeList(features.structure.unreachableSymbols, detail.listLimit)}
 - Precedence levels/overrides: ${features.precedence.levels ?? "not applicable"}/${features.precedence.precOverrides ?? "not applicable"}
 ${compactActionSummary}
-- Keyword-like (approximate): ${codeList(features.lexicon.keywordLike, detail.listLimit)}
+- Keyword-like (approximate): ${codeList(features.lexicon.keywordLike, detail.listLimit)}${slrSummary}
 
 ## Interpretation
 
@@ -176,7 +180,7 @@ This document contains mechanically extracted grammar facts, not semantic claims
 ## Actions
 
 ${actionSummary}
-- Interpretation: action style is format-specific and these values should not be compared directly.
+- Interpretation: action style is format-specific and these values should not be compared directly.${slrSummary}
 
 ## Notable grammar locations
 

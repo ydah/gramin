@@ -30,6 +30,23 @@ describe("feature reporters", () => {
     expect(markdown).toContain("keywordLike (approximate)");
     expect(markdown).toContain("punctuationLike (approximate)");
     expect(markdown).toContain("## Capabilities");
+    expect(markdown).not.toContain("Raw SLR counts");
+  });
+
+  it("explains how to interpret raw SLR counts", () => {
+    const markdown = renderMarkdown({
+      ...features,
+      parseability: {
+        ...features.parseability,
+        slr: { states: 12, shiftReduceConflicts: 2, reduceReduceConflicts: 1 },
+      },
+    });
+    expect(markdown).toContain("| `slr.states` | 12 |");
+    expect(markdown).toContain("| `slr.shiftReduceConflicts` | 2 |");
+    expect(markdown).toContain("| `slr.reduceReduceConflicts` | 1 |");
+    expect(markdown).toContain(
+      "Raw SLR counts ignore precedence/associativity resolution and cannot be compared to `%expect` declarations.",
+    );
   });
 
   it("suppresses incomplete action numbers in human-readable output", () => {

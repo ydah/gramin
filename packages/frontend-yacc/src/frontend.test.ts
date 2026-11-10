@@ -34,6 +34,33 @@ describe("yacc-family lexer", () => {
 });
 
 describe("yacc-family parser and lowering", () => {
+  it.each([
+    "after-shift",
+    "before-reduce",
+    "after-reduce",
+    "after-shift-error-token",
+    "after-pop-stack",
+  ])("ignores the opaque %s hook and retains following grammar", (directive) => {
+    const source = `%${directive} {
+  #define HOOK_PERCENT_PAIR %%
+  if (value % 2) { hook("} %%"); }
+  /* } %% */
+}
+%token TOKEN
+%%
+entry: TOKEN ;
+%%
+`;
+    const result = yaccFrontend.parse([{ name: "hooks.y", content: source }], {});
+
+    expect(result.diagnostics).toEqual([
+      expect.objectContaining({ code: "YACC100_IGNORED_DIRECTIVE", severity: "info" }),
+    ]);
+    expect(result.ir?.rules.map((rule) => rule.name)).toEqual(["entry"]);
+    expect(result.ir?.terminals).toEqual([expect.objectContaining({ name: "TOKEN" })]);
+    expect(lexYacc(source).tokens.filter((token) => token.kind === "action")).toHaveLength(1);
+  });
+
   it("rejects excessive parameter nesting before recursive lowering", () => {
     const nested = `%%\nstart: f(${"f(".repeat(2_000)}TOKEN${")".repeat(2_000)});\n%%\n`;
     const result = yaccFrontend.parse([{ name: "deep.y", content: nested }], {

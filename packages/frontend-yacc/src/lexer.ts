@@ -16,6 +16,11 @@ const punctuationKinds: Readonly<Record<string, TokenKind>> = {
 const isIdentifierStart = (character: string): boolean => /[A-Za-z_.$@]/u.test(character);
 const isIdentifierPart = (character: string): boolean => /[A-Za-z0-9_.$@-]/u.test(character);
 const blockDirectives = new Set([
+  "after-pop-stack",
+  "after-reduce",
+  "after-shift",
+  "after-shift-error-token",
+  "before-reduce",
   "union",
   "code",
   "destructor",
