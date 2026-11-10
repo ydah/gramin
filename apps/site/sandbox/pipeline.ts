@@ -82,7 +82,11 @@ const analyzeFiles = (
   request: AnalyzeRequest,
   files: readonly SourceFile[],
 ):
-  | { frontend: Frontend; ir: GrammarIR; features: ReturnType<typeof analyzeGrammar> }
+  | {
+      frontend: Pick<Frontend, "id" | "version">;
+      ir: GrammarIR;
+      features: ReturnType<typeof analyzeGrammar>;
+    }
   | AnalyzeResponse => {
   const parsed =
     request.mode === "ir"
@@ -93,7 +97,11 @@ const analyzeFiles = (
   const frontend =
     "frontend" in parsed ? getFrontend(parsed.frontend.id) : getFrontend(ir.source.frontend.id);
   if (!frontend) throw new Error(`no browser frontend registered for ${ir.source.frontend.id}`);
-  return { frontend, ir, features: analyzeGrammar(ir) };
+  return {
+    frontend: { id: frontend.id, version: frontend.version },
+    ir,
+    features: analyzeGrammar(ir),
+  };
 };
 
 const reportsFor = (

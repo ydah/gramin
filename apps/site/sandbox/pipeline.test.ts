@@ -75,6 +75,7 @@ describe("browser sandbox pipeline", () => {
     if (!response.ok) return;
     expect(response.comparison?.diff.changes.length).toBeGreaterThan(0);
     expect(response.comparison?.reports.markdown).toContain("# Grammar feature diff");
+    expect(structuredClone(response)).toEqual(response);
   });
 
   it("compares separately selected formats and preserves comparison reasons", () => {
@@ -100,6 +101,7 @@ describe("browser sandbox pipeline", () => {
       expect.objectContaining({ path: "/parseability/firstSetSize/average", class: "B" }),
     );
     expect(response.comparison?.reports.markdown).toContain("Not comparable");
+    expect(structuredClone(response)).toEqual(response);
   });
 
   it("bounds combined before/after input and rejects an empty side", () => {

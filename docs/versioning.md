@@ -47,6 +47,7 @@ behavior require a major release, additions a minor release, and compatible fixe
 a patch release. Node.js requirement increases require a major release after 1.0.
 
 Use immutable version tags or commit SHAs for the Action. Create the moving `v1`
-tag only when 1.0.0 is published, then advance it to tested, compatible 1.x releases.
+tag only when the first stable 1.x release is published, then advance it to tested,
+compatible 1.x releases.
 Keep full version tags immutable. Never move a tag to repair a failed publication;
 retry publishing the verified tag or issue a new patch release.

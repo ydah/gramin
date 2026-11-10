@@ -1,5 +1,5 @@
-import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import {
@@ -10,6 +10,7 @@ import {
   spawnSpecForPlatform,
   tarballName,
 } from "./release-packages.mjs";
+import { stageReleasePackage } from "./stage-release-package.mjs";
 
 const EXPECTED_AUTHOR = "Yudai Takada";
 const EXPECTED_LICENSE = "MIT";
@@ -61,7 +62,12 @@ const verifyPackedManifest = (manifest, artifact) => {
   if (typeof engines !== "object" || engines === null || engines.node !== ">=22.12.0") {
     throw new Error(`${context} must require Node.js 22.12 or newer`);
   }
-  for (const section of ["dependencies", "optionalDependencies", "peerDependencies"]) {
+  for (const section of [
+    "dependencies",
+    "devDependencies",
+    "optionalDependencies",
+    "peerDependencies",
+  ]) {
     const dependencies = manifest[section];
     if (typeof dependencies !== "object" || dependencies === null) continue;
     for (const [name, range] of Object.entries(dependencies)) {
@@ -121,9 +127,23 @@ const releaseVersions = new Set(preparedPackages.map(({ version }) => version));
 if (releaseVersions.size !== 1) {
   throw new Error("public packages must use one release version");
 }
+const packageVersions = new Map(preparedPackages.map(({ name, version }) => [name, version]));
 
 const artifacts = preparedPackages.map(({ name, directory, version }) => {
-  run("pnpm", ["--filter", name, "pack", "--pack-destination", releaseDirectory]);
+  const stagingDirectory = join(releaseDirectory, "staging", basename(directory));
+  try {
+    stageReleasePackage(join(repositoryRoot, directory), stagingDirectory, packageVersions);
+    run("pnpm", [
+      "--ignore-workspace",
+      "--dir",
+      stagingDirectory,
+      "pack",
+      "--pack-destination",
+      releaseDirectory,
+    ]);
+  } finally {
+    rmSync(stagingDirectory, { recursive: true, force: true });
+  }
   const file = tarballName(name, version);
   const tarball = join(releaseDirectory, file);
   const entries = archiveEntries(run("tar", ["-tzf", tarball]).trim());

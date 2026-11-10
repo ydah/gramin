@@ -2,6 +2,10 @@
 
 ## 1.0.1 — 2026-11-10
 
+- Fix browser comparisons failing to transfer frontend metadata across the worker boundary.
+- Normalize dependency ordering before packing release artifacts so retries retain
+  strict tarball integrity checks.
+- Update fast-uri, Vite, and source-map-js to their patched versions.
 - Exclude bound formal parameters from source dependency edges, recursion, unit
   cycles, reference-based redundancy, and structural-diff blast radius. A formal
   name that matches a real rule no longer creates a false reference.
