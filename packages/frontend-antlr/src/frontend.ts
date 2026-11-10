@@ -15,7 +15,7 @@ import {
 } from "@gramin/core";
 
 export const FRONTEND_ANTLR_ID = "antlr4";
-export const FRONTEND_ANTLR_VERSION = "0.2.0";
+export const FRONTEND_ANTLR_VERSION = "0.2.1";
 
 type TokenKind =
   | "identifier"

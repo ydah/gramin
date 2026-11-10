@@ -8,7 +8,7 @@ description: Add grammar analysis and regression review to GitHub Actions.
 The repository ships a composite action that can produce SARIF for GitHub Code Scanning:
 
 ```yaml
-- uses: ydah/gramin@v0.2.0
+- uses: ydah/gramin@v0.2.1
   id: gramin
   with:
     files: grammar.y

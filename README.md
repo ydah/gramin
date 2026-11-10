@@ -182,7 +182,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ydah/gramin@v0.2.0
+      - uses: ydah/gramin@v0.2.1
         id: gramin
         with:
           files: grammar.y
@@ -246,6 +246,8 @@ Read the [safety model](https://ydah.github.io/gramin/concepts/safety/),
 
 ## Development
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and metric proposal process.
+
 The repository is a pnpm workspace. Development requires pnpm 10 and Node.js 22.12.0 or newer:
 
 ```sh
@@ -287,6 +289,7 @@ syntax into Grammar IR; the analyzer derives features; reporters render the resu
 | Grammar IR | [IR schema guide](docs/ir-schema.md) |
 | Feature documents | [Features schema guide](docs/features-schema.md) |
 | Metrics | [Metrics catalog](docs/metrics-catalog.md) |
+| Metric relationships | [Metric invariants](docs/metric-invariants.md) |
 | Format comparison | [Cross-format notes](docs/cross-format-notes.md) |
 | Decisions | [Architecture decision records](docs/decisions/) |
 

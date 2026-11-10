@@ -132,8 +132,8 @@ if (frontends.some((frontend) => typeof frontend?.parse !== "function")) {
 }
 if (
   IR_VERSION !== "1.3.0" ||
-  [ANALYZER_VERSION, CLI_VERSION, REPORTER_VERSION].some((version) => version !== "0.2.0") ||
-  frontends.some((frontend) => frontend.version !== "0.2.0")
+  [ANALYZER_VERSION, CLI_VERSION, REPORTER_VERSION].some((version) => version !== "0.2.1") ||
+  frontends.some((frontend) => frontend.version !== "0.2.1")
 ) {
   throw new Error("an installed public version constant is incorrect");
 }
