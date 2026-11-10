@@ -110,6 +110,73 @@ chosen executable as a program you explicitly run.
 See the [frontend directory](frontend-directory.md) for reference implementations
 and the repository-ready starter.
 
+### Troubleshoot conformance failures
+
+The [deliberately broken Node examples](../examples/frontend-test-troubleshooting/)
+emit fixed IR for `sample.bnf`, whose complete grammar is `start ::= "x";`.
+They isolate validation failures and do not implement a general BNF parser. They
+need no runtime dependencies and do not modify the input. Run these commands from
+the repository root after `pnpm install --frozen-lockfile` and `pnpm build`.
+
+#### A capability does not match the emitted nodes
+
+```sh
+node packages/cli/dist/bin.js frontend-test \
+  examples/frontend-test-troubleshooting/sample.bnf \
+  --frontend-cmd ./examples/frontend-test-troubleshooting/misdeclared-capability.mjs
+```
+
+The CLI exits 2, writes no report to stdout, and prints this diagnostic to stderr:
+
+```text
+IR_CANON_PREDICATES_CAPABILITY /capabilities/predicates: predicates must exactly reflect predicate nodes
+```
+
+This frontend declares `predicates: true` but emits only a terminal. Derive the
+capability from the emitted nodes; this fixture needs `predicates: false`.
+
+#### Schema-valid IR is not in canonical form
+
+```sh
+node packages/cli/dist/bin.js frontend-test \
+  examples/frontend-test-troubleshooting/sample.bnf \
+  --frontend-cmd ./examples/frontend-test-troubleshooting/noncanonical-ir.mjs
+```
+
+The CLI exits 2, writes no report to stdout, and prints:
+
+```text
+IR_CANON_TOP_LEVEL_SEQ /rules/0/alternatives/0/items/0: Alternative.items is already an implicit sequence
+```
+
+The frontend wraps the terminal in a top-level `seq`. Put its children directly
+in `Alternative.items`; canonical validation applies after JSON Schema validation.
+
+#### The second invocation emits different IR
+
+```sh
+node packages/cli/dist/bin.js frontend-test \
+  examples/frontend-test-troubleshooting/sample.bnf \
+  --frontend-cmd ./examples/frontend-test-troubleshooting/nondeterministic.mjs
+```
+
+The CLI exits 1 and prints this diagnostic to stderr:
+
+```text
+FRONTEND_NONDETERMINISTIC: canonical IR differs between the two fixture runs
+```
+
+Its JSON report on stdout has `runs: 2`. The `checks` object contains `schema: true`,
+`canonicalForm: true`, `capabilities: true`, and `repeatable: false`. Both documents
+pass validation, but the example adds a random UUID to a warning on every invocation.
+Remove run-specific IDs and timestamps from the IR, including its diagnostics and
+source metadata, to make repeated output identical.
+
+For a real adapter, start with the [Python frontend template](https://github.com/ydah/gramin-frontend-template).
+Passing conformance covers only the supplied fixtures. It does not sandbox the
+executable or prove that its IR represents the source language correctly. Run only
+executables you trust, with the access restrictions described above.
+
 ## Implementation checklist
 
 - [ ] Accept `parse`, optional `--dialect`, and one-or-more paths or `--stdin`.
