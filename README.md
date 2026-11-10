@@ -6,7 +6,9 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@gramin/cli"><img src="https://img.shields.io/npm/v/@gramin/cli.svg?style=flat-square" alt="npm version"></a>
-  <a href="https://github.com/ydah/gramin/actions/workflows/ci.yml"><img src="https://github.com/ydah/gramin/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/@gramin/cli?style=flat-square" alt="Node.js version requirement"></a>
+  <a href="https://github.com/ydah/gramin/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/ydah/gramin/ci.yml?branch=main&amp;style=flat-square&amp;label=CI" alt="CI status"></a>
+  <a href="https://www.npmjs.com/package/@gramin/cli"><img src="https://img.shields.io/npm/dm/@gramin/cli?style=flat-square" alt="Monthly npm downloads"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT license"></a>
 </p>
 
