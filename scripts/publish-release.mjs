@@ -57,6 +57,7 @@ if (manifest.artifacts.length !== releasePackages.length) {
   throw new Error("release manifest does not contain every public package");
 }
 
+const acceptedPublications = [];
 for (const [index, expected] of releasePackages.entries()) {
   const artifact = manifest.artifacts[index];
   if (
@@ -118,6 +119,10 @@ for (const [index, expected] of releasePackages.entries()) {
       }`,
     );
   }
+  acceptedPublications.push({ artifact, query });
+}
+
+for (const { artifact, query } of acceptedPublications) {
   await waitForPublishedArtifact(artifact, query);
   console.log(`published ${artifact.name}@${artifact.version} with tag ${tag}`);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@gramin/mcp",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "author": "Yudai Takada",
   "description": "Measure grammar features over MCP without executing grammar code",
   "keywords": [

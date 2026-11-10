@@ -26,7 +26,7 @@ describe("sandbox chart data", () => {
       { label: "p95", value: 1 },
     ]);
     expect(charts[2]?.rows).toEqual([
-      { label: "Largest SCC", value: 2 },
+      { label: "Largest mutual SCC", value: 2 },
       { label: "Largest recursive component", value: 2 },
     ]);
   });
@@ -46,6 +46,35 @@ describe("sandbox chart data", () => {
     );
     const zero = { ...features, perRule: features.perRule.map((row) => ({ ...row, fanIn: 0 })) };
     expect(ruleChartData(zero, "fanIn", "s").rows).toEqual([{ rule: "s", value: 0 }]);
+  });
+
+  it("charts actual SCC frequencies and distinguishes empty from unrecorded populations", () => {
+    const features = fixture();
+    const histogram = [
+      { size: 1, count: 3 },
+      { size: 2, count: 1 },
+    ];
+    const chart = featureCharts({
+      ...features,
+      structure: { ...features.structure, sccSizeHistogram: histogram },
+    }).find(({ title }) => title === "SCC size distribution");
+    expect(chart?.rows).toEqual([
+      { label: "1 rule", value: 3 },
+      { label: "2 rules", value: 1 },
+    ]);
+    expect(
+      featureCharts({
+        ...features,
+        structure: { ...features.structure, sccSizeHistogram: [] },
+      }).find(({ title }) => title === "SCC size distribution")?.rows,
+    ).toEqual([{ label: "Components", value: 0 }]);
+    const structure = { ...features.structure };
+    delete structure.sccSizeHistogram;
+    expect(
+      featureCharts({ ...features, structure }).find(
+        ({ title }) => title === "SCC size distribution",
+      )?.rows,
+    ).toEqual([{ label: "Components", reason: "No SCC size histogram was recorded." }]);
   });
 
   it("filters rule names and bounds chart rows without dropping data from Features", () => {

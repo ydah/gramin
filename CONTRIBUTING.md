@@ -3,6 +3,11 @@
 gramin measures grammar structure without executing grammar actions or predicates. Changes
 should preserve deterministic output, explicit metric definitions, and honest applicability.
 
+Start with a [good first issue](https://github.com/ydah/gramin/labels/good%20first%20issue),
+or use the [frontend template](https://github.com/ydah/gramin-frontend-template)
+to build an external adapter. See [compatibility and versioning](docs/versioning.md)
+before changing a public contract, and [SECURITY.md](SECURITY.md) for private reports.
+
 ## Set up the workspace
 
 Use Node.js 22.12.0 or newer and the pnpm version pinned in `package.json`.

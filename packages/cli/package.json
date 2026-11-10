@@ -1,6 +1,6 @@
 {
   "name": "@gramin/cli",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "author": "Yudai Takada",
   "description": "Analyze parser grammar files as deterministic structural features",
   "keywords": [

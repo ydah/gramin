@@ -25,7 +25,7 @@
       "severity": "info"
     }
   ],
-  "featuresVersion": "0.8.0",
+  "featuresVersion": "1.0.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -267,7 +267,7 @@
     "format": "yacc",
     "frontend": {
       "id": "yacc-family",
-      "version": "0.4.0"
+      "version": "1.0.0"
     }
   },
   "structure": {
@@ -303,6 +303,12 @@
       "count": 2,
       "ratio": 1
     },
+    "sccSizeHistogram": [
+      {
+        "count": 2,
+        "size": 1
+      }
+    ],
     "shortestDerivation": [
       {
         "length": 1,

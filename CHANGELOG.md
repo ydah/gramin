@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 — 2026-11-10
+
+- Stabilize the CLI, public package APIs, and features v1 under the documented
+  compatibility policy. Preserve historical feature schemas and Grammar IR v1.
+- Add a source SCC-size histogram and show component frequencies in the sandbox.
+- Publish the external frontend template and starter issues for contributors.
+
 ## 0.4.0 — 2026-11-10
 
 - Compare rule vectors by name, with explicit reasons when versions, capabilities,

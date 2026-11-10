@@ -7,7 +7,7 @@ and the [features schema](./features-schema.md) remain the public contract.
 
 ## Scope and notation
 
-The target is features **0.8.0**, using the current
+The target is features **1.0.0**, using the current
 [`GrammarFeatures` schema](../packages/core/src/schemas/features.ts) and canonical
 Grammar IR v1, currently **1.4.0**. Earlier feature schemas do not necessarily contain
 these fields. Legacy IR v0 support and future-compatible v1 warnings are separate
@@ -94,6 +94,7 @@ properties, including properties of the internal graph helpers.
 | G8 | Each start-reachability entry contains its exact reachable-rule set and `reachableRules = rules.length`. Entries correspond to distinct start symbols; their union is `Q`. `p(r).reachableFromStarts` contains exactly the starts whose entry includes `r`. With starts, `overlapRatio = q(intersection size / union size)`; with no starts the ratio is absent with a reason. |
 | G9 | `maxDependencyDepth` is the longest path in the reachable SCC condensation, in edges. It is zero with no reachable components; otherwise it lies between zero and the number of reachable components minus one. |
 | G10 | `topFanIn` and `topFanOut` equal the first `min(N, 10)` entries of all local degrees sorted by descending count, then byte order. Summing a top-ten list gives the edge total only when it contains every rule. |
+| G11 | `sccSizeHistogram` contains ascending positive `{size, count}` bins for all source components. `sum(size * count) = N`; singleton components, self-loops, and unreachable rules remain in this partition. An empty grammar gives `[]`. |
 
 A repeated occurrence such as `a: b b` gives two symbol occurrences and one dependency
 edge. Do not equate `operations.symbolReferences`, `rhsItems`, unit-rule occurrences,

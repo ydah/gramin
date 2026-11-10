@@ -14,9 +14,10 @@ loss. Read diagnostics and capabilities alongside measurements.
 | [Python protocol reference](../examples/external-frontend-py/README.md) | `--frontend-cmd ./examples/external-frontend-py/gramin-bnf-frontend` | A small BNF/EBNF subset; dependency-free process example |
 | [External frontend starter](../examples/frontend-template/README.md) | `--frontend-cmd ./bin/gramin-example-frontend` | Repository-ready Python adapter, tests, fixture, and CI; literal alternatives only |
 
-The starter's source lives in this repository until its standalone template
-repository is published. No third-party external frontend is listed as verified
-without an implementation link and a stated supported grammar scope.
+Use [gramin-frontend-template](https://github.com/ydah/gramin-frontend-template)
+to create a repository from the starter. Its CI checks the protocol on the supplied
+fixture. The same source remains in this repository as a reference. External
+frontends are listed with an implementation link and their supported grammar scope.
 
 To list an external frontend, provide its repository, format/dialects, runtime
 requirements, license, supported Grammar IR version, and a reproducible

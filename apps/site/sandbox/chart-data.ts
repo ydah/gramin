@@ -45,14 +45,35 @@ export const featureCharts = (features: GrammarFeatures): readonly FeatureChart[
     },
     {
       title: "Component sizes",
-      description: "Recorded maxima in the source dependency graph.",
+      description:
+        "Mutual SCCs contain at least two source rules. Recursive components are reachable from a start symbol.",
       rows: [
-        { label: "Largest SCC", value: features.structure.largestSccSize.value },
+        { label: "Largest mutual SCC", value: features.structure.largestSccSize.value },
         {
           label: "Largest recursive component",
           value: features.structure.largestRecursiveComponent.value,
         },
       ],
+    },
+    {
+      title: "SCC size distribution",
+      description: "Component counts grouped by the number of source rules in each component.",
+      rows:
+        features.structure.sccSizeHistogram === undefined
+          ? [
+              {
+                label: "Components",
+                reason:
+                  features.structure.notApplicable?.sccSizeHistogram ??
+                  "No SCC size histogram was recorded.",
+              },
+            ]
+          : features.structure.sccSizeHistogram.length === 0
+            ? [{ label: "Components", value: 0 }]
+            : features.structure.sccSizeHistogram.map(({ size, count }) => ({
+                label: `${size} ${size === 1 ? "rule" : "rules"}`,
+                value: count,
+              })),
     },
   ];
 };

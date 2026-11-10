@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.8.0",
+  "featuresVersion": "1.0.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -277,7 +277,7 @@
     "format": "bnf",
     "frontend": {
       "id": "bnf",
-      "version": "0.4.0"
+      "version": "1.0.0"
     }
   },
   "structure": {
@@ -314,6 +314,12 @@
       "count": 3,
       "ratio": 1
     },
+    "sccSizeHistogram": [
+      {
+        "count": 1,
+        "size": 3
+      }
+    ],
     "shortestDerivation": [
       {
         "length": 1,

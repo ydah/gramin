@@ -25,7 +25,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.8.0",
+  "featuresVersion": "1.0.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -350,7 +350,7 @@
     "format": "antlr4",
     "frontend": {
       "id": "antlr4",
-      "version": "0.4.0"
+      "version": "1.0.0"
     }
   },
   "structure": {
@@ -400,6 +400,16 @@
       "count": 4,
       "ratio": 0.8
     },
+    "sccSizeHistogram": [
+      {
+        "count": 1,
+        "size": 1
+      },
+      {
+        "count": 1,
+        "size": 4
+      }
+    ],
     "shortestDerivation": [
       {
         "length": 2,

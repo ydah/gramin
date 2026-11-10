@@ -145,7 +145,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -4691,7 +4691,7 @@
           "format": "antlr4",
           "frontend": {
             "id": "antlr4",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -4979,6 +4979,16 @@
             "count": 109,
             "ratio": 0.8516
           },
+          "sccSizeHistogram": [
+            {
+              "count": 20,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 109
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 2,
@@ -5929,7 +5939,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -6250,7 +6260,7 @@
           "format": "antlr4",
           "frontend": {
             "id": "antlr4",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -6300,6 +6310,16 @@
             "count": 4,
             "ratio": 0.8
           },
+          "sccSizeHistogram": [
+            {
+              "count": 1,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 4
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 2,
@@ -6526,7 +6546,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -10692,7 +10712,7 @@
           "format": "antlr4",
           "frontend": {
             "id": "antlr4",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -10849,6 +10869,16 @@
             "count": 39,
             "ratio": 0.3421
           },
+          "sccSizeHistogram": [
+            {
+              "count": 76,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 38
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 1,
@@ -11934,7 +11964,7 @@
             "severity": "info"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -15852,7 +15882,7 @@
           "format": "bison",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -16118,6 +16148,16 @@
             "count": 90,
             "ratio": 0.7895
           },
+          "sccSizeHistogram": [
+            {
+              "count": 24,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 90
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 2,
@@ -17061,7 +17101,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -22993,7 +23033,7 @@
           "format": "bison",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -23275,6 +23315,20 @@
             "count": 119,
             "ratio": 0.6723
           },
+          "sccSizeHistogram": [
+            {
+              "count": 72,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 2
+            },
+            {
+              "count": 1,
+              "size": 103
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 3,
@@ -25364,7 +25418,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -33390,7 +33444,7 @@
           "format": "lrama",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -33833,6 +33887,20 @@
             "count": 144,
             "ratio": 0.5737
           },
+          "sccSizeHistogram": [
+            {
+              "count": 116,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 2
+            },
+            {
+              "count": 1,
+              "size": 133
+            }
+          ],
           "shortestDerivation": [],
           "shortestDerivationUnknown": [],
           "startSymbolReachability": {
@@ -34599,7 +34667,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -41795,7 +41863,7 @@
           "format": "bison",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -42212,6 +42280,20 @@
             "count": 132,
             "ratio": 0.6346
           },
+          "sccSizeHistogram": [
+            {
+              "count": 82,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 3
+            },
+            {
+              "count": 1,
+              "size": 123
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 0,
@@ -43733,7 +43815,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -51308,7 +51390,7 @@
           "format": "bison",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -51735,6 +51817,20 @@
             "count": 136,
             "ratio": 0.6182
           },
+          "sccSizeHistogram": [
+            {
+              "count": 90,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 3
+            },
+            {
+              "count": 1,
+              "size": 127
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 0,
@@ -53394,7 +53490,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -61084,7 +61180,7 @@
           "format": "bison",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -61503,6 +61599,20 @@
             "count": 137,
             "ratio": 0.6143
           },
+          "sccSizeHistogram": [
+            {
+              "count": 92,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 3
+            },
+            {
+              "count": 1,
+              "size": 128
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 0,
@@ -63266,7 +63376,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -71491,7 +71601,7 @@
           "format": "lrama",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -71891,6 +72001,20 @@
             "count": 141,
             "ratio": 0.59
           },
+          "sccSizeHistogram": [
+            {
+              "count": 105,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 3
+            },
+            {
+              "count": 1,
+              "size": 131
+            }
+          ],
           "shortestDerivation": [
             {
               "length": 0,
@@ -73894,7 +74018,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -81582,7 +81706,7 @@
           "format": "lrama",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -81999,6 +82123,20 @@
             "count": 138,
             "ratio": 0.5823
           },
+          "sccSizeHistogram": [
+            {
+              "count": 107,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 3
+            },
+            {
+              "count": 1,
+              "size": 127
+            }
+          ],
           "shortestDerivation": [],
           "shortestDerivationUnknown": [],
           "startSymbolReachability": {
@@ -83023,7 +83161,7 @@
             "severity": "warning"
           }
         ],
-        "featuresVersion": "0.8.0",
+        "featuresVersion": "1.0.0",
         "lexicon": {
           "anyCharCount": 0,
           "charClassCount": 0,
@@ -90871,7 +91009,7 @@
           "format": "lrama",
           "frontend": {
             "id": "yacc-family",
-            "version": "0.4.0"
+            "version": "1.0.0"
           }
         },
         "structure": {
@@ -91308,6 +91446,20 @@
             "count": 141,
             "ratio": 0.5779
           },
+          "sccSizeHistogram": [
+            {
+              "count": 112,
+              "size": 1
+            },
+            {
+              "count": 1,
+              "size": 2
+            },
+            {
+              "count": 1,
+              "size": 130
+            }
+          ],
           "shortestDerivation": [],
           "shortestDerivationUnknown": [],
           "startSymbolReachability": {
@@ -91977,8 +92129,8 @@
     }
   ],
   "software": {
-    "analyzerVersion": "0.4.0",
-    "featuresVersion": "0.8.0",
+    "analyzerVersion": "1.0.0",
+    "featuresVersion": "1.0.0",
     "irVersion": "1.4.0"
   }
 }

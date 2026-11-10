@@ -14,7 +14,7 @@ import {
 } from "@gramin/core";
 
 export const FRONTEND_BNF_ID = "bnf";
-export const FRONTEND_BNF_VERSION = "0.4.0";
+export const FRONTEND_BNF_VERSION = "1.0.0";
 
 type TokenKind =
   | "identifier"

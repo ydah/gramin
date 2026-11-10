@@ -166,6 +166,11 @@ const checkInvariants = (ir: GrammarIR, label: string) => {
   const reachable = [
     ...new Set(structure.startSymbolReachability.entries.flatMap(({ rules }) => rules)),
   ].sort(compareBytes);
+  expect(structure.sccSizeHistogram, label).toBeDefined();
+  expect(
+    sum((structure.sccSizeHistogram ?? []).map(({ size, count }) => size * count)),
+    label,
+  ).toBe(names.length);
   expect(structure.reachableRules, label).toBe(reachable.length);
   expect([...reachable, ...structure.unreachableSymbols].sort(compareBytes), label).toEqual(names);
   expect(

@@ -16,9 +16,9 @@ Paste a grammar, choose a frontend, and inspect the common IR and deterministic 
 - **Compare before / after** analyzes two grammars with independently selected frontends and reports aggregate and rule-level feature changes. Comparisons with incompatible capabilities or measurement context include their reasons instead of numeric differences.
 
 The **Charts** tab shows alternatives-per-rule and right-hand-side-length percentiles,
-the largest SCC and largest recursive component, and searchable rule vectors. Bars
-include numeric labels; unavailable measurements show their reasons. The two component
-sizes are recorded maxima, not a distribution of all SCCs. Rule charts show the largest
+the frequency of every source SCC size, the largest SCC and largest recursive component,
+and searchable rule vectors. Bars include numeric labels; older feature documents without
+the SCC histogram show it as unavailable. Rule charts show the largest
 20 matching values; the **Features** tab retains every rule vector. In comparison mode,
 choose **Before** or **After** to inspect either grammar's charts.
 

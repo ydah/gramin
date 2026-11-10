@@ -1,9 +1,9 @@
 # Grammar features v0.8
 
-The current producer version is 0.8.0.
+The current stable producer version is 1.0.0.
 
 The normative machine-readable contract is
-`packages/core/schema/features-v0.8.schema.json`. `@gramin/core` exports the schema,
+`packages/core/schema/features-v1.schema.json`. `@gramin/core` exports the schema,
 the `GrammarFeatures` TypeScript type, and `validateFeatures`.
 The previous feature schemas remain packaged for
 existing consumers.
@@ -40,6 +40,17 @@ Features 0.8 adds source CFG nullable-repetition and indirect-left-recursion cou
 declared conflict expectations, rule SLR involvement, and its aggregate distribution.
 It also analyzes finite parameterized grammars through an internal concrete BNF view.
 Historical schemas, including features 0.7, retain their original contracts.
+
+## Source SCC distribution
+
+`structure.sccSizeHistogram` records the complete source dependency SCC partition
+as ascending `{size, count}` bins. Both values are positive integers. Every source
+rule belongs to one component, including unreachable rules, singleton components,
+self-loops, and parameterized source definitions. Thus `sum(size * count)` equals
+the distinct source-rule count. An empty grammar records `[]`; older feature
+documents may omit the field. Unlike the legacy mutual-only `largestSccSize`, this
+histogram includes all components. Its comparison class is E/B under matching
+source capabilities, and it requires no CFG interpretation or LR option.
 
 ## Source and concrete grammar domains
 

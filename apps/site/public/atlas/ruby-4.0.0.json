@@ -368,7 +368,7 @@
         "severity": "warning"
       }
     ],
-    "featuresVersion": "0.8.0",
+    "featuresVersion": "1.0.0",
     "lexicon": {
       "anyCharCount": 0,
       "charClassCount": 0,
@@ -8216,7 +8216,7 @@
       "format": "lrama",
       "frontend": {
         "id": "yacc-family",
-        "version": "0.4.0"
+        "version": "1.0.0"
       }
     },
     "structure": {
@@ -8653,6 +8653,20 @@
         "count": 141,
         "ratio": 0.5779
       },
+      "sccSizeHistogram": [
+        {
+          "count": 112,
+          "size": 1
+        },
+        {
+          "count": 1,
+          "size": 2
+        },
+        {
+          "count": 1,
+          "size": 130
+        }
+      ],
       "shortestDerivation": [],
       "shortestDerivationUnknown": [],
       "startSymbolReachability": {

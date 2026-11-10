@@ -93,7 +93,7 @@
         "severity": "warning"
       }
     ],
-    "featuresVersion": "0.8.0",
+    "featuresVersion": "1.0.0",
     "lexicon": {
       "anyCharCount": 0,
       "charClassCount": 0,
@@ -7668,7 +7668,7 @@
       "format": "bison",
       "frontend": {
         "id": "yacc-family",
-        "version": "0.4.0"
+        "version": "1.0.0"
       }
     },
     "structure": {
@@ -8095,6 +8095,20 @@
         "count": 136,
         "ratio": 0.6182
       },
+      "sccSizeHistogram": [
+        {
+          "count": 90,
+          "size": 1
+        },
+        {
+          "count": 1,
+          "size": 3
+        },
+        {
+          "count": 1,
+          "size": 127
+        }
+      ],
       "shortestDerivation": [
         {
           "length": 0,

@@ -1,6 +1,6 @@
 {
   "name": "@gramin/frontend-yacc",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "author": "Yudai Takada",
   "description": "Yacc, Bison, and Lrama frontend for gramin",
   "keywords": [

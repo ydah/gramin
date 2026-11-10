@@ -186,6 +186,10 @@ const fanInShape = (graph: ReturnType<typeof buildDependencyGraph>): [number, nu
 export const structureFeatures = (ir: GrammarIR): StructureResult => {
   const graph = buildDependencyGraph(ir);
   const components = stronglyConnectedComponents(graph);
+  const sccSizes = new Map<number, number>();
+  for (const component of components) {
+    sccSizes.set(component.length, (sccSizes.get(component.length) ?? 0) + 1);
+  }
   const recursiveComponents = components.filter((component) => component.length >= 2);
   const largestRecursive =
     [...recursiveComponents].sort(
@@ -275,6 +279,9 @@ export const structureFeatures = (ir: GrammarIR): StructureResult => {
       directLeftRecursiveRules,
       directRightRecursiveRules,
       recursionSccCount: recursiveComponents.length,
+      sccSizeHistogram: [...sccSizes]
+        .sort(([left], [right]) => left - right)
+        .map(([size, count]) => ({ size, count })),
       largestSccSize: {
         value: largestRecursive.length,
         members: [...largestRecursive],

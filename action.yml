@@ -64,6 +64,6 @@ runs:
         GRAMIN_FAIL_ON: ${{ inputs.fail-on }}
         GRAMIN_FAIL_ON_REGRESSION: ${{ inputs.fail-on-regression }}
         GRAMIN_OUTPUT: ${{ inputs.output }}
-        GRAMIN_CLI_PACKAGE: "@gramin/cli@0.4.0"
+        GRAMIN_CLI_PACKAGE: "@gramin/cli@1.0.0"
         GITHUB_TOKEN: ${{ github.token }}
       run: node "$GITHUB_ACTION_PATH/scripts/action-runner.mjs"

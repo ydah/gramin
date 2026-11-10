@@ -67,6 +67,7 @@ nested choice and sugar metrics.
 | `indirectLeftRecursiveRules` | Source rules in left-corner SCCs containing at least two distinct rules; nullable prefixes expose subsequent references | E | B (source CFG) |
 | `directRightRecursiveRules` | Rules whose last effective reference is themselves | E | B |
 | `recursionSccCount` | Tarjan SCCs containing two or more rules | E | B |
+| `sccSizeHistogram` | Counts of all source dependency SCCs by positive rule count, including singleton and unreachable components | E | B (source graph) |
 | `largestSccSize` | Largest recursive SCC, with sorted members | E | B |
 | `maxDependencyDepth` | Longest edge path from a start symbol in the SCC-condensed reachable DAG | E | A |
 | `topFanIn`, `topFanOut` | Top ten unique incoming/outgoing rule-edge counts | E | A |
@@ -82,6 +83,12 @@ to BNF/Yacc counts. In PEG grammars direct left recursion is a likely defect sig
 than a complexity measure. CFG nullability is omitted for ordered choice.
 `recursionSccCount` and `largestSccSize` retain their features 0.2 definition and describe
 mutual recursion only; the new recursive-component fields also recognize self-loops.
+`sccSizeHistogram` covers the complete source SCC partition, including acyclic singleton
+components and unreachable rules. Bins are `{size, count}` in ascending size order;
+`sum(size * count)` equals the distinct source-rule count. The empty population is `[]`.
+This structural graph measurement applies even when CFG interpretation is unavailable;
+it never mixes concrete parameter instances into the source population. See
+[RFC 0013](./rfcs/0013-scc-size-histogram.md).
 `unproductiveSymbols` is computed by a least fixed point over productive terminals and
 rules; unresolved symbols are not assumed to be productive. A non-empty list also produces
 `ANALYZER006_UNPRODUCTIVE_RULES`. Productivity and shortest derivation are omitted for

@@ -19,7 +19,7 @@
     "scannerless": false
   },
   "diagnostics": [],
-  "featuresVersion": "0.8.0",
+  "featuresVersion": "1.0.0",
   "lexicon": {
     "anyCharCount": 0,
     "charClassCount": 0,
@@ -191,7 +191,7 @@
     "format": "menhir",
     "frontend": {
       "id": "menhir",
-      "version": "0.4.0"
+      "version": "1.0.0"
     }
   },
   "structure": {
@@ -230,6 +230,12 @@
       "count": 0,
       "ratio": 0
     },
+    "sccSizeHistogram": [
+      {
+        "count": 2,
+        "size": 1
+      }
+    ],
     "shortestDerivation": [],
     "shortestDerivationUnknown": [],
     "startSymbolReachability": {

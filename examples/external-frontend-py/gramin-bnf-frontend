@@ -135,7 +135,7 @@ def main():
             "format": "bnf",
             "dialect": dialect,
             "fileNames": file_names,
-            "frontend": {"id": "bnf", "version": "0.4.0"},
+            "frontend": {"id": "bnf", "version": "1.0.0"},
         },
         "capabilities": {
             "orderedChoice": False,

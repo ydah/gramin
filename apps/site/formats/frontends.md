@@ -20,7 +20,7 @@ diagnostics remain part of every measurement.
 
 The [Python BNF/EBNF reference](https://github.com/ydah/gramin/tree/main/examples/external-frontend-py)
 demonstrates the executable protocol without requiring another runtime dependency
-beyond Python. The [repository-ready starter](https://github.com/ydah/gramin/tree/main/examples/frontend-template)
+beyond Python. The [template repository](https://github.com/ydah/gramin-frontend-template)
 contains a small literal-alternative parser, tests, a sample grammar, and CI. Replace
 its parser for your format; it is not a general BNF implementation.
 

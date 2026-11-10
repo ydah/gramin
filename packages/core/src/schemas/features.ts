@@ -73,6 +73,14 @@ const StructureFeaturesSchema = Type.Object(
     indirectLeftRecursiveRules: Type.Optional(Type.Integer({ minimum: 0 })),
     directRightRecursiveRules: Type.Integer({ minimum: 0 }),
     recursionSccCount: Type.Integer({ minimum: 0 }),
+    sccSizeHistogram: Type.Optional(
+      Type.Array(
+        Type.Object(
+          { size: Type.Integer({ minimum: 1 }), count: Type.Integer({ minimum: 1 }) },
+          { additionalProperties: false },
+        ),
+      ),
+    ),
     largestSccSize: Type.Object(
       {
         value: Type.Integer({ minimum: 0 }),
@@ -512,7 +520,7 @@ export const GrammarFeaturesSchema = Type.Object(
     notable: NotableFeaturesSchema,
     diagnostics: Type.Array(DiagnosticSchema),
   },
-  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v0.8.json" },
+  { additionalProperties: false, $id: "https://gramin.dev/schema/features-v1.json" },
 );
 
 export type GrammarFeatures = Static<typeof GrammarFeaturesSchema>;

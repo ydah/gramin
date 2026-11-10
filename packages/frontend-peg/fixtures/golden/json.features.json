@@ -41,7 +41,7 @@
       "severity": "warning"
     }
   ],
-  "featuresVersion": "0.8.0",
+  "featuresVersion": "1.0.0",
   "lexicon": {
     "anyCharCount": 1,
     "charClassCount": 5,
@@ -397,7 +397,7 @@
     "format": "peg",
     "frontend": {
       "id": "peggy",
-      "version": "0.4.0"
+      "version": "1.0.0"
     }
   },
   "structure": {
@@ -452,6 +452,16 @@
       "count": 4,
       "ratio": 0.5
     },
+    "sccSizeHistogram": [
+      {
+        "count": 6,
+        "size": 1
+      },
+      {
+        "count": 1,
+        "size": 4
+      }
+    ],
     "shortestDerivation": [],
     "shortestDerivationUnknown": [],
     "startSymbolReachability": {

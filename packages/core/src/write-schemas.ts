@@ -11,7 +11,7 @@ await Promise.all([
     serializeCanonical(GrammarIRSchemaDocument),
   ),
   writeFile(
-    new URL("features-v0.8.schema.json", schemaDirectory),
+    new URL("features-v1.schema.json", schemaDirectory),
     serializeCanonical(GrammarFeaturesSchemaDocument),
   ),
 ]);

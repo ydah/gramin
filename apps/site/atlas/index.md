@@ -23,4 +23,4 @@ Measurements are regenerated weekly from the pinned manifest and the current gra
 
 Class A refers to representation-level counts. Class B requires matching capability/representation context; class C also depends on source conventions. Use the [sandbox](../sandbox) or `gramin diff --features` to apply the comparison gates. Missing values remain unavailable.
 
-Dataset contract 1.0.0; analyzer 0.4.0, Grammar IR 1.4.0, features 0.8.0.
+Dataset contract 1.0.0; analyzer 1.0.0, Grammar IR 1.4.0, features 1.0.0.

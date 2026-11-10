@@ -4,6 +4,11 @@ Packages, Grammar IR, and feature documents have separate version numbers. A
 package release identifies the software; `irVersion` and `featuresVersion`
 identify data contracts. Published workspace packages share one release version.
 
+Package 1.0 stabilizes the CLI and public package APIs with Grammar IR v1 and
+features v1. The initial stable documents use IR 1.4.0 and features 1.0.0. Historical
+features 0.7/0.8 schemas remain in the core package. Regenerate baselines when
+moving to features v1; comparisons conservatively exclude different versions.
+
 ## Grammar IR v1
 
 Grammar IR v1 is stable. Optional, backward-compatible fields increment its minor

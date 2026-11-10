@@ -909,6 +909,16 @@
       "name": "matches hand-calculated calculator metrics"
     }
   },
+  "structure.sccSizeHistogram": {
+    "implementation": {
+      "file": "packages/analyzer/src/structure.ts",
+      "symbol": "structureFeatures"
+    },
+    "test": {
+      "file": "packages/analyzer/src/scc-distribution.test.ts",
+      "name": "counts every source component by size including unreachable and singleton rules"
+    }
+  },
   "structure.shortestDerivation": {
     "implementation": {
       "file": "packages/analyzer/src/structure.ts",
