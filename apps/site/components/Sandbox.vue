@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from "vue";
+import SandboxCharts from "./SandboxCharts.vue";
 import { frontendOptions } from "../sandbox/frontend-registry";
 import { BROWSER_WORKER_TIMEOUT_MS, MAX_BROWSER_INPUT_CHARS } from "../sandbox/limits";
 import { defaultSample, irSample, sandboxSamples } from "../sandbox/samples";
@@ -13,6 +14,8 @@ import type {
 const mode = ref<SandboxMode>("source");
 const sampleId = ref(defaultSample?.id ?? "json-yacc");
 const frontendId = ref(defaultSample?.frontendId ?? "auto");
+const beforeFrontendId = ref(frontendId.value);
+const afterFrontendId = ref(frontendId.value);
 const fileName = ref(defaultSample?.files[0]?.name ?? "grammar.y");
 const source = ref(defaultSample?.files[0]?.content ?? "");
 const beforeFileName = ref(defaultSample?.files[0]?.name ?? "before.y");
@@ -21,6 +24,7 @@ const afterFileName = ref(defaultSample?.files[0]?.name ?? "after.y");
 const afterSource = ref(defaultSample?.files[0]?.content ?? "");
 const budgetChars = ref(6000);
 const activeTab = ref("summary");
+const chartSide = ref<"before" | "after">("after");
 const pending = ref(false);
 const error = ref("");
 const copyStatus = ref("");
@@ -30,6 +34,7 @@ let workerTimer: ReturnType<typeof setTimeout> | undefined;
 
 const tabs = [
   ["summary", "Summary"],
+  ["charts", "Charts"],
   ["diagnostics", "Diagnostics"],
   ["features", "Features"],
   ["ir", "Grammar IR"],
@@ -42,6 +47,9 @@ const tabs = [
 
 const currentSample = computed(() => sandboxSamples.find((sample) => sample.id === sampleId.value));
 const diagnostics = computed(() => result.value?.features.diagnostics ?? []);
+const chartFeatures = computed(
+  () => result.value?.comparison?.[chartSide.value].features ?? result.value?.features,
+);
 const output = computed(() => {
   const current = result.value;
   if (!current) return "";
@@ -57,8 +65,14 @@ const output = computed(() => {
 const setSample = (): void => {
   const sample = currentSample.value;
   if (!sample) return;
+  worker?.terminate();
+  worker = undefined;
+  if (workerTimer) clearTimeout(workerTimer);
+  pending.value = false;
   mode.value = "source";
   frontendId.value = sample.frontendId;
+  beforeFrontendId.value = sample.frontendId;
+  afterFrontendId.value = sample.frontendId;
   fileName.value = sample.files[0]?.name ?? "grammar.y";
   source.value = sample.files[0]?.content ?? "";
   beforeFileName.value = sample.files[0]?.name ?? "before.y";
@@ -74,10 +88,14 @@ const setMode = (): void => {
   if (mode.value === "ir") {
     source.value = result.value?.reports.ir ?? irSample;
     fileName.value = "grammar-ir.json";
-    result.value = undefined;
-    error.value = "";
-    activeTab.value = "summary";
   }
+  worker?.terminate();
+  worker = undefined;
+  if (workerTimer) clearTimeout(workerTimer);
+  pending.value = false;
+  result.value = undefined;
+  error.value = "";
+  activeTab.value = "summary";
 };
 
 const requestFor = (): AnalyzeRequest => {
@@ -88,6 +106,8 @@ const requestFor = (): AnalyzeRequest => {
       beforeFiles: [{ name: beforeFileName.value, content: beforeSource.value }],
       afterFiles: [{ name: afterFileName.value, content: afterSource.value }],
       frontendId: frontendId.value,
+      beforeFrontendId: beforeFrontendId.value,
+      afterFrontendId: afterFrontendId.value,
       budgetChars: budgetChars.value,
     };
   }
@@ -106,29 +126,36 @@ const analyze = (): void => {
   result.value = undefined;
   worker?.terminate();
   if (workerTimer) clearTimeout(workerTimer);
-  worker = new Worker(new URL("../sandbox/worker.ts", import.meta.url), { type: "module" });
-  worker.onmessage = (event: MessageEvent<AnalyzeResponse>) => {
+  const activeWorker = new Worker(new URL("../sandbox/worker.ts", import.meta.url), {
+    type: "module",
+  });
+  worker = activeWorker;
+  activeWorker.onmessage = (event: MessageEvent<AnalyzeResponse>) => {
+    if (worker !== activeWorker) return;
     if (workerTimer) clearTimeout(workerTimer);
     pending.value = false;
     const response = event.data;
     if (response.ok) {
       result.value = response;
-      activeTab.value = "summary";
+      activeTab.value = response.comparison ? "diff" : "summary";
+      chartSide.value = "after";
     } else {
       error.value = response.message;
     }
     worker?.terminate();
     worker = undefined;
   };
-  worker.onerror = (event) => {
+  activeWorker.onerror = (event) => {
+    if (worker !== activeWorker) return;
     if (workerTimer) clearTimeout(workerTimer);
     pending.value = false;
     error.value = event.message || "The browser worker failed.";
     worker?.terminate();
     worker = undefined;
   };
-  worker.postMessage(requestFor());
+  activeWorker.postMessage(requestFor());
   workerTimer = setTimeout(() => {
+    if (worker !== activeWorker) return;
     pending.value = false;
     error.value = "The browser worker exceeded the 10 second limit and was stopped.";
     worker?.terminate();
@@ -166,13 +193,23 @@ const download = (name: string, content: string): void => {
   URL.revokeObjectURL(url);
 };
 
+const cliPath = (value: string): string =>
+  `'${(value.startsWith("-") ? `./${value}` : value).replaceAll("'", "'\"'\"'")}'`;
+
 const cliCommand = computed(() => {
   const frontend = result.value?.frontend.id ?? frontendId.value;
   if (mode.value === "compare") {
-    return `npx @gramin/cli diff ${beforeFileName.value} ${afterFileName.value} --frontend ${frontend} --format md`;
+    const beforeFrontend = result.value?.comparison?.before.frontend.id ?? beforeFrontendId.value;
+    const afterFrontend = result.value?.comparison?.after.frontend.id ?? afterFrontendId.value;
+    if (beforeFrontend !== afterFrontend) {
+      return `npx @gramin/cli analyze ${cliPath(beforeFileName.value)} --frontend ${beforeFrontend} -o before.features.json\nnpx @gramin/cli analyze ${cliPath(afterFileName.value)} --frontend ${afterFrontend} -o after.features.json\nnpx @gramin/cli diff before.features.json after.features.json --features --format md`;
+    }
+    return `npx @gramin/cli diff ${cliPath(beforeFileName.value)} ${cliPath(afterFileName.value)} --frontend ${afterFrontend} --format md`;
   }
   const format = activeTab.value === "markdown" ? "md" : "json";
-  return `npx @gramin/cli analyze ${fileName.value} --frontend ${frontend} --format ${format}`;
+  return mode.value === "ir"
+    ? `npx @gramin/cli analyze --ir ${cliPath(fileName.value)} --format ${format}`
+    : `npx @gramin/cli analyze ${cliPath(fileName.value)} --frontend ${frontend} --format ${format}`;
 });
 
 onBeforeUnmount(() => {
@@ -198,7 +235,7 @@ onBeforeUnmount(() => {
           <option v-for="sample in sandboxSamples" :key="sample.id" :value="sample.id">{{ sample.label }}</option>
         </select>
       </label>
-      <label v-if="mode !== 'ir'">
+      <label v-if="mode === 'source'">
         <span>Frontend</span>
         <select v-model="frontendId" aria-label="Frontend">
           <option v-for="option in frontendOptions" :key="option.id" :value="option.id">{{ option.label }}</option>
@@ -224,8 +261,20 @@ onBeforeUnmount(() => {
               <input v-model="beforeFileName" aria-label="Before source name" />
             </label>
             <label>
+              <span>Before frontend</span>
+              <select v-model="beforeFrontendId" aria-label="Before frontend">
+                <option v-for="option in frontendOptions" :key="option.id" :value="option.id">{{ option.label }}</option>
+              </select>
+            </label>
+            <label>
               <span>After</span>
               <input v-model="afterFileName" aria-label="After source name" />
+            </label>
+            <label>
+              <span>After frontend</span>
+              <select v-model="afterFrontendId" aria-label="After frontend">
+                <option v-for="option in frontendOptions" :key="option.id" :value="option.id">{{ option.label }}</option>
+              </select>
             </label>
           </template>
           <span v-else class="section-kicker">IR JSON input</span>
@@ -247,7 +296,7 @@ onBeforeUnmount(() => {
             <textarea v-model="afterSource" class="sandbox-editor" spellcheck="false" aria-label="After grammar source" />
           </label>
         </div>
-        <p class="sandbox-note">Runs locally in this browser. Semantic actions and external frontends are never executed. Input limit: {{ MAX_BROWSER_INPUT_CHARS.toLocaleString() }} characters.</p>
+        <p class="sandbox-note">Runs locally in this browser. Semantic actions and external frontends are never executed. Combined input limit: {{ MAX_BROWSER_INPUT_CHARS.toLocaleString() }} characters.</p>
         <p v-if="mode === 'ir'" class="sandbox-note">Paste canonical Grammar IR JSON. Source grammar syntax such as <code>%token</code> is not JSON.</p>
       </div>
 
@@ -279,6 +328,16 @@ onBeforeUnmount(() => {
           </div>
           <p class="sandbox-note">Metrics are structural facts, not a semantic quality score. See the comparability guide before comparing formats.</p>
         </template>
+        <template v-else-if="result && activeTab === 'charts' && chartFeatures">
+          <label v-if="result.comparison" class="sandbox-chart-side">
+            <span>Show charts for</span>
+            <select v-model="chartSide">
+              <option value="before">Before: {{ result.comparison.before.ir.source.fileNames?.join(', ') }}</option>
+              <option value="after">After: {{ result.comparison.after.ir.source.fileNames?.join(', ') }}</option>
+            </select>
+          </label>
+          <SandboxCharts :features="chartFeatures" />
+        </template>
         <template v-else-if="result && activeTab === 'diagnostics'">
           <h3>Diagnostics</h3>
           <p v-if="diagnostics.length === 0" class="sandbox-note">No diagnostics were emitted.</p>
@@ -295,6 +354,7 @@ onBeforeUnmount(() => {
           <div class="sandbox-stat-grid">
             <div class="sandbox-stat"><strong>{{ result.comparison.diff.regressions.length }}</strong><span>Tracked regressions</span></div>
             <div class="sandbox-stat"><strong>{{ result.comparison.diff.changes.length }}</strong><span>All changes</span></div>
+            <div class="sandbox-stat"><strong>{{ result.comparison.diff.notComparable?.length ?? 0 }}</strong><span>Comparisons unavailable</span></div>
           </div>
           <div class="sandbox-output">{{ output }}</div>
           <div class="sandbox-actions">
@@ -345,13 +405,30 @@ onBeforeUnmount(() => {
 .sandbox-tabs button.active {
   background: var(--vp-c-brand-soft);
   border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
+  color: var(--vp-c-text-1);
+  font-weight: 600;
 }
 
 .sandbox-actions {
   display: flex;
   gap: 0.5rem;
   margin-top: 0.7rem;
+}
+
+.sandbox-chart-side {
+  display: grid;
+  font-size: 0.8rem;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.sandbox-chart-side select {
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.35rem;
+  color: var(--vp-c-text-1);
+  font: inherit;
+  padding: 0.5rem;
 }
 
 .diagnostics-list {

@@ -17,7 +17,7 @@ import {
 import { MENHIR_STDLIB_RULES } from "./stdlib.js";
 
 export const FRONTEND_MENHIR_ID = "menhir";
-export const FRONTEND_MENHIR_VERSION = "0.2.1";
+export const FRONTEND_MENHIR_VERSION = "0.4.0";
 
 type TokenKind =
   | "identifier"

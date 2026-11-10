@@ -48,6 +48,7 @@ const parseIrInput = (file: SourceFile): AnalyzeResponse | GrammarIR => {
 };
 
 const selectFrontend = (request: AnalyzeRequest, files: readonly SourceFile[]): Frontend => {
+  if (files.length === 0) throw new Error("at least one source file is required");
   if (request.frontendId !== "auto") {
     const frontend = getFrontend(request.frontendId);
     if (!frontend) throw new Error(`unknown frontend: ${request.frontendId}`);
@@ -122,15 +123,16 @@ export const analyzeRequest = (request: AnalyzeRequest): AnalyzeResponse => {
       );
     }
     if (request.mode === "compare") {
-      const before = analyzeFiles(request, request.beforeFiles ?? []);
+      const before = analyzeFiles(
+        { ...request, frontendId: request.beforeFrontendId ?? request.frontendId },
+        request.beforeFiles ?? [],
+      );
       if ("ok" in before && !before.ok) return before;
-      const after = analyzeFiles(request, request.afterFiles ?? []);
+      const after = analyzeFiles(
+        { ...request, frontendId: request.afterFrontendId ?? request.frontendId },
+        request.afterFiles ?? [],
+      );
       if ("ok" in after && !after.ok) return after;
-      if (before.frontend.id !== after.frontend.id) {
-        throw new Error(
-          `comparison requires the same frontend: ${before.frontend.id} and ${after.frontend.id}`,
-        );
-      }
       const diff = diffFeatures(before.features, after.features);
       const comparison: SandboxComparison = {
         before,

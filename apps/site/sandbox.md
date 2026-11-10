@@ -13,9 +13,19 @@ Paste a grammar, choose a frontend, and inspect the common IR and deterministic 
 
 - **Analyze source** parses one source file with an explicit frontend or unambiguous automatic detection.
 - **Analyze Grammar IR** validates an existing IR JSON document before analyzing it.
-- **Compare before / after** analyzes two revisions with the same frontend and reports feature changes and tracked regressions.
+- **Compare before / after** analyzes two grammars with independently selected frontends and reports aggregate and rule-level feature changes. Comparisons with incompatible capabilities or measurement context include their reasons instead of numeric differences.
 
-The first version keeps the surface deliberately small: one editable source file, bounded LLM digest output, and copy/download actions for the generated reports. External frontend executables, parser generation, semantic action execution, and automatic LLM calls are not available in the browser.
+The **Charts** tab shows alternatives-per-rule and right-hand-side-length percentiles,
+the largest SCC and largest recursive component, and searchable rule vectors. Bars
+include numeric labels; unavailable measurements show their reasons. The two component
+sizes are recorded maxima, not a distribution of all SCCs. Rule charts show the largest
+20 matching values; the **Features** tab retains every rule vector. In comparison mode,
+choose **Before** or **After** to inspect either grammar's charts.
+
+The editor accepts one source file per grammar, with bounded LLM digest output and
+copy/download actions for generated reports. External frontend executables, parser
+generation, semantic action execution, and automatic LLM calls are not available in the
+browser.
 
 ## Privacy and limits
 

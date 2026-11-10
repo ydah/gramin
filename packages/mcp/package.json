@@ -1,0 +1,60 @@
+{
+  "name": "@gramin/mcp",
+  "version": "0.4.0",
+  "author": "Yudai Takada",
+  "description": "Measure grammar features over MCP without executing grammar code",
+  "keywords": [
+    "grammar",
+    "mcp",
+    "parser"
+  ],
+  "homepage": "https://ydah.github.io/gramin/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ydah/gramin.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/ydah/gramin/issues"
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/.tsbuildinfo"
+  ],
+  "bin": {
+    "gramin-mcp": "./dist/bin.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run src --passWithNoTests",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@gramin/analyzer": "workspace:*",
+    "@gramin/core": "workspace:*",
+    "@gramin/frontend-antlr": "workspace:*",
+    "@gramin/frontend-bnf": "workspace:*",
+    "@gramin/frontend-menhir": "workspace:*",
+    "@gramin/frontend-peg": "workspace:*",
+    "@gramin/frontend-yacc": "workspace:*",
+    "@gramin/reporter": "workspace:*",
+    "@modelcontextprotocol/server": "2.4.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

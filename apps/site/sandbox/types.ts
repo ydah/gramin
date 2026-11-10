@@ -9,6 +9,8 @@ export interface AnalyzeRequest {
   readonly frontendId: string;
   readonly beforeFiles?: readonly SourceFile[];
   readonly afterFiles?: readonly SourceFile[];
+  readonly beforeFrontendId?: string;
+  readonly afterFrontendId?: string;
   readonly dialect?: string;
   readonly maxNestingDepth?: number;
   readonly budgetChars: number;

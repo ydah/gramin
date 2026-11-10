@@ -1,6 +1,6 @@
 import { MAX_SUPPORTED_NESTING_DEPTH } from "@gramin/core";
 
-export type OutputFormat = "json" | "md" | "llm" | "sarif";
+export type OutputFormat = "json" | "md" | "llm" | "sarif" | "csv";
 export type FailOn = "error" | "warning" | "none";
 
 export interface ParsedArguments {
@@ -22,6 +22,7 @@ export interface ParsedArguments {
   readonly baseline?: string;
   readonly failOnRegression: boolean;
   readonly analysis?: "lr";
+  readonly featuresInput: boolean;
 }
 
 export type ArgumentResult =
@@ -52,6 +53,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   const options = new Map<string, string>();
   let stripLocations = false;
   let failOnRegression = false;
+  let featuresInput = false;
 
   for (let index = 0; index < tokens.length; index += 1) {
     const token = tokens[index];
@@ -62,6 +64,10 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
     }
     if (token === "--fail-on-regression") {
       failOnRegression = true;
+      continue;
+    }
+    if (token === "--features") {
+      featuresInput = true;
       continue;
     }
     if (valueOptions.has(token)) {
@@ -78,7 +84,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
   }
 
   const format = options.get("--format") ?? "json";
-  if (!["json", "md", "llm", "sarif"].includes(format)) {
+  if (!["json", "md", "llm", "sarif", "csv"].includes(format)) {
     return { ok: false, message: `unknown format ${format}` };
   }
   const budgetText = options.get("--budget-chars");
@@ -162,6 +168,7 @@ export const parseArguments = (argv: readonly string[]): ArgumentResult => {
       ...(sourceRoot === undefined ? {} : { sourceRoot }),
       ...(baseline === undefined ? {} : { baseline }),
       failOnRegression,
+      featuresInput,
       ...(analysis === undefined ? {} : { analysis }),
     },
   };

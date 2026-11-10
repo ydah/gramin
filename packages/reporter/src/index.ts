@@ -1,8 +1,10 @@
+export { type NamedFeatures, renderFeatureCsv } from "./csv.js";
 export {
   diffFeatures,
   type FeatureChange,
   type FeatureDiff,
   type FeatureDiffOptions,
+  type FeatureNotComparable,
   type FeatureRegression,
   type GrammarStructureDiff,
   renderFeatureDiffJson,
@@ -17,4 +19,4 @@ export {
 export { renderMarkdown } from "./markdown.js";
 export { renderSarif } from "./sarif.js";
 
-export const REPORTER_VERSION = "0.2.1";
+export const REPORTER_VERSION = "0.4.0";

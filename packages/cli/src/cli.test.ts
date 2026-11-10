@@ -56,6 +56,236 @@ const harness = (
 };
 
 describe("gramin CLI", () => {
+  it("checks external frontend schema, capabilities, and repeatable canonical output", async () => {
+    const parsed = bnfFrontend.parse([{ name: "sample.bnf", content: 's ::= "x";' }], {});
+    if (!parsed.ir) throw new Error("invalid fixture");
+    let executions = 0;
+    const test = harness({}, async (_command, args, _stdin, options) => {
+      executions += 1;
+      expect(args).toEqual(["parse", "--dialect", "demo", "sample.bnf"]);
+      expect(options?.timeoutMs).toBe(1000);
+      return { exitCode: 0, stdout: JSON.stringify(parsed.ir), stderr: "" };
+    });
+    expect(
+      await runCli(
+        [
+          "frontend-test",
+          "sample.bnf",
+          "--frontend-cmd",
+          "frontend",
+          "--dialect",
+          "demo",
+          "--frontend-timeout",
+          "1000",
+        ],
+        test.io,
+      ),
+    ).toBe(EXIT_SUCCESS);
+    expect(executions).toBe(2);
+    expect(JSON.parse(test.stdout.join(""))).toMatchObject({
+      checks: { schema: true, canonicalForm: true, capabilities: true, repeatable: true },
+      runs: 2,
+    });
+  });
+
+  it("reports nondeterministic frontend output without treating missing values as success", async () => {
+    const parsed = bnfFrontend.parse([{ name: "sample.bnf", content: 's ::= "x";' }], {});
+    if (!parsed.ir) throw new Error("invalid fixture");
+    const ir = parsed.ir;
+    let executions = 0;
+    const test = harness({}, async () => {
+      executions += 1;
+      return {
+        exitCode: 0,
+        stdout: JSON.stringify({
+          ...ir,
+          source: { ...ir.source, fileNames: [`run-${executions}`] },
+        }),
+        stderr: "",
+      };
+    });
+    expect(
+      await runCli(["frontend-test", "sample.bnf", "--frontend-cmd", "frontend"], test.io),
+    ).toBe(EXIT_PARTIAL);
+    expect(JSON.parse(test.stdout.join("")).checks.repeatable).toBe(false);
+    expect(test.stderr.join("")).toContain("FRONTEND_NONDETERMINISTIC");
+  });
+
+  it("rejects incompatible capability declarations during frontend conformance", async () => {
+    const parsed = bnfFrontend.parse([{ name: "sample.bnf", content: 's ::= "x";' }], {});
+    if (!parsed.ir) throw new Error("invalid fixture");
+    const invalid = { ...parsed.ir, capabilities: { ...parsed.ir.capabilities, predicates: true } };
+    const test = harness({}, async () => ({
+      exitCode: 0,
+      stdout: JSON.stringify(invalid),
+      stderr: "",
+    }));
+    expect(
+      await runCli(["frontend-test", "sample.bnf", "--frontend-cmd", "frontend"], test.io),
+    ).toBe(EXIT_FATAL);
+    expect(test.stderr.join("")).toContain("IR_CANON_PREDICATES_CAPABILITY");
+    expect(test.stdout).toEqual([]);
+  });
+
+  it.each([
+    { exitCode: 0, stdout: "not JSON", stderr: "" },
+    { exitCode: 0, stdout: "{}", stderr: "" },
+    { exitCode: 2, stdout: "", stderr: "parse failed" },
+  ])("rejects invalid frontend process output during conformance %#", async (execution) => {
+    const test = harness({}, async () => execution);
+    expect(
+      await runCli(["frontend-test", "sample.bnf", "--frontend-cmd", "frontend"], test.io),
+    ).toBe(EXIT_FATAL);
+    expect(test.stdout).toEqual([]);
+  });
+
+  it("replays one stdin input for both frontend conformance runs", async () => {
+    const parsed = bnfFrontend.parse([{ name: "<stdin>", content: 's ::= "x";' }], {});
+    if (!parsed.ir) throw new Error("invalid fixture");
+    const values: (string | undefined)[] = [];
+    const test = harness({}, async (_command, args, stdin) => {
+      expect(args).toEqual(["parse", "--stdin"]);
+      values.push(stdin);
+      return { exitCode: 0, stdout: JSON.stringify(parsed.ir), stderr: "" };
+    });
+    let reads = 0;
+    expect(
+      await runCli(["frontend-test", "-", "--frontend-cmd", "frontend"], {
+        ...test.io,
+        readStdin: async () => {
+          reads += 1;
+          return "sample";
+        },
+      }),
+    ).toBe(EXIT_SUCCESS);
+    expect(reads).toBe(1);
+    expect(values).toEqual(["sample", "sample"]);
+  });
+
+  it("requires an explicit frontend executable and rejects analysis-only conformance options", async () => {
+    expect(await runCli(["frontend-test", "sample.bnf"], harness().io)).toBe(EXIT_USAGE);
+    expect(await runCli(["frontend-test", "--frontend-cmd", "frontend"], harness().io)).toBe(
+      EXIT_USAGE,
+    );
+    for (const args of [
+      ["--ir", "ir.json"],
+      ["--baseline", "baseline.json"],
+      ["--fail-on-regression"],
+      ["--format", "md"],
+      ["--analysis", "lr"],
+      ["--strip-loc"],
+      ["--source-name", "fixed"],
+    ]) {
+      expect(
+        await runCli(
+          ["frontend-test", "sample.bnf", "--frontend-cmd", "frontend", ...args],
+          harness().io,
+        ),
+      ).toBe(EXIT_USAGE);
+    }
+  });
+
+  it("checks the Python reference frontend through the real process boundary", async () => {
+    const fixture = fileURLToPath(
+      new URL("../../frontend-bnf/fixtures/arithmetic.ebnf", import.meta.url),
+    );
+    const executable = fileURLToPath(
+      new URL("../../../examples/external-frontend-py/gramin-bnf-frontend", import.meta.url),
+    );
+    const test = harness();
+    expect(await runCli(["frontend-test", fixture, "--frontend-cmd", executable], test.io)).toBe(
+      EXIT_SUCCESS,
+    );
+    expect(JSON.parse(test.stdout.join("")).checks.repeatable).toBe(true);
+  });
+
+  it("checks the standalone frontend template through the real process boundary", async () => {
+    const fixture = fileURLToPath(
+      new URL("../../../examples/frontend-template/fixtures/sample.bnf", import.meta.url),
+    );
+    const executable = fileURLToPath(
+      new URL("../../../examples/frontend-template/bin/gramin-example-frontend", import.meta.url),
+    );
+    const test = harness();
+    expect(await runCli(["frontend-test", fixture, "--frontend-cmd", executable], test.io)).toBe(
+      EXIT_SUCCESS,
+    );
+    expect(JSON.parse(test.stdout.join(""))).toMatchObject({
+      frontend: { id: "example-literals" },
+      checks: { repeatable: true },
+    });
+  });
+
+  it("compares validated feature documents directly", async () => {
+    const parsed = bnfFrontend.parse([{ name: "a.bnf", content: 's ::= "x";' }], {});
+    if (!parsed.ir) throw new Error("invalid fixture");
+    const features = analyzeGrammar(parsed.ir);
+    const run = harness({
+      "before.json": JSON.stringify(features),
+      "after.json": JSON.stringify(features),
+    });
+    expect(await runCli(["diff", "before.json", "after.json", "--features"], run.io)).toBe(
+      EXIT_SUCCESS,
+    );
+    expect(JSON.parse(run.stdout.join("")).changes).toEqual([]);
+    const invalid = harness({ "before.json": "{}", "after.json": JSON.stringify(features) });
+    expect(await runCli(["diff", "before.json", "after.json", "--features"], invalid.io)).toBe(
+      EXIT_FATAL,
+    );
+  });
+
+  it("analyzes independent grammars as one JSON collection or CSV table", async () => {
+    const files = { "a.bnf": 's ::= "x";', "b.bnf": 's ::= "x" | "y";' };
+    const json = harness(files);
+    expect(await runCli(["analyze-many", "a.bnf", "b.bnf", "--frontend", "bnf"], json.io)).toBe(
+      EXIT_SUCCESS,
+    );
+    expect(
+      JSON.parse(json.stdout.join("")).grammars.map(
+        (entry: { name: string; features: { size: { rules: number } } }) => [
+          entry.name,
+          entry.features.size.rules,
+        ],
+      ),
+    ).toEqual([
+      ["a.bnf", 1],
+      ["b.bnf", 1],
+    ]);
+    const csv = harness(files);
+    expect(
+      await runCli(
+        ["analyze-many", "a.bnf", "b.bnf", "--frontend", "bnf", "--format", "csv"],
+        csv.io,
+      ),
+    ).toBe(EXIT_SUCCESS);
+    expect(csv.stdout.join("")).toContain("a.bnf,rule,s,alternatives,1,");
+    expect(csv.stdout.join("")).toContain("b.bnf,rule,s,alternatives,2,");
+    const single = harness(files);
+    expect(
+      await runCli(["analyze", "a.bnf", "--frontend", "bnf", "--format", "csv"], single.io),
+    ).toBe(EXIT_SUCCESS);
+    expect(single.stdout.join("")).toContain("a.bnf,grammar,,size.rules,1,");
+  });
+
+  it("rejects ambiguous batch options and preserves partial diagnostics", async () => {
+    const files = { "a.y": "%%\ns: missing;" };
+    for (const args of [
+      ["--source-name", "x"],
+      ["--baseline", "baseline.json"],
+      ["--ir", "a.y"],
+      ["--format", "md"],
+    ]) {
+      expect(await runCli(["analyze-many", "a.y", ...args], harness(files).io)).toBe(EXIT_USAGE);
+    }
+    const partial = harness(files);
+    expect(
+      await runCli(
+        ["analyze-many", "a.y", "--frontend", "yacc-family", "--fail-on", "warning"],
+        partial.io,
+      ),
+    ).toBe(EXIT_PARTIAL);
+  });
+
   it("prints help and version as successful global options", async () => {
     const help = harness();
     expect(await runCli(["--help"], help.io)).toBe(EXIT_SUCCESS);
@@ -63,7 +293,7 @@ describe("gramin CLI", () => {
 
     const version = harness();
     expect(await runCli(["--version"], version.io)).toBe(EXIT_SUCCESS);
-    expect(version.stdout.join("")).toBe("0.2.1\n");
+    expect(version.stdout.join("")).toBe("0.4.0\n");
 
     const commandHelp = harness();
     expect(await runCli(["analyze", "--help"], commandHelp.io)).toBe(EXIT_SUCCESS);

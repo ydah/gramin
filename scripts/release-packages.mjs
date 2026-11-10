@@ -15,6 +15,7 @@ export const releasePackages = [
   { name: "@gramin/frontend-yacc", directory: "packages/frontend-yacc" },
   { name: "@gramin/reporter", directory: "packages/reporter" },
   { name: "@gramin/cli", directory: "packages/cli" },
+  { name: "@gramin/mcp", directory: "packages/mcp" },
 ];
 
 export const readJsonObject = (path) => {

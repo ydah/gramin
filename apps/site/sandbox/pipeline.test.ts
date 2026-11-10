@@ -77,6 +77,50 @@ describe("browser sandbox pipeline", () => {
     expect(response.comparison?.reports.markdown).toContain("# Grammar feature diff");
   });
 
+  it("compares separately selected formats and preserves comparison reasons", () => {
+    const response = analyzeRequest({
+      mode: "compare",
+      files: [],
+      beforeFiles: [{ name: "before.bnf", content: 'start ::= "x";' }],
+      afterFiles: [{ name: "after.pegjs", content: 'start = "x" / "y"' }],
+      frontendId: "auto",
+      beforeFrontendId: "bnf",
+      afterFrontendId: "peggy",
+      budgetChars: 6000,
+    });
+
+    expect(response.ok).toBe(true);
+    if (!response.ok) return;
+    expect(response.comparison?.before.frontend.id).toBe("bnf");
+    expect(response.comparison?.after.frontend.id).toBe("peggy");
+    expect(response.comparison?.diff.changes).toContainEqual(
+      expect.objectContaining({ path: "/size/alternatives", before: 1, after: 2 }),
+    );
+    expect(response.comparison?.diff.notComparable).toContainEqual(
+      expect.objectContaining({ path: "/parseability/firstSetSize/average", class: "B" }),
+    );
+    expect(response.comparison?.reports.markdown).toContain("Not comparable");
+  });
+
+  it("bounds combined before/after input and rejects an empty side", () => {
+    const request = {
+      mode: "compare" as const,
+      files: [],
+      beforeFiles: [{ name: "before.bnf", content: "x".repeat(MAX_BROWSER_INPUT_CHARS / 2) }],
+      afterFiles: [{ name: "after.bnf", content: "x".repeat(MAX_BROWSER_INPUT_CHARS / 2 + 1) }],
+      frontendId: "bnf",
+      budgetChars: 6000,
+    };
+    const oversized = analyzeRequest(request);
+    expect(oversized.ok).toBe(false);
+    if (oversized.ok) return;
+    expect(oversized.message).toContain("250,000");
+    const empty = analyzeRequest({ ...request, beforeFiles: [], afterFiles: [] });
+    expect(empty.ok).toBe(false);
+    if (empty.ok) return;
+    expect(empty.message).toContain("at least one source file");
+  });
+
   it("rejects an ambiguous automatic frontend selection", () => {
     const response = analyzeRequest({
       mode: "source",

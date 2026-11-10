@@ -6,7 +6,7 @@ import {
   type GrammarIR,
   mergeRulesByName,
 } from "@gramin/core";
-import { codeSpan } from "./code-span.js";
+import { codeSpan, tableCodeSpan } from "./code-span.js";
 
 export interface FeatureChange {
   readonly path: string;
@@ -19,9 +19,16 @@ export interface FeatureRegression extends FeatureChange {
   readonly reason: string;
 }
 
+export interface FeatureNotComparable {
+  readonly path: string;
+  readonly class: "A" | "B" | "C";
+  readonly reason: string;
+}
+
 export interface FeatureDiff {
   readonly changes: readonly FeatureChange[];
   readonly regressions: readonly FeatureRegression[];
+  readonly notComparable?: readonly FeatureNotComparable[];
   readonly structural?: GrammarStructureDiff;
 }
 
@@ -87,6 +94,146 @@ const equalValue = (left: unknown, right: unknown): boolean => {
     );
   }
   return false;
+};
+
+const RULE_METRICS: Readonly<Record<string, string>> = {
+  alternatives: "size/alternatives",
+  rhsItems: "size/avgRhsLength",
+  maxRhsItems: "size/maxRhsLength",
+  maxExpressionNestingDepth: "structure/maxExpressionNestingDepth",
+  fanIn: "structure/topFanIn",
+  fanOut: "structure/topFanOut",
+  unitRules: "parseability/unitRules",
+  firstSetSize: "parseability/firstSetSize",
+  followSetSize: "parseability/followSetSize",
+  ll1Conflicts: "parseability/ll1Conflicts",
+  slrConflictInvolvement: "parseability/slr",
+  shortestDerivation: "structure/shortestDerivation",
+};
+
+const metricParts = (path: string): readonly string[] => {
+  const parts = path.slice(1).split("/");
+  if (parts[0] !== "perRule") return parts;
+  const mapped = RULE_METRICS[parts[2] ?? ""];
+  return mapped === undefined ? [] : [...mapped.split("/"), ...parts.slice(3)];
+};
+
+const comparisonClass = (parts: readonly string[]): FeatureNotComparable["class"] | undefined => {
+  const [section, field] = parts;
+  if (field === "notApplicable") return undefined;
+  if (section === "size") return field === "nestedChoiceCount" ? "B" : "A";
+  if (section === "structure") {
+    return [
+      "maxDependencyDepth",
+      "topFanIn",
+      "topFanOut",
+      "unreachableSymbols",
+      "unproductiveSymbols",
+      "reachableRules",
+      "articulationPoints",
+      "bridges",
+      "topBetweenness",
+      "fanInGini",
+      "fanInEntropy",
+      "startSymbolReachability",
+    ].includes(field ?? "")
+      ? "A"
+      : "B";
+  }
+  if (section === "parseability") {
+    if (field === "context") return undefined;
+    if (field === "declaredConflicts") return "C";
+    return field === "unitRules" ? "A" : "B";
+  }
+  if (section === "lexicon") {
+    if (field === "tokenUsage") return "A";
+    return ["keywordLike", "punctuationLike", "keywordIdentifierCollisions"].includes(field ?? "")
+      ? "C"
+      : "B";
+  }
+  if (section === "redundancy") {
+    if (field === "listRecursion") return "C";
+    return [
+      "commonPrefixPairs",
+      "maxCommonPrefixLength",
+      "duplicateAlternatives",
+      "singleReferenceRules",
+    ].includes(field ?? "")
+      ? "A"
+      : "B";
+  }
+  if (section === "actions" || section === "style") return "C";
+  if (section === "operations") {
+    return ["errorTokenUses", "rulesWithErrorRecovery", "recoveryRuleRatio"].includes(field ?? "")
+      ? "B"
+      : "C";
+  }
+  if (section === "peg") {
+    return ["potentialShadowedAlternativePairs", "backtrackingHotspots"].includes(field ?? "")
+      ? "C"
+      : "B";
+  }
+  return section === "precedence" || section === "sugar" ? "B" : undefined;
+};
+
+const unavailableReason = (features: unknown, parts: readonly string[]): string | undefined => {
+  if (!isRecord(features)) return undefined;
+  const section = features[parts[0] ?? ""];
+  if (!isRecord(section) || !isRecord(section.notApplicable)) return undefined;
+  for (let length = parts.length; length > 1; length -= 1) {
+    const reason = section.notApplicable[parts.slice(1, length).join(".")];
+    if (typeof reason === "string") return reason;
+  }
+  return undefined;
+};
+
+const comparisonReason = (
+  before: GrammarFeatures,
+  after: GrammarFeatures,
+  change: FeatureChange,
+  parts: readonly string[],
+  classification: FeatureNotComparable["class"],
+): string | undefined => {
+  const beforeReason = unavailableReason(before, parts);
+  if (beforeReason !== undefined) return `metric is unavailable before: ${beforeReason}`;
+  const afterReason = unavailableReason(after, parts);
+  if (afterReason !== undefined) return `metric is unavailable after: ${afterReason}`;
+  if (change.before === undefined) return "metric is unavailable before";
+  if (change.after === undefined) return "metric is unavailable after";
+  if (before.featuresVersion !== after.featuresVersion) return "featuresVersion differs";
+  if (classification === "A") return undefined;
+  if (classification === "C") {
+    if (!equalValue(before.source.format, after.source.format))
+      return "source format differs for class C";
+    if (!equalValue(before.source.dialect, after.source.dialect))
+      return "source dialect differs for class C";
+  }
+  if (
+    parts[0] === "parseability" &&
+    ["firstSetSize", "followSetSize", "ll1Conflicts", "slr"].includes(parts[1] ?? "")
+  ) {
+    const left = before.parseability.context;
+    const right = after.parseability.context;
+    if (left?.representation !== right?.representation)
+      return "parseability representation differs";
+    if (left !== undefined && right !== undefined) {
+      if (!equalValue(left.effectiveCapabilities, right.effectiveCapabilities)) {
+        return "parseability effective capabilities differ";
+      }
+      return equalValue(left.limits, right.limits)
+        ? undefined
+        : "parseability expansion limits differ";
+    }
+  }
+  return equalValue(before.capabilities, after.capabilities)
+    ? undefined
+    : "source capabilities differ";
+};
+
+const containsNumber = (value: unknown): boolean => {
+  if (typeof value === "number") return true;
+  if (Array.isArray(value)) return value.some(containsNumber);
+  return isRecord(value) && Object.values(value).some(containsNumber);
 };
 
 const nodeSize = (value: unknown): number => {
@@ -322,10 +469,22 @@ const collectChanges = (
   changes: FeatureChange[],
 ): void => {
   if (equalValue(before, after)) return;
-  if (isRecord(before) && isRecord(after)) {
-    const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
+  const sourceRow = path.startsWith("/perRule/") && path.split("/").length === 3;
+  if (
+    ((isRecord(before) || isRecord(after)) && !sourceRow) ||
+    (isRecord(before) && isRecord(after))
+  ) {
+    const left = isRecord(before) ? before : {};
+    const right = isRecord(after) ? after : {};
+    const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
     [...keys].sort(compareBytes).forEach((key) => {
-      collectChanges(before[key], after[key], `${path}/${key}`, changes);
+      const escaped = key.replaceAll("~", "~0").replaceAll("/", "~1");
+      collectChanges(
+        Object.hasOwn(left, key) ? left[key] : undefined,
+        Object.hasOwn(right, key) ? right[key] : undefined,
+        `${path}/${escaped}`,
+        changes,
+      );
     });
     return;
   }
@@ -377,8 +536,31 @@ export const diffFeatures = (
   after: GrammarFeatures,
   options?: FeatureDiffOptions,
 ): FeatureDiff => {
-  const changes: FeatureChange[] = [];
-  collectChanges(before, after, "", changes);
+  const candidates: FeatureChange[] = [];
+  const keyedFeatures = (features: GrammarFeatures) => ({
+    ...features,
+    perRule: Object.fromEntries(features.perRule.map((row) => [row.rule, row])),
+  });
+  collectChanges(keyedFeatures(before), keyedFeatures(after), "", candidates);
+  const notComparable: FeatureNotComparable[] = [];
+  const changes = candidates.filter((change) => {
+    const parts = metricParts(change.path);
+    const classification = comparisonClass(parts);
+    if (
+      classification === undefined ||
+      !(
+        containsNumber(change.before) ||
+        containsNumber(change.after) ||
+        REGRESSION_LISTS.has(change.path)
+      )
+    ) {
+      return true;
+    }
+    const reason = comparisonReason(before, after, change, parts, classification);
+    if (reason === undefined) return true;
+    notComparable.push({ path: change.path, class: classification, reason });
+    return false;
+  });
   const regressions = changes
     .filter(
       (change): change is FeatureRegression =>
@@ -409,6 +591,7 @@ export const diffFeatures = (
   return {
     changes,
     regressions,
+    ...(notComparable.length === 0 ? {} : { notComparable }),
     ...(options === undefined
       ? {}
       : { structural: grammarStructureDiff(options.beforeIR, options.afterIR) }),
@@ -423,7 +606,7 @@ export const renderFeatureDiffMarkdown = (diff: FeatureDiff): string => {
     ? diff.changes
         .map(
           (change) =>
-            `| ${codeSpan(change.path)} | ${codeSpan(valueText(change.before))} | ${codeSpan(valueText(change.after))} | ${change.kind} |`,
+            `| ${tableCodeSpan(change.path)} | ${tableCodeSpan(valueText(change.before))} | ${tableCodeSpan(valueText(change.after))} | ${change.kind} |`,
         )
         .join("\n")
     : "| _none_ | — | — | — |";
@@ -441,13 +624,20 @@ export const renderFeatureDiffMarkdown = (diff: FeatureDiff): string => {
 
 `
     : "";
+  const skipped = diff.notComparable?.length
+    ? `## Not comparable\n\n${diff.notComparable
+        .map(
+          (entry) => `- ${codeSpan(entry.path)} (class ${entry.class}): ${codeSpan(entry.reason)}`,
+        )
+        .join("\n")}\n\n`
+    : "";
   return `# Grammar feature diff
 
 | Path | Before | After | Change |
 |---|---:|---:|---|
 ${rows}
 
-${structural}## Regressions
+${structural}${skipped}## Regressions
 
 ${regressions}
 `;

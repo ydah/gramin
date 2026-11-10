@@ -1,1 +1,1 @@
-export const ANALYZER_VERSION = "0.2.1";
+export const ANALYZER_VERSION = "0.4.0";

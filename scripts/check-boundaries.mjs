@@ -14,6 +14,8 @@ const publicPackages = new Set([
   "@gramin/frontend-peg",
   "@gramin/frontend-yacc",
   "@gramin/reporter",
+  "@gramin/cli",
+  "@gramin/mcp",
 ]);
 
 const allowedImports = new Map([
@@ -25,6 +27,19 @@ const allowedImports = new Map([
   ["frontend-peg", new Set(["@gramin/core"])],
   ["frontend-yacc", new Set(["@gramin/core"])],
   ["reporter", new Set(["@gramin/core"])],
+  [
+    "mcp",
+    new Set([
+      "@gramin/core",
+      "@gramin/analyzer",
+      "@gramin/frontend-antlr",
+      "@gramin/frontend-bnf",
+      "@gramin/frontend-menhir",
+      "@gramin/frontend-peg",
+      "@gramin/frontend-yacc",
+      "@gramin/reporter",
+    ]),
+  ],
   [
     "cli",
     new Set([

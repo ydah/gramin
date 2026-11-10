@@ -1,5 +1,5 @@
 name: gramin
-description: Analyze grammar files and emit a SARIF report
+description: Analyze grammar files, compare a merge-base baseline, and report feature changes
 author: Yudai Takada
 
 inputs:
@@ -7,8 +7,25 @@ inputs:
     description: Newline-separated grammar file paths
     required: true
   baseline:
-    description: Optional features JSON baseline used for regression checks
+    description: Features JSON baseline override (otherwise use the PR or push merge-base)
     required: false
+  frontend:
+    description: Explicit frontend identifier
+    required: false
+  dialect:
+    description: Grammar dialect
+    required: false
+  source-root:
+    description: Workspace-relative root used to normalize source file names
+    required: false
+    default: "."
+  analysis:
+    description: Optional analysis mode (lr)
+    required: false
+  comment:
+    description: Create or update the feature diff comment on pull requests
+    required: false
+    default: "true"
   fail-on:
     description: Diagnostic threshold (error, warning, or none)
     required: false
@@ -39,24 +56,14 @@ runs:
       env:
         GRAMIN_FILES: ${{ inputs.files }}
         GRAMIN_BASELINE: ${{ inputs.baseline }}
+        GRAMIN_FRONTEND: ${{ inputs.frontend }}
+        GRAMIN_DIALECT: ${{ inputs.dialect }}
+        GRAMIN_SOURCE_ROOT: ${{ inputs.source-root }}
+        GRAMIN_ANALYSIS: ${{ inputs.analysis }}
+        GRAMIN_COMMENT: ${{ inputs.comment }}
         GRAMIN_FAIL_ON: ${{ inputs.fail-on }}
         GRAMIN_FAIL_ON_REGRESSION: ${{ inputs.fail-on-regression }}
         GRAMIN_OUTPUT: ${{ inputs.output }}
-      run: |
-        set -euo pipefail
-        mapfile -t grammar_files < <(printf '%s\n' "$GRAMIN_FILES" | awk 'NF')
-        if (( ${#grammar_files[@]} == 0 )); then
-          echo "gramin action requires at least one grammar file" >&2
-          exit 3
-        fi
-
-        args=(analyze "${grammar_files[@]}" --format sarif --fail-on "$GRAMIN_FAIL_ON" -o "$GRAMIN_OUTPUT")
-        if [[ -n "$GRAMIN_BASELINE" ]]; then
-          args+=(--baseline "$GRAMIN_BASELINE")
-        fi
-        if [[ "$GRAMIN_FAIL_ON_REGRESSION" == "true" ]]; then
-          args+=(--fail-on-regression)
-        fi
-
-        npx --yes @gramin/cli@0.2.1 "${args[@]}"
-        echo "report=$GRAMIN_OUTPUT" >> "$GITHUB_OUTPUT"
+        GRAMIN_CLI_PACKAGE: "@gramin/cli@0.4.0"
+        GITHUB_TOKEN: ${{ github.token }}
+      run: node "$GITHUB_ACTION_PATH/scripts/action-runner.mjs"

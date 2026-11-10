@@ -77,6 +77,39 @@ these limits prevent a hung or unexpectedly verbose frontend from blocking or ex
 analysis process. Exceeding either limit is a fatal `FRONTEND_TIMEOUT` or
 `FRONTEND_OUTPUT_TOO_LARGE` failure.
 
+## Conformance checks
+
+Run the same fixture group twice through the process boundary:
+
+```sh
+gramin frontend-test fixtures/sample.bnf --frontend-cmd ./bin/my-frontend
+gramin frontend-test parser.ext lexer.ext --frontend-cmd ./bin/my-frontend --dialect demo
+cat fixtures/sample.bnf | gramin frontend-test - --frontend-cmd ./bin/my-frontend
+```
+
+The command applies the normal process, JSON, schema, canonical-form, and capability
+validation to both runs. It compares their complete canonical IR, including source
+metadata, locations, and diagnostics. The JSON report records the frontend identity,
+supplied fixtures, capabilities, two-run count, and passed checks. `-o` writes this
+report to a file. `--frontend-timeout` applies independently to each invocation.
+Standard input is read once and replayed for both runs.
+
+A changed canonical IR produces `repeatable: false`, a
+`FRONTEND_NONDETERMINISTIC` diagnostic on stderr, and exit 1. Valid partial frontend
+results retain exit 1. Invalid process output, schema, canonical form, or capability
+declarations return exit 2 without a success report. Invalid command options return
+exit 3. Analysis, baseline, alternate report formats, location stripping, and source
+renaming options are rejected so they cannot hide differences in a frontend's IR.
+
+These checks sample only the supplied fixture group. They do not establish language
+equivalence, prove determinism for every input, or verify that an external executable
+obeys the read-only/no-source-execution requirements. Run separate fixture groups for
+each supported dialect and for unsupported or lossy syntax. Trust and isolate the
+chosen executable as a program you explicitly run.
+
+See the [frontend directory](frontend-directory.md) for reference implementations
+and the repository-ready starter.
+
 ## Implementation checklist
 
 - [ ] Accept `parse`, optional `--dialect`, and one-or-more paths or `--stdin`.

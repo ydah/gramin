@@ -107,7 +107,7 @@ try {
 
   const apiSmoke = `
 import { ANALYZER_VERSION, analyzeGrammar } from "@gramin/analyzer";
-import { IR_VERSION, validateIR } from "@gramin/core";
+import { FEATURES_VERSION, IR_VERSION, validateIR } from "@gramin/core";
 import { antlrFrontend } from "@gramin/frontend-antlr";
 import { bnfFrontend } from "@gramin/frontend-bnf";
 import { menhirFrontend } from "@gramin/frontend-menhir";
@@ -115,8 +115,9 @@ import { pegFrontend } from "@gramin/frontend-peg";
 import { yaccFrontend } from "@gramin/frontend-yacc";
 import { renderJson, REPORTER_VERSION } from "@gramin/reporter";
 import { CLI_VERSION } from "@gramin/cli";
+import { createMcpServer, MCP_VERSION } from "@gramin/mcp";
 
-const functions = [analyzeGrammar, validateIR, renderJson];
+const functions = [analyzeGrammar, validateIR, renderJson, createMcpServer];
 if (functions.some((value) => typeof value !== "function")) {
   throw new Error("a public package export is missing");
 }
@@ -132,8 +133,9 @@ if (frontends.some((frontend) => typeof frontend?.parse !== "function")) {
 }
 if (
   IR_VERSION !== "1.4.0" ||
-  [ANALYZER_VERSION, CLI_VERSION, REPORTER_VERSION].some((version) => version !== "0.2.1") ||
-  frontends.some((frontend) => frontend.version !== "0.2.1")
+  FEATURES_VERSION !== "0.8.0" ||
+  [ANALYZER_VERSION, CLI_VERSION, REPORTER_VERSION, MCP_VERSION].some((version) => version !== "0.4.0") ||
+  frontends.some((frontend) => frontend.version !== "0.4.0")
 ) {
   throw new Error("an installed public version constant is incorrect");
 }

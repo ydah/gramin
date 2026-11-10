@@ -20,6 +20,7 @@ import { yaccFrontend } from "@gramin/frontend-yacc";
 import {
   DigestBudgetTooSmallError,
   diffFeatures,
+  renderFeatureCsv,
   renderFeatureDiffJson,
   renderFeatureDiffMarkdown,
   renderJson,
@@ -75,12 +76,14 @@ const frontends: readonly Frontend[] = [
 ];
 
 const usage = `Usage:
-  gramin analyze <file...> [--format json|md|llm|sarif] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
+  gramin analyze <file...> [--format json|md|llm|sarif|csv] [--frontend <id>] [--dialect <name>] [--fail-on error|warning|none]
     [--source-name <name> | --source-root <dir>] [--max-nesting-depth <n>] [--analysis lr] [--baseline <features.json>] [--fail-on-regression]
   gramin analyze <file...> --frontend-cmd <executable> [--dialect <name>] [--frontend-timeout <ms>]
   gramin analyze --ir <ir.json|-> [--format json|md|sarif]
   gramin ir <file...> [--frontend <id>] [--dialect <name>] [--strip-loc] [--source-name <name> | --source-root <dir>]
-  gramin diff <old-file> <new-file> [--format json|md]
+  gramin analyze-many <file...> [--format json|csv] [--frontend <id>] [--analysis lr]
+  gramin diff <old-file> <new-file> [--features] [--format json|md]
+  gramin frontend-test <fixture...|-> --frontend-cmd <executable> [--dialect <name>] [--frontend-timeout <ms>]
   gramin detect <file>
   gramin validate-ir <ir.json>
   gramin --help
@@ -410,15 +413,17 @@ const runPipeline = async (options: ParsedArguments, io: CliIO): Promise<number>
     }
   }
   const report =
-    options.format === "md"
-      ? renderMarkdown(features)
-      : options.format === "llm"
-        ? renderLlmDigest(features, {
-            ...(options.budgetChars === undefined ? {} : { budgetChars: options.budgetChars }),
-          })
-        : options.format === "sarif"
-          ? renderSarif(features)
-          : renderJson(features);
+    options.format === "csv"
+      ? renderFeatureCsv([{ name: ir.source.fileNames?.join("+") ?? "grammar", features }])
+      : options.format === "md"
+        ? renderMarkdown(features)
+        : options.format === "llm"
+          ? renderLlmDigest(features, {
+              ...(options.budgetChars === undefined ? {} : { budgetChars: options.budgetChars }),
+            })
+          : options.format === "sarif"
+            ? renderSarif(features)
+            : renderJson(features);
   await output(report, options.output, io);
   const diagnosticExit = exitCodeForDiagnostics(features.diagnostics, options.failOn);
   return options.failOnRegression && regressionCount > 0
@@ -431,6 +436,7 @@ const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => 
     options.files.length !== 2 ||
     options.format === "llm" ||
     options.format === "sarif" ||
+    options.format === "csv" ||
     options.baseline !== undefined
   ) {
     return EXIT_USAGE;
@@ -438,6 +444,22 @@ const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => 
   const beforeFile = options.files[0];
   const afterFile = options.files[1];
   if (!beforeFile || !afterFile) return EXIT_USAGE;
+  if (options.featuresInput) {
+    const before = await readFeatures(beforeFile, io);
+    const after = await readFeatures(afterFile, io);
+    if (!before || !after) return EXIT_FATAL;
+    const comparison = diffFeatures(before, after);
+    await output(
+      options.format === "md"
+        ? renderFeatureDiffMarkdown(comparison)
+        : renderFeatureDiffJson(comparison),
+      options.output,
+      io,
+    );
+    return options.failOnRegression && comparison.regressions.length > 0
+      ? EXIT_PARTIAL
+      : EXIT_SUCCESS;
+  }
   const before = await parseSourceIR({ ...options, command: "analyze", files: [beforeFile] }, io);
   const after = await parseSourceIR({ ...options, command: "analyze", files: [afterFile] }, io);
   if (!before?.ir || !after?.ir) return EXIT_FATAL;
@@ -456,12 +478,88 @@ const runDiff = async (options: ParsedArguments, io: CliIO): Promise<number> => 
     : Math.max(before.exitCode, after.exitCode);
 };
 
+const runAnalyzeMany = async (options: ParsedArguments, io: CliIO): Promise<number> => {
+  if (
+    options.files.length === 0 ||
+    options.irInput ||
+    options.sourceName ||
+    options.baseline ||
+    options.failOnRegression ||
+    !["json", "csv"].includes(options.format)
+  )
+    return EXIT_USAGE;
+  const grammars: { name: string; features: GrammarFeatures }[] = [];
+  let exitCode = EXIT_SUCCESS;
+  for (const file of options.files) {
+    const parsed = await parseSourceIR({ ...options, files: [file] }, io);
+    if (!parsed) return EXIT_FATAL;
+    const features = analyzeGrammar(parsed.ir, { lr: options.analysis === "lr" });
+    grammars.push({
+      name: options.sourceRoot === undefined ? file : normalizeSourcePath(file, options.sourceRoot),
+      features,
+    });
+    exitCode = Math.max(
+      exitCode,
+      parsed.exitCode,
+      exitCodeForDiagnostics(features.diagnostics, options.failOn),
+    );
+  }
+  await output(
+    options.format === "csv" ? renderFeatureCsv(grammars) : serializeCanonical({ grammars }),
+    options.output,
+    io,
+  );
+  return exitCode;
+};
+
+const runFrontendTest = async (options: ParsedArguments, io: CliIO): Promise<number> => {
+  if (
+    !options.frontendCommand ||
+    options.files.length === 0 ||
+    (options.files.includes("-") && options.files.length !== 1) ||
+    options.irInput !== undefined ||
+    options.baseline !== undefined ||
+    options.failOnRegression ||
+    options.format !== "json" ||
+    options.analysis !== undefined ||
+    options.stripLocations ||
+    options.sourceName !== undefined ||
+    options.sourceRoot !== undefined ||
+    options.budgetChars !== undefined ||
+    options.maxNestingDepth !== undefined
+  )
+    return EXIT_USAGE;
+  const stdin = options.files[0] === "-" ? await io.readStdin() : undefined;
+  const replayIO = { ...io, readStdin: async () => stdin ?? "" };
+  const first = await parseSourceIR(options, replayIO);
+  if (!first) return EXIT_FATAL;
+  const second = await parseSourceIR(options, replayIO);
+  if (!second) return EXIT_FATAL;
+  const repeatable = serializeCanonical(first.ir) === serializeCanonical(second.ir);
+  await output(
+    serializeCanonical({
+      frontend: first.ir.source.frontend,
+      fixtures: options.files,
+      capabilities: first.ir.capabilities,
+      runs: 2,
+      checks: { schema: true, canonicalForm: true, capabilities: true, repeatable },
+    }),
+    options.output,
+    io,
+  );
+  if (!repeatable)
+    io.writeError("FRONTEND_NONDETERMINISTIC: canonical IR differs between the two fixture runs\n");
+  return Math.max(first.exitCode, second.exitCode, repeatable ? EXIT_SUCCESS : EXIT_PARTIAL);
+};
+
 export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Promise<number> => {
   if (
     ((argv.length === 1 || argv.length === 2) &&
       ["--help", "-h", "help"].includes(argv.at(-1) ?? "")) ||
     (argv.length > 2 &&
-      ["analyze", "ir", "diff", "detect", "validate-ir"].includes(argv[0] ?? "") &&
+      ["analyze", "analyze-many", "ir", "diff", "detect", "validate-ir", "frontend-test"].includes(
+        argv[0] ?? "",
+      ) &&
       argv.includes("--help"))
   ) {
     io.writeOut(usage);
@@ -477,9 +575,12 @@ export const runCli = async (argv: readonly string[], io: CliIO = defaultIO): Pr
     return EXIT_USAGE;
   }
   const options = parsed.value;
+  if (options.featuresInput && options.command !== "diff") return EXIT_USAGE;
   try {
     if (options.command === "detect") return await runDetect(options, io);
     if (options.command === "diff") return await runDiff(options, io);
+    if (options.command === "analyze-many") return await runAnalyzeMany(options, io);
+    if (options.command === "frontend-test") return await runFrontendTest(options, io);
     if (options.command === "validate-ir") {
       if (options.files.length !== 1) return EXIT_USAGE;
       const fileName = options.files[0];

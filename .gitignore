@@ -6,6 +6,7 @@ tmp/
 node_modules/
 dist/
 coverage/
+apps/site/.vitepress/cache/
 fixtures/downloaded/
 *.tsbuildinfo
 .DS_Store
