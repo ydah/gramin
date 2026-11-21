@@ -47,7 +47,7 @@
     "update-golden": "pnpm build && node scripts/update-golden.mjs --update-golden"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.7",
     "@types/node": "26.6.6",
     "typescript": "7.0.2",
     "vitest": "5.0.5"
